@@ -1,0 +1,83 @@
+package giftadeed.kshantechsoft.com.giftadeed.Filter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
+import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.Signup.SignupPOJO;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
+
+/**
+ * Created by I-Sys on 27-Mar-18.
+ */
+
+public class CategoriesAdaptor extends BaseAdapter {
+    ArrayList<CategoryPOJO> categories;
+    Context context;
+    private ArrayList<CategoryPOJO> arraylist;
+
+    public CategoriesAdaptor(ArrayList<CategoryPOJO> categories, Context context) {
+        this.categories = categories;
+        this.context = context;
+        this.arraylist = new ArrayList<CategoryPOJO>();
+        this.arraylist.addAll(categories);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        return categories.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        LayoutInflater inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view=inflater.inflate(R.layout.select_category_item,null);
+        TextView storename= (TextView) view.findViewById(R.id.category_name);
+        ImageView cat_img=view.findViewById(R.id.categoryimg);
+        notifyDataSetChanged();
+        storename.setText(categories.get(i).getName());
+        Picasso.with(context).load(WebServices.MAIN_SUB_URL+categories.get(i).getCharacterpath()).into(cat_img);
+        return view;
+    }
+
+
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        categories.clear();
+        if (charText.length() == 0) {
+            categories.addAll(arraylist);
+        }
+        else
+        {
+            for (CategoryPOJO wp : arraylist)
+            {
+                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText))
+                {
+                    categories.add(wp);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+}

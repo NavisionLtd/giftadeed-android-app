@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/colorAccent"
+        android:gravity="center">
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/gridmenuimg_height"
+        android:layout_height="@dimen/gridmenuimg_height"
+        android:layout_gravity="center"
+        android:layout_marginTop="-45dp"
+        android:src="@drawable/first_login" />
+
+    <LinearLayout
+        android:id="@+id/layout_filternotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#f8f8f8"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtfilterapplyfilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/apply_filters"
+                android:textAllCaps="false"
+                android:textSize="@dimen/finalheaderfont" />
+
+            <TextView
+                android:id="@+id/txtfilterradius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/distance"
+                android:textSize="@dimen/finaltextfont" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                   <!-- <TextView
+                        android:id="@+id/txtfilterrminadius"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:text="1KM(S)" />-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/txtfilterrmaxadius"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:text="10KM(S)" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                android:id="@+id/notificationProgressbar_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dsb_indicatorColor="@color/colorAccent"
+                app:dsb_max="10"
+                app:dsb_indicatorElevation="0dp"
+                app:dsb_progressColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/txtdistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/time" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <!--<TextView
+                        android:id="@+id/txtfiltermintime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:text="1 Day" />-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/txtfilterrmaxtime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:textSize="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="7 Day(S)" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                android:id="@+id/notificationProgressbar_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                app:dsb_indicatorColor="@color/colorAccent"
+                app:dsb_max="7"
+                app:dsb_indicatorElevation="0dp"
+                app:dsb_progressColor="@color/colorAccent" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/filterdcategorylength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColorHint="#000">
+
+                <EditText
+
+                    android:id="@+id/ednotificationfiltercategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="#000"
+                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="@string/select_category" />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/searchnotification"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorAccent"
+            android:text="@string/search"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/finalheaderfont" />
+    </LinearLayout>
+
+</LinearLayout>

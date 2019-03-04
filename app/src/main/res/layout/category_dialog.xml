@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/colorAccent"
+
+        android:gravity="center">
+
+       <!-- <TextView
+            android:id="@+id/txtFogot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="Forgot Password?"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/finalheaderfont"
+            android:textStyle="bold" />-->
+    </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/gridmenuimg_height"
+            android:layout_height="@dimen/gridmenuimg_height"
+            android:layout_gravity="center"
+            android:layout_marginTop="-45dp"
+            android:src="@drawable/first_login" />
+    </LinearLayout>
+    <EditText
+        android:id="@+id/search_from_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/search_background"
+        android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
+        android:hint="@string/search"
+        android:imeOptions="actionDone"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:singleLine="true"/>
+
+    <ListView
+        android:id="@+id/category_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#c1f98222"
+        android:dividerHeight="1dp"
+        android:scrollbars="none"
+        android:padding="10dp"></ListView>
+
+    <Button
+        android:id="@+id/category_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorAccent"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

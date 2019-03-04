@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="5sp"
+
+        card_view:cardPreventCornerOverlap="true"
+        card_view:cardUseCompatPadding="true"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:paddingLeft="5dp">
+
+
+                <ImageView
+                    android:id="@+id/imgMyFullFilltags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:background="@drawable/imgbackground"
+                    android:src="@android:drawable/ic_menu_gallery" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/txtmyFullflltagTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold|italic"
+                    android:gravity="left|center_vertical"
+                    android:text="TextView"
+                    android:textSize="@dimen/finaltextfont" />
+
+                <TextView
+                    android:id="@+id/txtmyFulllfilltagsAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:text="TextView"
+                    android:drawableLeft="@drawable/ic_location_on_black_24dp"
+                    android:textSize="@dimen/finaltextfont" />
+
+                <ImageView
+                    android:id="@+id/imgmyfullfilltagschar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/dem" />
+
+                <TextView
+                    android:id="@+id/txtmyFullfilltagsdatentime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:text="TextView"
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/finaltextfont" />
+                <TextView
+                    android:id="@+id/txtmyFullfilltagpoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:text="TextView"
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/finaltextfont" />
+
+                />
+            </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>-->
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:Card_view="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    app:cardBackgroundColor="#FFF1EFEC"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/list_image_width"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgMyFullFilltags"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/imgbackground"
+                android:src="@android:drawable/ic_menu_gallery" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/txtmyFullflltagTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:paddingLeft="@dimen/distleftpadding"
+                    android:text="Hungry"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/finaltextfont"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtmyFullfilltagsdatentime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="0.5"
+                    android:gravity="right"
+                    android:text="7 FEB 2017"
+                    android:textSize="@dimen/finaltextfont" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="0.1"
+                    android:gravity="top">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:src="@drawable/location_mark" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.8"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/txtmyFulllfilltagsAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="0.99"
+                        android:gravity="left"
+                        android:text="Veritas company baner balewadi road Baner pune"
+                        android:textSize="@dimen/finaltextfont" />
+
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
+                android:background="#c8334455" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.7"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            >
+
+                            <ImageView
+                                android:id="@+id/txtg"
+                                android:layout_width="@dimen/list_icon_size"
+                                android:layout_height="@dimen/list_icon_size"
+                                android:layout_gravity="center"
+                                android:src="@drawable/thumb_icon_over" />
+
+                            <TextView
+                                android:id="@+id/txtmyfulfilendorse"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="#000"
+                                android:text="1000"
+                                />
+
+                            <ImageView
+                                android:layout_width="@dimen/list_icon_size"
+                                android:layout_height="@dimen/list_icon_size"
+                                android:layout_marginLeft="15dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/iconview" />
+
+                            <TextView
+                                android:id="@+id/txtmyfulfilviews"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:text="3000"
+                                android:textColor="#000" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_weight="0.3"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imgmyfullfilltagschar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/distleftpadding"
+                            android:src="@drawable/dem" />
+                        <!--<TextView
+                            android:id="@+id/txtmytagsstatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="left"
+                            android:layout_gravity="left"
+                            android:text="Fulfilled"
+                            android:textColor="#e352ef6f"
+                            android:textSize="@dimen/finaltextfont" />-->
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                &lt;!&ndash;<LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="0.6"
+                    android:orientation="vertical">
+                    &lt;!&ndash; <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+
+                         android:text="Unfullfilled"
+                         android:layout_gravity="top"
+                         android:textSize="@dimen/finaltextfont"/>&ndash;&gt;
+                    &lt;!&ndash;<ImageView
+                        android:id="@+id/imgneedlistchar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/distleftpadding"
+                        android:src="@drawable/dem" />&ndash;&gt;
+                </LinearLayout>&ndash;&gt;
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="0.4"
+                    android:orientation="vertical">
+
+               &lt;!&ndash;     <Button
+                        android:id="@+id/btnlistneeds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="5dp"
+                        android:background="#f50"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Gift Now"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/finaltextfont" />&ndash;&gt;
+                </LinearLayout>
+            </LinearLayout>-->
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
+

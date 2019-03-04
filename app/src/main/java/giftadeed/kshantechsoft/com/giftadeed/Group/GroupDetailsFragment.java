@@ -1,0 +1,723 @@
+package giftadeed.kshantechsoft.com.giftadeed.Group;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.leo.simplearcloader.ArcConfiguration;
+import com.leo.simplearcloader.SimpleArcDialog;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
+import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
+import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.NeedListAdapter;
+import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.RowData;
+import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
+import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
+
+public class GroupDetailsFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+    View rootview;
+    RecyclerView recyclerView;
+    List<RowData> item_list;
+    FragmentActivity myContext;
+    static FragmentManager fragmgr;
+    String strFiltertype = Validation.FILTER_CATEGORY;
+    SimpleArcDialog mDialog;
+    ImageView imageView;
+    SessionManager sessionManager;
+    TextView groupName, groupActiveCount, noRecordsFound;
+    LinearLayout countLayout;
+    String strUser_ID;
+    private AlertDialog alertDialog;
+    String receivedGid = "", receivedGname = "", receivedGimage = "";
+    private GoogleApiClient mGoogleApiClient;
+    String groupCreatorId = "", admin_ids = "";
+    ArrayList<String> split = new ArrayList<String>();
+    int isMember = 1;
+    float radius_set;
+    DatabaseAccess databaseAccess;
+
+    public static GroupDetailsFragment newInstance(int sectionNumber) {
+        GroupDetailsFragment fragment = new GroupDetailsFragment();
+        return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        myContext = (FragmentActivity) activity;
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootview = inflater.inflate(R.layout.group_details_layout, container, false);
+        sessionManager = new SessionManager(getActivity());
+        HashMap<String, String> user = sessionManager.getUserDetails();
+        strUser_ID = user.get(sessionManager.USER_ID);
+        HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
+        receivedGid = group.get(sessionManager.GROUP_ID);
+        receivedGname = group.get(sessionManager.GROUP_NAME);
+
+        TaggedneedsActivity.updateTitle(getResources().getString(R.string.grp_deed_title));
+        TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
+        FragmentManager fragManager = myContext.getSupportFragmentManager();
+        fragmgr = getFragmentManager();
+        mDialog = new SimpleArcDialog(getContext());
+        TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
+        TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
+        TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.editprofile.setVisibility(View.GONE);
+        TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
+        TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
+        TaggedneedsActivity.back.setVisibility(View.VISIBLE);
+        TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
+        TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        init();
+        databaseAccess = DatabaseAccess.getInstance(getContext());
+        databaseAccess.open();
+        groupName.setText(receivedGname);
+        radius_set = sessionManager.getradius();
+        if (!(Validation.isOnline(getActivity()))) {
+            ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+        } else {
+            get_Tag_data();
+            groupInfo(strUser_ID, receivedGid);
+        }
+        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
+        TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupsListFragment groupsListFragment = new GroupsListFragment();
+                fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+            }
+        });
+        return rootview;
+    }
+
+    //--------------------------Initilizing the UI variables--------------------------------------------
+    private void init() {
+        imageView = (ImageView) rootview.findViewById(R.id.selected_group_profile_image);
+        groupName = (TextView) rootview.findViewById(R.id.tv_group_name);
+        countLayout = (LinearLayout) rootview.findViewById(R.id.count_layout);
+        groupActiveCount = (TextView) rootview.findViewById(R.id.groupdetails_active_tags_count);
+        noRecordsFound = (TextView) rootview.findViewById(R.id.no_group_tags);
+        recyclerView = (RecyclerView) rootview.findViewById(R.id.group_activetags_list);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    public void get_Tag_data() {
+        item_list = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        GrouptagsInterface service = retrofit.create(GrouptagsInterface.class);
+        Call<List<Taggedlist>> call = service.fetchData(strUser_ID, receivedGid);
+        call.enqueue(new Callback<List<Taggedlist>>() {
+            @Override
+            public void onResponse(Response<List<Taggedlist>> response, Retrofit retrofit) {
+                // listData=null;
+                try {
+                    List<Taggedlist> res = response.body();
+                    int isblock = 0;
+                    try {
+                        isblock = res.get(0).getIsBlocked();
+                    } catch (Exception e) {
+                        isblock = 0;
+                    }
+                    if (isblock == 1) {
+                        FacebookSdk.sdkInitialize(getActivity());
+                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        sessionManager.createUserCredentialSession(null, null, null);
+                        LoginManager.getInstance().logOut();
+                        int i = new DBGAD(getContext()).delete_row_message();
+                        sessionManager.set_notification_status("ON");
+
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });
+
+                        Intent loginintent = new Intent(getActivity(), LoginActivity.class);
+                        loginintent.putExtra("message", "Charity");
+                        startActivity(loginintent);
+                    } else {
+                        List<Taggedlist> taggedlists = response.body();
+                        int size = taggedlists.size();
+                        double current_latitude = new GPSTracker(getContext()).getLatitude();
+//
+//                // Getting longitude of the current location
+                        double current_longitude = new GPSTracker(getContext()).getLongitude();
+                        Location myLocation = new Location("My Location");
+                        myLocation.setLatitude(current_latitude);
+                        myLocation.setLongitude(current_longitude);
+
+                        //   Log.d("TAG", "" + size);
+//---------------------adding data
+
+                        if (size > 0) {
+                            for (int j = 0; j < size; j++) {
+                                String str_geo_point = taggedlists.get(j).getGeopoint();
+                                String[] words = str_geo_point.split(",");
+                                Location tagLocation2 = new Location("tag Location");
+                                tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                tagLocation2.setLongitude(Double.parseDouble(words[1]));
+
+                                float dist1 = myLocation.distanceTo(tagLocation2);
+
+                                if (dist1 < radius_set) {
+                                    //String.format(java.util.Locale.US,"%.2f", dist1);
+                                    //df2.format(dist1);
+                                    if (strFiltertype.equals(taggedlists.get(j).getNeedName())) {
+                                        // System.out.print(result.getTaggedlist().get(j).getIconPath());
+                                        RowData rowData = new RowData();
+                                        rowData.setTitle(taggedlists.get(j).getNeedName());
+                                        rowData.setAddress(taggedlists.get(j).getAddress());
+                                        rowData.setDate(taggedlists.get(j).getTaggedDatetime());
+                                        rowData.setImagepath(taggedlists.get(j).getTaggedPhotoPath());
+                                        rowData.setDistance(dist1);
+                                        rowData.setCharacterPath(taggedlists.get(j).getCharacterPath());
+                                        rowData.setFname(taggedlists.get(j).getFname());
+                                        rowData.setLname(taggedlists.get(j).getLname());
+                                        rowData.setPrivacy(taggedlists.get(j).getPrivacy());
+                                        rowData.setNeedName(taggedlists.get(j).getNeedName());
+                                        rowData.setTotalTaggedCreditPoints(taggedlists.get(j).getTotalTaggedCreditPoints());
+                                        rowData.setTotalFulfilledCreditPoints(taggedlists.get(j).getTotalFulfilledCreditPoints());
+                                        rowData.setUserID(taggedlists.get(j).getUserID());
+                                        rowData.setTaggedID(taggedlists.get(j).getTaggedID());
+                                        rowData.setGeopoint(taggedlists.get(j).getGeopoint());
+                                        rowData.setTaggedPhotoPath(taggedlists.get(j).getTaggedPhotoPath());
+                                        rowData.setDescription(taggedlists.get(j).getDescription());
+                                        rowData.setViews(taggedlists.get(j).getViews());
+                                        rowData.setEndorse(taggedlists.get(j).getEndorse());
+                                        item_list.add(rowData);
+                                    } else if (strFiltertype.equals("All")) {
+                                        //  System.out.print(taggedlists.get(j).getIconPath());
+                                        RowData rowData = new RowData();
+                                        rowData.setTitle(taggedlists.get(j).getNeedName());
+                                        rowData.setAddress(taggedlists.get(j).getAddress());
+                                        rowData.setDate(taggedlists.get(j).getTaggedDatetime());
+                                        rowData.setImagepath(taggedlists.get(j).getTaggedPhotoPath());
+                                        rowData.setDistance(dist1);
+                                        rowData.setCharacterPath(taggedlists.get(j).getCharacterPath());
+                                        rowData.setFname(taggedlists.get(j).getFname());
+                                        rowData.setLname(taggedlists.get(j).getLname());
+                                        rowData.setPrivacy(taggedlists.get(j).getPrivacy());
+                                        rowData.setNeedName(taggedlists.get(j).getNeedName());
+                                        rowData.setTotalTaggedCreditPoints(taggedlists.get(j).getTotalTaggedCreditPoints());
+                                        rowData.setTotalFulfilledCreditPoints(taggedlists.get(j).getTotalFulfilledCreditPoints());
+                                        rowData.setUserID(taggedlists.get(j).getUserID());
+                                        rowData.setTaggedID(taggedlists.get(j).getTaggedID());
+                                        rowData.setGeopoint(taggedlists.get(j).getGeopoint());
+                                        rowData.setTaggedPhotoPath(taggedlists.get(j).getTaggedPhotoPath());
+                                        rowData.setDescription(taggedlists.get(j).getDescription());
+                                        rowData.setViews(taggedlists.get(j).getViews());
+                                        rowData.setEndorse(taggedlists.get(j).getEndorse());
+                                        item_list.add(rowData);
+                                    }
+                        /*icon_path.add(listData.getTaggedlist().get(j).getIconPath());
+                        tag_title.add(listData.getTaggedlist().get(j).getTaggedTitle());*/
+                                }
+
+                                if (item_list.size() == 0) {
+                                    recyclerView.setVisibility(View.GONE);
+                                    countLayout.setVisibility(View.GONE);
+                                    noRecordsFound.setVisibility(View.VISIBLE);
+                                } else {
+                                    noRecordsFound.setVisibility(View.GONE);
+                                    countLayout.setVisibility(View.VISIBLE);
+                                    groupActiveCount.setText(String.valueOf(item_list.size()));
+                                    recyclerView.setVisibility(View.VISIBLE);
+                                    recyclerView.setAdapter(new NeedListAdapter(item_list, getActivity(),"group"));
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+//                    StringWriter writer = new StringWriter();
+//                    e.printStackTrace(new PrintWriter(writer));
+//                    Bugreport bg = new Bugreport();
+//                    bg.sendbug(writer.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                ToastPopUp.show(myContext, getString(R.string.server_response_error));
+            }
+        });
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_group_details, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (groupCreatorId.equals(strUser_ID)) {
+            //group creator
+            getActivity().invalidateOptionsMenu();
+            menu.findItem(R.id.action_group_info).setVisible(false);
+            menu.findItem(R.id.action_exit_group).setVisible(false);
+        } else if (admin_ids.length() > 0) {
+            for (int i = 0; i < split.size(); i++) {
+                if (split.get(i).equals(strUser_ID)) {
+                    //group admin
+                    getActivity().invalidateOptionsMenu();
+                    menu.findItem(R.id.action_delete_group).setVisible(false);
+                    menu.findItem(R.id.action_group_info).setVisible(false);
+//                    menu.findItem(R.id.action_exit_group).setVisible(false);
+                    isMember = 0;
+                    break;
+                }
+            }
+            if (isMember == 1) {
+                //group member
+                getActivity().invalidateOptionsMenu();
+                menu.findItem(R.id.action_add_member).setVisible(false);
+                menu.findItem(R.id.action_member_list).setVisible(false);
+                menu.findItem(R.id.action_edit_group).setVisible(false);
+                menu.findItem(R.id.action_delete_group).setVisible(false);
+            }
+        } else {
+            //group member
+            getActivity().invalidateOptionsMenu();
+            menu.findItem(R.id.action_add_member).setVisible(false);
+            menu.findItem(R.id.action_member_list).setVisible(false);
+            menu.findItem(R.id.action_edit_group).setVisible(false);
+            menu.findItem(R.id.action_delete_group).setVisible(false);
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_add_member:
+                AddGroupMemberFragment addGroupMemberFragment = new AddGroupMemberFragment();
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("gid", receivedGid);
+                addGroupMemberFragment.setArguments(bundle2);
+                fragmgr.beginTransaction().replace(R.id.content_frame, addGroupMemberFragment).commit();
+                return true;
+
+            case R.id.action_member_list:
+                ManageGroupMemberFragment manageGroupMemberFragment = new ManageGroupMemberFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("groupCreatorId", groupCreatorId);
+                manageGroupMemberFragment.setArguments(bundle);
+                fragmgr.beginTransaction().replace(R.id.content_frame, manageGroupMemberFragment).commit();
+                return true;
+
+            case R.id.action_edit_group:
+                CreateGroupFragment createGroupFragment = new CreateGroupFragment();
+                fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
+                return true;
+
+            case R.id.action_delete_group:
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                LayoutInflater li = LayoutInflater.from(getContext());
+                View confirmDialog = li.inflate(R.layout.giftneeddialog, null);
+                Button dialogconfirm = (Button) confirmDialog.findViewById(R.id.btn_submit_mobileno);
+                Button dialogcancel = (Button) confirmDialog.findViewById(R.id.btn_Cancel_mobileno);
+                TextView dialogtext = (TextView) confirmDialog.findViewById(R.id.txtgiftneeddialog);
+                dialogtext.setText(getResources().getString(R.string.delete_grp_msg));
+                alert.setView(confirmDialog);
+                alert.setCancelable(false);
+                alertDialog = alert.create();
+                alertDialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertDialog.show();
+                dialogconfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // call delete group api
+                        if (!(Validation.isOnline(getActivity()))) {
+                            ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+                        } else {
+                            deleteGroup(receivedGid, strUser_ID);
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
+                dialogcancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                return true;
+
+            case R.id.action_group_info:
+                GroupInfoFragment groupInfoFragment = new GroupInfoFragment();
+                fragmgr.beginTransaction().replace(R.id.content_frame, groupInfoFragment).commit();
+                return true;
+
+            case R.id.action_exit_group:
+                AlertDialog.Builder alertexit = new AlertDialog.Builder(getContext());
+                LayoutInflater lin = LayoutInflater.from(getContext());
+                View confirmDialog1 = lin.inflate(R.layout.giftneeddialog, null);
+                Button dialogconfirm1 = (Button) confirmDialog1.findViewById(R.id.btn_submit_mobileno);
+                Button dialogcancel1 = (Button) confirmDialog1.findViewById(R.id.btn_Cancel_mobileno);
+                TextView dialogtext1 = (TextView) confirmDialog1.findViewById(R.id.txtgiftneeddialog);
+                dialogtext1.setText(getResources().getString(R.string.exit_grp_msg));
+                alertexit.setView(confirmDialog1);
+                alertexit.setCancelable(false);
+                alertDialog = alertexit.create();
+                alertDialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertDialog.show();
+                dialogconfirm1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                         call exit group api
+                        if (!(Validation.isOnline(getActivity()))) {
+                            ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+                        } else {
+                            exitGroup(receivedGid, strUser_ID);
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
+                dialogcancel1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //---------------------getting group info from server-----------------------------------------------
+    public void groupInfo(String user_id, String group_id) {
+        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.show();
+        mDialog.setCancelable(false);
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        GroupInfoInterface service = retrofit.create(GroupInfoInterface.class);
+        Call<List<GroupInfoPOJO>> call = service.sendData(user_id, group_id);
+        Log.d("grpinfo_input_params", user_id + ":" + group_id);
+        call.enqueue(new Callback<List<GroupInfoPOJO>>() {
+            @Override
+            public void onResponse(Response<List<GroupInfoPOJO>> response, Retrofit retrofit) {
+                mDialog.dismiss();
+                Log.d("responsegroupinfo", "" + response.body());
+                try {
+                    List<GroupInfoPOJO> groupInfoPOJO = response.body();
+                    int isblock = 0;
+                    try {
+                        isblock = groupInfoPOJO.get(0).getIsBlocked();
+                    } catch (Exception e) {
+                        isblock = 0;
+                    }
+                    if (isblock == 1) {
+                        mDialog.dismiss();
+                        FacebookSdk.sdkInitialize(getActivity());
+                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        sessionManager.createUserCredentialSession(null, null, null);
+                        LoginManager.getInstance().logOut();
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });
+                        int i = new DBGAD(getContext()).delete_row_message();
+                        sessionManager.set_notification_status("ON");
+                        Intent loginintent = new Intent(getActivity(), LoginActivity.class);
+                        loginintent.putExtra("message", "Charity");
+                        startActivity(loginintent);
+                    } else {
+//                        groupName.setText(groupInfoPOJO.get(0).getGroup_name());
+                        admin_ids = groupInfoPOJO.get(0).getAdmin_ids();
+                        Log.d("admin_ids", "" + admin_ids);
+                        if (!admin_ids.equals("")) {
+                            if (admin_ids.contains(",")) {
+                                Collections.addAll(split, admin_ids.split(","));
+                                Log.d("split_admin_ids", "" + split.toString());
+                            } else {
+                                split.add(admin_ids);
+                                Log.d("split_admin_id", "" + split.toString());
+                            }
+                        }
+
+                        groupCreatorId = groupInfoPOJO.get(0).getCreator_id();
+//                        createdBy.setText("Created by - " + groupInfoPOJO.get(0).getCreator_name());
+//                        createdDate.setText("Created date - " + groupInfoPOJO.get(0).getCreate_date());
+//                        if (groupInfoPOJO.get(0).getGroup_desc().length() == 0) {
+//                            groupDesc.setVisibility(View.GONE);
+//                        } else {
+//                            groupDesc.setVisibility(View.VISIBLE);
+//                            groupDesc.setText(groupInfoPOJO.get(0).getGroup_desc());
+//                        }
+                        String strImagepath = WebServices.MAIN_SUB_URL + groupInfoPOJO.get(0).getGroup_image();
+                        if (groupInfoPOJO.get(0).getGroup_image().length() > 0) {
+                            Picasso.with(getContext()).load(strImagepath).placeholder(R.drawable.group_default_wallpaper).into(imageView);
+                        } else {
+                            imageView.setImageResource(R.drawable.group_default_wallpaper);
+                        }
+                        sessionManager.createGroupDetails("", receivedGid, groupInfoPOJO.get(0).getGroup_name(), groupInfoPOJO.get(0).getGroup_desc(), groupInfoPOJO.get(0).getGroup_image());
+                    }
+                } catch (Exception e) {
+                    mDialog.dismiss();
+                    Log.d("responsegroupinfo", "" + e.getMessage());
+//                    StringWriter writer = new StringWriter();
+//                    e.printStackTrace(new PrintWriter(writer));
+//                    Bugreport bg = new Bugreport();
+//                    bg.sendbug(writer.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                mDialog.dismiss();
+                Log.d("responsegroupinfo", "" + t.getMessage());
+                ToastPopUp.show(myContext, getString(R.string.server_response_error));
+            }
+        });
+    }
+
+    //---------------------group delete only for group creator-----------------------------------------------
+    public void deleteGroup(final String groupid, String user_id) {
+        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.show();
+        mDialog.setCancelable(false);
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        DeleteGroupInterface service = retrofit.create(DeleteGroupInterface.class);
+        Call<GroupResponseStatus> call = service.sendData(groupid, user_id);
+        call.enqueue(new Callback<GroupResponseStatus>() {
+            @Override
+            public void onResponse(Response<GroupResponseStatus> response, Retrofit retrofit) {
+                mDialog.dismiss();
+                Log.d("responsegroup", "" + response.body());
+                try {
+                    GroupResponseStatus groupResponseStatus = response.body();
+                    int isblock = 0;
+                    try {
+                        isblock = groupResponseStatus.getIsBlocked();
+                    } catch (Exception e) {
+                        isblock = 0;
+                    }
+                    if (isblock == 1) {
+                        FacebookSdk.sdkInitialize(getActivity());
+                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        sessionManager.createUserCredentialSession(null, null, null);
+                        LoginManager.getInstance().logOut();
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });
+                        int i = new DBGAD(getContext()).delete_row_message();
+                        sessionManager.set_notification_status("ON");
+                        Intent loginintent = new Intent(getActivity(), LoginActivity.class);
+                        loginintent.putExtra("message", "Charity");
+                        startActivity(loginintent);
+                    } else {
+                        if (groupResponseStatus.getStatus() == 1) {
+                            Toast.makeText(getContext(), "Group deleted successfully", Toast.LENGTH_SHORT).show();
+                            databaseAccess.Delete_Group(groupid);
+                            GroupsListFragment groupsListFragment = new GroupsListFragment();
+                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                        } else if (groupResponseStatus.getStatus() == 0) {
+                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (Exception e) {
+                    mDialog.dismiss();
+                    Log.d("responsegroup", "" + e.getMessage());
+//                    StringWriter writer = new StringWriter();
+//                    e.printStackTrace(new PrintWriter(writer));
+//                    Bugreport bg = new Bugreport();
+//                    bg.sendbug(writer.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                mDialog.dismiss();
+                Log.d("responsegroup", "" + t.getMessage());
+                ToastPopUp.show(myContext, getString(R.string.server_response_error));
+            }
+        });
+    }
+
+    //---------------------exit group only for group member or group admin-----------------------------------------------
+    public void exitGroup(final String groupid, String user_id) {
+        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.show();
+        mDialog.setCancelable(false);
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        ExitGroupInterface service = retrofit.create(ExitGroupInterface.class);
+        Call<GroupResponseStatus> call = service.sendData(groupid, user_id);
+        call.enqueue(new Callback<GroupResponseStatus>() {
+            @Override
+            public void onResponse(Response<GroupResponseStatus> response, Retrofit retrofit) {
+                mDialog.dismiss();
+                Log.d("exit_responsegroup", "" + response.body());
+                try {
+                    GroupResponseStatus groupResponseStatus = response.body();
+                    int isblock = 0;
+                    try {
+                        isblock = groupResponseStatus.getIsBlocked();
+                    } catch (Exception e) {
+                        isblock = 0;
+                    }
+                    if (isblock == 1) {
+                        FacebookSdk.sdkInitialize(getActivity());
+                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        sessionManager.createUserCredentialSession(null, null, null);
+                        LoginManager.getInstance().logOut();
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });
+                        int i = new DBGAD(getContext()).delete_row_message();
+                        sessionManager.set_notification_status("ON");
+                        Intent loginintent = new Intent(getActivity(), LoginActivity.class);
+                        loginintent.putExtra("message", "Charity");
+                        startActivity(loginintent);
+                    } else {
+                        if (groupResponseStatus.getStatus() == 1) {
+                            Toast.makeText(getContext(), "You successfully exited from group", Toast.LENGTH_SHORT).show();
+                            databaseAccess.Delete_Group(groupid);
+                            GroupsListFragment groupsListFragment = new GroupsListFragment();
+                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                        } else if (groupResponseStatus.getStatus() == 0) {
+                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (Exception e) {
+                    mDialog.dismiss();
+                    Log.d("exit_responsegroup", "" + e.getMessage());
+//                    StringWriter writer = new StringWriter();
+//                    e.printStackTrace(new PrintWriter(writer));
+//                    Bugreport bg = new Bugreport();
+//                    bg.sendbug(writer.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                mDialog.dismiss();
+                Log.d("exit_responsegroup", "" + t.getMessage());
+                ToastPopUp.show(myContext, getString(R.string.server_response_error));
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                    GroupsListFragment groupsListFragment = new GroupsListFragment();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        mGoogleApiClient.connect();
+    }
+}

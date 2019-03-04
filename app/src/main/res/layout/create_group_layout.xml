@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/group_profile_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/group_default_wallpaper" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/group_take_picture"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:background="@drawable/white_button_background"
+                android:drawableLeft="@drawable/cam_1"
+                android:drawablePadding="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="11dp"
+                android:text="@string/take_picture"
+                android:textAllCaps="false"
+                android:textColor="@color/grey"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/group_browse_image"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/white_button_background"
+                android:drawableLeft="@drawable/gallery_1"
+                android:paddingLeft="10dp"
+                android:paddingRight="11dp"
+                android:text="@string/browse"
+                android:textAllCaps="false"
+                android:textColor="@color/grey"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText_group_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:hint="@string/group_name"
+            android:inputType="textPersonName"
+            android:maxLength="100"
+            android:singleLine="true"
+            android:textColor="@color/grey"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/editText_group_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="@string/group_desc"
+            android:inputType="textMultiLine"
+            android:maxLength="300"
+            android:maxLines="4"
+            android:scrollbars="vertical"
+            android:textColor="@color/grey"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/button_save_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_background"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+</ScrollView>

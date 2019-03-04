@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    app:layout_collapseMode="pin"
+    android:orientation="vertical"
+    tools:context="giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity">
+
+    <android.support.design.widget.AppBarLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <ImageView
+                android:id="@+id/imgHamburger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                android:src="@drawable/hamburger" />
+
+            <ImageView
+                android:id="@+id/imgappbarsetting"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/filter"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/img_filter"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/filter_icon"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/imgappbarcamera"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/cam"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/appbar_editprofile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="8dp"
+                android:text="@string/edit_profile"
+                android:textColor="#fff"
+                android:textSize="@dimen/finalheaderfont"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/appbar_editprofilesave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="8dp"
+                android:text="Save"
+                android:textColor="#fff"
+                android:textSize="@dimen/finalheaderfont"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/backbutton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="left"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_back"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_horizontal"
+                android:gravity="center|center_horizontal">
+
+                <TextView
+                    android:id="@+id/txtheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_horizontal"
+                    android:gravity="center|center_horizontal"
+                    android:text="Gift A Need"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/finalheaderfont"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <!--<include layout="@layout/content_main" />-->
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white" />
+</LinearLayout>

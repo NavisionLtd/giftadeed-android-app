@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="button_width">160dp</dimen>
+    <dimen name="button_height">20dp</dimen>
+    <dimen name="btndistance">10dp</dimen>
+
+    <dimen name="logineditemailwd">300dp</dimen>
+    <dimen name="logineditemailpwd">250dp</dimen>
+
+
+
+    <dimen name="signupfname">144dp</dimen>
+    <dimen name="signupaddress">290dp</dimen>
+    <dimen name="signupleftmarg">40dp</dimen>
+    <dimen name="signupmargin">10dp</dimen>
+    <dimen name="signupgenmargin">24dp</dimen>
+    <dimen name="imglogowidth">50dp</dimen>
+    <dimen name="landing_text_size">24dp</dimen>
+    <dimen name="needdtlslayouthig">300dp</dimen>
+    <dimen name="needdtlmargin">300dp</dimen>
+    <dimen name="postdatemargin">50dp</dimen>
+    <dimen name="uploadimg">120dp</dimen>
+    <dimen name="paddingdrawableofbutton">-40dp</dimen>
+
+    <dimen name="finaltextfont">15dp</dimen>
+
+    <dimen name="finalheaderfont">19dp</dimen>
+
+    <dimen name="myprofileheight">500dp</dimen>
+    <dimen name="splashtextfont">24dp</dimen>
+
+    <dimen name="forgotpassedittext">280dp</dimen>
+    <dimen name="taganeedcategorylength">260dp</dimen>
+    <dimen name="distleftpadding">10dp</dimen>
+    <dimen name="listimgwidth">100dp</dimen>
+    <dimen name="fb_image_dimen">40dp</dimen>
+    <dimen name="socialmedia_breakline">80dp</dimen>
+    <dimen name="nav_height">150dp</dimen>
+    <dimen name="list_image_width">120dp</dimen>
+    <dimen name="list_icon_size">20dp</dimen>
+    <dimen name="gridmenucard_size">130dp</dimen>
+    <dimen name="gridmenuimg_width">80dp</dimen>
+    <dimen name="gridmenuimg_height">60dp</dimen>
+    <dimen name="gridmenu_textsize">13dp</dimen>
+    <dimen name="drawer_icon_width">100dp</dimen>
+    <dimen name="drawer_icon_height">80dp</dimen>
+    <dimen name="negative_margin">-130dp</dimen>
+    <dimen name="detailspage_layoutheight">300dp</dimen>
+</resources>

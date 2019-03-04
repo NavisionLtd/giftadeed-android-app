@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/home_orange_map_icon"
+        android:title="@string/map_home" />
+
+    <item
+        android:id="@+id/navigation_tag_deed"
+        android:icon="@drawable/tag_a_deed_map_icon"
+        android:title="@string/map_tagadeed" />
+
+    <item
+        android:id="@+id/navigation_fullfill"
+        android:icon="@drawable/fulfill_a_deed_map_icon"
+        android:title="@string/map_tagged_deeds" />
+
+    <item
+        android:id="@+id/navigation_sos"
+        android:icon="@drawable/sos_icon"
+        android:title="SOS" />
+
+</menu>

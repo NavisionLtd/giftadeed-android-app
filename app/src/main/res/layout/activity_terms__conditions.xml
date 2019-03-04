@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_terms__conditions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Conditions">
+    <LinearLayout
+        android:id="@+id/activity_welcome_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarwelcomepage"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            <ImageView
+                android:id="@+id/tc_backbutton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="left"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_back"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Terms and Conditions"
+                android:textStyle="bold"
+                android:textSize="@dimen/finalheaderfont"
+                android:gravity="center"
+                android:layout_gravity="center|center_horizontal"
+                android:textColor="#fff"/>
+            </android.support.v7.widget.Toolbar>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <WebView
+                    android:id="@+id/txtAgreementText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+
+                    android:scrollbars="none"
+                    android:textColor="#000"
+                    android:textSize="@dimen/finaltextfont"
+
+                    />
+            </LinearLayout>
+
+
+        </ScrollView>
+    </LinearLayout>
+</RelativeLayout>

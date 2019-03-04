@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_first__login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="giftadeed.kshantechsoft.com.giftadeed.FirstLogin.First_Login">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D9000000"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_vertical"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/drawer_icon_width"
+                android:layout_height="@dimen/drawer_icon_width"
+                android:src="@drawable/first_login" />
+
+            <TextView
+                android:id="@+id/firstloginhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/first_login"
+                android:textColor="#fff"
+                android:textSize="@dimen/finalheaderfont" />
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="@dimen/drawer_icon_width"
+                android:layout_height="2dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:background="#fff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputlayoutfirstlogincountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColorHint="#fff">
+
+                <EditText
+                    android:id="@+id/edfirstlogin_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/colorAccent"
+                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="@string/country"
+                    android:inputType="text"
+                    android:longClickable="false"
+                    android:textColor="#FFFFFF"
+
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="@dimen/finaltextfont" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputlayoutfirstloginstate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColorHint="#fff">
+
+                <EditText
+                    android:id="@+id/edfirstlogin_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/colorAccent"
+                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="@string/state"
+                    android:inputType="text"
+                    android:longClickable="false"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="@dimen/finaltextfont" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputlayoutfirstlogincity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColorHint="#fff">
+
+                <EditText
+                    android:id="@+id/edfirstlogin_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/colorAccent"
+                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="@string/city"
+                    android:inputType="text"
+                    android:longClickable="false"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="@dimen/finaltextfont" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/txtinputlayoutfirstloginemail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColorHint="#fff">
+
+                <EditText
+                    android:id="@+id/edfirstloginemail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/colorAccent"
+                    android:hint="@string/email_string"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#FFFFFF"
+                    android:textColorHighlight="#eeec2b09"
+                    android:textColorHint="#FFFFFF"
+                    android:textSize="@dimen/finaltextfont" />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/firstloginsubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btnbackground"
+                android:text="@string/submit"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/finalheaderfont" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,234 @@
+package giftadeed.kshantechsoft.com.giftadeed.splash;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
+import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
+import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.GetingAddress;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
+
+public class SplashActivity extends AppCompatActivity {
+    TextView txt_title;
+    TextView txt_title2, txt_app_version;
+    private boolean isBackPressed = false;
+    SessionManager sessionManager;
+    String strUserId = null, message, address_show;
+    String currentVersion = "", newVersion;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+        init();
+        try {
+            currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            if (currentVersion.length() > 0) {
+                txt_app_version.setText("App Version " + currentVersion);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (isInternetOn()) {
+            new GetVersionCode().execute();
+        } else {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setMessage(getString(R.string.network_validation));
+            alertDialogBuilder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            finish();
+                        }
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+    }
+
+    public void init() {
+        //-----------------------title txt---------------------------------------------------------
+        txt_title = (TextView) findViewById(R.id.text_splash_title);
+        txt_title2 = (TextView) findViewById(R.id.text_splash_title2);
+        txt_app_version = (TextView) findViewById(R.id.tv_app_version);
+        txt_title.setShadowLayer(30, 0, 0, Color.BLACK);
+        //------------------Font setting------------------------------------------------------------
+        txt_title.setTypeface(new FontDetails(SplashActivity.this).fontStandard_spalsh);
+        txt_title2.setTypeface(new FontDetails(SplashActivity.this).fontStandard_spalsh);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            isBackPressed = true;
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void showForceUpdateDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SplashActivity.this);
+        alertDialogBuilder.setTitle(getApplicationContext().getString(R.string.youAreNotUpdatedTitle));
+        alertDialogBuilder.setMessage(getApplicationContext().getString(R.string.youAreNotUpdatedMessage));
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")));
+                dialog.dismiss();
+                SplashActivity.this.finish();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+                SplashActivity.this.finish();
+//                proceedToApp();
+            }
+        });
+        alertDialogBuilder.show();
+    }
+
+    public void proceedToApp() {
+        address_show = new GetingAddress(SplashActivity.this).getCompleteAddressString(new GPSTracker(SplashActivity.this).getLatitude(), new GPSTracker(SplashActivity.this).getLatitude());
+        Log.d("address", address_show);
+        Thread timerThread = new Thread() {
+            public void run() {
+                try {
+                    sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (!isBackPressed) {
+                        sessionManager = new SessionManager(getApplicationContext());
+                        HashMap<String, String> user = sessionManager.getUserDetails();
+                        strUserId = user.get(sessionManager.USER_ID);
+                        // Log.d("useridshared",strUserId);
+                        if (strUserId == null) {
+                            /*Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                            startActivity(i);*/
+
+                            //messagecharity = "Charity";
+                            Intent log = new Intent(getApplicationContext(), LoginActivity.class);
+                            log.putExtra("message", "Charity");
+                            startActivity(log);
+                        } else {
+                            message = "Charity";
+                            Intent in = new Intent(SplashActivity.this, TaggedneedsActivity.class);
+                            in.putExtra("message", message);
+                            startActivity(in);
+                        }
+                    }
+                }
+            }
+        };
+        //   }
+        timerThread.start();
+    }
+
+    class GetVersionCode extends AsyncTask<Void, String, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get();
+                if (document != null) {
+                    Elements element = document.getElementsContainingOwnText("Current Version");
+                    for (Element ele : element) {
+                        if (ele.siblingElements() != null) {
+                            Elements sibElemets = ele.siblingElements();
+                            for (Element sibElemet : sibElemets) {
+                                newVersion = sibElemet.text();
+                            }
+                        }
+                    }
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SplashActivity.this);
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setMessage(getString(R.string.network_validation));
+                    alertDialogBuilder.setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    finish();
+                                }
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d("appinfodetails", "" + newVersion);
+            return newVersion;
+        }
+
+        @Override
+        protected void onPostExecute(String onlineVersion) {
+            super.onPostExecute(onlineVersion);
+            if (onlineVersion != null && !onlineVersion.isEmpty()) {
+                if (Float.valueOf(currentVersion) < Float.valueOf(onlineVersion)) {
+//                if (!currentVersion.equals(onlineVersion)) {
+                    //show update dialog
+                    showForceUpdateDialog();
+                } else {
+                    proceedToApp();
+                }
+            }
+            Log.d("appinfodetails", "Current version " + currentVersion + "playstore version " + onlineVersion);
+        }
+    }
+
+    public final boolean isInternetOn() {
+        // get Connectivity Manager object to check connection
+        ConnectivityManager connec =
+                (ConnectivityManager) getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        // Check for network connections
+        if (connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED) {
+            // if connected with internet
+            return true;
+        } else if (
+                connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
+                        connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED) {
+            return false;
+        }
+        return false;
+    }
+}
+

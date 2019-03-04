@@ -1,0 +1,508 @@
+<resources>
+    <string name="app_name">GiftADeed</string>
+
+    <!--Login page-->
+    <string name="login_terms">条款和条件 </string>
+    <string name="login_privacy">隐私政策</string>
+    <string name="login_string">登录</string>
+    <string name="email_string">电子邮件</string>
+    <string name="password_string">密码</string>
+    <string name="signup">尚未注册? 注册</string>
+    <string name="forgot">忘记密码？</string>
+    <string name="txtseperator">或登录</string>
+    <string name="txtagree1">登录即表示您同意我们的意见</string>
+    <string name="terms_and">和</string>
+    <string name="select_language">选择语言</string>
+    <string name="registered_email">输入注册邮箱</string>
+    <string name="submit">提交</string>
+    <string name="cancel">取消</string>
+
+    <!--Sign up page-->
+    <string name="sign_up">注册</string>
+    <string name="first_name">名字</string>
+    <string name="last_name">姓</string>
+    <string name="country">国家</string>
+    <string name="logintxt">已经有账号？ <u>登录</u></string>
+
+    <!--App update-->
+    <string name="youAreNotUpdatedTitle">更新可用</string>
+    <string name="youAreNotUpdatedMessage">可以使用新版本的GiftADeed。请更新。</string>
+    <string name="update">更新</string>
+
+    <!--Navigation drawer-->
+    <string name="view_profile">查看资料</string>
+    <string name="drawer_home">家</string>
+    <string name="drawer_groups">组</string>
+    <string name="drawer_tag_deed">标记契约</string>
+    <string name="drawer_resources">资源</string>
+    <string name="drawer_about_app">关于App</string>
+    <string name="drawer_notification">通知</string>
+    <string name="drawer_settings">设置</string>
+    <string name="drawer_logout">登出</string>
+
+    <!--Grid menu and details-->
+    <string name="noti_history">通知歷史記錄</string>
+    <string name="list_of_myfulfilled_tags">我的已完成標籤列表</string>
+    <string name="list_of_taggers">您所在城市的前10名標記列表</string>
+    <string name="list_of_fulfillers">您所在城市的十大標籤履行者列表</string>
+    <string name="dash1">你的最後一件好事還在繼續</string>
+    <string name="dash2">您的標籤總數是</string>
+    <string name="dash3">您的履行總數是</string>
+    <string name="dash4">您成功標記的百分比是</string>
+    <string name="dash5">你的禮物得分是</string>
+    <string name="my_tags">我的標籤</string>
+    <string name="my_tags_heading">我的標籤</string>
+    <string name="list_of_mytags">我的標籤列表</string>
+    <string name="my_fulfil_tags_heading">我完成的標籤</string>
+    <string name="top_ten_heading">十大標籤</string>
+    <string name="top_ten_fulfill_heading">十大標籤Fulfillers</string>
+    <string name="tag_counter_heading">標籤計數器</string>
+    <string name="dashboard_heading">儀表板</string>
+    <string name="about_us_heading">關於我們</string>
+    <string name="terms_heading">條款和條件</string>
+    <string name="privacy_heading">隱私政策</string>
+    <string name="cookies_heading">Cookies政策</string>
+    <string name="end_user_heading">最終用戶協議</string>
+    <string name="dis_heading">放棄</string>
+    <string name="help_heading">救命</string>
+    <string name="contact_us_heading">聯繫我們</string>
+
+    <!--App update-->
+    <string name="map_map">地图</string>
+    <string name="map_list">名单</string>
+    <string name="map_tagged_deeds">标记的行为</string>
+
+    <!--Bottom navigation-->
+    <string name="map_home">家</string>
+    <string name="map_tagadeed">标记契约</string>
+    <string name="map_fulfilled_tags">完成标签</string>
+
+    <!--Group-->
+    <string name="grp_deed_title">團體契約</string>
+    <string name="search_email">搜索郵箱 *</string>
+    <string name="active_tags">有源標籤</string>
+    <string name="no_group_found">没有找到任何组。你想创造一个吗？</string>
+    <string name="action_create_group">创建组</string>
+    <string name="edit_group">编辑组</string>
+    <string name="group_name">团队名字 *</string>
+    <string name="group_desc">小组介绍</string>
+    <string name="save">保存</string>
+    <string name="take_picture">拍照片</string>
+    <string name="browse">浏览</string>
+    <string name="add_member">添加成员</string>
+    <string name="view_member_list">查看会员列表</string>
+    <string name="delete_group">删除组</string>
+    <string name="group_info">小组信息</string>
+    <string name="exit_group">退出组</string>
+    <string name="member_list">會員名單</string>
+    <string name="total_members">會員總數</string>
+    <string name="no_members">找不到會員</string>
+    <string name="search_member">搜索會員 *</string>
+    <string name="select_action">選擇操作</string>
+    <string name="remove_member">刪除會員</string>
+    <string name="make_admin">組管理員</string>
+    <string name="dismiss_admin">作為管理員解僱</string>
+
+    <!--My profile-->
+    <string name="my_profile">我的简历</string>
+    <string name="edit_profile">编辑</string>
+    <string name="gender">性别 :</string>
+    <string name="privacy">隐私 :</string>
+    <string name="state">州</string>
+    <string name="city">市</string>
+    <string name="anonymous">匿名</string>
+    <string name="public_1">上市</string>
+    <string name="change_pass">更改密码</string>
+    <string name="my_credits">我的学分 - </string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+
+    <!--Tag a deed-->
+    <string name="select_category">选择类别</string>
+    <string name="select_pref">選擇首選項</string>
+    <string name="select_location">选择位置</string>
+    <string name="permanent_location">永久的位置</string>
+    <string name="deed_validity_heading">契约有效期（1至48小时）</string>
+    <string name="select_audiance">选择受众</string>
+    <string name="description">描述</string>
+    <string name="post">岗位</string>
+    <string name="container_available">可用的容器</string>
+    <string name="container_note">* 這個有需要的人是否有食物盤/水容器來收回捐贈的食物/水？</string>
+
+    <!--Deed details-->
+    <string name="deed_details_heading">契約細節</string>
+    <string name="str_location">地點 : </string>
+    <string name="no_needy">周圍沒有窮人</string>
+    <string name="people_looking_1"> 人正在尋找你的幫助 </string>
+    <string name="people_looking_2"> 人們正在尋求你的幫助 </string>
+    <string name="pref_1">人/人的偏好 : </string>
+    <string name="deed_location">契約地點 : </string>
+    <string name="deed_details">契約細節 : </string>
+    <string name="see_more">看更多</string>
+    <string name="comments">评论</string>
+    <string name="tagged_by">标记为: </string>
+    <string name="edit">编辑</string>
+    <string name="comment">评论</string>
+    <string name="report_deed">报告契约</string>
+    <string name="report_user">报告用户</string>
+    <string name="gift_now">礼物现在</string>
+    <string name="press_enter_to_post">按Enter发布</string>
+
+    <!--gift a deed-->
+    <string name="gift_title">禮物契約</string>
+    <string name="upload_picture">上传图片</string>
+    <string name="snap">卡  </string>
+    <string name="is_this_deed">这件事完全履行了吗？</string>
+    <string name="tell_people">告诉别人你的礼物</string>
+
+    <!--First login-->
+    <string name="first_login">首次登录</string>
+
+    <!--Settings page-->
+    <string name="app_settings">應用設置</string>
+    <string name="notif_settings">通知設置</string>
+    <string name="receive_notif">接收通知</string>
+    <string name="groupwise_notif">小組明智的通知</string>
+    <string name="save_settings">保存設置</string>
+    <string name="GPSsettings">GPS设置</string>
+    <string name="GPSsettingsmessage">GPS未启用. 转到设置菜单并启用GPS</string>
+    <string name="settings">设置</string>
+    <string name="title_activity_maps">地图</string>
+    <string name="aboutMe">关于我</string>
+    <string name="here_hyperlink"><a href="https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed">这里</a></string>
+
+    <!--Dialog strings-->
+    <string name="exit_msg">你真的想退出吗？</string>
+    <string name="post_msg">你真的想發帖嗎？</string>
+    <string name="report_msg">你真的想報告用戶嗎？</string>
+    <string name="report_deed_msg">你真的想報告契約嗎？</string>
+    <string name="remove_sos_msg">你真的想刪除這個SOS嗎？</string>
+    <string name="delete_grp_msg">你真的想刪除這個群組嗎？</string>
+    <string name="exit_grp_msg">你真的想退出這個群體嗎？</string>
+    <string name="delete_resource_msg">你真的想刪除這個資源嗎？</string>
+    <string name="logout_msg">你真的想退出嗎？</string>
+    <string name="exit_yes">是</string>
+    <string name="exit_no">没有</string>
+    <string name="tag_success_msg1">你已經標記了 </string>
+    <string name="tag_success_msg2">需要</string>
+    <string name="tag_success_msg3">你賺了 </string>
+    <string name="tag_success_msg4">點 </string>
+    <string name="tag_success_msg5">你的總積分是 </string>
+    <string name="remove_member_dialog">從組中刪除此成員 ?</string>
+
+    <!--Resource-->
+    <string name="res_details">資源詳情</string>
+    <string name="select_res_group">選擇您的組</string>
+    <string name="res_cat">資源類別</string>
+    <string name="res_subcat">資源子類別</string>
+    <string name="res_name">資源名稱 *</string>
+    <string name="res_desc">資源描述</string>
+    <string name="res_audi">選擇資源受眾</string>
+    <string name="create_res">創建資源</string>
+    <string name="res_added_by">資源增加了 : </string>
+    <string name="res_name_1">資源名稱 : </string>
+    <string name="description_1">描述 : </string>
+    <string name="res_cat_1">資源類別 : </string>
+    <string name="res_location">資源位置 : </string>
+    <string name="res_created_on">資源創建於 : </string>
+
+    <!--SOS details-->
+    <string name="emer_details">緊急情況</string>
+    <string name="sos_heading">發布下面提到的細節</string>
+    <string name="current_location">當前位置</string>
+    <string name="refresh_current_location">刷新當前位置</string>
+    <string name="nature_emer">緊急的性質</string>
+    <string name="sos_added_by">SOS補充說: </string>
+    <string name="type_of_emer">緊急類型 : </string>
+    <string name="sos_location_1">SOS位置 : </string>
+    <string name="sos_created_on">SOS創建於 : </string>
+    <string name="del_sos">刪除SOS</string>
+
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+    <string name="middle_terms">  ,和  </string>
+    <string name="privacy_policy"><u>隐私政策</u></string>
+    <string name="last_text_terms"> 改变以适应全球观众.</string>
+    <string name="share"><u>分享</u></string>
+    <string name="network_validation">网络不可用</string>
+    <string name="Enter_FirstName">输入名字</string>
+    <string name="validation_first_name_special_characters_merchant">仅输入字母</string>
+    <string name="validation_last_name_special_characters_merchant">仅在姓氏中输入字母</string>
+    <string name="first_character_not_space">第一个字符不能是空格</string>
+    <string name="spaces_not_allowed">不允许有空格</string>
+    <string name="min_length">长度应在3-15个字符之间</string>
+    <string name="Lnamemin_length">长度应在1-20个字符之间</string>
+    <string name="Enter_LastName">输入姓氏</string>
+    <string name="Enter_Address">输入地址</string>
+    <string name="Enter_validemailaddress">输入一个有效的电子邮件地址</string>
+    <string name="Enter_emailaddress">输入电邮地址</string>
+    <string name="Enter_Mobileno">输入手机号码</string>
+    <string name="Password_blank">密码不能为空</string>
+    <string name="Password_length">密码长度应在8-20个字符之间</string>
+    <string name="resenttxt"><u>重发电子邮件</u></string>
+    <string name="facebook_app_id">1250339181777732</string>
+    <string name="fb_login_protocol_scheme">fb1250339181777732</string>
+    <string name="enter_password">输入密码</string>
+    <string name="take_photo">拍照</string>
+    <string name="select_from_gallery">從圖庫中選擇</string>
+    <string name="select_from_avatars">從頭像中選擇</string>
+    <string name="no_records_found">没有找到记录</string>
+    <string name="list_of_people">需要帮助的人员名单</string>
+    <string name="reg_completion_link">A registration completion link has been sent to </string>
+    <string name="reg_completion_link_1">. You can set your password using that link.</string>
+    <string name="reg_completion_link_2">Please check your promotions, social, spam or junk mails folders. Depending on your email preference settings, email from admin@giftadeed.com may end up in different folders.</string>
+    <string name="you_earned">你赚取了:</string>
+    <string name="your_points">你的总积分:</string>
+    <string name="tagged_deeds_for_day">标记的行为 &amp; 实现了一天的行动</string>
+    <string name="todays_deeds">今天的标记事迹</string>
+    <string name="todays_fulfilled_deeds">今天的履行行动</string>
+    <string name="filter">过滤</string>
+    <string name="start_writing">开始在这里写... </string>
+    <string name="apply_filters">应用过滤器</string>
+    <string name="radius">半径</string>
+    <string name="apply">应用</string>
+    <string name="send">发送</string>
+    <string name="you_can_contact">您可以联系我们 -</string>
+    <string name="contact_directly">直接联系我们</string>
+    <string name="distance">距离</string>
+    <string name="time">时间</string>
+    <string name="search">搜索</string>
+    <string name="coming_soon">快来了......</string>
+    <string name="suggest_sub_type">建議子類型</string>
+    <string name="enter_suggession">輸入建議</string>
+    <string name="subtype_already_exist">子類型已經存在</string>
+    <string name="subtype_success">子類型已成功提交</string>
+    <string name="suggession_error">無法提交您的建議</string>
+    <string name="all_groups">所有團體</string>
+    <string name="all_individuals">所有個人用戶</string>
+    <string name="your_groups">你的團體</string>
+    <string name="tell_people_remaining">告訴別人剩下的是什麼</string>
+    <string name="server_response_error">有些不對勁。請稍後再試</string>
+    <string name="already_deeds_msg">以下契約已經標記為選定的位置:</string>
+    <string name="first"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >Gift-A-Deed应用程序希望在生活的基本必需品方面弥合“富人”和“穷人”之间的差距.
+    </P></body></html>
+    ]]></string>
+
+    <string name="second"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >是. 此应用程序可在全球访问.
+    </P></body></html>
+    ]]></string>
+
+    <!--<P >Currently, this is app is available only in Hong Kong, India, Canada, China, France, and Thailand. We do plan to launch this app world-wide in the coming future.-->
+    <!--</P></body></html>-->
+
+    <string name="third"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >其他人只能看到您的全名. 如果您愿意,可以通过访问“我的个人资料”选项更改“隐私设置”来匿名.
+    </P></body></html>
+    ]]></string>
+
+    <string name="fourth"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >要标记有需要的人,只需转到应用的标记契约部分即可.在标记契约页面上,填写所需信息,然后单击有需要的人的照片（可选）,您就可以发布标签了.
+    </P></body></html>
+    ]]></string>
+
+    <string name="fifth"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >完成标记后,您将收到有关相同标记的通知.
+    </P></body></html>
+    ]]></string>
+
+    <string name="sixth"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >没有.在满足需求的同时,没有预期的货币兑换.
+    </P></body></html>
+    ]]></string>
+
+    <string name="seventh"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >不,您无法满足已经实现的需求.
+    </P></body></html>
+    ]]></string>
+
+    <string name="eighth"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >标记契约后,距离标记10公里附近的所有Gift-A-Deed应用程序用户都会收到通知.
+    </P></body></html>
+    ]]></string>
+
+    <string name="nineth"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >所有需求都具有在标记需求本身期间设置的预定义有效性.已通过有效性的所有需求都会停止在应用程序中显示.此外,无论何时完成标记,它都会停止在应用程序中显示.
+    </P></body></html>
+    ]]></string>
+
+    <string name="tenth"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+    <P >对于每个成功的标签,用户获得100个奖励积分.类似地,对于用户的每次履行,用户获得200个奖励积分.
+    </P></body></html>
+    ]]></string>
+
+    <string name="eleventh"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P >您可以转到该需求的详细信息页面来报告用户或管理员的需求.
+    </P></body></html>
+    ]]></string>
+
+
+    <string name="twelvth"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P >请检查您的垃圾/垃圾邮件文件夹，检查来自Gift-A-Deed的电子邮件是否会转到该文件夹​​。如果邮件形式的礼品 - 契约将转到您的垃圾/垃圾邮件文件夹，请将其标记为“安全”。这样，来自Gift-A-Deed的电子邮件将开始登陆您的收件箱。
+    </P></body></html>
+    ]]></string>
+
+
+    //--------------------key-------------------
+    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>
+
+</resources>

@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "711815567847",
+    "firebase_url": "https://giftadeed.firebaseio.com",
+    "project_id": "giftadeed",
+    "storage_bucket": "giftadeed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711815567847:android:de8c74aa0c609821",
+        "android_client_info": {
+          "package_name": "giftadeed.kshantechsoft.com.giftadeed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711815567847-milmbt4847d9bv81jtlhmj9elrb821db.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "giftadeed.kshantechsoft.com.giftadeed",
+            "certificate_hash": "2d00da5f56e3b1b6e547fa30fa6a7cd42c12b09f"
+          }
+        },
+        {
+          "client_id": "711815567847-m00rhap31u8do77vgqmdbujnruiarsmc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "giftadeed.kshantechsoft.com.giftadeed",
+            "certificate_hash": "50d50944ebc817888c711a3d0cca60a638e6f915"
+          }
+        },
+        {
+          "client_id": "711815567847-ivq968bl1tmv0fn8ck1t79s260momaft.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "giftadeed.kshantechsoft.com.giftadeed",
+            "certificate_hash": "6c73c5ce42da226312b39e66e58f4ac5ad7156bd"
+          }
+        },
+        {
+          "client_id": "711815567847-0jbq288upejg9p8ftfq2qi94h1lvbfek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8vLXX5pFHzrgwBt8fUs43zeiNBZGU6QM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711815567847-0jbq288upejg9p8ftfq2qi94h1lvbfek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
