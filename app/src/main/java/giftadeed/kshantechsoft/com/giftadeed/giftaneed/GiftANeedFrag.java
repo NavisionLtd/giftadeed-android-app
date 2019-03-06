@@ -277,10 +277,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
                 } catch (Exception e) {
                     e.printStackTrace();
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
 
             }
@@ -627,10 +627,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                             //sendaTag(strUser_ID, strNeedmapping_ID, str_Geopint, strImagenamereturned, strShortDescription, strFullDescription, strlocation);
                             // Log.d("photopath", strImagenamereturned);
                         } catch (Exception e) {
-//                            StringWriter writer = new StringWriter();
-//                            e.printStackTrace(new PrintWriter(writer));
-//                            Bugreport bg = new Bugreport();
-//                            bg.sendbug(writer.toString());
+                            StringWriter writer = new StringWriter();
+                            e.printStackTrace(new PrintWriter(writer));
+                            Bugreport bg = new Bugreport();
+                            bg.sendbug(writer.toString());
                         }
                     }
                 },
@@ -884,10 +884,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     }
                     mDialog.dismiss();
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -1123,10 +1123,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             }
         } catch (Exception e) {
             // SendMail smail=new SendMail("giftadeed2017@gmail.com","Error",e.toString());
-//            StringWriter writer = new StringWriter();
-//            e.printStackTrace(new PrintWriter(writer));
-//            Bugreport bg = new Bugreport();
-//            bg.sendbug(writer.toString());
+            StringWriter writer = new StringWriter();
+            e.printStackTrace(new PrintWriter(writer));
+            Bugreport bg = new Bugreport();
+            bg.sendbug(writer.toString());
         }
        /* ActivityCompat.requestPermissions(getActivity(), new String[]
                 {
@@ -1171,10 +1171,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             }
         } catch (Exception e) {
             // SendMail smail=new SendMail("giftadeed2017@gmail.com","Error",e.toString());
-//            StringWriter writer = new StringWriter();
-//            e.printStackTrace(new PrintWriter(writer));
-//            Bugreport bg = new Bugreport();
-//            bg.sendbug(writer.toString());
+            StringWriter writer = new StringWriter();
+            e.printStackTrace(new PrintWriter(writer));
+            Bugreport bg = new Bugreport();
+            bg.sendbug(writer.toString());
         }
     }
 
@@ -1262,10 +1262,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         fragmentTransaction.commit();
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

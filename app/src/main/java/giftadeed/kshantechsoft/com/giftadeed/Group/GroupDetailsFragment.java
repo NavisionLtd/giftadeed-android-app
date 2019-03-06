@@ -41,12 +41,15 @@ import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
@@ -299,10 +302,10 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                         }
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -537,10 +540,10 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                 } catch (Exception e) {
                     mDialog.dismiss();
                     Log.d("responsegroupinfo", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -609,10 +612,10 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                 } catch (Exception e) {
                     mDialog.dismiss();
                     Log.d("responsegroup", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -681,10 +684,10 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                 } catch (Exception e) {
                     mDialog.dismiss();
                     Log.d("exit_responsegroup", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

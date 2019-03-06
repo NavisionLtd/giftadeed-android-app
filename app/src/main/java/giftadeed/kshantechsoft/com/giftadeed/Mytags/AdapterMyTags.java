@@ -84,10 +84,10 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
             date = sdf.parse(model.getTaggedDatetime());
         } catch (ParseException e) {
             e.printStackTrace();
-//            StringWriter writer = new StringWriter();
-//            e.printStackTrace(new PrintWriter(writer));
-//            Bugreport bg = new Bugreport();
-//            bg.sendbug(writer.toString());
+            StringWriter writer = new StringWriter();
+            e.printStackTrace(new PrintWriter(writer));
+            Bugreport bg = new Bugreport();
+            bg.sendbug(writer.toString());
         }
 
         sdf = new SimpleDateFormat("dd-MMM-yyyy");
@@ -102,10 +102,10 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
                 Picasso.with(context).load(MANI_URL + SUB_URL + model.getTaggedPhotoPath()).placeholder(R.drawable.pictu)  .into(mainHolder.imgMytags);
             } catch (Exception e) {
                 // Picasso.with(context).load(R.drawable.pictu).resize(100, 100).into(mainHolder.imgMytags);
-//                StringWriter writer = new StringWriter();
-//                e.printStackTrace(new PrintWriter(writer));
-//                Bugreport bg = new Bugreport();
-//                bg.sendbug(writer.toString());
+                StringWriter writer = new StringWriter();
+                e.printStackTrace(new PrintWriter(writer));
+                Bugreport bg = new Bugreport();
+                bg.sendbug(writer.toString());
                 //mainHolder.imgMytags.setImageResource(R.drawable.pictu);
                 //mainHolder.imgMytags.setScaleType(ImageView.ScaleType.FIT_XY);
             }

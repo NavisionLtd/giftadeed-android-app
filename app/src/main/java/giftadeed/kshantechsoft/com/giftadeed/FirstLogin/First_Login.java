@@ -117,10 +117,10 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
             strCountry_Id = bundle.getString("countryid");
             strPrivacy=bundle.getString("privacy");
         } catch (Exception e) {
-//            StringWriter writer = new StringWriter();
-//            e.printStackTrace(new PrintWriter(writer));
-//            Bugreport bg = new Bugreport();
-//            bg.sendbug(writer.toString());
+            StringWriter writer = new StringWriter();
+            e.printStackTrace(new PrintWriter(writer));
+            Bugreport bg = new Bugreport();
+            bg.sendbug(writer.toString());
         }
         if (!(strCountry_Id.equals(""))) {
             getSelectedcountry();
@@ -317,10 +317,10 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
 
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -391,10 +391,10 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
 
             }
@@ -538,10 +538,10 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                 } catch (Exception e) {
                     states.clear();
                     categorylist.setAdapter(null);
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
 
                 }
 
@@ -678,10 +678,10 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         mDialog.dismiss();
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -779,10 +779,10 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         mDialog.dismiss();
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

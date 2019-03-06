@@ -251,6 +251,16 @@
                                         android:layout_weight="0.5"
                                         android:textColor="@color/colorAccent"
                                         android:textSize="14sp" />
+
+                                    <!--<TextView
+                                        android:id="@+id/details_locationicon"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:textColor="@color/colorPrimary"
+                                        android:layout_weight="0.5"
+                                        android:textSize="14sp"
+                                        android:text="Get Directions" />-->
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>

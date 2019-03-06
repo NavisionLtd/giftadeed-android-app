@@ -74,12 +74,15 @@ import com.squareup.okhttp.OkHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.EmergencyContact;
 import giftadeed.kshantechsoft.com.giftadeed.FirstLogin.First_Login;
 import giftadeed.kshantechsoft.com.giftadeed.Needdetails.StatusModel;
@@ -655,10 +658,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         mDialog.dismiss();
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                     alertDialogForgot.dismiss();
                 }
 
@@ -801,10 +804,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     mDialog.dismiss();
                 } catch (Exception e) {
                     mDialog.dismiss();
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -1029,10 +1032,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "Login was unsuccessful.", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-//                        StringWriter writer = new StringWriter();
-//                        e.printStackTrace(new PrintWriter(writer));
-//                        Bugreport bg = new Bugreport();
-//                        bg.sendbug(writer.toString());
+                        StringWriter writer = new StringWriter();
+                        e.printStackTrace(new PrintWriter(writer));
+                        Bugreport bg = new Bugreport();
+                        bg.sendbug(writer.toString());
                     }
                     /// String strFname = response.body().getCheckstatus().get(0).getFname();
                     // String strLname = response.body().getCheckstatus().get(0).getLname();
@@ -1112,10 +1115,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         Toast.makeText(LoginActivity.this, "Login was unsuccessful.", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
                 /// String strFname = response.body().getCheckstatus().get(0).getFname();
                 // String strLname = response.body().getCheckstatus().get(0).getLname();
@@ -1275,10 +1278,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 signIn();
                             }
                         });
-//                StringWriter writer = new StringWriter();
-//                e.printStackTrace(new PrintWriter(writer));
-//                Bugreport bg = new Bugreport();
-//                bg.sendbug(writer.toString());
+                StringWriter writer = new StringWriter();
+                e.printStackTrace(new PrintWriter(writer));
+                Bugreport bg = new Bugreport();
+                bg.sendbug(writer.toString());
             }
             /*txtName.setText(personName);
             txtEmail.setText(email);

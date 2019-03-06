@@ -459,10 +459,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
 
             }
@@ -981,10 +981,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                                 groupArrayList.add(groupPOJO);
                             }
                         } catch (Exception e) {
-//                            StringWriter writer = new StringWriter();
-//                            e.printStackTrace(new PrintWriter(writer));
-//                            Bugreport bg = new Bugreport();
-//                            bg.sendbug(writer.toString());
+                            StringWriter writer = new StringWriter();
+                            e.printStackTrace(new PrintWriter(writer));
+                            Bugreport bg = new Bugreport();
+                            bg.sendbug(writer.toString());
                         }
 
                         final Dialog dialog = new Dialog(getContext());
@@ -1098,10 +1098,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                 } catch (Exception e) {
                     simpleArcDialog.dismiss();
                     Log.d("response_grouplist", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -1215,10 +1215,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                                         selectedPref.clearFocus();
                                     }
                                 } catch (Exception e) {
-//                                    StringWriter writer = new StringWriter();
-//                                    e.printStackTrace(new PrintWriter(writer));
-//                                    Bugreport bg = new Bugreport();
-//                                    bg.sendbug(writer.toString());
+                                    StringWriter writer = new StringWriter();
+                                    e.printStackTrace(new PrintWriter(writer));
+                                    Bugreport bg = new Bugreport();
+                                    bg.sendbug(writer.toString());
                                 }
                                 //  Picasso.with(context).load(user.getImagelinlk()).resize(100, 100).into(img);
                        /* Log.d("name", strNeed_Name);
@@ -1463,10 +1463,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                     }
                 } catch (Exception e) {
                     Log.d("suggest_exception", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -1532,10 +1532,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                             taggeddeeds.add(taggedDeedsPojo);
                         }
                     } catch (Exception e) {
-//                        StringWriter writer = new StringWriter();
-//                        e.printStackTrace(new PrintWriter(writer));
-//                        Bugreport bg = new Bugreport();
-//                        bg.sendbug(writer.toString());
+                        StringWriter writer = new StringWriter();
+                        e.printStackTrace(new PrintWriter(writer));
+                        Bugreport bg = new Bugreport();
+                        bg.sendbug(writer.toString());
                     }
 
                     if (taggeddeeds.size() > 0) {
@@ -1779,10 +1779,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                 } catch (Exception e) {
                     simpleArcDialog.dismiss();
                     Log.d("editdeed_exception", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -2236,10 +2236,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
             }
         } catch (Exception e) {
             // SendMail smail=new SendMail("giftadeed2017@gmail.com","Error",e.toString());
-//            StringWriter writer = new StringWriter();
-//            e.printStackTrace(new PrintWriter(writer));
-//            Bugreport bg = new Bugreport();
-//            bg.sendbug(writer.toString());
+            StringWriter writer = new StringWriter();
+            e.printStackTrace(new PrintWriter(writer));
+            Bugreport bg = new Bugreport();
+            bg.sendbug(writer.toString());
         }
         /*ActivityCompat.requestPermissions(getActivity(), new String[]
                 {
@@ -2274,10 +2274,10 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
             }
         } catch (Exception e) {
             // SendMail smail=new SendMail("giftadeed2017@gmail.com","Error",e.toString());
-//            StringWriter writer = new StringWriter();
-//            e.printStackTrace(new PrintWriter(writer));
-//            Bugreport bg = new Bugreport();
-//            bg.sendbug(writer.toString());
+            StringWriter writer = new StringWriter();
+            e.printStackTrace(new PrintWriter(writer));
+            Bugreport bg = new Bugreport();
+            bg.sendbug(writer.toString());
         }
         /*ActivityCompat.requestPermissions(getActivity(), new String[]
                 {

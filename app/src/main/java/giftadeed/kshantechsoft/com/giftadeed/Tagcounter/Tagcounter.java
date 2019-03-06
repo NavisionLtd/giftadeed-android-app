@@ -175,10 +175,10 @@ public class Tagcounter extends Fragment implements GoogleApiClient.OnConnection
                     }
                 } catch (Exception e) {
                     mDialog.dismiss();
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

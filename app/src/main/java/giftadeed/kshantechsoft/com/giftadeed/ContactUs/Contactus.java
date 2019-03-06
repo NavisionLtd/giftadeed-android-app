@@ -245,10 +245,10 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                     }
                 }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                     mDialog.dismiss();
                 }
             }

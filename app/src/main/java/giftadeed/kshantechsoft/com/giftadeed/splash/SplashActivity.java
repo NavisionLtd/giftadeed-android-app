@@ -102,7 +102,7 @@ public class SplashActivity extends AppCompatActivity {
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")));
+                getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")));
                 dialog.dismiss();
                 SplashActivity.this.finish();
             }

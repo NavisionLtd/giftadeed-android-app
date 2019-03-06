@@ -502,10 +502,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             }
                         } catch (Exception e) {
                             mDialog.dismiss();
-//                            StringWriter writer = new StringWriter();
-//                            e.printStackTrace(new PrintWriter(writer));
-//                            Bugreport bg = new Bugreport();
-//                            bg.sendbug(writer.toString());
+                            StringWriter writer = new StringWriter();
+                            e.printStackTrace(new PrintWriter(writer));
+                            Bugreport bg = new Bugreport();
+                            bg.sendbug(writer.toString());
                         }
 
                         try {
@@ -514,10 +514,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             System.out.print("strImagepath" + strImagepath);
                             Picasso.with(myContext).load(strImagepath).into(imgcharacter);
                         } catch (Exception e) {
-//                            StringWriter writer = new StringWriter();
-//                            e.printStackTrace(new PrintWriter(writer));
-//                            Bugreport bg = new Bugreport();
-//                            bg.sendbug(writer.toString());
+                            StringWriter writer = new StringWriter();
+                            e.printStackTrace(new PrintWriter(writer));
+                            Bugreport bg = new Bugreport();
+                            bg.sendbug(writer.toString());
                         }
 
                         //---------------change date format
@@ -539,10 +539,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                 } catch (Exception e) {
                     mDialog.dismiss();
                     // Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
 
             }
@@ -623,10 +623,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         }
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -705,10 +705,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         }
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -784,10 +784,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         }
                     }
                 } catch (Exception e) {
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

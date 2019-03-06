@@ -226,10 +226,10 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                                 userList.add(groupPOJO);
                             }
                         } catch (Exception e) {
-//                            StringWriter writer = new StringWriter();
-//                            e.printStackTrace(new PrintWriter(writer));
-//                            Bugreport bg = new Bugreport();
-//                            bg.sendbug(writer.toString());
+                            StringWriter writer = new StringWriter();
+                            e.printStackTrace(new PrintWriter(writer));
+                            Bugreport bg = new Bugreport();
+                            bg.sendbug(writer.toString());
                         }
 
                         if (userList.size() > 0) {
@@ -255,10 +255,10 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                 } catch (Exception e) {
                     mDialog.dismiss();
                     Log.d("response_search_user", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -326,10 +326,10 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                 } catch (Exception e) {
                     mDialog.dismiss();
                     Log.d("response_add_member", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

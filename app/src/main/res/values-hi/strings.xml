@@ -138,6 +138,7 @@
     <string name="pref_1"> व्यक्ति के लिए प्राथमिकताएं : </string>
     <string name="deed_location">डीड लोकेशन : </string>
     <string name="deed_details">डीड विवरण : </string>
+    <string name="get_directions">दिशा प्राप्त करें</string>
     <string name="see_more">और देखें</string>
     <string name="tagged_by">टैग द्वारा : </string>
     <string name="edit">संपादित करें</string>

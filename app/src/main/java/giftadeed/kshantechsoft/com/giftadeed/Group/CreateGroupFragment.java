@@ -360,10 +360,10 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     }
                 } catch (Exception e) {
                     Log.d("responsegroup", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

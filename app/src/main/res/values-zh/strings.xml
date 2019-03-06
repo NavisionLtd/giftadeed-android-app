@@ -137,6 +137,7 @@
     <string name="people_looking_2"> 人們正在尋求你的幫助 </string>
     <string name="pref_1">人/人的偏好 : </string>
     <string name="deed_location">契約地點 : </string>
+    <string name="get_directions">獲取路線</string>
     <string name="deed_details">契約細節 : </string>
     <string name="see_more">看更多</string>
     <string name="comments">评论</string>

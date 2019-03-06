@@ -17,6 +17,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.design.bottomnavigation.LabelVisibilityMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -145,6 +146,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) v.findViewById(R.id.bottom_navigation_bar);
+        bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -214,7 +216,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-        mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
 
         if (!(Validation.isOnline(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));

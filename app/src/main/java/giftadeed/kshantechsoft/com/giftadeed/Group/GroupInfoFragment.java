@@ -223,10 +223,10 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                     }
                 } catch (Exception e) {
                     Log.d("responsegroupinfo", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 
@@ -309,10 +309,10 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                     }
                 } catch (Exception e) {
                     Log.d("response_memberlist", "" + e.getMessage());
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
 

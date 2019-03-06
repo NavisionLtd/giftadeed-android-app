@@ -47,5 +47,6 @@
         android:layout_weight="0.1"
         android:background="?android:attr/windowBackground"
         android:foreground="?attr/selectableItemBackground"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation" />
 </LinearLayout>
