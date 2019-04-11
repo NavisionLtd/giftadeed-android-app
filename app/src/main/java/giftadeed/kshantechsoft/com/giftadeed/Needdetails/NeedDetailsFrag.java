@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -97,7 +98,8 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     ListView listviewcomments;
     LinearLayout locationTypeLayout, subTypeLayout;
     CircleImageView imgcharacter;
-    ImageView img, imgback, details_locationicon, img_endorse, img_endorse_over;
+    TextView details_locationicon;
+    ImageView img, imgback, img_endorse, img_endorse_over;
     TextView txtheading, txtsubheading, txtaddress, txtdistance, txtDate, txt_name, txt_des, txtneeddetailsendorse,
             txtneeddetailsview, txtcontaineravilable, txtcontaineravilableyes_no, dialogtext, tvLocationType, txtPermanent, txtSubtypes;
     WebView detailsofgieft;
@@ -137,6 +139,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.VISIBLE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -205,6 +208,25 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
             }
         });
 
+        TaggedneedsActivity.imgShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String android_shortlink = "http://tiny.cc/kwb33y";
+                String ios_shortlink = "http://tiny.cc/h4533y";
+                String website = "https://www.giftadeed.com/";
+                String location = "http://maps.google.com/maps?saddr=" + str_geopoint;
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, "Hey! Someone needs your help to fulfil a deed. \n" +
+                        str_needName + " is needed here " + location + "\n\n" +
+                        "For more details download GiftADeed App: \n" +
+                        "Android : " + android_shortlink + "\n" +
+                        "iOS : " + ios_shortlink + "\n\n" +
+                        "Also, check the website at " + website);
+                startActivity(Intent.createChooser(share, "Share deed details on:"));
+            }
+        });
+
         layout_editdeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,16 +260,13 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 //---------------------------distance in feet-------------------------------------------------------
                         float ft_distance = dist1 * 3280.8f;
                         if (is_endorse == 1) {
-                            Toast.makeText(getContext(), "You have already endorse", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "You have already endorsed", Toast.LENGTH_SHORT).show();
                         } else {
 
                             if (ft_distance > dist) {
                                 Toast.makeText(getContext(), "You need to be within " + dist + " feet area of the needy person", Toast.LENGTH_SHORT).show();
                             } else {
-
                                 isDeedDeleted("endorse");
-
-
                             }
                         }
                     } catch (Exception e) {
@@ -364,7 +383,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -453,7 +472,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         } else {
                             txtaddress.setText(getResources().getString(R.string.deed_location) + "\n" + str_address.trim());
                         }
-                        txtdistance.setText(String.format("%.2f", Double.parseDouble(str_distance)) + " km(s)");
+                        txtdistance.setText(String.format("%.2f", Double.parseDouble(str_distance)) + " km(s) away");
 
                         List<String> elephantList = null;
                         StringBuffer edited = new StringBuffer();
@@ -585,7 +604,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
@@ -669,7 +688,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -749,7 +768,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -829,7 +848,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
@@ -863,9 +882,9 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();*/
-                            Toast.makeText(getContext(), "User reported successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.user_reported), Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getContext(), "Sorry something went wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.server_response_error), Toast.LENGTH_SHORT).show();
                             mDialog.dismiss();
                         }
                     }
@@ -915,7 +934,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
@@ -1234,14 +1253,11 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         dialog.setContentView(R.layout.gif_dialog);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(false);
-
-
         dialog.show();
         ImageView img = (ImageView) dialog.findViewById(R.id.img_gif);
         Glide.with(this)
-                .load(R.drawable.thumb)
+                .load(R.drawable.thumbs_up)
                 .into(img);
-
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
@@ -1252,8 +1268,6 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                 }
             }
         };
-
-
         handler.postDelayed(runnable, 5000);
     }
 }

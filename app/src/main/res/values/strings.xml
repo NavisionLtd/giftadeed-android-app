@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">GiftADeed</string>
+    <!--<string name="app_name">GiftADeed</string>-->
+    <string name="app_name">GAD P2 Test 28 March</string>
 
     <!--Login page-->
     <string name="login_terms">Terms and Conditions</string>
@@ -16,6 +17,8 @@
     <string name="registered_email">Enter registered email</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
+    <string name="wrong_password">Wrong Password</string>
+    <string name="login_failed">Login failed</string>
 
     <!--Sign up page-->
     <string name="sign_up">Sign up</string>
@@ -23,27 +26,67 @@
     <string name="last_name">Last Name</string>
     <string name="country">Country</string>
     <string name="logintxt">Already have an account? <u>Login</u></string>
+    <string name="length_error_1">Length cannot be greater than 15 characters</string>
+    <string name="length_error_2">Length cannot be greater than 20 characters</string>
 
     <!--App update-->
     <string name="youAreNotUpdatedTitle">Update Available</string>
     <string name="youAreNotUpdatedMessage">A new version of GiftADeed is available. Please update.</string>
     <string name="update">Update</string>
 
+    <!--Toast messages-->
+    <string name="network_validation">OOPS! No INTERNET. Please check your network connection</string>
+    <string name="server_response_error">Something went wrong. Please try later</string>
+    <string name="contact_saved">Contact saved</string>
+    <string name="setting_saved">Settings saved</string>
+    <string name="block_toast">You have been blocked</string>
+    <string name="group_deleted">Group deleted successfully</string>
+    <string name="error">Error</string>
+    <string name="exit_group_msg">You successfully exited from group</string>
+    <string name="group_created_msg">Group created successfully</string>
+    <string name="you_havnt_change">You havn\'t changed group information</string>
+    <string name="group_edited">Group edited successfully</string>
+    <string name="member_removed">Member removed successfully</string>
+    <string name="member_added">Member added successfully</string>
+    <string name="no_data_found">No data found</string>
+    <string name="admin_assigned">Admin assigned successfully</string>
+    <string name="admin_dismissed">Admin dismissed successfully</string>
+    <string name="address_notfound">Address not found</string>
+    <string name="user_reported">User reported successfully</string>
+    <string name="edited_success">Edited successfully</string>
+    <string name="check_email">Please check your email</string>
+    <string name="select_account">Please select your account from the list</string>
+    <string name="login_unsuccess">Login was unsuccessful</string>
+    <string name="email_already_exist">Email address already exists</string>
+    <string name="length_msg">Length cannot be greater than 500 characters</string>
+    <string name="unable_to_find">Unable to find address</string>
+    <string name="edited_unsucess">Edited unsuccessfully</string>
+    <string name="select_country">Select country</string>
+    <string name="select_state">Select state</string>
+    <string name="select_city">Select city</string>
+    <string name="permission_denied">Permission are denied please enable permissions</string>
+    <string name="already_deed">This deed is already reported by someone</string>
+    <string name="sos_location_error">Location cannot be blank. Please get location</string>
+    <string name="sos_success">Emergency created successfully</string>
+
     <!--Navigation drawer-->
     <string name="view_profile">View Profile</string>
     <string name="drawer_home">Home</string>
     <string name="drawer_groups">Groups</string>
+    <string name="drawer_inspire">Inspire Community</string>
     <string name="drawer_tag_deed">Tag A Deed</string>
     <string name="drawer_resources">Resources</string>
     <string name="drawer_about_app">About App</string>
     <string name="drawer_notification">Notifications</string>
     <string name="drawer_settings">Settings</string>
+    <string name="drawer_emergency_contacts">Emergency Contacts</string>
     <string name="drawer_logout">Logout</string>
 
     <!--Grid menu and details-->
     <string name="my_tags">MY TAGS</string>
     <string name="noti_history">Notification History</string>
     <string name="my_tags_heading">My Tags</string>
+    <string name="list_of_your">List of your tagged</string>
     <string name="list_of_mytags">List of my tags</string>
     <string name="list_of_myfulfilled_tags">List of My Fulfilled Tags</string>
     <string name="list_of_taggers">List of top 10 taggers in your city</string>
@@ -108,6 +151,7 @@
     <string name="edit_profile">Edit</string>
     <string name="my_credits">My Credits - </string>
     <string name="change_pass">Change Password</string>
+    <string name="change_pic">Change Picture</string>
     <string name="state">State</string>
     <string name="city">City</string>
     <string name="privacy">Privacy :</string>
@@ -118,10 +162,15 @@
     <string name="female">Female</string>
 
     <!--Tag a deed-->
+    <string name="main_cat">Main Categories</string>
+    <string name="group_cat">Group Categories</string>
+    <string name="edit_deed">Edit Deed</string>
     <string name="select_category">Select Category</string>
+    <string name="select_sub_category">Select Sub-Category</string>
     <string name="select_pref">Select Preferences</string>
     <string name="select_location">Select Location</string>
     <string name="permanent_location">Permanent location</string>
+    <string name="remove_location">Remove Location</string>
     <string name="deed_validity_heading">Deed Validity (1 to 48 Hours)</string>
     <string name="select_audiance">Select audience</string>
     <string name="description">Description</string>
@@ -164,6 +213,7 @@
     <string name="notif_settings">Notification Settings</string>
     <string name="receive_notif">Receive Notifications</string>
     <string name="groupwise_notif">Group wise Notifications</string>
+    <string name="catwise_notif">Category wise Notifications</string>
     <string name="save_settings">Save Settings</string>
     <string name="GPSsettings">GPS  Settings</string>
     <string name="GPSsettingsmessage">GPS is not enabled. Go to settings menu and enable GPS</string>
@@ -192,7 +242,13 @@
     <string name="tag_success_msg5">Your total point(s) are </string>
 
     <!--Resource-->
+    <string name="resource_error">You don\'t own groups to create the resource</string>
+    <string name="res_success">Resource created successfully</string>
+    <string name="action_create_resource">Create Resource</string>
+    <string name="edit_resource">Edit Resource</string>
+    <string name="delete_resource">Delete Resource</string>
     <string name="res_details">Resource Details</string>
+    <string name="no_res_found">No resources found. Do you want to create one?</string>
     <string name="select_res_group">Select your group</string>
     <string name="res_cat">Resource category</string>
     <string name="res_subcat">Resource sub-category</string>
@@ -218,6 +274,16 @@
     <string name="sos_location_1">SOS Location : </string>
     <string name="sos_created_on">SOS created on : </string>
     <string name="del_sos">Delete SOS</string>
+    <string name="use_in_case">USE IN CASE OF</string>
+    <string name="emergency">EMERGENCY</string>
+    <string name="call_police">Call Police Control Room</string>
+    <string name="alert_contact">Alert your Emergency contact</string>
+    <string name="no_emergency_contacts">No Emergency contacts to send alert</string>
+    <string name="set">Set</string>
+    <string name="share_location">Share your location</string>
+    <string name="close">CLOSE</string>
+    <string name="contacts_to_send_alert">Contacts to send alert message in emergency situation</string>
+    <string name="family_or_friend">e.g. Family member or Friend</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -225,13 +291,12 @@
     <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="last_text_terms"> to be changed to suit global audience.</string>
     <string name="share"><u>Share</u></string>
-    <string name="network_validation">OOPS! No INTERNET. Please check your network connection</string>
-    <string name="server_response_error">Something went wrong. Please try later</string>
     <string name="Enter_FirstName">Enter first name</string>
     <string name="validation_first_name_special_characters_merchant">Enter alphabets only</string>
     <string name="validation_last_name_special_characters_merchant">Enter alphabets only in last name</string>
     <string name="first_character_not_space">First character cannot be blank space</string>
     <string name="spaces_not_allowed">Blank space are not allowed</string>
+    <string name="length_error">Length cannot be greater than 15 characters</string>
     <string name="min_length">Length should be between 3-15 characters</string>
     <string name="Lnamemin_length">Length should be between 1-20 characters</string>
     <string name="Enter_LastName">Enter last name</string>
@@ -256,6 +321,8 @@
     <string name="todays_deeds">Today\'s Tagged Deeds</string>
     <string name="todays_fulfilled_deeds">Today\'s Fulfilled Deeds</string>
     <string name="filter">Filter</string>
+    <string name="filters">Filters</string>
+    <string name="filter_group">Filter by group</string>
     <string name="start_writing">Start writing here... </string>
     <string name="apply_filters">Apply Filters</string>
     <string name="radius">Radius</string>
@@ -280,6 +347,7 @@
     <string name="all_individuals">All individual users</string>
     <string name="tell_people_remaining">Tell people what is remaining</string>
     <string name="already_deeds_msg">Following deeds are already tagged for selected location:</string>
+
     <string name="first"><![CDATA[
     <html><body style="text-align:justify;>
 <head>
@@ -502,6 +570,118 @@
     </P></body></html>
     ]]></string>
 
+    <string name="thirteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>Gift-a-Deed will have many different channels,</P>
+    <p>1. people to people;</p>
+    <p>2. people to groups/organisations/charities;</p>
+    <p>3. groups/organisations/charities to people; &</p>
+    <p>4. groups/organisations/charities to groups/organisations/charities. </p>
+    <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
+    <p>Once people and groups/organisations/charities come on board/register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
+    </body></html>
+    ]]></string>
+
+    <string name="fourteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>Organisations like Food banks, (or Goonj in India etc) are designed to be important partners, each connecting to their network via the App or simply using the App as a tool in their private group (similar to WhatsApp group function). In summary, Gift-a-Deed aims to be an aggregator of different needs in a community, city and even country level.
+    </P></body></html>
+    ]]></string>
+
+    <string name="fifteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>To this extent as Airbnb and Uber doesn't itself own any properties or taxis', Gift-a-Deed need not themselves collect, store or distribute. Partnerships and getting other volunteer groups /people with cause orientation, are requirements.
+    </P></body></html>
+    ]]></string>
+
+    <string name="sixteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>As far as compliance and test for food/health/safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
+    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving /helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App ofc uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
+    </body></html>
+    ]]></string>
+
     //--------------------key-------------------
     <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>
+
+    <!-- SendBird -->
+    <string name="no_channel">No channel found</string>
+    <string name="action_group_messages">Group Messages</string>
+    <string name="all_app_version">Sample UI v%1$s / SDK v%2$s</string>
+    <string name="select_channel_type">Select channel type</string>
+    <string name="blocked_members_list">Blocked members</string>
+    <string name="GroupMessage_Community">Messages</string>
+    <string name="login_user_id">User ID</string>
+    <string name="login_user_nickname">Nickname</string>
+    <string name="login_connect">Connect to Chat</string>
+    <string name="login_disconnect">Disconnect</string>
+    <string name="open_channel_list_participant_count">%1$d participants</string>
+    <string name="create_open_channel">Create Open Channel</string>
+    <string name="participant_list">Participants</string>
+    <string name="group_channel_list_file_message_text">%1$s has uploaded a file.</string>
+    <string name="create_group_channel">Create Group Channel</string>
+    <string name="members">Members</string>
+    <string name="invite_member">Invite members</string>
+    <string name="invite">Invite</string>
+    <string name="open_channel_chat_content_desc_profile">Profile image</string>
+    <string name="action_create_channel">Create channel</string>
+    <string name="download">Download</string>
+    <string name="upload">Upload</string>
+    <string name="resend_message">Resend</string>
+    <string name="delete_message">Delete</string>
+    <string name="message_sending">Sending</string>
+    <string name="message_failed">Failed</string>
+    <string name="welcomechatmessage">Welcome to GAD group chat</string>
 </resources>

@@ -1,7 +1,5 @@
 package giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds;
 
-import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -23,12 +21,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,18 +42,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.GroupChannelListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.Filter.FilterFrag;
+import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSEmergencyNumbers;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsListFragment;
@@ -70,15 +66,19 @@ import giftadeed.kshantechsoft.com.giftadeed.MyProfile.Profile;
 import giftadeed.kshantechsoft.com.giftadeed.Mytags.MyTagsList;
 import giftadeed.kshantechsoft.com.giftadeed.Notifications.Notificationfrag;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.Resources.CreateResourceFragment;
-import giftadeed.kshantechsoft.com.giftadeed.Resources.OwnedGroupsAdapter;
 import giftadeed.kshantechsoft.com.giftadeed.Resources.OwnedGroupsInterface;
+import giftadeed.kshantechsoft.com.giftadeed.Resources.ResourceListFragment;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.main.ConnectionManager;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.openchannel.OpenChannelActivity;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PushUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.GetingAddress;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.Utility;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import giftadeed.kshantechsoft.com.giftadeed.settings.SettingsFragment;
@@ -97,34 +97,28 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
     Configuration config;
     static Fragment frag;
     static android.support.v4.app.FragmentManager fragmgr;
-    static FragmentTransaction fragTrans;
     public static TextView headingtext, editprofile, saveprofile;
     ImageView profilePic;
-    public static ImageView imgappbarcamera, imgfilter, imgappbarsetting, back;
+    public static ImageView imgHamburger, imgappbarcamera, imgfilter, imgappbarsetting, back, imgShare;
     NavigationView navigationView;
     public static DrawerLayout drawer;
-    TextView profiletxtview, txtProfileName, txtOrgName;
+    TextView profiletxtview, txtProfileName;
     Toolbar toolbar;
     public static ActionBarDrawerToggle toggle;
     SessionManager sharedPreferences;
-    String message, strUserId, strUserName, strOrgName;
-    public String str_Geopint, adress_show, selectedAccount;
-    String latitude_source, longitude_source;
+    String message, strUserId, strUserName;
+    public String adress_show;
     Context myContext;
-    public static ImageView imgHamburger;
-    String drawervalue;
-    HashMap<String, String> draerwe_status;
     public static Fragment fragname;
-    //------------------------dialog text
     TextView dialogtext;
     private AlertDialog alertDialogForgot;
-    Button btnLogin, dialogconfirm, dialogcancel;
+    Button dialogconfirm, dialogcancel;
     public GoogleApiClient mGoogleApiClient;
     SimpleArcDialog mDialog;
     private List<Profile> profileList;
-    public static final String DATABASE_PROFILE_PIC_UPLOADS = "users";
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
+    public static String userClubCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,16 +126,14 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         setContentView(R.layout.activity_taggedneeds);
         myContext = TaggedneedsActivity.this;
         init();
-
-        // add NavigationItemSelectedListener to check the navigation clicks
-        navigationView.setNavigationItemSelectedListener(this);
         sharedPreferences = new SessionManager(getApplicationContext());
         selectedLangugae = sharedPreferences.getLanguage();
         setSupportActionBar(toolbar);
         GPSTracker gps = new GPSTracker(TaggedneedsActivity.this);
         toolbar.setTitle("");
-        headingtext.setText("Tagged Needs");
+        headingtext.setText(getResources().getString(R.string.map_tagged_deeds));
         imgHamburger = (ImageView) toolbar.findViewById(R.id.imgHamburger);
+        imgShare = (ImageView) toolbar.findViewById(R.id.img_share);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -150,6 +142,8 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         HashMap<String, String> user = sharedPreferences.getUserDetails();
         strUserId = user.get(sharedPreferences.USER_ID);
         strUserName = user.get(sharedPreferences.USER_NAME);
+        loginWithSendbirdchat(strUserId, strUserName, "");
+        getChannelsDetails();
         sharedPreferences.set_drawer_status("close");
         if (!gps.isGPSEnabled) {
             gps.showSettingsAlert();
@@ -168,37 +162,19 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-
-        Menu menu = navigationView.getMenu();
-        MenuItem nav_home = menu.findItem(R.id.nav_home);
-        nav_home.setTitle(getResources().getString(R.string.drawer_home));
-        MenuItem nav_groups = menu.findItem(R.id.nav_groups);
-        nav_groups.setTitle(getResources().getString(R.string.drawer_groups));
-        MenuItem nav_taganeed = menu.findItem(R.id.nav_taganeed);
-        nav_taganeed.setTitle(getResources().getString(R.string.drawer_tag_deed));
-        MenuItem nav_resources = menu.findItem(R.id.nav_resources);
-        nav_resources.setTitle(getResources().getString(R.string.drawer_resources));
-        MenuItem aboutapp = menu.findItem(R.id.aboutapp);
-        aboutapp.setTitle(getResources().getString(R.string.drawer_about_app));
-        MenuItem notifications = menu.findItem(R.id.notifications);
-        notifications.setTitle(getResources().getString(R.string.drawer_notification));
-        MenuItem settings = menu.findItem(R.id.settings);
-        settings.setTitle(getResources().getString(R.string.drawer_settings));
-        MenuItem logout = menu.findItem(R.id.logout);
-        logout.setTitle(getResources().getString(R.string.drawer_logout));
         navigationView.setNavigationItemSelectedListener(this);
         View hView = navigationView.getHeaderView(0);
         profilePic = (ImageView) hView.findViewById(R.id.imageView_profile_pic);
         txtProfileName = (TextView) hView.findViewById(R.id.txtProfilename);
         profiletxtview = (TextView) hView.findViewById(R.id.txtviewprofile);
         txtProfileName.setText(strUserName);
-        profiletxtview.setText(getResources().getString(R.string.view_profile));
+//        profiletxtview.setText(getResources().getString(R.string.view_profile));
 
         if (!(Validation.isOnline(TaggedneedsActivity.this))) {
             ToastPopUp.show(TaggedneedsActivity.this, getString(R.string.network_validation));
         } else {
             mFirebaseInstance = FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference(DATABASE_PROFILE_PIC_UPLOADS);
+            mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_PROFILE_PIC_UPLOADS);
             profileList = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase.child("profile");
             //adding an event listener to fetch values
@@ -242,32 +218,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
 
         adress_show = new GetingAddress(TaggedneedsActivity.this).getCompleteAddressString(new GPSTracker(TaggedneedsActivity.this).getLatitude(), new GPSTracker(TaggedneedsActivity.this).getLatitude());
         Log.d("myadd", adress_show);
-//---------------------------------clicking hamburger
-        /*imgHamburger.setOnClickListener(new View.OnClickListener() {
-            int i = 0;
-
-            @Override
-            public void onClick(View v) {
-                draerwe_status = sharedPreferences.get_drawer_status();
-                drawervalue = draerwe_status.get(sharedPreferences.DRAWER_STATUS);
-
-                if (drawervalue.equals("close")) {
-                    mDialog = new SimpleArcDialog(TaggedneedsActivity.this);
-                    mDialog.setConfiguration(new ArcConfiguration(TaggedneedsActivity.this));
-                    mDialog.show();
-                    getNotificationCount();
-
-                } else {
-                    sharedPreferences.set_drawer_status("close");
-                    android.support.v4.app.FragmentTransaction transaction = fragmgr.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.slide_right, R.anim.slide_left);
-                    transaction.replace(R.id.content_frame, fragname);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-
-            }
-        });*/
 
         if (savedInstanceState == null) {
             selectfragment(1);
@@ -326,6 +276,8 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         } else if (id == R.id.nav_groups) {
             //open groups fragment
             selectfragment(9);
+        } else if (id == R.id.nav_inspire_community) {
+            selectfragment(13);
         } else if (id == R.id.nav_mytags) {
             selectfragment(7);
         } else if (id == R.id.nav_myfulfilledtags) {
@@ -348,6 +300,8 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
             selectfragment(6);
         } else if (id == R.id.settings) {
             selectfragment(10);
+        } else if (id == R.id.emergency_contacts) {
+            selectfragment(12);
         } else if (id == R.id.logout) {
             /*Intent needdtls = new Intent(TaggedneedsActivity.this, NeedDetailsActivity.class);
             startActivity(needdtls);*/
@@ -363,7 +317,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
             //-------------Adding our dialog box to the view of alert dialog
             alert.setView(confirmDialog);
             alert.setCancelable(false);
-
             //----------------Creating an alert dialog
             alertDialogForgot = alert.create();
             alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
@@ -375,17 +328,21 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 public void onClick(View v) {
                     //alertDialogForgot.dismiss();
                     LoginManager.getInstance().logOut();
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                            new ResultCallback<Status>() {
-                                @Override
-                                public void onResult(Status status) {
-                                    //updateUI(false);
-                                }
-                            });
+                    if (mGoogleApiClient.isConnected()) {
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });
+                    }
                     sharedPreferences.createUserCredentialSession(null, null, null);
+                    DisconnectSendbirdCall();
                     Intent loginintent = new Intent(TaggedneedsActivity.this, LoginActivity.class);
                     loginintent.putExtra("message", "Charity");
                     startActivity(loginintent);
+                    TaggedneedsActivity.this.finish();
                 }
             });
             dialogcancel.setOnClickListener(new View.OnClickListener() {
@@ -401,7 +358,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
     }
 
     //---------------------------------selecting a fragment to display----------------------------------
-    public static void selectfragment(int i) {
+    public void selectfragment(int i) {
         frag = null;
         switch (i) {
             case 0:
@@ -442,13 +399,30 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 transaction1.replace(R.id.content_frame, GroupsListFragment.newInstance(i));
                 transaction1.addToBackStack(null);
                 transaction1.commit();
-//                fragmgr.beginTransaction().replace(R.id.content_frame, GroupsListFragment.newInstance(i)).addToBackStack(null).commit();
                 break;
             case 10:
                 fragmgr.beginTransaction().replace(R.id.content_frame, SettingsFragment.newInstance(i)).addToBackStack(null).commit();
                 break;
             case 11:
-                fragmgr.beginTransaction().replace(R.id.content_frame, CreateResourceFragment.newInstance(i)).addToBackStack(null).commit();
+//                fragmgr.beginTransaction().replace(R.id.content_frame, CreateResourceFragment.newInstance(i)).addToBackStack(null).commit();
+                fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance(i)).addToBackStack(null).commit();
+                break;
+            case 12:
+                Intent intent = new Intent(TaggedneedsActivity.this, SOSEmergencyNumbers.class);
+                intent.putExtra("callingfrom", "app");
+                startActivity(intent);
+                break;
+            case 13:
+                //jump to sendbird chat
+               /* SendBirdLoginActivity loginActivity = new SendBirdLoginActivity();
+                Bundle bl = new Bundle();
+                bl.putString("CHATPAGE", "SHARECOMMUNITY");
+                loginActivity.setArguments(bl);
+                fragmgr.beginTransaction().replace(R.id.content_frame, loginActivity).addToBackStack(null).commit();*/
+
+                // global chat functionality
+                Intent global_intent = new Intent(TaggedneedsActivity.this, OpenChannelActivity.class);
+                startActivity(global_intent);
                 break;
         }
     }
@@ -480,11 +454,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
     @Override
     public void onDrawerOpened(View drawerView) {
         // Toast.makeText(TaggedneedsActivity.this, "changed", Toast.LENGTH_LONG).show();
-        sharedPreferences = new SessionManager(getApplicationContext());
-        HashMap<String, String> user = sharedPreferences.getUserDetails();
-        strUserId = user.get(sharedPreferences.USER_ID);
-        strUserName = user.get(sharedPreferences.USER_NAME);
-        txtProfileName.setText(strUserName);
 //        mDialog = new SimpleArcDialog(TaggedneedsActivity.this);
 //        mDialog.setConfiguration(new ArcConfiguration(TaggedneedsActivity.this));
 //        mDialog.show();
@@ -494,6 +463,28 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         } else {
             getNotificationCount();
         }
+        Menu menu = navigationView.getMenu();
+        MenuItem nav_home = menu.findItem(R.id.nav_home);
+        nav_home.setTitle(getResources().getString(R.string.drawer_home));
+        MenuItem nav_groups = menu.findItem(R.id.nav_groups);
+        nav_groups.setTitle(getResources().getString(R.string.drawer_groups));
+        MenuItem nav_inspire = menu.findItem(R.id.nav_inspire_community);
+        nav_inspire.setTitle(getResources().getString(R.string.drawer_inspire));
+        MenuItem nav_taganeed = menu.findItem(R.id.nav_taganeed);
+        nav_taganeed.setTitle(getResources().getString(R.string.drawer_tag_deed));
+        MenuItem nav_resources = menu.findItem(R.id.nav_resources);
+        nav_resources.setTitle(getResources().getString(R.string.drawer_resources));
+        MenuItem aboutapp = menu.findItem(R.id.aboutapp);
+        aboutapp.setTitle(getResources().getString(R.string.drawer_about_app));
+        MenuItem notifications = menu.findItem(R.id.notifications);
+        notifications.setTitle(getResources().getString(R.string.drawer_notification));
+        MenuItem settings = menu.findItem(R.id.settings);
+        settings.setTitle(getResources().getString(R.string.drawer_settings));
+        MenuItem contact = menu.findItem(R.id.emergency_contacts);
+        contact.setTitle(getResources().getString(R.string.drawer_emergency_contacts));
+        MenuItem logout = menu.findItem(R.id.logout);
+        logout.setTitle(getResources().getString(R.string.drawer_logout));
+        profiletxtview.setText(getResources().getString(R.string.view_profile));
     }
 
     @Override
@@ -611,7 +602,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getApplicationContext());
-                        Toast.makeText(getApplicationContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sharedPreferences.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -631,7 +622,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                         if (groupPOJOS.size() > 0) {
                             selectfragment(11);
                         } else {
-                            Toast.makeText(getApplicationContext(), "You don't own groups to create the resource", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.resource_error), Toast.LENGTH_LONG).show();
                         }
                     }
                 } catch (Exception e) {
@@ -657,5 +648,177 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
             super.onBackPressed();
         }
         // dialog();
+    }
+
+    //==============================================Send Bird Chat===================================================
+
+    /**
+     * it connects the user to sendbird environment where it takes input like userid,username,photo of google login
+     *
+     * @param strUserId
+     * @param strUserName
+     * @param strPhotoPath
+     */
+    public void loginWithSendbirdchat(String strUserId, String strUserName, String strPhotoPath) {
+        if (strUserId != null && strUserName != null) {
+            strUserId = strUserId.replaceAll("\\s", "");
+            // String userNickname = mUserNicknameEditText.getText().toString();
+            PreferenceUtils.setUserId(TaggedneedsActivity.this, strUserId);
+            PreferenceUtils.setNickname(TaggedneedsActivity.this, strUserName);
+
+            connectToSendBird(strUserId, strUserName, strPhotoPath);
+        } else {
+//            Toast.makeText(TaggedneedsActivity.this, "UnAuthorized Access", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Attempts to connect a user to SendBird.
+     *
+     * @param userId       The unique ID of the user.
+     * @param userNickname The user's nickname, which will be displayed in chats.
+     */
+    private void connectToSendBird(final String userId, final String userNickname, final String strPhotoUrl) {
+        // Show the loading indicator
+        // showProgressBar(true);
+        // mConnectButton.setEnabled(false);
+        ConnectionManager.login(userId, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                // Callback received; hide the progress bar.
+                if (e != null) {
+                    // Error!
+                    Log.d("sendbird connect error", "" + e.getCode() + ": " + e.getMessage());
+                    /*Toast.makeText(
+                            TaggedneedsActivity.this, "" + e.getCode() + ": " + e.getMessage(),
+                            Toast.LENGTH_SHORT)
+                            .show();*/
+
+                    // Show login failure snackbar
+//                    ToastPopUp.displayToast(TaggedneedsActivity.this,"Login to SendBird failed");
+                    //     mConnectButton.setEnabled(true);
+                    PreferenceUtils.setConnected(TaggedneedsActivity.this, false);
+                    return;
+                }
+                Log.d("PHOTOSNADBIRD", "vv  " + user.getProfileUrl());
+                PreferenceUtils.setUserId(TaggedneedsActivity.this, user.getUserId());
+                PreferenceUtils.setNickname(TaggedneedsActivity.this, user.getNickname());
+                PreferenceUtils.setProfileUrl(TaggedneedsActivity.this, user.getProfileUrl());
+                PreferenceUtils.setConnected(TaggedneedsActivity.this, true);
+                PreferenceUtils.setGroupChannelDistinct(TaggedneedsActivity.this, false);   //set the group chat false to allow create many group by single users
+                // Update the user's nickname
+                updateCurrentUserInfo(userNickname, strPhotoUrl);
+                updateCurrentUserPushToken();
+            }
+        });
+    }
+
+    /**
+     * Update the user's push token.
+     */
+    private void updateCurrentUserPushToken() {
+        PushUtils.registerPushTokenForCurrentUser(TaggedneedsActivity.this, null);
+    }
+
+    /**
+     * Updates the user's nickname.
+     *
+     * @param userNickname The new nickname of the user.
+     */
+    private void updateCurrentUserInfo(final String userNickname, String photoPath) {
+        Log.d("PHOTOSNADBIRD", "uner method :  " + photoPath);
+        if (photoPath.equalsIgnoreCase("")) {
+            SendBird.updateCurrentUserInfo(userNickname, Utility.avatorDefaultIcon, new SendBird.UserInfoUpdateHandler() {
+                @Override
+                public void onUpdated(SendBirdException e) {
+                    if (e != null) {
+                        // Error!
+                        Toast.makeText(
+                                TaggedneedsActivity.this, "" + e.getCode() + ":" + e.getMessage(),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                        // Show update failed snackbar
+//                        ToastPopUp.displayToast(TaggedneedsActivity.this, "Update user nickname failed");
+                        return;
+                    }
+                    Log.d("TAG", "NickName189" + userNickname);
+                    PreferenceUtils.setNickname(TaggedneedsActivity.this, userNickname);
+                }
+            });
+        } else {
+            SendBird.updateCurrentUserInfo(userNickname, photoPath, new SendBird.UserInfoUpdateHandler() {
+                @Override
+                public void onUpdated(SendBirdException e) {
+                    if (e != null) {
+                        // Error!
+                        Toast.makeText(
+                                TaggedneedsActivity.this, "" + e.getCode() + ":" + e.getMessage(),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                        // Show update failed snackbar
+//                        ToastPopUp.displayToast(TaggedneedsActivity.this, "Update user nickname failed");
+                        return;
+                    }
+                    Log.d("TAG", "NickName189" + userNickname);
+                    PreferenceUtils.setNickname(TaggedneedsActivity.this, userNickname);
+                }
+            });
+        }
+    }
+
+    public void DisconnectSendbirdCall() {
+        SendBird.unregisterPushTokenAllForCurrentUser(new SendBird.UnregisterPushTokenHandler() {
+            @Override
+            public void onUnregistered(SendBirdException e) {
+                if (e != null) {
+                    // Error!
+                    e.printStackTrace();
+                    // Don't return because we still need to disconnect.
+                } else {
+//                    Toast.makeText(MainActivity.this, "All push tokens unregistered.", Toast.LENGTH_SHORT).show();
+                    ConnectionManager.logout(new SendBird.DisconnectHandler() {
+                        @Override
+                        public void onDisconnected() {
+                            PreferenceUtils.setConnected(TaggedneedsActivity.this, false);
+                            //  finish();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * to get he user club to identify they have any channel or not
+     */
+    public void getChannelsDetails() {
+        //always use connect() along with any method of chat #phase 2 requirement 27 feb 2018 Nilesh
+        SendBird.connect(strUserId, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannelListQuery channelListQuery = GroupChannel.createMyGroupChannelListQuery();
+                channelListQuery.setIncludeEmpty(true);
+                channelListQuery.next(new GroupChannelListQuery.GroupChannelListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<GroupChannel> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error.
+                            return;
+                        }
+                        if (list != null) {
+                            if (list.size() != 0) {
+                                userClubCount = "Yes";
+                            } else {
+                                userClubCount = "No";
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 }

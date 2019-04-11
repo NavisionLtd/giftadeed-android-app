@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">GiftADeed</string>
+    <!--<string name="app_name">GiftADeed</string>-->
+    <string name="app_name">GAD P2 Test 28 March</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
@@ -16,6 +17,8 @@
     <string name="registered_email">输入注册邮箱</string>
     <string name="submit">提交</string>
     <string name="cancel">取消</string>
+    <string name="wrong_password">密碼錯誤</string>
+    <string name="login_failed">登錄失敗</string>
 
     <!--Sign up page-->
     <string name="sign_up">注册</string>
@@ -23,6 +26,8 @@
     <string name="last_name">姓</string>
     <string name="country">国家</string>
     <string name="logintxt">已经有账号？ <u>登录</u></string>
+    <string name="length_error_1">長度不能超過15個字符</string>
+    <string name="length_error_2">長度不能超過20個字符</string>
 
     <!--App update-->
     <string name="youAreNotUpdatedTitle">更新可用</string>
@@ -34,10 +39,12 @@
     <string name="drawer_home">家</string>
     <string name="drawer_groups">组</string>
     <string name="drawer_tag_deed">标记契约</string>
+    <string name="drawer_inspire">啟發社區</string>
     <string name="drawer_resources">资源</string>
     <string name="drawer_about_app">关于App</string>
     <string name="drawer_notification">通知</string>
     <string name="drawer_settings">设置</string>
+    <string name="drawer_emergency_contacts">緊急聯繫人</string>
     <string name="drawer_logout">登出</string>
 
     <!--Grid menu and details-->
@@ -71,6 +78,41 @@
     <string name="map_map">地图</string>
     <string name="map_list">名单</string>
     <string name="map_tagged_deeds">标记的行为</string>
+
+    <!--Toast messages-->
+    <string name="network_validation">网络不可用</string>
+    <string name="server_response_error">有些不對勁。請稍後再試</string>
+    <string name="contact_saved">聯繫已保存</string>
+    <string name="setting_saved">設置已保存</string>
+    <string name="block_toast">你被封鎖了</string>
+    <string name="group_deleted">組已成功刪除</string>
+    <string name="error">錯誤</string>
+    <string name="exit_group_msg">您已成功退出群組</string>
+    <string name="group_created_msg">組成功創建</string>
+    <string name="you_havnt_change">你沒有改變團體信息</string>
+    <string name="group_edited">組編輯成功</string>
+    <string name="member_removed">會員已成功刪除</string>
+    <string name="member_added">會員成功添加</string>
+    <string name="no_data_found">沒有找到數據</string>
+    <string name="admin_assigned">管理員分配成功</string>
+    <string name="admin_dismissed">管理員成功解僱</string>
+    <string name="address_notfound">地址未找到</string>
+    <string name="user_reported">用戶報告成功</string>
+    <string name="edited_success">編輯成功</string>
+    <string name="check_email">請檢查您的電子郵件</string>
+    <string name="select_account">請從列表中選擇您的帳戶</string>
+    <string name="login_unsuccess">登錄失敗</string>
+    <string name="email_already_exist">電子郵件地址已存在</string>
+    <string name="length_msg">長度不能超過500個字符</string>
+    <string name="unable_to_find">無法找到地址</string>
+    <string name="edited_unsucess">編輯失敗</string>
+    <string name="select_country">選擇國家</string>
+    <string name="select_state">選擇狀態</string>
+    <string name="select_city">選擇城市</string>
+    <string name="permission_denied">權限被拒絕請啟用權限</string>
+    <string name="already_deed">這個契約已經有人報導了</string>
+    <string name="sos_location_error">位置不能為空。 請到位置</string>
+    <string name="sos_success">緊急創建成功</string>
 
     <!--Bottom navigation-->
     <string name="map_home">家</string>
@@ -109,6 +151,7 @@
     <string name="gender">性别 :</string>
     <string name="privacy">隐私 :</string>
     <string name="state">州</string>
+    <string name="change_pic">更改圖片</string>
     <string name="city">市</string>
     <string name="anonymous">匿名</string>
     <string name="public_1">上市</string>
@@ -118,10 +161,13 @@
     <string name="female">女</string>
 
     <!--Tag a deed-->
+    <string name="edit_deed">Edit Deed</string>
     <string name="select_category">选择类别</string>
+    <string name="select_sub_category">選擇子類別</string>
     <string name="select_pref">選擇首選項</string>
     <string name="select_location">选择位置</string>
     <string name="permanent_location">永久的位置</string>
+    <string name="remove_location">Remove Location</string>
     <string name="deed_validity_heading">契约有效期（1至48小时）</string>
     <string name="select_audiance">选择受众</string>
     <string name="description">描述</string>
@@ -163,6 +209,7 @@
     <string name="app_settings">應用設置</string>
     <string name="notif_settings">通知設置</string>
     <string name="receive_notif">接收通知</string>
+    <string name="catwise_notif">類別明智的通知</string>
     <string name="groupwise_notif">小組明智的通知</string>
     <string name="save_settings">保存設置</string>
     <string name="GPSsettings">GPS设置</string>
@@ -192,6 +239,11 @@
     <string name="remove_member_dialog">從組中刪除此成員 ?</string>
 
     <!--Resource-->
+    <string name="res_success">資源創建成功</string>
+    <string name="action_create_resource">創建資源</string>
+    <string name="edit_resource">編輯資源</string>
+    <string name="delete_resource">刪除資源</string>
+    <string name="no_res_found">找不到資源。 你想創造一個嗎？</string>
     <string name="res_details">資源詳情</string>
     <string name="select_res_group">選擇您的組</string>
     <string name="res_cat">資源類別</string>
@@ -218,6 +270,16 @@
     <string name="sos_location_1">SOS位置 : </string>
     <string name="sos_created_on">SOS創建於 : </string>
     <string name="del_sos">刪除SOS</string>
+    <string name="use_in_case">用於緊急情況</string>
+    <string name="emergency"> </string>
+    <string name="call_police">打電話給警察控制室</string>
+    <string name="alert_contact">提醒你的緊急聯繫人</string>
+    <string name="no_emergency_contacts">沒有緊急聯繫人發送警報</string>
+    <string name="set">組</string>
+    <string name="share_location">分享您的位置</string>
+    <string name="close">關</string>
+    <string name="contacts_to_send_alert">聯繫人在緊急情況下發送警報消息</string>
+    <string name="family_or_friend">e.g. 家庭成員或朋友</string>
 
     <string name="navigation_drawer_open">打开导航抽屉</string>
     <string name="navigation_drawer_close">关闭导航抽屉</string>
@@ -225,12 +287,12 @@
     <string name="privacy_policy"><u>隐私政策</u></string>
     <string name="last_text_terms"> 改变以适应全球观众.</string>
     <string name="share"><u>分享</u></string>
-    <string name="network_validation">网络不可用</string>
     <string name="Enter_FirstName">输入名字</string>
     <string name="validation_first_name_special_characters_merchant">仅输入字母</string>
     <string name="validation_last_name_special_characters_merchant">仅在姓氏中输入字母</string>
     <string name="first_character_not_space">第一个字符不能是空格</string>
     <string name="spaces_not_allowed">不允许有空格</string>
+    <string name="length_error">Length cannot be greater than 15 characters</string>
     <string name="min_length">长度应在3-15个字符之间</string>
     <string name="Lnamemin_length">长度应在1-20个字符之间</string>
     <string name="Enter_LastName">输入姓氏</string>
@@ -258,6 +320,7 @@
     <string name="todays_deeds">今天的标记事迹</string>
     <string name="todays_fulfilled_deeds">今天的履行行动</string>
     <string name="filter">过滤</string>
+    <string name="filters">Filters</string>
     <string name="start_writing">开始在这里写... </string>
     <string name="apply_filters">应用过滤器</string>
     <string name="radius">半径</string>
@@ -278,8 +341,8 @@
     <string name="all_individuals">所有個人用戶</string>
     <string name="your_groups">你的團體</string>
     <string name="tell_people_remaining">告訴別人剩下的是什麼</string>
-    <string name="server_response_error">有些不對勁。請稍後再試</string>
     <string name="already_deeds_msg">以下契約已經標記為選定的位置:</string>
+
     <string name="first"><![CDATA[
     <html><body style="text-align:justify;>
 <head>
@@ -502,8 +565,118 @@
     </P></body></html>
     ]]></string>
 
+    <string name="thirteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>Gift-a-Deed will have many different channels,</P>
+    <p>1. people to people;</p>
+    <p>2. people to groups/organisations/charities;</p>
+    <p>3. groups/organisations/charities to people; &</p>
+    <p>4. groups/organisations/charities to groups/organisations/charities. </p>
+    <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
+    <p>Once people and groups/organisations/charities come on board/register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
+    </body></html>
+    ]]></string>
+
+    <string name="fourteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>Organisations like Food banks, (or Goonj in India etc) are designed to be important partners, each connecting to their network via the App or simply using the App as a tool in their private group (similar to WhatsApp group function). In summary, Gift-a-Deed aims to be an aggregator of different needs in a community, city and even country level.
+    </P></body></html>
+    ]]></string>
+
+    <string name="fifteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>To this extent as Airbnb and Uber doesn't itself own any properties or taxis', Gift-a-Deed need not themselves collect, store or distribute. Partnerships and getting other volunteer groups /people with cause orientation, are requirements.
+    </P></body></html>
+    ]]></string>
+
+    <string name="sixteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>As far as compliance and test for food/health/safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
+    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving /helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App ofc uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
+    </body></html>
+    ]]></string>
 
     //--------------------key-------------------
     <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>
 
+    <!-- SendBird -->
+    <string name="all_app_version">Sample UI v%1$s / SDK v%2$s</string>
+    <string name="select_channel_type">選擇頻道類型</string>
+    <string name="blocked_members_list">被封鎖的成員</string>
+    <string name="GroupMessage_Community">消息</string>
+    <string name="login_user_id">用戶身份</string>
+    <string name="login_user_nickname">暱稱</string>
+    <string name="login_connect">連接聊天</string>
+    <string name="login_disconnect">斷開</string>
+    <string name="open_channel_list_participant_count">%1$d 參與者</string>
+    <string name="create_open_channel">創建開放頻道</string>
+    <string name="participant_list">參與者</string>
+    <string name="group_channel_list_file_message_text">%1$s 已上傳文件。</string>
+    <string name="create_group_channel">創建群組頻道</string>
+    <string name="members">會員</string>
+    <string name="invite_member">邀請成員</string>
+    <string name="open_channel_chat_content_desc_profile">個人資料圖片</string>
+    <string name="action_create_channel">創建頻道</string>
+    <string name="download">下載</string>
+    <string name="upload">上傳</string>
+    <string name="resend_message">重發</string>
+    <string name="delete_message">刪除</string>
+    <string name="message_sending">發出</string>
+    <string name="message_failed">失敗</string>
+    <string name="welcomechatmessage">歡迎來到瑜伽俱樂部聊天組。</string>
+    <string name="no_channel">找不到頻道</string>
+    <string name="action_group_messages">群組消息</string>
+    <string name="invite">邀請</string>
 </resources>

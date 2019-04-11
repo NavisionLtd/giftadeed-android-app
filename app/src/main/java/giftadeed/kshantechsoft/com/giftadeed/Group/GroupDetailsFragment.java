@@ -38,8 +38,17 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.GroupChannelListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
+import com.sendbird.android.UserListQuery;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.ResponseBody;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -52,6 +61,10 @@ import java.util.concurrent.TimeUnit;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.DeleteChannelGroup;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.RemoveMemberFromChannel;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.RemoveUserFromClub;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChannelListFragment;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.NeedListAdapter;
@@ -69,6 +82,8 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChatFragment.EXTRA_CHANNEL_URL;
 
 public class GroupDetailsFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     View rootview;
@@ -91,6 +106,14 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
     int isMember = 1;
     float radius_set;
     DatabaseAccess databaseAccess;
+    private UserListQuery mUserListQuery;
+    private List<String> lstCurrentMembersInfo = new ArrayList<>();
+    private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
+    private List<String> lstGetSelectedMemberId = new ArrayList<>();
+    private String fetchedChannelUrl;
+    private String strSelectedChannelUrl = "";
+    private  List<String> lstUsersForRemove = new ArrayList<>();
+    RemoveUserFromClub model_obj;
 
     public static GroupDetailsFragment newInstance(int sectionNumber) {
         GroupDetailsFragment fragment = new GroupDetailsFragment();
@@ -127,6 +150,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
@@ -136,6 +160,8 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
         init();
         databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
+        getChannelsDetails();
+        loadNextUserList();
         groupName.setText(receivedGname);
         radius_set = sessionManager.getradius();
         if (!(Validation.isOnline(getActivity()))) {
@@ -192,7 +218,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();
@@ -296,7 +322,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                                     countLayout.setVisibility(View.VISIBLE);
                                     groupActiveCount.setText(String.valueOf(item_list.size()));
                                     recyclerView.setVisibility(View.VISIBLE);
-                                    recyclerView.setAdapter(new NeedListAdapter(item_list, getActivity(),"group"));
+                                    recyclerView.setAdapter(new NeedListAdapter(item_list, getActivity(), "group"));
                                 }
                             }
                         }
@@ -491,7 +517,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -584,7 +610,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -601,12 +627,19 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), "Group deleted successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.group_deleted), Toast.LENGTH_SHORT).show();
                             databaseAccess.Delete_Group(groupid);
+
+                            //delete channel from sendbird
+                            String channelName = receivedGname + " - " + groupid;
+                            filterGroupChannel(channelName); //fetch data based on given club name
+                            callDeleteGrpChannels(fetchedChannelUrl); //will delete channels based on certain url of grp
+
+                            //move to group list
                             GroupsListFragment groupsListFragment = new GroupsListFragment();
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -629,7 +662,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
     }
 
     //---------------------exit group only for group member or group admin-----------------------------------------------
-    public void exitGroup(final String groupid, String user_id) {
+    public void exitGroup(final String groupid, final String user_id) {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
@@ -656,7 +689,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -673,12 +706,40 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), "You successfully exited from group", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.exit_group_msg), Toast.LENGTH_SHORT).show();
                             databaseAccess.Delete_Group(groupid);
+
+                            //remove member from sendbird channel
+                            String channel_name = receivedGname + " - " + groupid;
+                            if (lstGetChannelsList.size() != 0) {
+                                for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                                    if (lstGetChannelsList.get(i).getmChannelName().equals(channel_name)) {
+                                        strSelectedChannelUrl = lstGetChannelsList.get(i).getmUrl().toString();
+                                    }
+                                }
+
+                                if (lstCurrentMembersInfo != null && lstCurrentMembersInfo.size() != 0) {
+                                    for (final String strUserId : lstCurrentMembersInfo) {
+                                        if (strUserId.equals(user_id)) {
+                                            lstGetSelectedMemberId.add(strUserId); //add data to selected member string
+                                            lstUsersForRemove.add(strUserId);
+                                        }
+                                    }
+                                } else {
+//                                    Toast.makeText(getContext(), "Member(s) is not available.Please Login Again", Toast.LENGTH_SHORT).show();
+                                }
+                                if (lstUsersForRemove.size() != 0) {
+                                    model_obj = new RemoveUserFromClub();
+                                    model_obj.setUserIds(lstUsersForRemove);
+                                }
+                                callUpdateSendBird(strSelectedChannelUrl, model_obj);
+                            }
+
+                            //move to group list
                             GroupsListFragment groupsListFragment = new GroupsListFragment();
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -722,5 +783,141 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiClient.connect();
+    }
+
+    //channel details
+    public void getChannelsDetails() {
+        //always use connect() along with any method of chat #phase 2 requirement 27 feb 2018 Nilesh
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannelListQuery channelListQuery = GroupChannel.createMyGroupChannelListQuery();
+                channelListQuery.setIncludeEmpty(true);
+                channelListQuery.next(new GroupChannelListQuery.GroupChannelListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<GroupChannel> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error.
+                            return;
+
+                        }
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                lstGetChannelsList.add(new GroupListInfo(list.get(i).getData().toString(), list.get(i).getName().toString(), list.get(i).getUrl().toString()));
+                                System.out.println("ff" + list.get(i).getName());
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    //***********************************transform*************************************************
+    public void filterGroupChannel(String clubname) {
+        System.out.println("clbname line n0 3950        " + clubname);
+        if (lstGetChannelsList != null && lstGetChannelsList.size() != 0) {
+            for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                if (lstGetChannelsList.get(i).getmChannelName().equals(clubname)) {
+                    fetchedChannelUrl = lstGetChannelsList.get(i).getmUrl();
+                    Log.d("UPDATE", "" + lstGetChannelsList.get(i).getmUrl());
+                }
+            }
+        }
+    }
+
+    //==================Delete Group channel from sendbird===============================================
+    public void callDeleteGrpChannels(String urlOfChannel) {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WebServices.MANI_SENDBRD_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //call interface
+        DeleteChannelGroup service = retrofit.create(DeleteChannelGroup.class);
+        Call<Object> call = service.deleteChannels(urlOfChannel);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Response<Object> response, Retrofit retrofit) {
+                if (response.code() == 200) {
+                    Log.d("DLCLUB", "Success.");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                Log.d("DLCLUB", "Not Success." + t.getMessage());
+            }
+        });
+    }
+
+    public void callUpdateSendBird(String urlOfChannel, RemoveUserFromClub model_obj) {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WebServices.MANI_SENDBRD_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        JSONObject jsonOBJ = new JSONObject();
+        try {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //call interface
+        RemoveMemberFromChannel service = retrofit.create(RemoveMemberFromChannel.class);
+        Log.d("JOBJ", "" + jsonOBJ);
+        Call<ResponseBody> call = service.removeMembers(urlOfChannel, model_obj);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
+                if (response.code() == 200) {
+                    Log.d("UPCLUB", "Success.");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                Log.d("UPCLUB", "Not Success." + t.getMessage());
+            }
+        });
+    }
+
+    private void loadNextUserList() {
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                mUserListQuery = SendBird.createUserListQuery();
+                // mUserListQuery.setLimit(100);
+                mUserListQuery.next(new UserListQuery.UserListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<User> list, SendBirdException e) {
+                        if (e != null) {
+                            return;
+                        }
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                lstCurrentMembersInfo.add(list.get(i).getUserId().toString());
+                                System.out.println("Data ciming from" + list.get(i).getUserId().toString());
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 }

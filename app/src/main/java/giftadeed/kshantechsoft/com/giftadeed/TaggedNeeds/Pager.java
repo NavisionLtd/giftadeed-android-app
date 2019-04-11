@@ -54,11 +54,6 @@ public class Pager extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-      /*  sessionManager = new SessionManager(myContext);
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
-        get_Taglist_data(strUser_ID);*/
         switch (position) {
             case 0:
                 TabNew tab1 = new TabNew();
@@ -69,7 +64,6 @@ public class Pager extends FragmentPagerAdapter {
             default:
                 return null;
         }
-
     }
 
     @Override
@@ -82,8 +76,4 @@ public class Pager extends FragmentPagerAdapter {
         // Generate title based on item position
         return tabTitles[position];
     }
-
-
-
-
 }

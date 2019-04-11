@@ -36,18 +36,30 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.GroupChannelListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
+import com.sendbird.android.UserListQuery;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.ResponseBody;
+
+import org.json.JSONObject;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.RemoveMemberFromChannel;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.RemoveUserFromClub;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
@@ -68,7 +80,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
     SimpleArcDialog mDialog;
     SessionManager sessionManager;
     String strUser_ID;
-    String receivedGid = "";
+    String receivedGid = "", receivedGname = "";
     EditText editsearch;
     TextView noGroupMember, memberCount;
     ListView listView;
@@ -78,6 +90,13 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
     private GoogleApiClient mGoogleApiClient;
     String member_count, groupCreatorId, clickedMemberId;
     SwipeRefreshLayout swipeRefreshLayout;
+    private UserListQuery mUserListQuery;
+    private List<String> lstCurrentMembersInfo = new ArrayList<>();
+    private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
+    private List<String> lstGetSelectedMemberId = new ArrayList<>();
+    private String strSelectedChannelUrl = "";
+    private  List<String> lstUsersForRemove = new ArrayList<>();
+    RemoveUserFromClub model_obj;
 
     public static ManageGroupMemberFragment newInstance(int sectionNumber) {
         ManageGroupMemberFragment fragment = new ManageGroupMemberFragment();
@@ -102,6 +121,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
@@ -114,6 +134,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         strUser_ID = user.get(sessionManager.USER_ID);
         HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
         receivedGid = group.get(sessionManager.GROUP_ID);
+        receivedGname = group.get(sessionManager.GROUP_NAME);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             groupCreatorId = bundle.getString("groupCreatorId");
@@ -133,6 +154,8 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
                                             getMemberListForAdmin(strUser_ID, receivedGid, "1");
+                                            getChannelsDetails();
+                                            loadNextUserList();
                                         }
                                     }
                                 }
@@ -313,7 +336,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         dialog.show();
     }
 
-    private void removeMember(String userid, String memberid, String groupid) {
+    private void removeMember(String userid, final String memberid, final String groupid) {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -337,7 +360,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -357,11 +380,37 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (groupResponseStatus.getStatus() == 1) {
-                                Toast.makeText(getContext(), "Member removed successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getString(R.string.member_removed), Toast.LENGTH_SHORT).show();
+
+                                //remove member from sendbird channel
+                                String channel_name = receivedGname + " - " + receivedGid;
+                                if (lstGetChannelsList.size() != 0) {
+                                    for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                                        if (lstGetChannelsList.get(i).getmChannelName().equals(channel_name)) {
+                                            strSelectedChannelUrl = lstGetChannelsList.get(i).getmUrl().toString();
+                                        }
+                                    }
+
+                                    if (lstCurrentMembersInfo != null && lstCurrentMembersInfo.size() != 0) {
+                                        for (final String strUserId : lstCurrentMembersInfo) {
+                                            if (strUserId.equals(memberid)) {
+                                                lstGetSelectedMemberId.add(strUserId); //add data to selected member string
+                                                lstUsersForRemove.add(strUserId);
+                                            }
+                                        }
+                                    } else {
+//                                        Toast.makeText(getContext(), "Member(s) is not available.Please Login Again", Toast.LENGTH_SHORT).show();
+                                    }
+                                    if (lstUsersForRemove.size() != 0) {
+                                        model_obj = new RemoveUserFromClub();
+                                        model_obj.setUserIds(lstUsersForRemove);
+                                    }
+                                    callUpdateSendBird(strSelectedChannelUrl, model_obj);
+                                }
                                 editsearch.setText("");
                                 getMemberListForAdmin(strUser_ID, receivedGid, "1");
                             } else if (groupResponseStatus.getStatus() == 0) {
-                                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -405,7 +454,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -425,11 +474,11 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (groupResponseStatus.getStatus() == 1) {
-                                Toast.makeText(getContext(), "Admin assigned successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getString(R.string.admin_assigned), Toast.LENGTH_SHORT).show();
                                 editsearch.setText("");
                                 getMemberListForAdmin(strUser_ID, receivedGid, "1");
                             } else if (groupResponseStatus.getStatus() == 0) {
-                                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -473,7 +522,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -493,11 +542,11 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (groupResponseStatus.getStatus() == 1) {
-                                Toast.makeText(getContext(), "Admin dismissed successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getString(R.string.admin_dismissed), Toast.LENGTH_SHORT).show();
                                 editsearch.setText("");
                                 getMemberListForAdmin(strUser_ID, receivedGid, "1");
                             } else if (groupResponseStatus.getStatus() == 0) {
-                                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -546,7 +595,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                     if (isblock == 1) {
                         swipeRefreshLayout.setRefreshing(false);
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();
@@ -642,6 +691,100 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         } else {
             swipeRefreshLayout.setRefreshing(true);
             getMemberListForAdmin(strUser_ID, receivedGid, "1");
+            getChannelsDetails();
+            loadNextUserList();
         }
+    }
+
+    public void getChannelsDetails() {
+        //always use connect() along with any method of chat #phase 2 requirement 27 feb 2018 Nilesh
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannelListQuery channelListQuery = GroupChannel.createMyGroupChannelListQuery();
+                channelListQuery.setIncludeEmpty(true);
+                channelListQuery.next(new GroupChannelListQuery.GroupChannelListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<GroupChannel> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error.
+                            return;
+
+                        }
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                lstGetChannelsList.add(new GroupListInfo(list.get(i).getData().toString(), list.get(i).getName().toString(), list.get(i).getUrl().toString()));
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void loadNextUserList() {
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    return;
+                }
+                mUserListQuery = SendBird.createUserListQuery();
+                // mUserListQuery.setLimit(100);
+                mUserListQuery.next(new UserListQuery.UserListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<User> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error!
+                            return;
+                        }
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                lstCurrentMembersInfo.add(list.get(i).getUserId().toString());
+                                System.out.println("Data ciming from" + list.get(i).getUserId().toString());
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void callUpdateSendBird(String urlOfChannel, RemoveUserFromClub model_obj) {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WebServices.MANI_SENDBRD_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        JSONObject jsonOBJ = new JSONObject();
+        try {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //call interface
+        RemoveMemberFromChannel service = retrofit.create(RemoveMemberFromChannel.class);
+        Log.d("JOBJ", "" + jsonOBJ);
+        Call<ResponseBody> call = service.removeMembers(urlOfChannel, model_obj);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Response<ResponseBody> response, Retrofit retrofit) {
+                if (response.code() == 200) {
+                    Log.d("UPCLUB", "Success.");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                Log.d("UPCLUB", "Not Success." + t.getMessage());
+            }
+        });
     }
 }

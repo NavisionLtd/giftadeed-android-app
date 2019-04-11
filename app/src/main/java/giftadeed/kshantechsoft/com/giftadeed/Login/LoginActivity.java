@@ -82,8 +82,10 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.EmergencyContact;
+import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSOptionActivity;
 import giftadeed.kshantechsoft.com.giftadeed.FirstLogin.First_Login;
 import giftadeed.kshantechsoft.com.giftadeed.Needdetails.StatusModel;
 import giftadeed.kshantechsoft.com.giftadeed.PrivacyPolicy.Privacy_policy;
@@ -200,9 +202,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         btnSos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(LoginActivity.this, EmergencyContact.class);
+                Intent i = new Intent(LoginActivity.this, SOSOptionActivity.class);
                 i.putExtra("callingfrom", "login");
                 startActivity(i);
+
+                /*Intent i = new Intent(LoginActivity.this, FadeInActivity.class);
+                startActivity(i);*/
             }
         });
 
@@ -257,7 +262,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 //    edemailaddress.setSelection(edemailaddress.getText().length());   //set cursor at right placee of text
                 //password.setFocusableInTouchMode(false);
                 if (!(Validation.isOnline(LoginActivity.this))) {
-                    ToastPopUp.displayToast(LoginActivity.this, "OOPS! No INTERNET. Please check your network connection");
+                    ToastPopUp.displayToast(LoginActivity.this, getResources().getString(R.string.network_validation));
                 } else if (Validation.isStringNullOrBlank(email.getText().toString())) {
 
                 } else if (!(Validation.isValidEmailAddress(email.getText().toString().trim()))) {
@@ -303,7 +308,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     }
                     if ((email.getText().toString().equals(""))) {
                         email.setText("");
-                        // ToastPopUp.displayToast(LoginActivity.this, "Password doesn't match");
+                        // ToastPopUp.displayToast(SendBirdLoginActivity.this, "Password doesn't match");
                         email.requestFocus();
                     } else {
                         password.setFocusableInTouchMode(true);
@@ -391,7 +396,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
 //                if (!(chkbx.isChecked())) {
-//                    ToastPopUp.displayToast(LoginActivity.this, "Please accept the Terms and Conditions.");
+//                    ToastPopUp.displayToast(SendBirdLoginActivity.this, "Please accept the Terms and Conditions.");
 //                } else {
                 callbackManager = CallbackManager.Factory.create();
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email", "user_hometown"));
@@ -404,7 +409,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                Log.e("LoginActivity Response ", response.toString());
+                                Log.e("SendBirdLogin Response", response.toString());
                                 Log.e("jsonObject", "" + object);
                                 long fbid = object.optLong("id");
                                 String email = object.optString("email");
@@ -456,7 +461,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View view) {
 //                if (!(chkbx.isChecked())) {
-//                    ToastPopUp.displayToast(LoginActivity.this, "Please accept the Terms and Conditions.");
+//                    ToastPopUp.displayToast(SendBirdLoginActivity.this, "Please accept the Terms and Conditions.");
 //                } else {
                 handleLogin();
 //                }
@@ -466,7 +471,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View view) {
 //                if (!(chkbx.isChecked())) {
-//                    ToastPopUp.displayToast(LoginActivity.this, "Please accept the Terms and Conditions.");
+//                    ToastPopUp.displayToast(SendBirdLoginActivity.this, "Please accept the Terms and Conditions.");
 //                } else {
                 signIn();
 //                }
@@ -509,8 +514,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         password.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         txtInpLoiginid.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         txtInpPasswrd.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
-//        fb_login.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
-        //    txtlinkedIn_login.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
+//        fb_login.setTypeface(new FontDetails(SendBirdLoginActivity.this).fontStandardForPage);
+        //    txtlinkedIn_login.setTypeface(new FontDetails(SendBirdLoginActivity.this).fontStandardForPage);
         txtsaperator.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
     }
 
@@ -584,7 +589,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     //--------------------sending email for forgot password------------------------------------------
-    public void Forgotpassword(final String email)  {
+    public void Forgotpassword(final String email) {
         mDialog.setConfiguration(new ArcConfiguration(getApplicationContext()));
         mDialog.show();
         mDialog.setCancelable(false);
@@ -640,20 +645,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             @Override
                             public void onClick(View v) {
                                 alertDialogreturn.dismiss();
-                                /*Intent loginintent = new Intent(LoginActivity.this, LoginActivity.class);
+                                /*Intent loginintent = new Intent(SendBirdLoginActivity.this, SendBirdLoginActivity.class);
                                 loginintent.putExtra("message", message);
                                 startActivity(loginintent);*/
                             }
                         });
                     } else if (successstatus.equals("3")) {
                         // status 3 : email not found
-                        ToastPopUp.show(LoginActivity.this, "Enter registered email address");
+                        ToastPopUp.show(LoginActivity.this, getResources().getString(R.string.registered_email));
                         edforgotpassEmail.setText("");
                         mDialog.dismiss();
                         mDialog.dismiss();
                     } else {
                         // status 0 : error
-                        ToastPopUp.show(LoginActivity.this, "Something went wrong ,try again");
+                        ToastPopUp.show(LoginActivity.this, getResources().getString(R.string.server_response_error));
                         edforgotpassEmail.setText("");
                         mDialog.dismiss();
                     }
@@ -681,7 +686,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //---------------------sending details of login to server and validating------------------------
     public void login() {
         String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
-       /* progressDialog = new ProgressDialog(LoginActivity.this);
+       /* progressDialog = new ProgressDialog(SendBirdLoginActivity.this);
         progressDialog.show();*/
         mDialog.setConfiguration(new ArcConfiguration(this));
         mDialog.show();
@@ -719,11 +724,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         String country_id = response.body().getCheckstatus().get(0).getCountryID();
                         String privacy = response.body().getCheckstatus().get(0).getPrivacy();
                         if (count.equals("0")) {
-                            email.setText("");
                             password.setText("");
+                            email.setText("");
                             Intent in = new Intent(LoginActivity.this, First_Login.class);
                             Bundle bundle = new Bundle();
-//Add your data to bundle
                             bundle.putString("EmailId", stremailaddress);
                             bundle.putString("strMerchant_id", strMerchant_id);
                             bundle.putString("message", message);
@@ -731,31 +735,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             bundle.putString("LName", strLname);
                             bundle.putString("countryid", country_id);
                             bundle.getString("privacy");
-                            // in.putExtra("",);
                             in.putExtras(bundle);
                             startActivity(in);
                         } else {
+                            password.setText("");
+                            email.setText("");
                             sharedPreferences.createUserCredentialSession(strMerchant_id, strFullName, privacy);
-                            //ToastPopUp.show(LoginActivity.this, "Login successful ");
-                            // Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             sharedPreferences.store_radius(Validation.inital_radius);
-                            //  Toast.makeText(Login.this, "Login successful ", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getBaseContext(), TaggedneedsActivity.class);
                             i.putExtra("message", message);
                             startActivity(i);
-                            //----------------------set up status to ON-----------------------
+                            //----------------------set up notification status to ON-----------------------
                             sharedPreferences.set_notification_status("ON");
                         }
                     } else if (successstatus.equals("0")) {
-                        ToastPopUp.show(LoginActivity.this, "Enter a registered email address");
-                        email.setText("");
+                        ToastPopUp.show(LoginActivity.this, getResources().getString(R.string.registered_email));
                         password.setText("");
+                        email.setText("");
                         //password.setFocusableInTouchMode(false);
                         email.requestFocus();
                         mDialog.dismiss();
                         //Toast.makeText(Login.this, "Enter a valid email address", Toast.LENGTH_LONG).show();
                     } else if (successstatus.equals("2")) {
-                        // ToastPopUp.show(LoginActivity.this, "A Registration Completion Link has been sent to " + stremailaddress + ". Please set your password using that link");
+                        // ToastPopUp.show(SendBirdLoginActivity.this, "A Registration Completion Link has been sent to " + stremailaddress + ". Please set your password using that link");
                         password.setText("");
                         mDialog.dismiss();
                         final AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
@@ -789,17 +791,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             @Override
                             public void onClick(View v) {
                                 alertDialogreturn.dismiss();
-                               /* Intent loginintent = new Intent(LoginActivity.this, LoginActivity.class);
+                               /* Intent loginintent = new Intent(SendBirdLoginActivity.this, SendBirdLoginActivity.class);
                                 loginintent.putExtra("message", message);
                                 startActivity(loginintent);*/
                             }
                         });
                         // Toast.makeText(Login.this, "Wrong Password", Toast.LENGTH_LONG).show();
                     } else if (successstatus.equals("4")) {
-                        ToastPopUp.show(LoginActivity.this, "Wrong Password");
+                        ToastPopUp.show(LoginActivity.this, getResources().getString(R.string.wrong_password));
                         // Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_LONG).show();
                     } else {
-                        ToastPopUp.show(LoginActivity.this, "Login failed");
+                        ToastPopUp.show(LoginActivity.this, getResources().getString(R.string.login_failed));
                     }
                     mDialog.dismiss();
                 } catch (Exception e) {
@@ -844,11 +846,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     String strsuccessStatus = response.body().getStatus().toString();
                     if (strsuccessStatus.equals("1")) {
                         mDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "Please check your email", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.check_email), Toast.LENGTH_SHORT).show();
                         alertDialogreturn.dismiss();
                     } else {
                         mDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "Someting went wrong please retry", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.server_response_error), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
 
@@ -858,7 +860,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onFailure(Throwable t) {
                 mDialog.dismiss();
-                ToastPopUp.show(getApplicationContext(), getString(R.string.server_response_error));
+                ToastPopUp.show(getApplicationContext(), getResources().getString(R.string.server_response_error));
             }
         });
     }
@@ -875,7 +877,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onAuthError(LIAuthError error) {
                 // Handle authentication errors
-                Log.d("Error", error.toString());
+                Log.d(getResources().getString(R.string.error), error.toString());
             }
         }, true);
     }
@@ -894,7 +896,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     lnkdEmail = jsonObject.getString("emailAddress");
                     // imgurl = jsonObject.getString("pictureUrls");
 
-                   /* Intent in=new Intent(LoginActivity.this,Detailspage.class);
+                   /* Intent in=new Intent(SendBirdLoginActivity.this,Detailspage.class);
                     startActivity(in);*/
                     Log.d("FName", lnkdFname);
                     Log.d("LName", lnkdLname);
@@ -963,15 +965,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //------------------------linkedinlogin api-----------------------------------------------------
     public void linkedInLigin(final String first_Name, final String last_Name, final String LinkedIn_Email, String Login_Type) {
         String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
-       /* progressDialog = new ProgressDialog(LoginActivity.this);
+       /* progressDialog = new ProgressDialog(SendBirdLoginActivity.this);
         progressDialog.show();*/
         if (first_Name == null) {
-            Toast.makeText(LoginActivity.this, "Please select your account from the list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override
                         public void onResult(Status status) {
-                            // Toast.makeText(LoginActivity.this,"")
+                            // Toast.makeText(SendBirdLoginActivity.this,"")
                             //updateUI(false);
                             signIn();
                         }
@@ -1029,7 +1031,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 sharedPreferences.set_notification_status("ON");
                             }
                         } else {
-                            Toast.makeText(LoginActivity.this, "Login was unsuccessful.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_unsuccess), Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         StringWriter writer = new StringWriter();
@@ -1054,7 +1056,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public void facebookLogin(final String first_Name, final String last_Name, final String fbEmail, String fb_Id) {
         String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
-       /* progressDialog = new ProgressDialog(LoginActivity.this);
+       /* progressDialog = new ProgressDialog(SendBirdLoginActivity.this);
         progressDialog.show();*/
         mDialog.setConfiguration(new ArcConfiguration(this));
         mDialog.show();
@@ -1112,7 +1114,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             sharedPreferences.set_notification_status("ON");
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, "Login was unsuccessful.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_unsuccess), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     StringWriter writer = new StringWriter();
@@ -1142,7 +1144,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
-        /*Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        /*Intent intent = new Intent(SendBirdLoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);*/
 
@@ -1164,7 +1166,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         dialogconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+                /*Intent intent = new Intent(SendBirdLoginActivity.this, SplashActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
                 alertDialogForgot.dismiss();
                 Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -1172,7 +1174,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
-                //  Activity. LoginActivity.finishAffinity()
+                //  Activity. SendBirdLoginActivity.finishAffinity()
                 finish();
             }
         });
@@ -1251,29 +1253,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.e("Google_details", "Name: " + first_name + " last name:" + last_name + ", email: " + email);
                 if (first_name.equals("null")) {
                     mDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Please select your account from the list", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
                     Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                             new ResultCallback<Status>() {
                                 @Override
                                 public void onResult(Status status) {
-                                    // Toast.makeText(LoginActivity.this,"")
+                                    // Toast.makeText(SendBirdLoginActivity.this,"")
                                     //updateUI(false);
                                     signIn();
                                 }
                             });
                     // mDialog.dismiss();
-                    // Toast.makeText(LoginActivity.this, "Retry login", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(SendBirdLoginActivity.this, "Retry login", Toast.LENGTH_SHORT).show();
                 } else {
                     //  linkedInLigin(first_name, last_name, email, "gp");
                     linkedInLigin(first_name, last_name, email, "gp");
                 }
             } catch (Exception e) {
-                Toast.makeText(LoginActivity.this, "Please select your account from the list", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                         new ResultCallback<Status>() {
                             @Override
                             public void onResult(Status status) {
-                                // Toast.makeText(LoginActivity.this,"")
+                                // Toast.makeText(SendBirdLoginActivity.this,"")
                                 //updateUI(false);
                                 signIn();
                             }
@@ -1315,7 +1317,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         //(byte) 0xD3, (byte)0xDA, (byte)0xA0, 0x5B, 0x4F, 0x35, 0x71, 0x02, 0x4E, 0x27, 0x22, (byte)0xB9, (byte)0xAc, (byte)0xB2, 0x77, 0x2F, (byte)0x9D, (byte)0xA9, (byte)0x9B, (byte)0xD9
                 };
                 Log.e("keyhash", Base64.encodeToString(sha1, Base64.NO_WRAP));
-                // Toast.makeText(LoginActivity.this, Base64.encodeToString(md.digest(), Base64.NO_WRAP), Toast.LENGTH_LONG).show();
+                // Toast.makeText(SendBirdLoginActivity.this, Base64.encodeToString(md.digest(), Base64.NO_WRAP), Toast.LENGTH_LONG).show();
                /* ((TextView) findViewById(R.id.hashKey))
                         .setText(Base64.encodeToString(md.digest(),
                                 Base64.NO_WRAP));*/
@@ -1324,7 +1326,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Log.d("Name not found", e.getMessage(), e);
 
         } catch (NoSuchAlgorithmException e) {
-            Log.d("Error", e.getMessage(), e);
+            Log.d(getResources().getString(R.string.error), e.getMessage(), e);
         }
     }
 

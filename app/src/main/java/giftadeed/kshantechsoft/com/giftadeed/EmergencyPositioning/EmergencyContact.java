@@ -81,7 +81,7 @@ public class EmergencyContact extends AppCompatActivity implements View.OnClickL
                 if (et_contact_1.getText().length() > 0) {
                     et_contact_1.setText("");
                     et_contact_1.clearFocus();
-                    databaseAccess.updateContact("1", "", et_contact_2.getText().toString(), et_contact_3.getText().toString());
+                    databaseAccess.updateContact("1", "", et_contact_2.getText().toString());
                     msg1.setVisibility(View.VISIBLE);
                     msg1.setText("Contact removed");
                 }
@@ -94,7 +94,7 @@ public class EmergencyContact extends AppCompatActivity implements View.OnClickL
                 if (et_contact_2.getText().length() > 0) {
                     et_contact_2.setText("");
                     et_contact_2.clearFocus();
-                    databaseAccess.updateContact("1", et_contact_1.getText().toString(), "", et_contact_3.getText().toString());
+                    databaseAccess.updateContact("1", et_contact_1.getText().toString(), "");
                     msg2.setVisibility(View.VISIBLE);
                     msg2.setText("Contact removed");
                 }
@@ -107,7 +107,7 @@ public class EmergencyContact extends AppCompatActivity implements View.OnClickL
                 if (et_contact_3.getText().length() > 0) {
                     et_contact_3.setText("");
                     et_contact_3.clearFocus();
-                    databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString(), "");
+                    databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString());
                     msg3.setVisibility(View.VISIBLE);
                     msg3.setText("Contact removed");
                 }
@@ -236,17 +236,17 @@ public class EmergencyContact extends AppCompatActivity implements View.OnClickL
                                 et_contact_1.setText(contactNumber);
                                 msg1.setVisibility(View.VISIBLE);
                                 msg1.setText("Contact saved");
-                                databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString(), et_contact_3.getText().toString());
+                                databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString());
                             } else if (flag == 2) {
                                 et_contact_2.setText(contactNumber);
                                 msg2.setVisibility(View.VISIBLE);
                                 msg2.setText("Contact saved");
-                                databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString(), et_contact_3.getText().toString());
+                                databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString());
                             } else if (flag == 3) {
                                 et_contact_3.setText(contactNumber);
                                 msg3.setVisibility(View.VISIBLE);
                                 msg3.setText("Contact saved");
-                                databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString(), et_contact_3.getText().toString());
+                                databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString());
                             }
                         }
                     }

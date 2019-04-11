@@ -34,6 +34,11 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.GroupChannelListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.PrintWriter;
@@ -47,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChatFragment;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
@@ -68,7 +74,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
     SimpleArcDialog mDialog;
     SessionManager sessionManager;
     String strUser_ID;
-    String receivedGid = "";
+    String receivedGid = "", receivedGName = "", strClubName;
     EditText editsearch;
     Button btnSearch, btnAddSearchedMember;
     TextView searchedRecordResult, searchedUsername, searchedEmail, tvAlreadyAdded;
@@ -76,6 +82,8 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     ArrayList<MemberDetails> userList;
     String searchedMemberId;
+    private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
+    private String mChannelUrl = "";
 
     public static AddGroupMemberFragment newInstance(int sectionNumber) {
         AddGroupMemberFragment fragment = new AddGroupMemberFragment();
@@ -107,6 +115,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
@@ -119,6 +128,13 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         strUser_ID = user.get(sessionManager.USER_ID);
         HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
         receivedGid = group.get(sessionManager.GROUP_ID);
+        receivedGName = group.get(sessionManager.GROUP_NAME);
+        strClubName = receivedGName + " - " + receivedGid;
+        try {
+            getChannelsDetails();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,7 +215,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -272,7 +288,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
     }
 
     //---------------------add searched member in group-----------------------------------------------
-    public void addMemberInGroup(final String user_id, String memberid, String groupid) {
+    public void addMemberInGroup(final String user_id, final String memberid, String groupid) {
         userList = new ArrayList<MemberDetails>();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -299,7 +315,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -316,11 +332,21 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), "Member added successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.member_added), Toast.LENGTH_SHORT).show();
+                            //============add member in sendbird group channel==============
+                            if (lstGetChannelsList != null) {
+                                for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                                    Log.d("channel_name", lstGetChannelsList.get(i).getmChannelName());
+                                    if (lstGetChannelsList.get(i).getmChannelName().equals(strClubName)) {
+                                        Log.d("channel_url", lstGetChannelsList.get(i).getmUrl());
+                                        inviteUser(lstGetChannelsList.get(i).getmUrl().toString(), memberid);
+                                    }
+                                }
+                            }
                             editsearch.setText("");
                             layoutSearchedRecord.setVisibility(View.GONE);
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -364,5 +390,69 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiClient.connect();
+    }
+
+    public void getChannelsDetails() {
+        //always use connect() along with any method of chat #phase 2 requirement 27 feb 2018 Nilesh
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannelListQuery channelListQuery = GroupChannel.createMyGroupChannelListQuery();
+                channelListQuery.setIncludeEmpty(true);
+                channelListQuery.next(new GroupChannelListQuery.GroupChannelListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<GroupChannel> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error.
+                            return;
+
+                        }
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                System.out.println("Chnalls: " + list.get(i).getName());
+                                /// lstGetChannelsList.add(list.get(i).getName().toString());
+                                lstGetChannelsList.add(new GroupListInfo(list.get(i).getData().toString(), list.get(i).getName().toString(), list.get(i).getUrl().toString()));
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void inviteUser(final String url, final String searchedMemberId) {
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                // Get channel instance from URL first.
+                GroupChannel.getChannel(url, new GroupChannel.GroupChannelGetHandler() {
+                    @Override
+                    public void onResult(GroupChannel groupChannel, SendBirdException e) {
+                        if (e != null) {
+                            // Error!
+                            return;
+                        }
+                        // Then invite the selected members to the channel.
+                        groupChannel.inviteWithUserId(searchedMemberId, new GroupChannel.GroupChannelInviteHandler() {
+                            @Override
+                            public void onResult(SendBirdException e) {
+                                if (e != null) {
+                                    // Error!
+                                    return;
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 }

@@ -33,22 +33,24 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.GroupChannelListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChannelListFragment;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.main.SendBirdLoginActivity;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
@@ -63,6 +65,8 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity.userClubCount;
 
 public class GroupsListFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
@@ -79,9 +83,12 @@ public class GroupsListFragment extends Fragment
     SessionManager sessionManager;
     private GoogleApiClient mGoogleApiClient;
     GroupListAdapter groupListAdapter;
-    String json;
-    ArrayList<GroupPOJO> storedGroupArrayList;
     DatabaseAccess databaseAccess;
+    private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
+    private List<String> channelList = new ArrayList<String>();
+    private boolean mIsDistinct;
+    private String strMessage = "Welcome to GiftADeed Chat";
+    private List<String> lstusers = new ArrayList<String>();
 
     public static GroupsListFragment newInstance(int sectionNumber) {
         GroupsListFragment fragment = new GroupsListFragment();
@@ -119,6 +126,7 @@ public class GroupsListFragment extends Fragment
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(true);
@@ -145,6 +153,7 @@ public class GroupsListFragment extends Fragment
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
                                             getGroupList(strUser_ID);
+                                            getChannelsDetails();
                                         }
                                     }
                                 }
@@ -196,6 +205,27 @@ public class GroupsListFragment extends Fragment
                 sessionManager.createGroupDetails("create", "", "", "", "");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
                 return true;
+            case R.id.action_group_messages:
+                if (userClubCount != null) {
+                    if (userClubCount.equals("Yes")) {
+                        int i = 0;
+                        /*SendBirdLoginActivity sendBirdLoginActivity = new SendBirdLoginActivity();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("CHATPAGE", "MSGPAGE");
+                        bundle.putString("PAGE", "MESSAGES");
+                        sendBirdLoginActivity.setArguments(bundle);
+                        fragmgr.beginTransaction().replace(R.id.content_frame, sendBirdLoginActivity).commit();*/
+
+                        // Load list of Group Channels
+                        Fragment fragment = GroupChannelListFragment.newInstance();
+                        fragmgr.beginTransaction()
+                                .replace(R.id.content_frame, fragment)
+                                .commit();
+                    } else if (userClubCount.equals("No")) {
+                        Toast.makeText(getContext(), getResources().getString(R.string.no_channel), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -209,6 +239,7 @@ public class GroupsListFragment extends Fragment
         } else {
             swipeRefreshLayout.setRefreshing(true);
             getGroupList(strUser_ID);
+            getChannelsDetails();
         }
     }
 
@@ -239,7 +270,7 @@ public class GroupsListFragment extends Fragment
                     if (isblock == 1) {
                         swipeRefreshLayout.setRefreshing(false);
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -288,6 +319,11 @@ public class GroupsListFragment extends Fragment
                                 if (!databaseAccess.groupidExist(groupArrayList.get(i).getGroup_id())) {
                                     databaseAccess.Create_Group(groupArrayList.get(i).getGroup_id(), groupArrayList.get(i).getGroup_name(), groupArrayList.get(i).getGroup_image(), "true");
                                 }
+
+//                                String channelName = "";
+//                                channelName = groupArrayList.get(i).getGroup_name() + " - " + groupArrayList.get(i).getGroup_id();
+//                                Log.d("group_name", "" + channelName);
+//                                filterGroupChannel(channelName);
                             }
 
                             ArrayList<String> abc = new ArrayList<>();
@@ -345,5 +381,111 @@ public class GroupsListFragment extends Fragment
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiClient.connect();
+    }
+
+    public void getChannelsDetails() {
+        channelList = new ArrayList<String>();
+        //always use connect() along with any method of chat #phase 2 requirement 27 feb 2018 Nilesh
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannelListQuery channelListQuery = GroupChannel.createMyGroupChannelListQuery();
+                channelListQuery.setIncludeEmpty(true);
+                channelListQuery.next(new GroupChannelListQuery.GroupChannelListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<GroupChannel> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error.
+                            return;
+
+                        }
+                        if (list != null) {
+                            if (list.size() != 0) {
+                                userClubCount = "Yes";
+                                for (int i = 0; i < list.size(); i++) {
+                                    System.out.println("Chnalls: " + list.get(i).getName());
+                                    lstGetChannelsList.add(new GroupListInfo(list.get(i).getData().toString(), list.get(i).getName().toString(), list.get(i).getUrl().toString()));
+                                    channelList.add(list.get(i).getName().toString());
+                                }
+                            } else {
+                                userClubCount = "No";
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void filterGroupChannel(String clubname) {
+        System.out.println("clbname line n0 3950        " + clubname);
+        /*if (lstGetChannelsList != null && lstGetChannelsList.size() != 0) {
+            for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                if (lstGetChannelsList.get(i).getmChannelName().equals(clubname)) {
+
+                } else {
+                    mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                    if (strUser_ID != null && clubname != null) {
+                        lstusers.add(strUser_ID);
+                        mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                        createGroupChannel(lstusers, clubname, strMessage, mIsDistinct);
+                    }
+                }
+            }
+        } else {
+            mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+            if (strUser_ID != null && clubname != null) {
+                lstusers.add(strUser_ID);
+                mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                createGroupChannel(lstusers, clubname, strMessage, mIsDistinct);
+            }
+        }*/
+
+        if (channelList != null && channelList.size() != 0) {
+            for (int i = 0; i < channelList.size(); i++) {
+                if (channelList.contains(clubname)) {
+
+                } else {
+                    mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                    if (strUser_ID != null && clubname != null) {
+                        lstusers.add(strUser_ID);
+                        mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                        createGroupChannel(lstusers, clubname, strMessage, mIsDistinct);
+                    }
+                }
+            }
+        } else {
+            mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+            if (strUser_ID != null && clubname != null) {
+                lstusers.add(strUser_ID);
+                mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                createGroupChannel(lstusers, clubname, strMessage, mIsDistinct);
+            }
+        }
+    }
+
+    private void createGroupChannel(final List<String> userIds, final String clubName, final String message, final boolean distinct) {
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannel.createChannelWithUserIds(userIds, distinct, clubName, "", message, new GroupChannel.GroupChannelCreateHandler() {
+                    @Override
+                    public void onResult(GroupChannel groupChannel, SendBirdException e) {
+                        if (e != null) {
+                            // Error!
+                            return;
+                        }
+                    }
+                });
+            }
+        });
     }
 }

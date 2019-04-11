@@ -34,7 +34,6 @@
                 android:text="@string/radius"
                 android:textSize="@dimen/finaltextfont" />
 
-
             <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
                 android:id="@+id/discreteProgressbar"
                 android:layout_width="match_parent"
@@ -53,29 +52,51 @@
                 android:layout_marginTop="10dp"
                 android:text="10 km" />
 
-
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/filterdcategorylength"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textColorHint="#000">
+                android:textColorHint="@color/grey">
 
                 <EditText
-
                     android:id="@+id/edfiltercategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
-                    android:backgroundTint="#000"
+                    android:backgroundTint="@color/grey"
                     android:drawableRight="@android:drawable/arrow_down_float"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="@string/select_category" />
+                    android:hint="@string/select_category"
+                    android:textColor="@color/grey" />
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/filtergrouplayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/filterdcategorylength"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/grey">
+
+                <EditText
+                    android:id="@+id/edfiltergroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:backgroundTint="@color/grey"
+                    android:visibility="gone"
+                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="@string/filter_group"
+                    android:textColor="@color/grey" />
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
         <Button
@@ -87,8 +108,6 @@
             android:text="@string/apply"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/finalheaderfont"
-
-            ></Button>
+            android:textSize="@dimen/finalheaderfont" />
     </RelativeLayout>
 </FrameLayout>

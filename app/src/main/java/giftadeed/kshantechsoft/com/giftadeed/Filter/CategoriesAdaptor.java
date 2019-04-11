@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.SignupPOJO;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.Needtype;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 /**
@@ -22,14 +23,14 @@ import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
  */
 
 public class CategoriesAdaptor extends BaseAdapter {
-    ArrayList<CategoryPOJO> categories;
+    ArrayList<Needtype> categories;
     Context context;
-    private ArrayList<CategoryPOJO> arraylist;
+    private ArrayList<Needtype> arraylist;
 
-    public CategoriesAdaptor(ArrayList<CategoryPOJO> categories, Context context) {
+    public CategoriesAdaptor(ArrayList<Needtype> categories, Context context) {
         this.categories = categories;
         this.context = context;
-        this.arraylist = new ArrayList<CategoryPOJO>();
+        this.arraylist = new ArrayList<Needtype>();
         this.arraylist.addAll(categories);
         notifyDataSetChanged();
     }
@@ -56,8 +57,8 @@ public class CategoriesAdaptor extends BaseAdapter {
         TextView storename= (TextView) view.findViewById(R.id.category_name);
         ImageView cat_img=view.findViewById(R.id.categoryimg);
         notifyDataSetChanged();
-        storename.setText(categories.get(i).getName());
-        Picasso.with(context).load(WebServices.MAIN_SUB_URL+categories.get(i).getCharacterpath()).into(cat_img);
+        storename.setText(categories.get(i).getNeedName());
+        Picasso.with(context).load(WebServices.MAIN_SUB_URL+categories.get(i).getCharacterPath()).into(cat_img);
         return view;
     }
 
@@ -70,9 +71,9 @@ public class CategoriesAdaptor extends BaseAdapter {
         }
         else
         {
-            for (CategoryPOJO wp : arraylist)
+            for (Needtype wp : arraylist)
             {
-                if (wp.getName().toLowerCase(Locale.getDefault()).contains(charText))
+                if (wp.getNeedName().toLowerCase(Locale.getDefault()).contains(charText))
                 {
                     categories.add(wp);
                 }

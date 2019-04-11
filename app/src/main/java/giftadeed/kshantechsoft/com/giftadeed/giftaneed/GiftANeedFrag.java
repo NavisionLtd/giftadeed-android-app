@@ -175,6 +175,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         sessionManager = new SessionManager(getActivity());
@@ -786,7 +787,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                             @Override
                             public void onClick(View v) {
                                 alertDialogreturn.dismiss();
-                               /* Intent loginintent = new Intent(SignUp.this, LoginActivity.class);
+                               /* Intent loginintent = new Intent(SignUp.this, SendBirdLoginActivity.class);
                                 loginintent.putExtra("message", message);
                                 startActivity(loginintent);*/
                             }
@@ -838,7 +839,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
@@ -926,26 +927,23 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         //----------------Displaying the alert dialog
         alertDialogreturn.show();
 
-        txtneedname.setText("You have fulfilled " + needtype + " need");
+        txtneedname.setText(" You have fulfilled " + needtype + " need");
         txtdialogcreditpoints.setText("You have earned " + credits_points + " point(s)");
         txttotalpoints.setText("Your total point(s) are " + total_points);
         Picasso.with(getContext()).load(char_path).resize(50, 50).into(imgchar);
         imgshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed";
-                String here = "here.";
+                String android_shortlink = "http://tiny.cc/kwb33y";
+                String ios_shortlink = "http://tiny.cc/h4533y";
+                String website = "https://www.giftadeed.com/";
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, "Hey!\n" +
-                        "I am using ‘Gift-A-Deed’ charity mobile app.\n" +
-                        "You can download it from:\n" +
-                        "https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed");
-
-                //new Html("<a target=\"_blank\" href=\"" + url + "\">" + here + "</a>");
-                // );
-                //   https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed
-
+                share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest points are " + total_points + " in the GiftADeed App.\n" +
+                        "You can earn your points by downloading the app from\n\n" +
+                        "Android : " + android_shortlink + "\n" +
+                        "iOS : " + ios_shortlink + "\n\n" +
+                        "Also, check the website at " + website);
                 startActivity(Intent.createChooser(share, "Share your points on:"));
             }
         });
@@ -1122,7 +1120,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 Toast.makeText(getActivity(), "Permission are denied please enable permissions", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            // SendMail smail=new SendMail("giftadeed2017@gmail.com","Error",e.toString());
+            // SendMail smail=new SendMail("giftadeed2017@gmail.com",getResources().getString(R.string.error),e.toString());
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             Bugreport bg = new Bugreport();
@@ -1170,7 +1168,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 Toast.makeText(getActivity(), "Permission are denied please enable permissions", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            // SendMail smail=new SendMail("giftadeed2017@gmail.com","Error",e.toString());
+            // SendMail smail=new SendMail("giftadeed2017@gmail.com",getResources().getString(R.string.error),e.toString());
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             Bugreport bg = new Bugreport();
@@ -1249,7 +1247,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         checkimage();
 
                     } else {
-                        Toast.makeText(getContext(), "This deed is already reported by someone", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.already_deed), Toast.LENGTH_SHORT).show();
                         mDialog.dismiss();
                         Bundle bundle = new Bundle();
                         int i = 3;
@@ -1292,7 +1290,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         dialog.setCancelable(false);
         ImageView img = (ImageView) dialog.findViewById(R.id.img_gif);
         Glide.with(this)
-                .load(R.drawable.claping)
+                .load(R.drawable.clap)
                 .into(img);
 
         dialog.show();

@@ -99,7 +99,6 @@ public class SignUp extends AppCompatActivity {
     String cityid = null;
     String stremailaddress, strMobileno, strFirstMerchantName, strLastName, strAddress, stredgender, strgender, strPassword, strConfirmpassword, strCountry, strState, strCity;
     String Charity, Subscription, message, strDeviceid;
-    int flag = 1;
     CountryAdapter ctryadptr;
     StateAdapter stateadptr;
     CityAdapter cityadptr;
@@ -163,9 +162,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (edFname.getText().length() > 14) {
-
-                    ToastPopUp.show(SignUp.this, "Length cannot be greater than 15 characters");
-
+                    ToastPopUp.show(SignUp.this, getResources().getString(R.string.length_error));
                 }
             }
         });
@@ -175,7 +172,6 @@ public class SignUp extends AppCompatActivity {
                 strFirstMerchantName = edFname.getText().toString();
                 if (!hasFocus) {
                     if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
-
                         ToastPopUp.show(context, getString(R.string.Enter_FirstName));
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     } else if (!(strFirstMerchantName.matches("^[a-zA-Z.'_\\s]*$"))) {
@@ -235,7 +231,7 @@ public class SignUp extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (edLname.getText().length() > 19) {
 
-                    ToastPopUp.show(SignUp.this, "Length cannot be greater than 20 characters");
+                    ToastPopUp.show(SignUp.this, getResources().getString(R.string.length_error_2));
 
                 }
             }
@@ -567,7 +563,7 @@ public class SignUp extends AppCompatActivity {
 
                 });
                 if (countries.size() == 0) {
-                    Toast.makeText(SignUp.this, "No data found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                     mDialog.dismiss();
                 } else {
 
@@ -711,7 +707,7 @@ public class SignUp extends AppCompatActivity {
                         states.add(data);
                     }
                     if (states.size() == 0) {
-                        Toast.makeText(SignUp.this, "No data found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUp.this, getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                         mDialog.dismiss();
                     } else {
                         final Dialog dialog = new Dialog(context);
@@ -850,7 +846,7 @@ public class SignUp extends AppCompatActivity {
                     cities.add(data);
                 }
                 if (cities.size() == 0) {
-                    Toast.makeText(SignUp.this, "No data found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                     mDialog.dismiss();
                 } else {
                     final Dialog dialog = new Dialog(context);
@@ -980,7 +976,7 @@ public class SignUp extends AppCompatActivity {
 
                     if (successstatus.equals("1")) {
                         mDialog.dismiss();
-                        Toast.makeText(SignUp.this, "Email address already exists", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUp.this, getResources().getString(R.string.email_already_exist), Toast.LENGTH_LONG).show();
                         edEmail.setText("");
 
 

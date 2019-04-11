@@ -169,7 +169,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(context);
-                        Toast.makeText(context, "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(

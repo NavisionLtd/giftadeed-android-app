@@ -32,7 +32,7 @@
                     android:id="@+id/change_profile_pic"
                     android:layout_width="@dimen/uploadimg"
                     android:layout_height="@dimen/uploadimg"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center">
 
                     <ImageView
@@ -41,6 +41,21 @@
                         android:layout_height="@dimen/uploadimg"
                         android:src="@drawable/profimg" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_change_pic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:text="@string/change_pic"
+                    android:textAllCaps="false"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/white"
+                    android:background="@color/grey"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -125,11 +140,10 @@
 
                     <ImageView
                         android:id="@+id/myprofileimgshare"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:gravity="left"
-                        android:src="@drawable/share" />
+                        android:src="@drawable/ic_share_black_1" />
                     <!--</LinearLayout>-->
                 </LinearLayout>
 

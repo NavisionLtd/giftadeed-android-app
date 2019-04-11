@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    app:layout_collapseMode="pin"
     android:orientation="vertical"
+    app:layout_collapseMode="pin"
     tools:context="giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity">
 
     <android.support.design.widget.AppBarLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,8 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginRight="10dp"
-                android:visibility="gone"
-                android:src="@drawable/hamburger" />
+                android:src="@drawable/hamburger"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/imgappbarsetting"
@@ -57,6 +57,15 @@
                 android:layout_gravity="right"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/cam"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_share"
                 android:visibility="gone" />
 
             <TextView
@@ -86,7 +95,6 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="left"
-                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_back"
                 android:visibility="gone" />
 

@@ -1,138 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_margin="16dp"
-        android:text="@string/app_settings"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp" />
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/language_settings_inputlayout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:textColorHint="@color/grey">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/et_select_language"
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/app_settings"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:visibility="visible" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/language_settings_inputlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textView1"
+            android:textColorHint="@color/grey"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/et_select_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:backgroundTint="@color/grey"
+                android:drawableRight="@android:drawable/arrow_down_float"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="@string/select_language"
+                android:longClickable="false"
+                android:textColor="@color/grey"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/language_settings_inputlayout"
+            android:layout_margin="16dp"
+            android:text="@string/notif_settings"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp" />
+
+        <Switch
+            android:id="@+id/switch_receive_noti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:backgroundTint="@color/grey"
-            android:drawableRight="@android:drawable/arrow_down_float"
-            android:editable="false"
-            android:focusable="false"
-            android:hint="@string/select_language"
-            android:longClickable="false"
-            android:textColor="@color/grey"
+            android:checked="true"
+            android:text="@string/receive_notif"
             android:textSize="16sp" />
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/notif_settings"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp" />
-
-    <Switch
-        android:id="@+id/switch_receive_noti"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:checked="true"
-        android:text="@string/receive_notif"
-        android:textSize="16sp" />
-
-    <LinearLayout
-        android:id="@+id/layout_radius"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/layout_radius"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_below="@+id/switch_receive_noti"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/radius"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txtdistance_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="right"
+                    android:text="35 meters" />
+            </LinearLayout>
+
+            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                android:id="@+id/seekBar_notisettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                app:dsb_indicatorColor="@color/colorAccent"
+                app:dsb_indicatorElevation="0dp"
+                app:dsb_max="100000"
+                app:dsb_min="35"
+                app:dsb_progressColor="@color/colorAccent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_noti_group_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_radius"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/radius"
-                android:textColor="@color/black"
+                android:layout_marginTop="16dp"
+                android:text="@string/groupwise_notif"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/txtdistance_settings"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/notification_recycler_grouplist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="16dp"
-                android:gravity="right"
-                android:text="35 meters" />
+                android:scrollbars="none" />
         </LinearLayout>
 
-        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-            android:id="@+id/seekBar_notisettings"
+        <LinearLayout
+            android:id="@+id/layout_noti_cat_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
-            app:dsb_indicatorColor="@color/colorAccent"
-            app:dsb_indicatorElevation="0dp"
-            app:dsb_max="100000"
-            app:dsb_min="35"
-            app:dsb_progressColor="@color/colorAccent" />
-    </LinearLayout>
+            android:layout_below="@+id/layout_noti_group_list"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-    <LinearLayout
-        android:id="@+id/layout_noti_group_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/catwise_notif"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/notification_recycler_catlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_save_settings"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/groupwise_notif"
-            android:textColor="@color/colorPrimary"
+            android:layout_below="@+id/layout_noti_cat_list"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_background"
+            android:text="@string/save_settings"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="16sp" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/notification_recycler_grouplist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_save_settings"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="26dp"
-        android:background="@drawable/button_background"
-        android:text="@string/save_settings"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-</LinearLayout>
+    </RelativeLayout>
+</ScrollView>

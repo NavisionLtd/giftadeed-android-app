@@ -48,8 +48,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -116,8 +119,6 @@ import static android.app.Activity.RESULT_OK;
 //     Shows user profile details                               //
 /////////////////////////////////////////////////////////////////
 public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
-    public static final String DATABASE_PROFILE_PIC_UPLOADS = "users";
-    public static final String STORAGE_PATH_UPLOADS = "profilepics/";
     private StorageReference storageReference;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
@@ -129,7 +130,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     String strimagePath = "", firebasePhotoUrl = "", strAvatarPath = "";
     View rootview;
     ImageView profilePic;
-    LinearLayout changeProfilePic;
+    Button changeProfilePic;
     static android.support.v4.app.Fragment fragment;
     // FragmentManager fragmentManager;
     static android.support.v4.app.FragmentManager fragmgr;
@@ -185,6 +186,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         TaggedneedsActivity.fragname = MyProfilefrag.newInstance(0);
         edEmail.setEnabled(false);
@@ -204,12 +206,12 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         strProfilrName = user.get(sessionManager.USER_NAME);
         txtName.setText(strProfilrName);
         if (!(Validation.isNetworkAvailable(getContext()))) {
-            Toast.makeText(getContext(), "OOPS! No INTERNET. Please check your network connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getResources().getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
         } else {
             getProfileDetails();
             enabletext(false);
             mFirebaseInstance = FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference(DATABASE_PROFILE_PIC_UPLOADS);
+            mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_PROFILE_PIC_UPLOADS);
             storageReference = FirebaseStorage.getInstance().getReference();
             profileList = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase.child("profile");
@@ -263,12 +265,13 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     }
                     editflag = 1;
                     if (!(Validation.isNetworkAvailable(getContext()))) {
-                        Toast.makeText(getContext(), "OOPS! No INTERNET. Please check your network connection", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
                     } else {
                         getProfileDetails();
                     }
                     //Toast.makeText(getContext(), "please retry editing your profile", Toast.LENGTH_SHORT).show();
                 } else {
+                    changeProfilePic.setVisibility(View.VISIBLE);
                     enabletext(true);
                     TaggedneedsActivity.editprofile.setVisibility(View.GONE);
                     TaggedneedsActivity.saveprofile.setVisibility(View.VISIBLE);
@@ -342,16 +345,16 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // shareIt();
-                //String message = "Text I want to share.";
-                String url = "https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed";
+                String android_shortlink = "http://tiny.cc/kwb33y";
+                String ios_shortlink = "http://tiny.cc/h4533y";
+                String website = "https://www.giftadeed.com/";
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, "Hey!\n" +
-                        "I am using ‘Gift-A-Deed’ charity mobile app.\n" +
-                        "You can download it from:\n" +
-                        "https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed");
-
+                share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest credit score is " + strCreditpoints + " points in the GiftADeed App.\n" +
+                        "You can earn your credit points by downloading the app from\n\n" +
+                        "Android : " + android_shortlink + "\n" +
+                        "iOS : " + ios_shortlink + "\n\n" +
+                        "Also, check the website at " + website);
                 startActivity(Intent.createChooser(share, "Share your points on:"));
             }
         });
@@ -908,7 +911,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     //-------------------------Initilizing UI veriables-------------------------------------------------
     private void init() {
         profilePic = (ImageView) rootview.findViewById(R.id.profile_pic);
-        changeProfilePic = (LinearLayout) rootview.findViewById(R.id.change_profile_pic);
+        changeProfilePic = (Button) rootview.findViewById(R.id.btn_change_pic);
         txtName = (TextView) rootview.findViewById(R.id.myprofiletxtname);
         txtCredits = (TextView) rootview.findViewById(R.id.myprofiletxtcredits);
         txtPoints = (TextView) rootview.findViewById(R.id.myprofiletxtpoints);
@@ -980,7 +983,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -1226,10 +1229,12 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                             edCity.setText(selected_name);
 
                             if (editflag == 1) {
+                                changeProfilePic.setVisibility(View.VISIBLE);
                                 enabletext(true);
                                 TaggedneedsActivity.editprofile.setVisibility(View.GONE);
                                 TaggedneedsActivity.saveprofile.setVisibility(View.VISIBLE);
                             } else {
+                                changeProfilePic.setVisibility(View.GONE);
                                 enabletext(false);
                                 TaggedneedsActivity.editprofile.setVisibility(View.VISIBLE);
                                 TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
@@ -1263,7 +1268,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         } else {
             try {
                 if (countries.size() <= 0) {
-                    Toast.makeText(getContext(), "No data found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                 } else {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1372,7 +1377,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         } else {
             try {
                 if (states.size() <= 0) {
-                    Toast.makeText(getContext(), "No data found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                 } else {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1473,7 +1478,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             Toast.makeText(myContext, getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
         } else {
             if (cities.size() <= 0) {
-                Toast.makeText(getContext(), "No data found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     final Dialog dialog = new Dialog(getContext());
@@ -1571,7 +1576,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     public void enabletext(boolean enabletxt) {
         edFname.setEnabled(enabletxt);
         edLname.setEnabled(enabletxt);
-        changeProfilePic.setClickable(enabletxt);
         edPhone.setEnabled(enabletxt);
         edAddress.setEnabled(enabletxt);
         edCountry.setEnabled(enabletxt);
@@ -1679,7 +1683,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
@@ -1770,9 +1774,38 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 //            progressDialog.show();
 
             //getting the storage reference
-            StorageReference sRef = storageReference.child(STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".jpg");
+            final StorageReference sRef = storageReference.child(WebServices.PROFILEPIC_STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".jpg");
+            UploadTask uploadTask = sRef.putFile(fileUri);
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    // Continue with the task to get the download URL
+                    return sRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        System.out.println("Upload " + downloadUri);
+                        if (downloadUri != null) {
+                            String photoStringLink = downloadUri.toString(); //YOU WILL GET THE DOWNLOAD URL HERE !!!!
+                            System.out.println("Upload " + photoStringLink);
+                            //creating the upload object to store uploaded image details
+                            Profile profile = new Profile(strUserId, photoStringLink);
+                            mFirebaseDatabase.child("profile").child(strUserId).setValue(profile);
+                        }
 
-            //adding the file to reference
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+            /*//adding the file to reference
             sRef.putFile(fileUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -1802,7 +1835,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 //                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 //                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                         }
-                    });
+                    });*/
         } else {
             //display an error if no file is selected
         }

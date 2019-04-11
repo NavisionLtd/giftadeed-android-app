@@ -1,6 +1,7 @@
 package giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,11 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,12 +51,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
+import giftadeed.kshantechsoft.com.giftadeed.Filter.CategoriesAdaptor;
+import giftadeed.kshantechsoft.com.giftadeed.Filter.CategoryPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Filter.FilterFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupListAdapter;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryInterface;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryType;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Modeltaglist;
@@ -82,23 +92,17 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
     List<RowData> item_list;
     float radius_set;
     int t = 0;
-    String strUserId;
-    ArrayList<String> lat_long = new ArrayList<>();
-    ArrayList<String> icon_path = new ArrayList<>();
-    ArrayList<String> tag_title = new ArrayList<>();
-    String strTitle, strDate, strAddress, strDistance, strImagepath, strUser_ID;
+    String strUser_ID;
     NeedListAdapter needListAdapter;
     SessionManager sessionManager;
     static android.support.v4.app.FragmentManager fragmgr;
     FragmentActivity myContext;
-    //    SimpleArcDialog mDialog;
     String strFiltertype = Validation.FILTER_CATEGORY;
     TextView txtlist_count, textView;
     private GoogleApiClient mGoogleApiClient;
-    //added
-    List<Taggedlist> listtaggedmodel = new ArrayList<>();
     DatabaseAccess databaseAccess;
     ArrayList<GroupPOJO> groupArrayList;
+    ArrayList<CategoryPOJO> categories;
     SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -116,6 +120,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         swipeRefreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.swipe_refresh_layout_deeds);
         recyclerView = (RecyclerView) rootview.findViewById(R.id.needslistrecycler);
         recyclerView.setHasFixedSize(true);
@@ -150,6 +155,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                                             swipeRefreshLayout.setRefreshing(true);
                                             get_Tag_data();
                                             getGroupList(strUser_ID);
+                                            getCategory();
                                         }
                                     }
                                 }
@@ -210,7 +216,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();
@@ -364,7 +370,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -428,7 +434,56 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
         });
     }
 
-    boolean _areLecturesLoaded = false;
+    //---------------------get the list of categories from server-----------------------------------------------
+    public void getCategory() {
+        categories = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        CategoryInterface service = retrofit.create(CategoryInterface.class);
+        Call<CategoryType> call = service.sendData("");
+        call.enqueue(new Callback<CategoryType>() {
+            @Override
+            public void onResponse(Response<CategoryType> response, Retrofit retrofit) {
+                CategoryType categoryType = response.body();
+                categories.clear();
+                if (categoryType.getNeedtype().size() > 0) {
+                    for (int i = 0; i < categoryType.getNeedtype().size(); i++) {
+                        CategoryPOJO categoryPOJO = new CategoryPOJO();
+                        categoryPOJO.setId(categoryType.getNeedtype().get(i).getNeedMappingID());
+                        categoryPOJO.setName(categoryType.getNeedtype().get(i).getNeedName());
+                        categories.add(categoryPOJO);
+                    }
+                }
+                if (categories.size() <= 0) {
+                    databaseAccess.deleteAllCategory();
+                } else {
+                    for (int i = 0; i < categories.size(); i++) {
+                        if (!databaseAccess.catIdExist(categories.get(i).getId())) {
+                            databaseAccess.Create_Category(categories.get(i).getId(), categories.get(i).getName(),"true");
+                        }
+                    }
+
+                    ArrayList<String> abc = new ArrayList<>();
+                    for (int i = 0; i < categories.size(); i++) {
+                        abc.add(categories.get(i).getId());
+                    }
+                    Log.d("abc", abc.toString());
+                    String formatted = abc.toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                    databaseAccess.catIdNotExist(formatted);
+                }
+                Log.d("LocalDbCatSize", "" + databaseAccess.getAllCategories().size());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                ToastPopUp.show(getActivity(), getString(R.string.server_response_error));
+            }
+        });
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -444,19 +499,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
             swipeRefreshLayout.setRefreshing(true);
             get_Tag_data();
             getGroupList(strUser_ID);
+            getCategory();
         }
     }
-
-   /* @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (isVisibleToUser && !_areLecturesLoaded) {
-            // myContext = (FragmentActivity) getContext();
-
-            get_Tag_data();
-            _areLecturesLoaded = true;
-
-        }
-    }*/
 }

@@ -108,6 +108,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         sharedPreferences = new SessionManager(getContext());
@@ -128,7 +129,8 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
             currentVersion = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
             if (currentVersion.length() > 0) {
                 txt_app_version.setVisibility(View.VISIBLE);
-                txt_app_version.setText("App Version " + currentVersion);
+//                txt_app_version.setText("App Version " + currentVersion);
+                txt_app_version.setText(getResources().getString(R.string.app_name));
             } else {
                 txt_app_version.setVisibility(View.GONE);
             }
@@ -150,7 +152,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
         }
         recyclerView.setHasFixedSize(true);
 //        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), mNoOfColumns);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         recyclerView.setLayoutManager(layoutManager);
         final ArrayList<DataModel> androidversions = new ArrayList<>();
 
@@ -365,7 +367,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
                                         });
                                 int i = new DBGAD(getContext()).delete_row_message();
                                 sharedPreferences.set_notification_status("OFF");
-                                Intent loginintent = new Intent(getActivity(), LoginActivity.class);
+                                Intent loginintent = new Intent(getActivity(), SendBirdLoginActivity.class);
                                 loginintent.putExtra("message", "Charity");
                                 startActivity(loginintent);
                             }

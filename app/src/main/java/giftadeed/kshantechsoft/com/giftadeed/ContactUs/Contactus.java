@@ -97,6 +97,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -210,7 +211,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null,null);
                         LoginManager.getInstance().logOut();
 
@@ -255,7 +256,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(getContext(), "Sorry something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.server_response_error), Toast.LENGTH_SHORT).show();
                 mDialog.dismiss();
             }
         });

@@ -65,6 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
     ArrayList<GroupPOJO> savedGroupList;
     int checkedGroups;
     int selectedCheckedCount;
+    int selectedCategoryOn;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -73,6 +74,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
         savedGroupList = new ArrayList<>();
         savedGroupList = databaseAccess.getAllGroups();
         checkedGroups = databaseAccess.getGroupCheckedCount();
+
         if (remoteMessage.getNotification() != null) {
             Log.e(TAG, "Notification Body: " + "" + remoteMessage.getNotification().getBody());
         }
@@ -117,6 +119,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
             type = data.getString("type");
             groupids = data.getString("grp_ids");
             selectedCheckedCount = databaseAccess.getSelectedCheckedCount(groupids);
+            selectedCategoryOn = databaseAccess.getSelectedCatCheckedCount(title);
             Log.d("db_res_notification", "savedGroupList : " + savedGroupList.size() + ", checkedGroups : " + checkedGroups + ", selectedCheckedCount : " + selectedCheckedCount);
             System.out.print("#######" + imageUrl);
             //creating MyNotificationManager object
@@ -303,27 +306,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                             }
 
                             if (Notification_status.equals("ON")) {
-                                if (groupids.equals("")) {
-                                    if (savedGroupList.size() == 0) {
-                                        //tag audience : Individual user
-                                        mNotificationManager.showSmallNotification(title, message, intent);
-                                    } else {
-                                        if (checkedGroups > 0) {
-                                            //tag audience : All groups
-                                            mNotificationManager.showSmallNotification(title, message, intent);
-                                        }
-                                    }
-                                } else {
-                                    if (selectedCheckedCount > 0) {
-                                        //tag audience : selected groups
-                                        mNotificationManager.showSmallNotification(title, message, intent);
-                                    } else {
+//                                if (selectedCategoryOn > 0) { // check for notification category setting is ON
+                                    if (groupids.equals("")) {
                                         if (savedGroupList.size() == 0) {
                                             //tag audience : Individual user
                                             mNotificationManager.showSmallNotification(title, message, intent);
+                                        } else {
+                                            if (checkedGroups > 0) {
+                                                //tag audience : All groups
+                                                mNotificationManager.showSmallNotification(title, message, intent);
+                                            }
+                                        }
+                                    } else {
+                                        if (selectedCheckedCount > 0) {
+                                            //tag audience : selected groups
+                                            mNotificationManager.showSmallNotification(title, message, intent);
+                                        } else {
+                                            if (savedGroupList.size() == 0) {
+                                                //tag audience : Individual user
+                                                mNotificationManager.showSmallNotification(title, message, intent);
+                                            }
                                         }
                                     }
-                                }
+//                                }
                             } else if (Notification_status.equals("OFF")) {
 
                             } else {

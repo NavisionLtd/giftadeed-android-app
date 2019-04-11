@@ -6,4 +6,9 @@
         android:title="@string/action_create_group"
         app:showAsAction="always"
         android:icon="@drawable/create_group" />
+    <item
+        android:id="@+id/action_group_messages"
+        android:title="@string/action_group_messages"
+        app:showAsAction="always"
+        android:icon="@drawable/messages" />
 </menu>

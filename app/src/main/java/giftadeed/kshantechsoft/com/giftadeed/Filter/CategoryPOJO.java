@@ -9,6 +9,7 @@ public class CategoryPOJO {
     String name;
     String characterpath;
     String PhotoPath;
+    boolean isChecked = true;
 
     public String getPhotoPath() {
         return PhotoPath;
@@ -40,5 +41,13 @@ public class CategoryPOJO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

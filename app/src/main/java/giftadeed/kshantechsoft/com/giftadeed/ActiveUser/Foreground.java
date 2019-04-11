@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -177,6 +178,8 @@ public class Foreground extends Application implements Application.ActivityLifec
             //showToast("foreground");
             if (user_id != null) {
                 login(user_id);
+            } else {
+                Log.d("user_logged_in", "no");
             }
             for (Listener l : listeners) {
                 try {
@@ -281,5 +284,11 @@ public class Foreground extends Application implements Application.ActivityLifec
 
             }
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

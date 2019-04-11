@@ -103,60 +103,12 @@
                     android:textColor="@color/grey"
                     android:textSize="16sp" />
 
-                <LinearLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/my_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:orientation="vertical">
-
-                    <CheckBox
-                        android:id="@+id/chk_flood"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Flood"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/finaltextfont" />
-
-                    <CheckBox
-                        android:id="@+id/chk_eq"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Earthquake"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/finaltextfont" />
-
-                    <CheckBox
-                        android:id="@+id/chk_huricanes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Hurricanes"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/finaltextfont" />
-
-                    <CheckBox
-                        android:id="@+id/chk_tornado"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tornadoes"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/finaltextfont" />
-
-                    <CheckBox
-                        android:id="@+id/chk_volcano"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Volcanic eruptions"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/finaltextfont" />
-
-                    <CheckBox
-                        android:id="@+id/chk_tsunami"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tsunami"
-                        android:textColor="@color/grey"
-                        android:textSize="@dimen/finaltextfont" />
-                </LinearLayout>
+                    android:scrollbars="none"
+                    android:layout_marginLeft="10dp" />
 
                 <Button
                     android:id="@+id/btn_open_camera"

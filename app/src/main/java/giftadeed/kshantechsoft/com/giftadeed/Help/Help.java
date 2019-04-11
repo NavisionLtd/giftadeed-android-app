@@ -1,6 +1,5 @@
 package giftadeed.kshantechsoft.com.giftadeed.Help;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -9,10 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,26 +17,18 @@ import java.util.List;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 
 ////////////////////////////////////////////////////////////////////
 //                                                               //
 //     Shows FAQ                                                //
 /////////////////////////////////////////////////////////////////
 public class Help extends Fragment {
-
     static android.support.v4.app.FragmentManager fragmgr;
     View rootview;
-
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
-    Button btnhelp;
-    Typeface fontOfstandardtext;
-    TextView txttitle;
-    TextView txtneedmore;
-    ImageView imgtoolbar_help;
 
     public static Help newInstance(int sectionNumber) {
         Help fragment = new Help();
@@ -50,19 +38,18 @@ public class Help extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.fragment_help, container, false);
-        //---------------------------------------------------------------------------
         TaggedneedsActivity.fragname = Help.newInstance(0);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.help_heading));
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -81,7 +68,6 @@ public class Help extends Fragment {
 
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-
                 return false;
             }
         });
@@ -94,18 +80,13 @@ public class Help extends Fragment {
                 /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Expanded",
                         Toast.LENGTH_SHORT).show();*/
-
                 if (groupPosition != previousGroup)
                     expListView.collapseGroup(previousGroup);
                 previousGroup = groupPosition;
-
-
             }
         });
 
-
         expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
             @Override
             public void onGroupCollapse(int groupPosition) {
 
@@ -139,7 +120,6 @@ public class Help extends Fragment {
                 fragmgr.beginTransaction().replace(R.id.content_frame, menuGrid).commit();
             }
         });
-
         return rootview;
     }
 
@@ -147,7 +127,6 @@ public class Help extends Fragment {
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
-
         // Adding child data
         listDataHeader.add("What social issue does GAD plan to address?");
         listDataHeader.add("Is this app accessible globally?");
@@ -161,7 +140,10 @@ public class Help extends Fragment {
         listDataHeader.add("How are the Reward points calculated?");
         listDataHeader.add("What option do I have to report a need I think is not genuine?");
         listDataHeader.add("I am not receiving any emails from Gift-A-Deed. What do I do?");
-
+        listDataHeader.add("What are the channels of GiftADeed?");
+        listDataHeader.add("Is the App similar to other aggregator like Food Bank and Circular economy?");
+        listDataHeader.add("Will the App itself do charitable work?");
+        listDataHeader.add("How are compliance/food/health/safety issues addressed by the App?");
 
         // Adding child data
         List<String> first = new ArrayList<String>();
@@ -196,7 +178,6 @@ public class Help extends Fragment {
         // eighth.add("All the Gift-A-Deed app users who are in a vicinity of 10 km from the tag will get notified once you tag a deed.");
         eighth.add(getString(R.string.eighth));
 
-
         List<String> nineth = new ArrayList<String>();
         //nineth.add("All needs have a predefined validity that is set during tagging the need itself. All the needs that have passed the validity stop being shown in the app. Also, whenever a tag is fulfilled, it stops being shown in the app.");
         nineth.add(getString(R.string.nineth));
@@ -213,6 +194,18 @@ public class Help extends Fragment {
         //eleventh.add("You can report a user, or a need to the admin by going to the details page of that need.");
         twelvth.add(getString(R.string.twelvth));
 
+        List<String> thirteen = new ArrayList<String>();
+        thirteen.add(getString(R.string.thirteen));
+
+        List<String> fourteen = new ArrayList<String>();
+        fourteen.add(getString(R.string.fourteen));
+
+        List<String> fifteen = new ArrayList<String>();
+        fifteen.add(getString(R.string.fifteen));
+
+        List<String> sixteen = new ArrayList<String>();
+        sixteen.add(getString(R.string.sixteen));
+
         listDataChild.put(listDataHeader.get(0), first); // Header, Child data
         listDataChild.put(listDataHeader.get(1), second);
         listDataChild.put(listDataHeader.get(2), third);
@@ -225,12 +218,15 @@ public class Help extends Fragment {
         listDataChild.put(listDataHeader.get(9), tenth);
         listDataChild.put(listDataHeader.get(10), eleventh);
         listDataChild.put(listDataHeader.get(11), twelvth);
+        listDataChild.put(listDataHeader.get(12), thirteen);
+        listDataChild.put(listDataHeader.get(13), fourteen);
+        listDataChild.put(listDataHeader.get(14), fifteen);
+        listDataChild.put(listDataHeader.get(15), sixteen);
     }
 
 
     @Override
     public void onResume() {
-
         super.onResume();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getView().setFocusableInTouchMode(true);
@@ -238,18 +234,14 @@ public class Help extends Fragment {
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     MenuGrid menuGrid = new MenuGrid();
                     fragmgr.beginTransaction().replace(R.id.content_frame, menuGrid).commit();
-
                     return true;
                 }
                 return false;
             }
         });
     }
-
-
 }

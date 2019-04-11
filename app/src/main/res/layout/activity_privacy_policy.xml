@@ -29,8 +29,8 @@
 
                 <ImageView
                     android:id="@+id/tc_backbutton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="left"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_back" />

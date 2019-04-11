@@ -3,8 +3,11 @@ package giftadeed.kshantechsoft.com.giftadeed.ActiveUser;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.sendbird.android.SendBird;
 
 /**
  * Usage:
@@ -38,6 +41,10 @@ import android.widget.Toast;
  * }
  */
 public class GiftAdeed extends Application {
+//    private static final String APP_ID = "A90E8A82-E9CD-477C-829D-A162F478B0E4"; // For live app
+    private static final String APP_ID = "2B2DA376-91B5-4604-9279-C0533F130126"; // For kshandemo development
+    public static final String VERSION = "3.0.39";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,5 +52,13 @@ public class GiftAdeed extends Application {
         Foreground handler = new Foreground();
         registerActivityLifecycleCallbacks(handler);
         registerComponentCallbacks(handler);
+
+        SendBird.init(APP_ID, getApplicationContext());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 }

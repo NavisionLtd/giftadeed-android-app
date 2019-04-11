@@ -67,7 +67,6 @@ import retrofit.Retrofit;
 /////////////////////////////////////////////////////////////////////////
 
 public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
-    public static final String DATABASE_SOS_PIC_UPLOADS = "SOS";
     FragmentActivity myContext;
     LinearLayout creatorlayout, emergencyLayout;
     View rootview;
@@ -101,6 +100,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
@@ -120,7 +120,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
         } else {
             getSOS_Details();
             mFirebaseInstance = FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference(DATABASE_SOS_PIC_UPLOADS);
+            mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_SOS_UPLOADS);
             soslist = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase;
             //adding an event listener to fetch values
@@ -283,7 +283,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -304,7 +304,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                             fragmgr = getFragmentManager();
                             fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {

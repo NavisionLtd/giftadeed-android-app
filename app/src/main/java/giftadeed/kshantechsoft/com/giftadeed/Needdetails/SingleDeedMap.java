@@ -86,9 +86,10 @@ public class SingleDeedMap extends Fragment implements OnMapReadyCallback,
         rootview = inflater.inflate(R.layout.fragment_single_deed_map, container, false);
         fragmgr = getFragmentManager();
         ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.singlemap)).getMapAsync(this);
-        TaggedneedsActivity.updateTitle("Map View");
+        TaggedneedsActivity.updateTitle(getResources().getString(R.string.title_activity_maps));
         TaggedneedsActivity.imgHamburger.setVisibility(GONE);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         // mGpsStatusDetector = new GpsStatusDetector(this);

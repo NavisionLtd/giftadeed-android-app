@@ -11,8 +11,9 @@ import retrofit.http.POST;
  */
 
 public interface CategoryInterface {
-    String path= WebServices.needtype;
+    String path = WebServices.needtype;
+
     @FormUrlEncoded
     @POST(path)
-    Call<CategoryType> sendData(@Field("category") String country);
+    Call<CategoryType> sendData(@Field("group_id") String groupid);
 }

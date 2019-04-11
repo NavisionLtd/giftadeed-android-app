@@ -3,11 +3,8 @@ package giftadeed.kshantechsoft.com.giftadeed.settings;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,76 +21,52 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
-import com.squareup.okhttp.OkHttpClient;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
+import giftadeed.kshantechsoft.com.giftadeed.Filter.CategoryPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsInterface;
-import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails.context;
 
 public class SettingsFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     View rootview;
-    String language;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
     EditText etSelectLanguage;
-    RecyclerView groupRecyclerView;
+    RecyclerView groupRecyclerView, catRecyclerView;
     Button btnSaveSettings;
     Switch switchReceiveNoti;
     DiscreteSeekBar distanceSeekBar;
     double radius;
     TextView txtdist;
-    LinearLayout radiusLayout, groupListLayout;
+    LinearLayout radiusLayout, groupListLayout, catListLayout;
     String strUser_ID;
     SessionManager sessionManager;
     private GoogleApiClient mGoogleApiClient;
     GroupListSettingsAdapter groupListAdapter;
+    CatListSettingsAdapter catListSettingsAdapter;
     ArrayList<GroupPOJO> groupArrayList;
+    ArrayList<CategoryPOJO> catArrayList;
     SimpleArcDialog simpleArcDialog;
     HashMap<String, String> Notification_status_map;
     String Notification_status = "null";
@@ -135,6 +108,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(true);
@@ -240,6 +214,8 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                 radiusLayout.setVisibility(View.GONE);
                 groupListLayout.setVisibility(View.GONE);
                 groupRecyclerView.setVisibility(View.GONE);
+                catListLayout.setVisibility(View.GONE);
+                catRecyclerView.setVisibility(View.GONE);
             }
         } catch (Exception e) {
 
@@ -255,6 +231,8 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                     radiusLayout.setVisibility(View.GONE);
                     groupListLayout.setVisibility(View.GONE);
                     groupRecyclerView.setVisibility(View.GONE);
+                    catListLayout.setVisibility(View.GONE);
+                    catRecyclerView.setVisibility(View.GONE);
                 }
             }
         });
@@ -280,7 +258,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                     updateLanguage("hi");
                 }
 
-                Toast.makeText(getContext(), "Settings saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.setting_saved), Toast.LENGTH_SHORT).show();
                 // move to mapview
                 fragmgr = getFragmentManager();
                 fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
@@ -293,15 +271,19 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
         etSelectLanguage = (EditText) rootview.findViewById(R.id.et_select_language);
         btnSaveSettings = (Button) rootview.findViewById(R.id.btn_save_settings);
         groupRecyclerView = (RecyclerView) rootview.findViewById(R.id.notification_recycler_grouplist);
+        catRecyclerView = (RecyclerView) rootview.findViewById(R.id.notification_recycler_catlist);
         switchReceiveNoti = (Switch) rootview.findViewById(R.id.switch_receive_noti);
         distanceSeekBar = (DiscreteSeekBar) rootview.findViewById(R.id.seekBar_notisettings);
         txtdist = (TextView) rootview.findViewById(R.id.txtdistance_settings);
         radiusLayout = (LinearLayout) rootview.findViewById(R.id.layout_radius);
         groupListLayout = (LinearLayout) rootview.findViewById(R.id.layout_noti_group_list);
+        catListLayout = (LinearLayout) rootview.findViewById(R.id.layout_noti_cat_list);
         groupRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         groupRecyclerView.setLayoutManager(layoutManager);
-//        distanceSeekBar.setMin((int) Validation.inital_radius);
+        catRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext());
+        catRecyclerView.setLayoutManager(layoutManager1);
     }
 
     public void updateLanguage(String language) {
@@ -324,6 +306,19 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
             groupRecyclerView.setVisibility(View.VISIBLE);
             groupListAdapter = new GroupListSettingsAdapter(groupArrayList, myContext);
             groupRecyclerView.setAdapter(groupListAdapter);
+        }
+
+        catArrayList = new ArrayList<>();
+        catArrayList = databaseAccess.getAllCategories();
+        Log.d("LocalDbCatSize", "" + catArrayList.size());
+        if (catArrayList.size() <= 0) {
+            catListLayout.setVisibility(View.GONE);
+            catRecyclerView.setVisibility(View.GONE);
+        } else {
+            catListLayout.setVisibility(View.VISIBLE);
+            catRecyclerView.setVisibility(View.VISIBLE);
+            catListSettingsAdapter = new CatListSettingsAdapter(catArrayList, myContext);
+            catRecyclerView.setAdapter(catListSettingsAdapter);
         }
     }
 

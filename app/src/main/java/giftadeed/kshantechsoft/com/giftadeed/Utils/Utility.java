@@ -15,7 +15,7 @@ import com.google.android.gms.common.api.Status;
  */
 
 public class Utility{
-
+    public static final String avatorDefaultIcon="https://cdn.pixabay.com/photo/2016/11/08/15/21/user-1808597_960_720.png";
     public static int calculateNoOfColumns(Context context) {
         int noOfColumns=0;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

@@ -39,12 +39,11 @@
                 android:id="@+id/txttoptenfullfillernoresult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:background="#e6edf3"
                 android:gravity="center"
-                android:text="No Records Found"
+                android:text="@string/no_records_found"
                 android:textColor="#168def"
                 android:textSize="@dimen/finalheaderfont" />
         </RelativeLayout>

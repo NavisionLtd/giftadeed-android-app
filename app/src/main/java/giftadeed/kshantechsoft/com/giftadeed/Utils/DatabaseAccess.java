@@ -15,6 +15,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.Contact;
+import giftadeed.kshantechsoft.com.giftadeed.Filter.CategoryPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 
 /**
@@ -93,7 +94,6 @@ public class DatabaseAccess {
                 contact.setId(Integer.parseInt(cursor.getString(0)));
                 contact.setContact1(cursor.getString(1));
                 contact.setContact2(cursor.getString(2));
-                contact.setContact3(cursor.getString(3));
                 // Adding contact to list
                 contactList.add(contact);
             } while (cursor.moveToNext());
@@ -103,11 +103,10 @@ public class DatabaseAccess {
     }
 
     // code to update the single contact
-    public int updateContact(String id, String contact1, String contact2, String contact3) {
+    public int updateContact(String id, String contact1, String contact2) {
         ContentValues values = new ContentValues();
         values.put("contact_1", contact1);
         values.put("contact_2", contact2);
-        values.put("contact_3", contact3);
         // updating row
         return database.update("contact_details", values, "id" + " = ?",
                 new String[]{id});
@@ -195,6 +194,92 @@ public class DatabaseAccess {
 
     public void deleteAllGroups() {
         String deleteQuery = "delete from group_details";
+        Log.d("deleteAllQuery", deleteQuery);
+        database.execSQL(deleteQuery);
+    }
+
+    public long Create_Category(String catid, String catname, String checked) {
+        ContentValues values = new ContentValues();
+        values.put("category_id", catid);
+        values.put("category_name", catname);
+        values.put("category_checked", checked);
+        long ros = database.insert("category_details", null, values);
+        return ros;
+    }
+
+    public int getCategoryCheckedCount() {
+        String countQuery = "SELECT * FROM category_details WHERE category_checked = 'true'";
+        Cursor cursor = database.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        // return count
+        return count;
+    }
+
+    public int getSelectedCatCheckedCount(String cat_type) {
+        String countQuery = "SELECT * FROM category_details WHERE category_name = " + "'" + cat_type + "'" + " AND category_checked = 'true'";
+        Log.d("cat_query", countQuery);
+        Cursor cursor = database.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        // return count
+        return count;
+    }
+
+    public ArrayList<CategoryPOJO> getAllCategories() {
+        ArrayList<CategoryPOJO> catPOJOArrayList = new ArrayList<CategoryPOJO>();
+        String selectQuery = "SELECT * FROM category_details";
+        Log.d("query", selectQuery);
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                CategoryPOJO category = new CategoryPOJO();
+                category.setId(cursor.getString(0));
+                category.setName(cursor.getString(1));
+                if (cursor.getString(2).equals("true")) {
+                    category.setChecked(true);
+                } else {
+                    category.setChecked(false);
+                }
+                catPOJOArrayList.add(category);
+            } while (cursor.moveToNext());
+        }
+        return catPOJOArrayList;
+    }
+
+    public void Update_Category_Details(String cid, String checked) {
+        ContentValues values = new ContentValues();
+        values.put("category_checked", checked);
+        database.update("category_details", values, "category_id" + "=" + cid, null);
+    }
+
+    // Deleting category
+    public void Delete_Category(String catid) {
+        database.delete("category_details", "category_id" + " = ?",
+                new String[]{catid});
+    }
+
+    public boolean catIdExist(String cid) {
+        boolean result;
+        String selectQuery = "select * from category_details where category_id = '" + cid + "'";
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    public void catIdNotExist(String cid) {
+        String deleteQuery = "delete from category_details where category_id NOT IN (" + cid + ")";
+        Log.d("deleteQuery", deleteQuery);
+        database.execSQL(deleteQuery);
+    }
+
+    public void deleteAllCategory() {
+        String deleteQuery = "delete from category_details";
         Log.d("deleteAllQuery", deleteQuery);
         database.execSQL(deleteQuery);
     }

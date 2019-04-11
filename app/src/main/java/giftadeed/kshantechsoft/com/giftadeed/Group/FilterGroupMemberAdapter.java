@@ -27,6 +27,7 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 public class FilterGroupMemberAdapter extends BaseAdapter {
     Context mContext;
@@ -35,7 +36,6 @@ public class FilterGroupMemberAdapter extends BaseAdapter {
     private ArrayList<GroupMember> arraylist;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
-    public static final String DATABASE_PROFILE_PIC_UPLOADS = "users";
     private List<Profile> profileList;
 
     public FilterGroupMemberAdapter(Context context,
@@ -104,7 +104,7 @@ public class FilterGroupMemberAdapter extends BaseAdapter {
             ToastPopUp.show(mContext, mContext.getString(R.string.network_validation));
         } else {
             mFirebaseInstance = FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference(DATABASE_PROFILE_PIC_UPLOADS);
+            mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_PROFILE_PIC_UPLOADS);
             profileList = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase.child("profile");
             //adding an event listener to fetch values

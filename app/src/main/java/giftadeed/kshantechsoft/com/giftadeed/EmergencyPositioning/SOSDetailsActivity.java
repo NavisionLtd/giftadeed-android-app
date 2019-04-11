@@ -33,7 +33,6 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class SOSDetailsActivity extends AppCompatActivity {
-    public static final String DATABASE_SOS_PIC_UPLOADS = "SOS";
     ImageView sosImage;
     TextView txtsos_creater, txtaddress, txtemergency, txtDate;
     String str_sosid;
@@ -64,7 +63,7 @@ public class SOSDetailsActivity extends AppCompatActivity {
         } else {
             getSOS_Details();
             mFirebaseInstance = FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference(DATABASE_SOS_PIC_UPLOADS);
+            mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_SOS_UPLOADS);
             soslist = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase;
             //adding an event listener to fetch values

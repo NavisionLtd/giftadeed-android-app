@@ -21,6 +21,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +42,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,6 +59,8 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +69,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.BuildConfig;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
@@ -84,8 +92,10 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     Button btnOpenCamera, btnSendDetails;
-    private AlertDialog alertDialogLocation;
-    CheckBox ch1, ch2, ch3, ch4, ch5, ch6;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private List<EmergencyTypes> emergencyList;
     TextView tvRefreshLocation;
     ImageView imageCaptured;
     EditText etCurrentLocation;
@@ -101,8 +111,6 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
     String callingfrom, latitude, longitude;
     ArrayList<String> checkedList;
     String formattedChecked = "";
-    public static final String DATABASE_SOS_UPLOADS = "SOS";
-    public static final String STORAGE_PATH_UPLOADS = "uploads/";
     //firebase objects
     private StorageReference storageReference;
     private DatabaseReference mFirebaseDatabase;
@@ -119,13 +127,6 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
         imageCaptured = (ImageView) findViewById(R.id.captured_photo);
         etCurrentLocation = (EditText) findViewById(R.id.et_current_location);
         tvRefreshLocation = (TextView) findViewById(R.id.tv_refresh_location);
-        ch1 = (CheckBox) findViewById(R.id.chk_flood);
-        ch2 = (CheckBox) findViewById(R.id.chk_eq);
-        ch3 = (CheckBox) findViewById(R.id.chk_huricanes);
-        ch4 = (CheckBox) findViewById(R.id.chk_tornado);
-        ch5 = (CheckBox) findViewById(R.id.chk_volcano);
-        ch6 = (CheckBox) findViewById(R.id.chk_tsunami);
-        checkedList = new ArrayList<String>();
         sessionManager = new SessionManager(this);
         simpleArcDialog = new SimpleArcDialog(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -136,7 +137,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         mFirebaseInstance = FirebaseDatabase.getInstance();
-        mFirebaseDatabase = mFirebaseInstance.getReference(DATABASE_SOS_UPLOADS);
+        mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_SOS_UPLOADS);
         storageReference = FirebaseStorage.getInstance().getReference();
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
@@ -173,10 +174,10 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-//                    StringWriter writer = new StringWriter();
-//                    e.printStackTrace(new PrintWriter(writer));
-//                    Bugreport bg = new Bugreport();
-//                    bg.sendbug(writer.toString());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
                 }
             }
         });
@@ -201,141 +202,37 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
             }
         });
 
-        ch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    if (!checkedList.contains(ch1.getText().toString())) {
-                        checkedList.add(String.valueOf(ch1.getText()));
-                    }
-                } else {
-                    if (checkedList.contains(ch1.getText().toString())) {
-                        checkedList.remove(String.valueOf(ch1.getText()));
-                    }
-                }
-            }
-        });
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (!(Validation.isOnline(EmergencyStageTwo.this))) {
+            ToastPopUp.show(EmergencyStageTwo.this, getString(R.string.network_validation));
+        } else {
+            getTypes();
+        }
 
-        ch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    if (!checkedList.contains(ch2.getText().toString())) {
-                        checkedList.add(String.valueOf(ch2.getText()));
-                    }
-                } else {
-                    if (checkedList.contains(ch2.getText().toString())) {
-                        checkedList.remove(String.valueOf(ch2.getText()));
-                    }
-                }
-            }
-        });
-
-        ch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    if (!checkedList.contains(ch3.getText().toString())) {
-                        checkedList.add(String.valueOf(ch3.getText()));
-                    }
-                } else {
-                    if (checkedList.contains(ch3.getText().toString())) {
-                        checkedList.remove(String.valueOf(ch3.getText()));
-                    }
-                }
-            }
-        });
-
-        ch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    if (!checkedList.contains(ch4.getText().toString())) {
-                        checkedList.add(String.valueOf(ch4.getText()));
-                    }
-                } else {
-                    if (checkedList.contains(ch4.getText().toString())) {
-                        checkedList.remove(String.valueOf(ch4.getText()));
-                    }
-                }
-            }
-        });
-
-        ch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    if (!checkedList.contains(ch5.getText().toString())) {
-                        checkedList.add(String.valueOf(ch5.getText()));
-                    }
-                } else {
-                    if (checkedList.contains(ch5.getText().toString())) {
-                        checkedList.remove(String.valueOf(ch5.getText()));
-                    }
-                }
-            }
-        });
-
-        ch6.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    if (!checkedList.contains(ch6.getText().toString())) {
-                        checkedList.add(String.valueOf(ch6.getText()));
-                    }
-                } else {
-                    if (checkedList.contains(ch6.getText().toString())) {
-                        checkedList.remove(String.valueOf(ch6.getText()));
-                    }
-                }
-            }
-        });
 
         btnSendDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                checkedList = new ArrayList<String>();
+                List<EmergencyTypes> stList = ((EmergencyTypesAdapter) mAdapter)
+                        .getCheckedList();
+
+                for (int i = 0; i < stList.size(); i++) {
+                    EmergencyTypes type = stList.get(i);
+                    if (type.isSelected()) {
+                        checkedList.add(type.getType());
+                    }
+                }
+
                 formattedChecked = checkedList.toString().replaceAll("\\[", "").replaceAll("\\]", "");
                 Log.d("checked_list", "" + formattedChecked);
+
                 if (!(Validation.isOnline(EmergencyStageTwo.this))) {
                     ToastPopUp.show(EmergencyStageTwo.this, getString(R.string.network_validation));
                 } else {
                     if (etCurrentLocation.getText().length() <= 0) {
-                        ToastPopUp.displayToast(EmergencyStageTwo.this,"Location cannot be blank. Please get location");
-                        /*AlertDialog.Builder alert = new AlertDialog.Builder(EmergencyStageTwo.this);
-                        LayoutInflater li = LayoutInflater.from(EmergencyStageTwo.this);
-                        View confirmDialog = li.inflate(R.layout.refresh_location_dialog, null);
-                        Button dialogconfirm = (Button) confirmDialog.findViewById(R.id.btn_refresh_yes);
-                        Button dialogcancel = (Button) confirmDialog.findViewById(R.id.btn_refresh_no);
-
-                        //-------------Adding our dialog box to the view of alert dialog
-                        alert.setView(confirmDialog);
-                        alert.setCancelable(false);
-                        alertDialogLocation = alert.create();
-                        alertDialogLocation.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
-                        alertDialogLocation.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        alertDialogLocation.show();
-                        alertDialogLocation.setCancelable(false);
-                        dialogconfirm.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                GPSTracker gps = new GPSTracker(EmergencyStageTwo.this);
-                                if (!gps.isGPSEnabled) {
-                                    gps.showSettingsAlert();
-                                }
-                                latitude = String.valueOf(new GPSTracker(EmergencyStageTwo.this).getLatitude());
-                                longitude = String.valueOf(new GPSTracker(EmergencyStageTwo.this).getLongitude());
-                                strAddress = getAddress(Double.parseDouble(latitude), Double.parseDouble(longitude));
-                                strGeopoints = latitude + "," + longitude;
-                                etCurrentLocation.setText(strAddress);
-                                alertDialogLocation.dismiss();
-                            }
-                        });
-                        dialogcancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialogLocation.dismiss();
-                            }
-                        });*/
+                        ToastPopUp.displayToast(EmergencyStageTwo.this,getResources().getString(R.string.sos_location_error));
                     } else {
                         if (strUser_ID != null) {
                             createSOS(strUser_ID, "", strGeopoints, strAddress, formattedChecked, "1");
@@ -379,7 +276,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                     if (isblock == 1) {
                         simpleArcDialog.dismiss();
                         FacebookSdk.sdkInitialize(getApplicationContext());
-                        Toast.makeText(EmergencyStageTwo.this, "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EmergencyStageTwo.this, getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -398,7 +295,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                         if (sosResponseStatus.getSos_id() > 0) {
                             String sosid = String.valueOf(sosResponseStatus.getSos_id());
                             Log.d("sosid", "" + sosid);
-                            Toast.makeText(EmergencyStageTwo.this, "Emergency created successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmergencyStageTwo.this, getResources().getString(R.string.sos_success), Toast.LENGTH_SHORT).show();
                             //firebase call for image store with sos id
                             if (bitmap != null) {
                                 uploadFile(sosid);
@@ -410,7 +307,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                                 startActivity(i);
                             }
                         } else if (sosResponseStatus.getSos_id() == 0) {
-                            Toast.makeText(EmergencyStageTwo.this, "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmergencyStageTwo.this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -432,51 +329,89 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
     }
 
     private void uploadFile(final String sosid) {
-        //checking if file is available
         if (fileUri != null) {
-            //displaying progress dialog while image is uploading
-//            final ProgressDialog progressDialog = new ProgressDialog(this);
-//            progressDialog.setTitle("Uploading");
-//            progressDialog.setCancelable(false);
-//            progressDialog.show();
-
             //getting the storage reference
-            StorageReference sRef = storageReference.child(STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".jpg");
-
-            //adding the file to reference
-            sRef.putFile(fileUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            //dismissing the progress dialog
-//                            progressDialog.dismiss();
-
-                            //displaying success toast
-//                            Toast.makeText(getApplicationContext(), "File Uploaded", Toast.LENGTH_LONG).show();
-
-                            //creating the upload object to store uploaded image details
-                            UploadSOS upload = new UploadSOS(sosid, taskSnapshot.getDownloadUrl().toString());
+            final StorageReference sRef = storageReference.child(WebServices.SOS_STORAGE_PATH_UPLOADS + System.currentTimeMillis() + ".jpg");
+            UploadTask uploadTask = sRef.putFile(fileUri);
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+                    // Continue with the task to get the download URL
+                    return sRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        System.out.println("Upload " + downloadUri);
+                        if (downloadUri != null) {
+                            String photoStringLink = downloadUri.toString(); //YOU WILL GET THE DOWNLOAD URL HERE !!!!
+                            System.out.println("Upload " + photoStringLink);
+                            UploadSOS upload = new UploadSOS(sosid, photoStringLink);
                             mFirebaseDatabase.child(sosid).setValue(upload);
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-//                            progressDialog.dismiss();
-                            Log.d("FirebaseUploadError", "" + exception.getMessage());
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            //displaying the upload progress
-//                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                        }
-                    });
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
         } else {
             //display an error if no file is selected
         }
+    }
+
+    public void getTypes() {
+        simpleArcDialog.setConfiguration(new ArcConfiguration(this));
+        simpleArcDialog.show();
+        simpleArcDialog.setCancelable(false);
+        emergencyList = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        EmergencyTypesInterface service = retrofit.create(EmergencyTypesInterface.class);
+        Call<List<EmergencyTypes>> call = service.sendData("category");
+        call.enqueue(new Callback<List<EmergencyTypes>>() {
+            @Override
+            public void onResponse(Response<List<EmergencyTypes>> response, Retrofit retrofit) {
+                simpleArcDialog.dismiss();
+                List<EmergencyTypes> subCategoryType = response.body();
+                emergencyList.clear();
+                try {
+                    for (int i = 0; i < subCategoryType.size(); i++) {
+                        EmergencyTypes subCat = new EmergencyTypes();
+                        subCat.setTypeid(subCategoryType.get(i).getTypeid());
+                        subCat.setType(subCategoryType.get(i).getType());
+                        subCat.setSelected(false);
+                        emergencyList.add(subCat);
+                    }
+                } catch (Exception e) {
+
+                }
+
+                if (emergencyList.size() > 0) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mAdapter = new EmergencyTypesAdapter(emergencyList);
+                    mRecyclerView.setAdapter(mAdapter);
+                } else {
+                    mRecyclerView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                simpleArcDialog.dismiss();
+                Log.d("emergency_type_error", t.getMessage());
+                ToastPopUp.show(EmergencyStageTwo.this, getString(R.string.server_response_error));
+            }
+        });
     }
 
     private String getAddress(double latitude, double longitude) {

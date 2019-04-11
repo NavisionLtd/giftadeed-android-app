@@ -161,6 +161,7 @@ public class Tab1 extends android.support.v4.app.Fragment implements OnMapReadyC
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         mMapView = (MapView) v.findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this); //this is important
@@ -484,7 +485,7 @@ public class Tab1 extends android.support.v4.app.Fragment implements OnMapReadyC
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();
@@ -755,7 +756,7 @@ public class Tab1 extends android.support.v4.app.Fragment implements OnMapReadyC
 
             }
         } catch (Exception e) {
-            // SendMail smail=new SendMail("giftadeed2017@gmail.com","Error",e.toString());
+            // SendMail smail=new SendMail("giftadeed2017@gmail.com",getResources().getString(R.string.error),e.toString());
 //            StringWriter writer = new StringWriter();
 //            e.printStackTrace(new PrintWriter(writer));
 //            Bugreport bg = new Bugreport();

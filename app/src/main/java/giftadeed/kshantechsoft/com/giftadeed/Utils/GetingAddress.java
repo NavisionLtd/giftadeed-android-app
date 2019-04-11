@@ -9,6 +9,8 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Locale;
 
+import giftadeed.kshantechsoft.com.giftadeed.R;
+
 /**
  * Created by I-Sys on 03-Aug-17.
  */
@@ -39,7 +41,7 @@ public class GetingAddress {
                     if (addresses != null && addresses.size() > 0) {
                         Address returnedAddress = addresses.get(0);
                         countryName = addresses.get(0).getCountryName();
-                       // Log.d("country", countryName);
+                        // Log.d("country", countryName);
                         StringBuilder strReturnedAddress = new StringBuilder("");
 
                         for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
@@ -48,7 +50,7 @@ public class GetingAddress {
                         strAdd = strReturnedAddress.toString();
                         //  Log.d("My Current loction address", "" + strReturnedAddress.toString());
                     } else {
-                        Toast.makeText(context, "Address not found", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.address_notfound), Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

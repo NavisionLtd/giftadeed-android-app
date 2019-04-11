@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">GiftADeed</string>
+    <!--<string name="app_name">GiftADeed</string>-->
+    <string name="app_name">GAD P2 Test 28 March</string>
 
     <!--Login page-->
     <string name="login_terms">नियम और शर्तें</string>
@@ -9,13 +10,16 @@
     <string name="password_string">पासवर्ड</string>
     <string name="signup">पंजीकरण नहीं किया? साइन अप करें</string>
     <string name="forgot">पासवर्ड भूल गए?</string>
-    <string name="txtseperator">या साथ लॉगिन करें</string>
+    <string name="change_pic">चित्र बदलें</string>
+    <string name="txtseperator">या इसके साथ लॉग इन करें</string>
     <string name="txtagree1">लॉग इन करके, आप हमारे लिए सहमत हैं </string>
     <string name="terms_and">तथा</string>
     <string name="select_language">भाषा चुनिए</string>
     <string name="registered_email">पंजीकृत ईमेल दर्ज करें</string>
     <string name="submit">जमा करें</string>
     <string name="cancel">रद्द करें</string>
+    <string name="wrong_password">गलत पासवर्ड</string>
+    <string name="login_failed">लॉग इन असफल हुआ</string>
 
     <!--Sign up page-->
     <string name="sign_up">साइन अप</string>
@@ -23,10 +27,12 @@
     <string name="last_name">अंतिम नाम</string>
     <string name="country">देश</string>
     <string name="logintxt">पहले से ही एक खाता है? <u>लॉग इन</u></string>
+    <string name="length_error_1">लंबाई 15 अक्षर से अधिक नहीं हो सकती</string>
+    <string name="length_error_2">लंबाई 20 अक्षर से अधिक नहीं हो सकती</string>
 
     <!--App update-->
     <string name="youAreNotUpdatedTitle">अपडेट उपलब्ध</string>
-    <string name="youAreNotUpdatedMessage">GiftADeed का एक नया संस्करण उपलब्ध है। कृपया अद्यतन करें|</string>
+    <string name="youAreNotUpdatedMessage">GiftADeed का एक नया संस्करण उपलब्ध है। कृपया अपडेट करें|</string>
     <string name="update">अपडेट</string>
 
     <!--Navigation drawer-->
@@ -34,18 +40,21 @@
     <string name="drawer_home">होम</string>
     <string name="drawer_groups">समूह</string>
     <string name="drawer_tag_deed">टैग ए डीड</string>
+    <string name="drawer_inspire">समुदाय को प्रेरित करें</string>
     <string name="drawer_resources">साधन</string>
     <string name="drawer_about_app">ॲप के बारे में</string>
     <string name="drawer_notification">सूचनाएं</string>
     <string name="drawer_settings">सेटिंग्स</string>
+    <string name="drawer_emergency_contacts">आपातकालीन संपर्क</string>
     <string name="drawer_logout">लॉग आउट</string>
 
     <!--Grid menu and details-->
+    <string name="list_of_your">आपके द्वारा टैग की गई सूची</string>
     <string name="noti_history">अधिसूचना इतिहास</string>
     <string name="list_of_myfulfilled_tags">मेरे पूर्ण टैग की सूची</string>
-    <string name="list_of_taggers">अपने शहर के शीर्ष 10 टैगर्स की सूची</string>
-    <string name="list_of_fulfillers">अपने शहर में शीर्ष 10 टैग पूरा करने वालों की सूची</string>
-    <string name="dash1">आपका अंतिम शुभ कार्य चल रहा था</string>
+    <string name="list_of_taggers">अपने शहर के सर्वोच्च 10 टैगर्स की सूची</string>
+    <string name="list_of_fulfillers">अपने शहर में सर्वोच्च 10 टैग पूरा करने वालों की सूची</string>
+    <string name="dash1">आपने पिछला अच्छा काम किया है</string>
     <string name="dash2">टैग की आपकी कुल संख्या है</string>
     <string name="dash3">आपकी कुल संख्याएँ पूर्ण हैं</string>
     <string name="dash4">आपके सफल टैग का प्रतिशत है</string>
@@ -71,6 +80,41 @@
     <string name="map_map">नक्षा</string>
     <string name="map_list">सूची</string>
     <string name="map_tagged_deeds">टैग किए गए कर्म</string>
+
+    <!--Toast messages-->
+    <string name="network_validation">नेटवर्क उपलब्ध नहीं है</string>
+    <string name="server_response_error">कुछ गलत हो गया। बाद में कोशिश करें</string>
+    <string name="contact_saved">संपर्क सहेजा गया</string>
+    <string name="setting_saved">सेटिंग्स को सहेजा गया</string>
+    <string name="block_toast">आपको ब्लॉक कर दिया गया है</string>
+    <string name="group_deleted">समूह को सफलतापूर्वक हटा दिया गया</string>
+    <string name="error">त्रुटि</string>
+    <string name="exit_group_msg">आप सफलतापूर्वक समूह से बाहर हो गए</string>
+    <string name="group_created_msg">समूह सफलतापूर्वक बनाया गया</string>
+    <string name="you_havnt_change">आपने समूह की जानकारी नहीं बदली है</string>
+    <string name="group_edited">समूह सफलतापूर्वक संपादित किया गया</string>
+    <string name="member_removed">सदस्य को सफलतापूर्वक हटा दिया गया</string>
+    <string name="member_added">सदस्य सफलतापूर्वक जोड़ा गया</string>
+    <string name="no_data_found">कोई डेटा नहीं मिला</string>
+    <string name="admin_assigned">व्यवस्थापक को सफलतापूर्वक सौंपा गया</string>
+    <string name="admin_dismissed">व्यवस्थापक सफलतापूर्वक खारिज कर दिया गया</string>
+    <string name="address_notfound">पता नहीं पाया गया</string>
+    <string name="user_reported">उपयोगकर्ता ने सफलतापूर्वक सूचना दी</string>
+    <string name="edited_success">सफलतापूर्वक संपादित किया गया</string>
+    <string name="check_email">कृपया अपनी ईमेल देखें</string>
+    <string name="select_account">कृपया सूची से अपना खाता चुनें</string>
+    <string name="login_unsuccess">लॉगिन असफल रहा</string>
+    <string name="email_already_exist">ईमेल पता पहले से ही मौजूद है</string>
+    <string name="length_msg">लंबाई 500 अक्षरों से अधिक नहीं हो सकती</string>
+    <string name="unable_to_find">पता खोजने में असमर्थ</string>
+    <string name="edited_unsucess">असफल रूप से संपादित किया गया</string>
+    <string name="select_country">देश चुनिए</string>
+    <string name="select_state">राज्य चुनें</string>
+    <string name="permission_denied">अनुमति से इनकार कर दिया जाता है कृपया अनुमति सक्षम करें</string>
+    <string name="already_deed">यह विलेख पहले से ही किसी के द्वारा सूचित किया गया है</string>
+    <string name="sos_location_error">स्थान रिक्त नहीं हो सकता। कृपया स्थान प्राप्त करें</string>
+    <string name="sos_success">आपातकाल सफलतापूर्वक बनाया गया</string>
+    <string name="select_city">शहर चुनें</string>
 
     <!--Bottom navigation-->
     <string name="map_home">होम</string>
@@ -121,7 +165,9 @@
     <string name="select_category">श्रेणी का चयन करें</string>
     <string name="select_pref">प्राथमिकताएँ चुनें</string>
     <string name="select_location">स्थान चुनें</string>
+    <string name="select_sub_category">उप-श्रेणी का चयन करें</string>
     <string name="permanent_location">स्थायी स्थान</string>
+    <string name="remove_location">स्थान निकालें</string>
     <string name="deed_validity_heading">कार्य वैधता (1 से 48 घंटे)</string>
     <string name="select_audiance">दर्शकों का चयन करें</string>
     <string name="description">विवरण</string>
@@ -166,6 +212,7 @@
     <string name="groupwise_notif">समूह वार अधिसूचनाएँ</string>
     <string name="save_settings">सेव्ह सेटिंग्स</string>
     <string name="GPSsettings">जीपीएस सेटिंग्स</string>
+    <string name="catwise_notif">श्रेणी वार अधिसूचनाएँ</string>
     <string name="GPSsettingsmessage">GPS सक्षम नहीं है। सेटिंग्स मेनू पर जाएं और GPS को सक्षम करें</string>
     <string name="settings">सेटिंग्स</string>
     <string name="title_activity_maps">नक्शा</string>
@@ -192,6 +239,11 @@
     <string name="remove_member_dialog">इस सदस्य को समूह से निकालें ?</string>
 
     <!--Resource-->
+    <string name="res_success">संसाधन सफलतापूर्वक बनाया गया</string>
+    <string name="action_create_resource">संसाधन बनाएँ</string>
+    <string name="edit_resource">संसाधन संपादित करें</string>
+    <string name="delete_resource">संसाधन हटाएं</string>
+    <string name="no_res_found">कोई संसाधन नहीं मिला। क्या आप एक बनाना चाहते हैं?</string>
     <string name="res_details">संसाधन विवरण</string>
     <string name="select_res_group">अपने समूह का चयन करें</string>
     <string name="res_cat">संसाधन श्रेणी</string>
@@ -218,15 +270,25 @@
     <string name="sos_location_1">SOS स्थान : </string>
     <string name="sos_created_on">SOS बनाया गया : </string>
     <string name="del_sos">SOS हटाना</string>
+    <string name="use_in_case">आपातकालीन स्थिति में उपयोग करें</string>
+    <string name="emergency">EMERGENCY</string>
+    <string name="call_police">पुलिस कंट्रोल रूम को फोन करें</string>
+    <string name="alert_contact">अपने आपातकालीन संपर्क को सचेत करें</string>
+    <string name="no_emergency_contacts">अलर्ट भेजने के लिए कोई आपातकालीन संपर्क नहीं हें</string>
+    <string name="set">सेट</string>
+    <string name="share_location">अपना स्थान साझा करें</string>
+    <string name="close">बंद करे</string>
+    <string name="contacts_to_send_alert">आपातकालीन स्थिति में अलर्ट संदेश भेजने के लिए संपर्क</string>
+    <string name="family_or_friend">e.g. परिवार का सदस्य या मित्र</string>
 
+    <string name="length_error">लंबाई 15 वर्णों से अधिक नहीं हो सकती</string>
+    <string name="filters">फ़िल्टर</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="server_response_error">कुछ गलत हो गया। बाद में कोशिश करें</string>
     <string name="middle_terms">  ,तथा  </string>
     <string name="privacy_policy"><u>गोपनीयता नीति</u></string>
     <string name="last_text_terms"> वैश्विक दर्शकों के अनुरूप बदला जाना।</string>
     <string name="share"><u>शेयर</u></string>
-    <string name="network_validation">नेटवर्क उपलब्ध नहीं है</string>
     <string name="Enter_FirstName">पहला नाम डालो</string>
     <string name="validation_first_name_special_characters_merchant">केवल अक्षर दर्ज करें</string>
     <string name="validation_last_name_special_characters_merchant">केवल अंतिम नाम में अक्षर दर्ज करें</string>
@@ -280,6 +342,7 @@
     <string name="your_groups">आपके समूह</string>
     <string name="tell_people_remaining">लोगों को बताओ कि क्या शेष है</string>
     <string name="already_deeds_msg">चयनित स्थानों के लिए निम्नलिखित कर्म पहले से ही टैग किए गए हैं :</string>
+
     <string name="first"><![CDATA[
     <html><body style="text-align:justify;>
 <head>
@@ -502,7 +565,119 @@
     </P></body></html>
     ]]></string>
 
+    <string name="thirteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>Gift-a-Deed will have many different channels,</P>
+    <p>1. people to people;</p>
+    <p>2. people to groups/organisations/charities;</p>
+    <p>3. groups/organisations/charities to people; &</p>
+    <p>4. groups/organisations/charities to groups/organisations/charities. </p>
+    <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
+    <p>Once people and groups/organisations/charities come on board/register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
+    </body></html>
+    ]]></string>
+
+    <string name="fourteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>Organisations like Food banks, (or Goonj in India etc) are designed to be important partners, each connecting to their network via the App or simply using the App as a tool in their private group (similar to WhatsApp group function). In summary, Gift-a-Deed aims to be an aggregator of different needs in a community, city and even country level.
+    </P></body></html>
+    ]]></string>
+
+    <string name="fifteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>To this extent as Airbnb and Uber doesn't itself own any properties or taxis', Gift-a-Deed need not themselves collect, store or distribute. Partnerships and getting other volunteer groups /people with cause orientation, are requirements.
+    </P></body></html>
+    ]]></string>
+
+    <string name="sixteen"><![CDATA[
+    <html><body style="text-align:justify;>
+<head>
+<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
+ <style>
+
+                @font-face {
+                    font-family: "MyFont";
+                    word-spacing:-1px;
+                    src: url("file:///android_asset/roboto.ttf");
+                }
+                p { font-family:"MyFont"}
+            </style>
+</head>
+
+    <P>As far as compliance and test for food/health/safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
+    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving /helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App ofc uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
+    </body></html>
+    ]]></string>
+
     //--------------------key-------------------
     <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>
 
+    <!-- SendBird -->
+    <string name="no_channel">कोई चैनल नहीं मिला</string>
+    <string name="action_group_messages">समूह संदेश</string>
+    <string name="all_app_version">Sample UI v%1$s / SDK v%2$s</string>
+    <string name="select_channel_type">चैनल प्रकार चुनें</string>
+    <string name="blocked_members_list">Blocked सदस्य</string>
+    <string name="GroupMessage_Community">संदेश</string>
+    <string name="login_user_id">User ID</string>
+    <string name="login_user_nickname">Nickname</string>
+    <string name="login_connect">चैट से जुडिये</string>
+    <string name="login_disconnect">डिस्कनेक्ट</string>
+    <string name="open_channel_list_participant_count">%1$d भाग लेने वाले</string>
+    <string name="create_open_channel">Create Open Channel</string>
+    <string name="participant_list">भाग लेने वाले</string>
+    <string name="group_channel_list_file_message_text">%1$s ने एक फ़ाइल अपलोड की है।</string>
+    <string name="create_group_channel">ग्रुप चैनल बनाएं</string>
+    <string name="members">सदस्य</string>
+    <string name="invite_member">सदस्य को आमंत्रित करें</string>
+    <string name="open_channel_chat_content_desc_profile">प्रोफाइल तस्वीर</string>
+    <string name="action_create_channel">चैनल बनाएं </string>
+    <string name="download">डाउनलोड</string>
+    <string name="upload">अपलोड</string>
+    <string name="resend_message">पुन: भेजें</string>
+    <string name="delete_message">हटाए</string>
+    <string name="message_sending">भेज रहे है</string>
+    <string name="message_failed">असफल हुआ</string>
+    <string name="invite">आमंत्रण</string>
+    <string name="welcomechatmessage">GAD समूह चैट में आपका स्वागत है!</string>
+    <string name="errorMsg">ऐसा लगता है कि आपने इस सुविधा के लिए आवश्यक अनुमतियां बंद कर दी हैं। फोन सेटिंग के तहत इसे सक्षम किया जा सकता है Phone Settings > Apps > GiftADeed > Permissions</string>
 </resources>

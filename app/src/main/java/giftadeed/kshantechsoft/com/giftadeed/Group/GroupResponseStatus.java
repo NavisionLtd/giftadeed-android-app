@@ -15,6 +15,9 @@ public class GroupResponseStatus {
     @SerializedName("status")
     @Expose
     private Integer status;
+    @SerializedName("group_id")
+    @Expose
+    private Integer groupid;
 
     public Integer getStatus() {
         return status;
@@ -30,5 +33,13 @@ public class GroupResponseStatus {
 
     public void setIsBlocked(Integer isBlocked) {
         this.isBlocked = isBlocked;
+    }
+
+    public Integer getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(Integer groupid) {
+        this.groupid = groupid;
     }
 }

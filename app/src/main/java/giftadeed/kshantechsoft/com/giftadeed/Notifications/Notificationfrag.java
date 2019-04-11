@@ -66,6 +66,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.SignupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryInterface;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryType;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.Needtype;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.NotificationCountInterface;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.NotificationCountModel;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
@@ -97,7 +98,7 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
     List<Notification> notification_list;
     EditText ednotificationfiltercategory;
     DiscreteSeekBar notificationProgressbar_distance, notificationProgressbar_time;
-    private ArrayList<CategoryPOJO> categories;
+    private ArrayList<Needtype> categories;
     SimpleArcDialog mDialog;
     String strNeedmapping_ID, strFiltertype = "All";
     HashMap<String, String> Notification_status_map;
@@ -125,6 +126,7 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.VISIBLE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(true);
@@ -251,7 +253,7 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sharedPreferences.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -446,24 +448,24 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CategoryInterface service = retrofit.create(CategoryInterface.class);
 
-        Call<CategoryType> call = service.sendData("category");
+        Call<CategoryType> call = service.sendData("");
         call.enqueue(new Callback<CategoryType>() {
             @Override
             public void onResponse(Response<CategoryType> response, Retrofit retrofit) {
 
                 CategoryType categoryType = response.body();
                 categories.clear();
-                CategoryPOJO signupPOJO1 = new CategoryPOJO();
-                signupPOJO1.setId("0");
-                signupPOJO1.setName("All");
-                signupPOJO1.setCharacterpath("");
+                Needtype signupPOJO1 = new Needtype();
+                signupPOJO1.setNeedMappingID("0");
+                signupPOJO1.setType("All");
+                signupPOJO1.setCharacterPath("");
                 categories.add(signupPOJO1);
                 if (categoryType.getNeedtype().size() > 0) {
                     for (int i = 0; i < categoryType.getNeedtype().size(); i++) {
-                        CategoryPOJO signupPOJO = new CategoryPOJO();
-                        signupPOJO.setId(categoryType.getNeedtype().get(i).getNeedMappingID().toString());
-                        signupPOJO.setName(categoryType.getNeedtype().get(i).getNeedName().toString());
-                        signupPOJO.setCharacterpath(categoryType.getNeedtype().get(i).getCharacterPath());
+                        Needtype signupPOJO = new Needtype();
+                        signupPOJO.setNeedMappingID(categoryType.getNeedtype().get(i).getNeedMappingID().toString());
+                        signupPOJO.setType(categoryType.getNeedtype().get(i).getNeedName().toString());
+                        signupPOJO.setCharacterPath(categoryType.getNeedtype().get(i).getCharacterPath());
                         // signupPOJO.setCharacterpath(categoryType.getNeedtype().get(i).getCharacterPath());
                         // signupPOJO.setPhotoPath(categoryType.getNeedtype().get(i).getIconPath());
                         categories.add(signupPOJO);
@@ -483,9 +485,9 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
                     categorylist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            ednotificationfiltercategory.setText(categories.get(i).getName());
+                            ednotificationfiltercategory.setText(categories.get(i).getNeedName());
                             // strNeed_Name = edselectcategory.getText().toString();
-                            strNeedmapping_ID = categories.get(i).getId();
+                            strNeedmapping_ID = categories.get(i).getNeedMappingID();
                             dialog.dismiss();
                         }
                     });

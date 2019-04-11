@@ -50,7 +50,8 @@ public class SplashActivity extends AppCompatActivity {
         try {
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
             if (currentVersion.length() > 0) {
-                txt_app_version.setText("App Version " + currentVersion);
+//                txt_app_version.setText("App Version " + currentVersion);
+                txt_app_version.setText(getResources().getString(R.string.app_name));
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -102,7 +103,11 @@ public class SplashActivity extends AppCompatActivity {
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")));
+                Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN"));
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+//                getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")));
                 dialog.dismiss();
                 SplashActivity.this.finish();
             }

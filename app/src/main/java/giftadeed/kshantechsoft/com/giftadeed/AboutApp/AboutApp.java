@@ -40,6 +40,7 @@ public class AboutApp extends Fragment {
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.fragname= AboutApp.newInstance(0);
@@ -51,7 +52,8 @@ public class AboutApp extends Fragment {
 
         txtAgreementDetails= (WebView)rootview. findViewById(R.id.txtaboutapp);
         //----------------------Loading data from html file
-        txtAgreementDetails.loadUrl("file:///android_asset/AboutApp.html");
+//        txtAgreementDetails.loadUrl("file:///android_asset/AboutApp.html");
+        txtAgreementDetails.loadUrl("https://giftadeed.com/pages/about_app_mob.html");
 
         WebSettings settings = txtAgreementDetails.getSettings();
         settings.setJavaScriptEnabled(true);

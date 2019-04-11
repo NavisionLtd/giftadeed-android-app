@@ -149,7 +149,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                 if (contryid != null) {
                     getstate(contryid, "Clicked");
                 } else {
-                    Toast.makeText(First_Login.this, "Select country ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(First_Login.this, getResources().getString(R.string.select_country), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -157,7 +157,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
             @Override
             public void onClick(View v) {
                 if (stateid == null) {
-                    Toast.makeText(First_Login.this, "Select state", Toast.LENGTH_LONG).show();
+                    Toast.makeText(First_Login.this, getResources().getString(R.string.select_state), Toast.LENGTH_LONG).show();
                 } else {
                     getcity(stateid);
                 }
@@ -214,7 +214,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
 
                     });
                     if (countries.size() == 0) {
-                        Toast.makeText(First_Login.this, "No data found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(First_Login.this, getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                         mDialog.dismiss();
                     } else {
 
@@ -440,7 +440,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         states.add(data);
                     }
                     if (states.size() == 0) {
-                        Toast.makeText(First_Login.this, "No data found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(First_Login.this, getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                         mDialog.dismiss();
                     } else {
                         if (fromwhere.equals("Clicked")) {
@@ -587,7 +587,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         cities.add(data);
                     }
                     if (cities.size() == 0) {
-                        Toast.makeText(First_Login.this, "No data found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(First_Login.this, getResources().getString(R.string.no_data_found), Toast.LENGTH_SHORT).show();
                         mDialog.dismiss();
                     } else {
                         final Dialog dialog = new Dialog(context);
@@ -719,11 +719,11 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
 
 
         if (StrCountry_name.length() < 1) {
-            ToastPopUp.displayToast(First_Login.this, "Select your country");
+            ToastPopUp.displayToast(First_Login.this, getResources().getString(R.string.select_country));
         } else if (strState_name.length() < 1) {
-            ToastPopUp.displayToast(First_Login.this, "Select your state");
+            ToastPopUp.displayToast(First_Login.this, getResources().getString(R.string.select_state));
         } else if (strCity_name.length() < 1) {
-            ToastPopUp.displayToast(First_Login.this, "Select your city");
+            ToastPopUp.displayToast(First_Login.this, getResources().getString(R.string.select_city));
         }else if (edfirstlogin_email.getVisibility() == View.VISIBLE) {
             strEmail = edfirstlogin_email.getText().toString();
              if (!(Validation.isOnline(First_Login.this))) {
@@ -775,7 +775,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         in.putExtra("message", message);
                         startActivity(in);
                     } else {
-                        Toast.makeText(First_Login.this, "Login was unsuccessful.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(First_Login.this, getResources().getString(R.string.login_unsuccess), Toast.LENGTH_SHORT).show();
                         mDialog.dismiss();
                     }
                 } catch (Exception e) {

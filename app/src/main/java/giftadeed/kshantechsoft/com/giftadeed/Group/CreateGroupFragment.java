@@ -2,7 +2,6 @@ package giftadeed.kshantechsoft.com.giftadeed.Group;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,7 +17,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -39,8 +37,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.gson.JsonObject;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.GroupChannelListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
@@ -50,19 +54,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.BuildConfig;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.UpdateGrpChannel;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.ModalSendBrdUpdate;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -94,6 +100,11 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     String strimagePath, imgDecodableString, pathToSend = "", strUser_ID;
     String receivedGid = "", receivedGname = "", receivedGdesc = "", receivedGimage = "", callingFrom = "";
     private GoogleApiClient mGoogleApiClient;
+    private List<String> lstusers = new ArrayList<String>();
+    private boolean mIsDistinct;
+    private String strMessage = "Welcome to GiftADeed Chat";
+    private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
+    private String fetchedChannelUrl;
 
     public static CreateGroupFragment newInstance(int sectionNumber) {
         CreateGroupFragment fragment = new CreateGroupFragment();
@@ -124,6 +135,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
@@ -154,6 +166,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                 imageView.setImageResource(R.drawable.group_default_wallpaper);
             }
             TaggedneedsActivity.updateTitle(getResources().getString(R.string.edit_group));
+            getChannelsDetails();
         }
 
         takePicture.setOnClickListener(new View.OnClickListener() {
@@ -194,7 +207,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                                 editGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID, receivedGid);
                             } else {
                                 if (receivedGname.equals(groupName.getText().toString()) && receivedGdesc.equals(groupDesc.getText().toString())) {
-                                    Toast.makeText(getContext(), "You havn't changed group information", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getResources().getString(R.string.you_havnt_change), Toast.LENGTH_SHORT).show();
                                 } else {
                                     editGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID, receivedGid);
                                 }
@@ -231,7 +244,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     }
 
     //---------------------sending group details to server for create group-----------------------------------------------
-    public void createGroup(String groupimage, String groupname, String groupdesc, String user_id) {
+    public void createGroup(String groupimage, final String groupname, String groupdesc, String user_id) {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -261,7 +274,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -277,13 +290,25 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
+                        int generatedGroupId = groupResponseStatus.getGroupid();
+                        String channelName = "";
+                        channelName = groupname + " - " + generatedGroupId;
+                        Log.d("channel_name", channelName);
                         if (groupResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), "Group created successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.group_created_msg), Toast.LENGTH_SHORT).show();
+                            sessionManager.store_GroupName(groupname);
+                            //group chat
+                            mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                            if (strUser_ID != null && channelName != null) {
+                                lstusers.add(strUser_ID);
+                                mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
+                                createGroupChannel(lstusers, channelName, strMessage, mIsDistinct);
+                            }
                             // move to groups list fragment
                             GroupsListFragment groupsListFragment = new GroupsListFragment();
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -301,7 +326,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     }
 
     //---------------------sending group details to server for edit group-----------------------------------------------
-    public void editGroup(String groupimage, String groupname, String groupdesc, String user_id, String groupid) {
+    public void editGroup(String groupimage, final String groupname, String groupdesc, String user_id, final String groupid) {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -332,7 +357,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -350,12 +375,19 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     } else {
                         Log.d("edit_group_status", groupResponseStatus.getStatus().toString());
                         if (groupResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), "Group edited successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.group_edited), Toast.LENGTH_SHORT).show();
+
+                            // update sendbird also
+                            String channelName = "";
+                            channelName = groupname + " - " + groupid;
+                            filterGroupChannel(receivedGname + " - " + receivedGid);
+                            callUpdateSendBird(fetchedChannelUrl, channelName);
+
                             // move to groups list fragment
                             GroupsListFragment groupsListFragment = new GroupsListFragment();
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -535,5 +567,106 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiClient.connect();
+    }
+
+    private void createGroupChannel(final List<String> userIds, final String clubName, final String message, final boolean distinct) {
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannel.createChannelWithUserIds(userIds, distinct, clubName, "", message, new GroupChannel.GroupChannelCreateHandler() {
+                    @Override
+                    public void onResult(GroupChannel groupChannel, SendBirdException e) {
+                        if (e != null) {
+                            // Error!
+                            return;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    //get channels details
+    public void getChannelsDetails() {
+        //always use connect() along with any method of chat #phase 2 requirement 27 feb 2018 Nilesh
+        SendBird.connect(strUser_ID, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannelListQuery channelListQuery = GroupChannel.createMyGroupChannelListQuery();
+                channelListQuery.setIncludeEmpty(true);
+                channelListQuery.next(new GroupChannelListQuery.GroupChannelListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<GroupChannel> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error.
+                            return;
+
+                        }
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                System.out.println("Chnalls: " + list.get(i).getName());
+                                /// lstGetChannelsList.add(list.get(i).getName().toString());
+                                lstGetChannelsList.add(new GroupListInfo(list.get(i).getData().toString(), list.get(i).getName().toString(), list.get(i).getUrl().toString()));
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    //***********************************transform*************************************************
+    public void filterGroupChannel(String clubname) {
+        System.out.println("clbname line n0 3950        " + clubname);
+        if (lstGetChannelsList != null && lstGetChannelsList.size() != 0) {
+            for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                if (lstGetChannelsList.get(i).getmChannelName().equals(clubname)) {
+                    fetchedChannelUrl = lstGetChannelsList.get(i).getmUrl();
+                    Log.d("UPDATE", "" + lstGetChannelsList.get(i).getmUrl());
+                }
+            }
+        }
+    }
+
+    //==============================================================================================
+    public void callUpdateSendBird(String urlOfChannel, final String channelName) {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WebServices.MANI_SENDBRD_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //pass the json obhect
+        JsonObject postParam = new JsonObject();
+        postParam.addProperty("name", channelName);
+
+        //call interface
+        UpdateGrpChannel service = retrofit.create(UpdateGrpChannel.class);
+        Call<ModalSendBrdUpdate> call = service.sendData(urlOfChannel, postParam);
+        call.enqueue(new Callback<ModalSendBrdUpdate>() {
+            @Override
+            public void onResponse(Response<ModalSendBrdUpdate> response, Retrofit retrofit) {
+                if (response.code() == 200) {
+                    Log.d("UPCLUB", "Success.");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                Log.d("UPCLUB", "Not Success." + t.getMessage());
+            }
+        });
     }
 }

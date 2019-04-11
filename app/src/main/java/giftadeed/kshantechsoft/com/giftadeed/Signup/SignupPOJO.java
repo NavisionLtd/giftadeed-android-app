@@ -7,9 +7,17 @@ package giftadeed.kshantechsoft.com.giftadeed.Signup;
 public class SignupPOJO {
     String id;
     String name;
+    String type;
     String characterpath;
     String PhotoPath;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getPhotoPath() {
         return PhotoPath;

@@ -33,11 +33,15 @@ public class SessionManager {
     public static final String DRAWER_STATUS = "Status";
     public static final String KEY_NOTIFICATION = "notify";
     public static final String PRIVACY = "Public";
+    public static final String RES_CALL_FROM = "Res_Call_From";
+    public static final String RESOURCE_ID = "Resource_Id";
+    public static final String RESOURCE_NAME = "Resource_name";
     public static final String CALL_FROM = "Call_From";
     public static final String GROUP_ID = "Group_Id";
     public static final String GROUP_NAME = "Group_name";
     public static final String GROUP_DESC = "Group_desc";
     public static final String GROUP_IMAGE = "Group_image";
+    public static final String KEY_GROUPNAME = "GROUPNAME";
 
     public SessionManager(Context context) {
         this.context = context;
@@ -70,7 +74,7 @@ public class SessionManager {
         return user;
     }
 
-    public void createGroupDetails(String callingfrom,String gid, String gname, String gdesc, String gimage) {
+    public void createGroupDetails(String callingfrom, String gid, String gname, String gdesc, String gimage) {
         editor.putString(CALL_FROM, callingfrom);
         editor.putString(GROUP_ID, gid);
         editor.putString(GROUP_NAME, gname);
@@ -87,6 +91,19 @@ public class SessionManager {
         group.put(GROUP_DESC, pref.getString(GROUP_DESC, null));
         group.put(GROUP_IMAGE, pref.getString(GROUP_IMAGE, null));
         return group;
+    }
+
+    public void createResourceDetails(String callingfrom) {
+        editor.putString(RES_CALL_FROM, callingfrom);
+        editor.commit();
+    }
+
+    public HashMap<String, String> getSelectedResourceDetails() {
+        HashMap<String, String> resource = new HashMap<String, String>();
+        resource.put(RES_CALL_FROM, pref.getString(RES_CALL_FROM, null));
+        resource.put(RESOURCE_ID, pref.getString(RESOURCE_ID, null));
+        resource.put(RESOURCE_NAME, pref.getString(RESOURCE_NAME, null));
+        return resource;
     }
 
     public void store_radius(float radius) {
@@ -108,16 +125,6 @@ public class SessionManager {
     public String getLanguage() {
         String langugae = pref.getString(KEY_SELECTED_LANGUAGE, "en");
         return langugae;
-    }
-
-    public void store_groups(String groups) {
-        editor.putString(KEY_SELECTED_GROUPS, groups);
-        editor.commit();
-    }
-
-    public String getGroups() {
-        String group = pref.getString(KEY_SELECTED_GROUPS, null);
-        return group;
     }
 
     //-----------------------------Getting current drawer status
@@ -147,4 +154,15 @@ public class SessionManager {
         get_OTA.put(KEY_NOTIFICATION, pref.getString(KEY_NOTIFICATION, ""));
         return get_OTA;
     }
+
+    public void store_GroupName(String groupName) {
+        editor.putString(KEY_GROUPNAME, groupName);
+        editor.commit();
+    }
+
+    public String getGroupName() {
+        String strGroupName = pref.getString(KEY_GROUPNAME, "");
+        return strGroupName;
+    }
+
 }

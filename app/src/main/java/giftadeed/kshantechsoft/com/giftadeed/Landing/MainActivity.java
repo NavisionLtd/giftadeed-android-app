@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent subscribe=new Intent(getApplicationContext(), Subscription_Activity.class);
                 startActivity(subscribe);
                // Toast.makeText(MainActivity.this, "Coming soon.........", Toast.LENGTH_LONG).show();
-                /*Intent log = new Intent(getApplicationContext(), LoginActivity.class);
+                /*Intent log = new Intent(getApplicationContext(), SendBirdLoginActivity.class);
                 log.putExtra("message", messagesubscription);
                 startActivity(log);*/
             }

@@ -2,9 +2,9 @@ package giftadeed.kshantechsoft.com.giftadeed.Filter;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,61 +18,76 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.Picasso;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
+import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
+import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.NeedDetailsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.Signup.CountryAdapter;
-import giftadeed.kshantechsoft.com.giftadeed.Signup.SignupPOJO;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryAdapter;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryInterface;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryType;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.Needtype;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
-import giftadeed.kshantechsoft.com.giftadeed.giftaneed.GiftANeedFrag;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
+import static giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed.setDynamicHeight;
+
 ////////////////////////////////////////////////////////////////////
 //                                                               //
 //     Used to filter the tags according to conditions          //
 /////////////////////////////////////////////////////////////////
 public class FilterFrag extends Fragment {
+    public static ArrayList<String> selectedFilterUserGroups = new ArrayList<String>();
+    public static ArrayList<String> selectedFilterUserGrpNames = new ArrayList<String>();
+    String formattedUserOrgs = "", formattedUserGroupNames = ""; // for removing brackets [ and ]
+    String checkedOtherOrg = "N";
     FragmentActivity myContext;
     View rootview;
+    private ArrayList<GroupPOJO> groupArrayList;
     SimpleArcDialog mDialog;
-    private ArrayList<CategoryPOJO> categories;
-    String strNeedmapping_ID, strNeed_Name, strCharacter_Path, strImagenamereturned, strUser_ID, strDist;
+    private ArrayList<Needtype> categories;
+    String strNeedmapping_ID, strNeed_Name, strUser_ID, callingFrom = "screenload";
     double radius;
-    SeekBar seekBar;
     DiscreteSeekBar distance;
-    EditText edselectcategory;
+    EditText edselectcategory, edselectAudiance;
     TextView txtapplyfilter, txtradius, txtselectcategory, txtdist;
     Button btnapplyfilters;
     static FragmentManager fragmgr;
@@ -87,37 +102,53 @@ public class FilterFrag extends Fragment {
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_filter, container, false);
-        TaggedneedsActivity.updateTitle("Filters");
+        TaggedneedsActivity.updateTitle(getResources().getString(R.string.filters));
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(true);
         TaggedneedsActivity.back.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
-
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         sessionManager = new SessionManager(getContext());
+        HashMap<String, String> user = sessionManager.getUserDetails();
+        strUser_ID = user.get(sessionManager.USER_ID);
         mDialog = new SimpleArcDialog(getContext());
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             value = bundle.getString("tab");
         }
         init();
+        getUserGroups(strUser_ID);
         radius = sessionManager.getradius();
         edselectcategory.setText(Validation.FILTER_CATEGORY);
+
         edselectcategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCategory();
             }
         });
+
+        edselectAudiance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!(Validation.isOnline(getActivity()))) {
+                    ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+                } else {
+                    callingFrom = "group";
+                    getUserGroups(strUser_ID);
+                }
+            }
+        });
+
         btnapplyfilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +159,15 @@ public class FilterFrag extends Fragment {
                 // Log.d("Validation o radius", "validation from validation class" + Validation.radius + "Radius " + radius);
                 strNeed_Name = edselectcategory.getText().toString();
                 Validation.FILTER_CATEGORY = strNeed_Name;
+
+                formattedUserOrgs = selectedFilterUserGroups.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
+                formattedUserGroupNames = selectedFilterUserGrpNames.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
+                if (checkedOtherOrg.equals("Y")) {
+                    Validation.FILTER_GROUPS = "All";
+                } else {
+                    Validation.FILTER_GROUPS = formattedUserOrgs.trim();
+                    Validation.FILTER_GROUP_NAMES = formattedUserGroupNames.trim();
+                }
                 fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).addToBackStack(null).commit();
             }
         });
@@ -147,7 +187,6 @@ public class FilterFrag extends Fragment {
                         getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                 fragmentTransaction.commit();
-
             }
         });
         rootview.getRootView().setFocusableInTouchMode(true);
@@ -218,7 +257,6 @@ public class FilterFrag extends Fragment {
         return rootview;
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         myContext = (FragmentActivity) activity;
@@ -226,22 +264,21 @@ public class FilterFrag extends Fragment {
     }
 
     public void init() {
-        // seekBar = (SeekBar) rootview.findViewById(R.id.filterseekbar);
+        selectedFilterUserGroups = new ArrayList<String>();
+        selectedFilterUserGrpNames = new ArrayList<String>();
         distance = (DiscreteSeekBar) rootview.findViewById(R.id.discreteProgressbar);
         edselectcategory = (EditText) rootview.findViewById(R.id.edfiltercategory);
+        edselectAudiance = (EditText) rootview.findViewById(R.id.edfiltergroup);
         txtapplyfilter = (TextView) rootview.findViewById(R.id.txtfilterapplyfilter);
         txtradius = (TextView) rootview.findViewById(R.id.txtfilterradius);
-        // txtselectcategory = (TextView) rootview.findViewById(R.id.txtfilterselectcategory);
         btnapplyfilters = (Button) rootview.findViewById(R.id.btnfilterapply);
         txtdist = (TextView) rootview.findViewById(R.id.txtdistance);
 
         btnapplyfilters.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
-        //  txtselectcategory.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         txtradius.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         txtapplyfilter.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         edselectcategory.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
 //        distance.setMin((int) Validation.inital_radius);
-
     }
 
     //------------------------------getting list data
@@ -257,29 +294,31 @@ public class FilterFrag extends Fragment {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CategoryInterface service = retrofit.create(CategoryInterface.class);
-
-        Call<CategoryType> call = service.sendData("category");
+        Call<CategoryType> call = service.sendData("");
         call.enqueue(new Callback<CategoryType>() {
             @Override
             public void onResponse(Response<CategoryType> response, Retrofit retrofit) {
-
                 CategoryType categoryType = response.body();
                 categories.clear();
-                CategoryPOJO signupPOJO1 = new CategoryPOJO();
-                signupPOJO1.setId("0");
-                signupPOJO1.setName("All");
-                signupPOJO1.setCharacterpath("");
-                categories.add(signupPOJO1);
-                if (categoryType.getNeedtype().size() > 0) {
+                Needtype needtype = new Needtype();
+                needtype.setNeedMappingID("0");
+                needtype.setNeedName("All");
+                needtype.setCharacterPath("");
+                categories.add(needtype);
+                try {
                     for (int i = 0; i < categoryType.getNeedtype().size(); i++) {
-                        CategoryPOJO signupPOJO = new CategoryPOJO();
-                        signupPOJO.setId(categoryType.getNeedtype().get(i).getNeedMappingID().toString());
-                        signupPOJO.setName(categoryType.getNeedtype().get(i).getNeedName().toString());
-                        signupPOJO.setCharacterpath(categoryType.getNeedtype().get(i).getCharacterPath());
-                        // signupPOJO.setPhotoPath(categoryType.getNeedtype().get(i).getIconPath());
-                        categories.add(signupPOJO);
+                        Needtype needtype1 = new Needtype();
+                        needtype1.setNeedMappingID(categoryType.getNeedtype().get(i).getNeedMappingID().toString());
+                        needtype1.setNeedName(categoryType.getNeedtype().get(i).getNeedName().toString());
+                        needtype1.setType(categoryType.getNeedtype().get(i).getType());
+                        needtype1.setCharacterPath(categoryType.getNeedtype().get(i).getCharacterPath());
+                        needtype1.setIconPath(categoryType.getNeedtype().get(i).getIconPath());
+                        categories.add(needtype1);
                     }
+                } catch (Exception e) {
+
                 }
+                Log.d("filters_categories", "" + categories.size());
                 try {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -290,16 +329,14 @@ public class FilterFrag extends Fragment {
                     edsearch.setVisibility(View.GONE);
                     ListView categorylist = (ListView) dialog.findViewById(R.id.category_list);
                     Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
-                    categorylist.setAdapter(new CategoriesAdaptor(categories, getContext()));
+                    categorylist.setAdapter(new CategoryAdapter(categories, getContext()));
+                    //set dynamic height for all listviews
+                    setDynamicHeight(categorylist);
                     categorylist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                            edselectcategory.setText(categories.get(i).getName());
-                            // strNeed_Name = edselectcategory.getText().toString();
-
-                            strNeedmapping_ID = categories.get(i).getId();
-
+                            edselectcategory.setText(categories.get(i).getNeedName());
+                            strNeedmapping_ID = categories.get(i).getNeedMappingID();
                             dialog.dismiss();
                         }
                     });
@@ -309,10 +346,8 @@ public class FilterFrag extends Fragment {
                             dialog.dismiss();
                         }
                     });
-
                     dialog.show();
                     mDialog.dismiss();
-
                 } catch (Exception e) {
                     StringWriter writer = new StringWriter();
                     e.printStackTrace(new PrintWriter(writer));
@@ -327,8 +362,178 @@ public class FilterFrag extends Fragment {
                 mDialog.dismiss();
             }
         });
+    }
 
+    //--------------------------getting user groups from server------------------------------------------
+    public void getUserGroups(String user_id) {
+        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.show();
+        mDialog.setCancelable(false);
+        groupArrayList = new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        GroupsInterface service = retrofit.create(GroupsInterface.class);
+        Call<List<GroupPOJO>> call = service.sendData(user_id);
+        call.enqueue(new Callback<List<GroupPOJO>>() {
+            @Override
+            public void onResponse(Response<List<GroupPOJO>> response, Retrofit retrofit) {
+                mDialog.dismiss();
+                Log.d("response_grouplist", "" + response.body());
+                try {
+                    List<GroupPOJO> res = response.body();
+                    int isblock = 0;
+                    try {
+                        isblock = res.get(0).getIsBlocked();
+                    } catch (Exception e) {
+                        isblock = 0;
+                    }
+                    if (isblock == 1) {
+                        FacebookSdk.sdkInitialize(getActivity());
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
+                        sessionManager.createUserCredentialSession(null, null, null);
+                        LoginManager.getInstance().logOut();
+                        int i = new DBGAD(getContext()).delete_row_message();
+                        sessionManager.set_notification_status("ON");
+                        Intent loginintent = new Intent(getActivity(), LoginActivity.class);
+                        loginintent.putExtra("message", "Charity");
+                        startActivity(loginintent);
+                    } else {
+                        List<GroupPOJO> groupPOJOS = response.body();
+                        groupArrayList.clear();
+                        try {
+                            for (int i = 0; i < groupPOJOS.size(); i++) {
+                                GroupPOJO groupPOJO = new GroupPOJO();
+                                groupPOJO.setGroup_id(groupPOJOS.get(i).getGroup_id());
+                                groupPOJO.setGroup_name(groupPOJOS.get(i).getGroup_name());
+                                groupPOJO.setGroup_image(groupPOJOS.get(i).getGroup_image());
+                                groupArrayList.add(groupPOJO);
+                            }
+                        } catch (Exception e) {
+                            StringWriter writer = new StringWriter();
+                            e.printStackTrace(new PrintWriter(writer));
+                            Bugreport bg = new Bugreport();
+                            bg.sendbug(writer.toString());
+                        }
+                        if (callingFrom.equals("screenload")) {
+                            if (groupArrayList.size() > 0) {
+                                edselectAudiance.setVisibility(View.VISIBLE);
+                                if (Validation.FILTER_GROUPS.equals("All")) {
+                                    edselectAudiance.setText(Validation.FILTER_GROUPS);
+                                } else {
+                                    edselectAudiance.setText(Validation.FILTER_GROUP_NAMES);
+                                    Log.d("selected_filter_grp", "" + Validation.FILTER_GROUPS);
+                                }
+                            } else {
+                                edselectAudiance.setVisibility(View.GONE);
+                            }
+                        } else {
+                            final Dialog dialog = new Dialog(getContext());
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setCancelable(false);
+                            dialog.setCanceledOnTouchOutside(false);
+                            dialog.setContentView(R.layout.user_orgs_dialog);
+                            TextView txtHead = (TextView) dialog.findViewById(R.id.txt_head);
+                            ListView userorglist = (ListView) dialog.findViewById(R.id.user_orgs_list);
+                            final CheckBox chkOtherOrg = (CheckBox) dialog.findViewById(R.id.chk_all_other_orgs);
+                            final CheckBox chkAllIndi = (CheckBox) dialog.findViewById(R.id.chk_all_individuals);
+                            chkAllIndi.setVisibility(View.GONE);
+                            Button ok = (Button) dialog.findViewById(R.id.user_org_ok);
+                            Button cancel = (Button) dialog.findViewById(R.id.user_org_cancel);
+                            Log.d("groupArrayList_size", "" + groupArrayList.size());
+                            if (groupArrayList.size() > 0) {
+                                txtHead.setVisibility(View.VISIBLE);
+                                userorglist.setVisibility(View.VISIBLE);
+                                userorglist.setAdapter(new FilterUserGroupAdapter(groupArrayList, getContext()));
+                            } else {
+                                txtHead.setVisibility(View.GONE);
+                                userorglist.setVisibility(View.GONE);
+                            }
 
+                            if (checkedOtherOrg.equals("Y")) {
+                                chkOtherOrg.setChecked(true);
+                            }
+
+                            chkOtherOrg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                    if (chkOtherOrg.isChecked()) {
+                                        checkedOtherOrg = "Y";
+                                    } else {
+                                        checkedOtherOrg = "N";
+                                    }
+                                }
+                            });
+
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+//                            Toast.makeText(getContext(), String.valueOf(selectedUserGroups), Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                    if (selectedFilterUserGrpNames.size() > 0) {
+                                        if (selectedFilterUserGrpNames.get(0).length() > 15) {
+                                            String txt = selectedFilterUserGrpNames.get(0).substring(0, 14) + "... ";
+                                            int count = selectedFilterUserGrpNames.size();
+                                            if (checkedOtherOrg.equals("Y")) {
+                                                count++;
+                                            }
+                                            if (count > 1) {
+                                                edselectAudiance.setText(txt + " + " + String.valueOf(count - 1) + " more");
+                                            } else {
+                                                edselectAudiance.setText(txt);
+                                            }
+                                        } else {
+                                            String txt = selectedFilterUserGrpNames.get(0);
+                                            int count = selectedFilterUserGrpNames.size();
+                                            if (checkedOtherOrg.equals("Y")) {
+                                                count++;
+                                            }
+                                            if (count > 1) {
+                                                edselectAudiance.setText(txt + " + " + String.valueOf(count - 1) + " more");
+                                            } else {
+                                                edselectAudiance.setText(txt);
+                                            }
+                                        }
+                                    } else {
+                                        if (checkedOtherOrg.equals("Y")) {
+                                            edselectAudiance.setText(chkOtherOrg.getText());
+                                        } else {
+                                            edselectAudiance.setText("");
+                                            edselectAudiance.clearFocus();
+                                        }
+                                    }
+                                }
+                            });
+
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    }
+                } catch (Exception e) {
+                    mDialog.dismiss();
+                    Log.d("response_grouplist", "" + e.getMessage());
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                mDialog.dismiss();
+                Log.d("getorgs_error", "" + t.getMessage());
+                ToastPopUp.show(getContext(), getString(R.string.server_response_error));
+            }
+        });
     }
 
     @Override
@@ -340,7 +545,6 @@ public class FilterFrag extends Fragment {
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     Bundle bundle = new Bundle();
@@ -352,7 +556,6 @@ public class FilterFrag extends Fragment {
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();
-
                     return true;
                 }
                 return false;

@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -61,10 +59,6 @@ import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,8 +67,8 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.BottomNavigation.BottomNavigationViewHelper;
-import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.EmergencyContact;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSDetailsFrag;
+import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSOptionActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.MyFullFillTag.MyFullFillTags;
@@ -91,8 +85,8 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Modeltaglist
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Resourcelist;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.ResourcelistInterface;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.SOSlist;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.SOSlistInterface;
+import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.taglistInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
@@ -107,7 +101,8 @@ import retrofit.Retrofit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class TabNew extends android.support.v4.app.Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class TabNew extends android.support.v4.app.Fragment implements GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     ArrayList<TaggedDeedsPojo> taggeddeeds = new ArrayList<TaggedDeedsPojo>();
     FragmentActivity myContext;
     List<Taggedlist> taggedlists = new ArrayList<>();
@@ -145,6 +140,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) v.findViewById(R.id.bottom_navigation_bar);
         bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -203,8 +199,8 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                     newfrag.beginTransaction().replace(R.id.content_frame, myFullFillTags).commit();
                     return true;
                 case R.id.navigation_sos:
-                    Intent i = new Intent(getApplicationContext(), EmergencyContact.class);
-                    i.putExtra("callingfrom","app");
+                    Intent i = new Intent(getApplicationContext(), SOSOptionActivity.class);
+                    i.putExtra("callingfrom", "app");
                     startActivity(i);
                     return true;
             }
@@ -217,6 +213,19 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mGoogleMap.setMyLocationEnabled(true);
+        mGoogleMap.setOnMyLocationButtonClickListener(this);
+        mGoogleMap.setOnMyLocationClickListener(this);
 
         if (!(Validation.isOnline(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
@@ -292,7 +301,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                             if (marker.getSnippet().equals(taggedlists.get(m).getTaggedID())) {
                                 if (!(Validation.isOnline(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-                                }else {
+                                } else {
                                     Log.d("taggedlistsize", "in condition");
                                     str_address = taggedlists.get(m).getAddress();
                                     str_tagid = taggedlists.get(m).getTaggedID();
@@ -354,7 +363,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                             if (marker.getSnippet().equals(soslists.get(m).getId())) {
                                 if (!(Validation.isOnline(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-                                }else {
+                                } else {
                                     Log.d("soslistsize", "in condition");
                                     String str_sosid = soslists.get(m).getId();
                                     android.support.v4.app.FragmentManager newfrag;
@@ -374,7 +383,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                             if (marker.getSnippet().equals(resourcelists.get(m).getId())) {
                                 if (!(Validation.isOnline(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-                                }else {
+                                } else {
                                     Log.d("reslistsize", "in condition");
                                     String str_resid = resourcelists.get(m).getId();
                                     android.support.v4.app.FragmentManager newfrag;
@@ -391,18 +400,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                 }
             }
         });
-    }
-
-    public Bitmap mergeBitmap(Bitmap bitmap) {
-        Bitmap bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
-        Bitmap bmp2 = Bitmap.createScaledBitmap(bitmap, 70, 70, true);
-        Bitmap bmOverlay = Bitmap.createBitmap(bmp1.getWidth(), bmp1.getHeight(), bmp1.getConfig());
-        Canvas canvas = new Canvas(bmOverlay);
-//        int centreX = (bmp1.getWidth() - bmp2.getWidth()) / 2;
-//        int centreY = (bmp1.getHeight() - bmp2.getHeight()) / 2;
-        canvas.drawBitmap(bmp1, new Matrix(), null);
-        canvas.drawBitmap(bmp2, 5, 5, null);
-        return bmOverlay;
     }
 
     private Bitmap getMarkerBitmapFromView(View view, Bitmap bitmap) {
@@ -457,20 +454,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
         super.onAttach(activity);
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
     public void get_Taglist_data(String user_id) {
         mDialog.setCancelable(false);
         item = new ArrayList<>();
@@ -500,7 +483,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();
@@ -721,7 +704,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();
@@ -837,7 +820,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();
@@ -963,7 +946,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                 if (isblock == 1) {
                     mDialog.dismiss();
                     FacebookSdk.sdkInitialize(getActivity());
-                    Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                     sessionManager.createUserCredentialSession(null, null, null);
                     LoginManager.getInstance().logOut();
                     Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -1019,7 +1002,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                 if (!(Validation.isNetworkAvailable(getContext()))) {
-                                    Toast.makeText(getContext(), "OOPS! No INTERNET. Please check your network connection", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getResources().getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
                                 } else {
                                     android.support.v4.app.FragmentManager newfrag;
                                     newfrag = getActivity().getSupportFragmentManager();
@@ -1134,7 +1117,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -1153,7 +1136,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                         if (groupResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), "Location removed successfully", Toast.LENGTH_SHORT).show();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -1277,29 +1260,24 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
         }
     }
 
-    private void changeMap(Location location) {
-        Log.d("map", "Reaching map" + mGoogleMap);
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        // check if map is created successfully or not
-        if (mGoogleMap != null) {
-            mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-            LatLng latLong;
-            latLong = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(latLong).zoom(19f).tilt(0).build();
-            mGoogleMap.setMyLocationEnabled(true);
-            mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
-            mGoogleMap.animateCamera(CameraUpdateFactory
-                    .newCameraPosition(cameraPosition));
-//            mLocationMarkerText.setText("Lat : " + location.getLatitude() + "," + "Long : " + location.getLongitude());
-//            startIntentService(location);
+    @Override
+    public boolean onMyLocationButtonClick() {
+        if (!(Validation.isOnline(getActivity()))) {
+            ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
-            Toast.makeText(getApplicationContext(),
-                    "Sorry! unable to create maps", Toast.LENGTH_SHORT)
-                    .show();
+            mDialog.setConfiguration(new ArcConfiguration(getContext()));
+            mDialog.show();
+            get_Taglist_data(strUserId);
+            get_SOSlist_data(strUserId);
+            get_Resourcelist_data(strUserId);
         }
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
+        return false;
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+
     }
 }

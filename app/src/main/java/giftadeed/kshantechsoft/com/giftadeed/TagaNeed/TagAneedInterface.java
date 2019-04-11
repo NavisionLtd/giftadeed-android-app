@@ -20,5 +20,6 @@ public interface TagAneedInterface {
     Call<MobileModel> sendData(@Field("User_ID") String uid, @Field("NeedMapping_ID") String mappingid, @Field("Geopoint") String geopoints,
                                @Field("Tagged_Photo_Path") String photopath, @Field("Tagged_Title") String title, @Field("Description") String description,
                                @Field("Address") String address, @Field("container") String container, @Field("validity") String validity, @Field("PAddress") String paddress,
-                               @Field("sub_type_pref") String subTypePref, @Field("all_groups") String allGroups, @Field("all_individuals") String allIndi, @Field("user_grp_ids") String userGrps);
+                               @Field("sub_type_pref") String subTypePref, @Field("all_groups") String allGroups, @Field("all_individuals") String allIndi, @Field("user_grp_ids") String userGrps,
+                               @Field("from_group") String from_group_id);
 }

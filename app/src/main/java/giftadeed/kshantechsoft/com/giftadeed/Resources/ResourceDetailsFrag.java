@@ -15,6 +15,9 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -41,6 +44,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
+import giftadeed.kshantechsoft.com.giftadeed.Group.CreateGroupFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
@@ -68,7 +72,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     View rootview;
     private AlertDialog alertDialog;
     TextView txtgroupname, txtaddress, txtresname, txtDate, txttypes, txtSubtypes, txt_qty_perperson;
-    Button btnDeleteResource;
+    Button btnEditResource, btnDeleteResource;
     String str_ResCreatorId, strUser_ID, str_resid, tab;
     static FragmentManager fragmgr;
     SessionManager sessionManager;
@@ -90,6 +94,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
@@ -109,6 +114,20 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         } else {
             getResource_Details();
         }
+
+        btnEditResource.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!(Validation.isNetworkAvailable(myContext))) {
+                    ToastPopUp.show(myContext, getString(R.string.network_validation));
+                } else {
+                    CreateResourceFragment createResourceFragment = new CreateResourceFragment();
+                    sessionManager.createResourceDetails("");
+                    fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();
+                }
+            }
+        });
+
         btnDeleteResource.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +209,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -210,8 +229,10 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                         txtgroupname.setText(resourcePOJO.get(0).getGroup_name());
                         str_ResCreatorId = resourcePOJO.get(0).getCreatorId();
                         if (strUser_ID.equals(str_ResCreatorId)) {
+                            btnEditResource.setVisibility(View.VISIBLE);
                             btnDeleteResource.setVisibility(View.VISIBLE);
                         } else {
+                            btnEditResource.setVisibility(View.GONE);
                             btnDeleteResource.setVisibility(View.GONE);
                         }
                         txtresname.setText(resourcePOJO.get(0).getResName());
@@ -282,7 +303,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -303,7 +324,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                             fragmgr = getFragmentManager();
                             fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -339,6 +360,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         txtSubtypes = (TextView) rootview.findViewById(R.id.tv_res_subcat);
         txtaddress = (TextView) rootview.findViewById(R.id.txt_res_address);
         txtDate = (TextView) rootview.findViewById(R.id.tv_res_created);
+        btnEditResource = (Button) rootview.findViewById(R.id.btn_edit_resource);
         btnDeleteResource = (Button) rootview.findViewById(R.id.btn_delete_resource);
     }
 

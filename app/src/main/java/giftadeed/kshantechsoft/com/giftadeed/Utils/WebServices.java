@@ -5,14 +5,26 @@ package giftadeed.kshantechsoft.com.giftadeed.Utils;
  */
 
 public class WebServices {
-  public static final String MANI_URL = "https://www.giftadeed.com/";
-  //  public static final String SUB_URL = "GiftAdeed/";
-//    public static final String SUB_URL = "gad2/";
-    // public static final String SUB_URL = "GiftAdeedRevised/";
-    // public static final String MANI_URL = "http://192.168.1.115/";
-//    public static final String MANI_URL = "https://kshandemo.co.in/"; //need to chnage this url yestell me the url
-//    public static final String SUB_URL = "gad2_latest/";
-    public static final String SUB_URL = "gad3/api/";
+
+    /* Urls for development */
+    public static final String MANI_URL = "https://kshandemo.co.in/";
+    public static final String SOS_STORAGE_PATH_UPLOADS = "uploadsDev/";
+    public static final String DATABASE_SOS_UPLOADS = "SOSDev";
+    public static final String DATABASE_PROFILE_PIC_UPLOADS = "usersDev";
+    public static final String PROFILEPIC_STORAGE_PATH_UPLOADS = "profilepicsDev/";
+    /* End of Urls for development */
+
+
+    /* Urls for production */
+    /* public static final String MANI_URL = "https://www.giftadeed.com/";
+    public static final String SOS_STORAGE_PATH_UPLOADS = "uploads/";
+    public static final String DATABASE_SOS_UPLOADS = "SOS";
+    public static final String DATABASE_PROFILE_PIC_UPLOADS = "users";
+    public static final String PROFILEPIC_STORAGE_PATH_UPLOADS = "profilepics/"; */
+    /* End of Urls for production */
+
+    public static final String SUB_URL = "gad3p2/api/";
+    public static final String CUSTOM_CATEGORY_IMAGE_URL = MANI_URL + SUB_URL + "/image/group_category/";
     public static final String country = SUB_URL + "country_list.php";
     public static final String state = SUB_URL + "state_list.php";
     public static final String city = SUB_URL + "city_list.php";
@@ -91,4 +103,11 @@ public class WebServices {
     public static final String Add_SOS = SUB_URL + "add_sos.php";
     public static final String SOS_Details = SUB_URL + "sos_details.php";
     public static final String Delete_SOS = SUB_URL + "remove_sos.php";
+    public static final String SOS_Types = SUB_URL + "get_sos_type.php";
+
+    //send bird
+    public static final String MANI_SENDBRD_URL = "https://api.sendbird.com/";
+    public static final String UPDATE_GRP_CHANNEL = "v3/group_channels/";
+    public static final String DELETE_USER_ACOUNT = "v3/users/";
+    public static final String REMOVE_MEMBER = "v3/group_channels/";
 }

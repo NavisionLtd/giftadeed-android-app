@@ -27,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -53,8 +54,6 @@ import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -63,7 +62,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsInterface;
@@ -71,6 +69,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryInterface;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryType;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CustomNeedtype;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.Needtype;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.SuggestSubType;
@@ -101,18 +100,21 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     ArrayList<String> subtypePrefId = new ArrayList<String>();
     ArrayList<String> typePref = new ArrayList<String>();
     ArrayList<String> typePrefId = new ArrayList<String>();
+    ArrayList<String> customTypePrefId = new ArrayList<String>();
     View rootview;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
     SimpleArcDialog simpleArcDialog;
     EditText selectGroup, resourceCat, resourceSubCat, resourceName, resourceLocation, resourceDesc, edselectAudiance;
+    LinearLayout resSubCatLayout;
     Button btnCreateResource;
     SessionManager sessionManager;
     String strUser_ID;
-    String receivedGid = "";
+    String receivedGid = "", receivedRid = "", callingFrom = "";
     private ArrayList<Needtype> categories = new ArrayList<Needtype>();
+    private ArrayList<CustomNeedtype> customCategories = new ArrayList<>();
     private ArrayList<MultiSubCategories> subcategories = new ArrayList<MultiSubCategories>();
-    String strCharacter_Path, strNeedmapping_ID, strGroupmapping_ID;
+    String strCharacter_Path, strNeedmapping_ID, strGroupmapping_ID, strGroupmapping_Name;
     ImageView catImage;
     String latitude_source, longitude_source;
     public String str_Geopint, lat, longi, itemname, itemid;
@@ -141,22 +143,35 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(true);
         TaggedneedsActivity.back.setVisibility(View.GONE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        TaggedneedsActivity.updateTitle(getResources().getString(R.string.create_res));
         init();
         mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
         HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
         receivedGid = group.get(sessionManager.GROUP_ID);
+        HashMap<String, String> resource = sessionManager.getSelectedResourceDetails();
+        callingFrom = resource.get(sessionManager.RES_CALL_FROM);
+        receivedRid = resource.get(sessionManager.RESOURCE_ID);
         lat = String.valueOf(new GPSTracker(myContext).latitude);
         longi = String.valueOf(new GPSTracker(myContext).longitude);
         getAddress(lat, longi);
+
+        if (callingFrom.equals("create")) {
+            //from create menu
+            TaggedneedsActivity.updateTitle(getResources().getString(R.string.create_res));
+        } else {
+            //from edit menu
+//            groupName.setText(receivedGname);
+//            groupDesc.setText(receivedGdesc);
+            TaggedneedsActivity.updateTitle(getResources().getString(R.string.edit_resource));
+        }
 
         selectGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +190,11 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 if (categories.size() > 0) {
                     showCatDialog();
                 } else {
-                    getCategory();
+                    if (selectGroup.getText().length() < 1) {
+                        ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
+                    } else {
+                        getCategory(strGroupmapping_ID);
+                    }
                 }
             }
         });
@@ -185,7 +204,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
             public void onClick(View view) {
 //                String strCategory = resourceCat.getText().toString();
                 if (formattedTypeIds.length() < 1) {
-                    ToastPopUp.displayToast(getContext(), "Select category");
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_category));
                 } else {
                     if (subcategories.size() > 0) {
                         showSubCatDialog();
@@ -193,7 +212,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         if (!(Validation.isOnline(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
-                            getSubCategory();
+                            getSubCategory("no");
                         }
                     }
                 }
@@ -222,19 +241,19 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
             @Override
             public void onClick(View view) {
                 if (selectGroup.getText().length() == 0) {
-                    ToastPopUp.displayToast(getContext(), "Select group");
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
                 } else if (resourceCat.getText().length() == 0) {
-                    ToastPopUp.displayToast(getContext(), "Select category");
-                } else if (resourceSubCat.getText().length() == 0) {
-                    ToastPopUp.displayToast(getContext(), "Select sub-category");
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_category));
+                } else if ((resourceSubCat.getText().length() < 1) && (subcategories.size() > 0)) {
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_sub_category));
                 } else if (resourceLocation.getText().length() == 0) {
-                    ToastPopUp.displayToast(getContext(), "Select location");
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_location));
                 } else if (resourceName.getText().length() == 0) {
                     resourceName.requestFocus();
                     resourceName.setFocusable(true);
                     resourceName.setError("Resource name required");
                 } else if (edselectAudiance.getText().length() == 0) {
-                    ToastPopUp.displayToast(getContext(), "Select resource audience");
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_audiance));
                 } else {
                     formattedUserGroups = selectedGroups.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                     Log.d("formattedUserGroups", "" + formattedUserGroups);
@@ -264,6 +283,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         resourceName = (EditText) rootview.findViewById(R.id.editText_resource_name);
         resourceCat = (EditText) rootview.findViewById(R.id.resource_select_cat);
         resourceSubCat = (EditText) rootview.findViewById(R.id.tv_select_sub_categories);
+        resSubCatLayout = (LinearLayout) rootview.findViewById(R.id.res_sub_cat_layout);
         resourceDesc = (EditText) rootview.findViewById(R.id.editText_resource_desc);
         btnCreateResource = (Button) rootview.findViewById(R.id.button_create_resource);
         resourceLocation = (EditText) rootview.findViewById(R.id.resource_location);
@@ -299,7 +319,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -348,6 +368,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                             selectGroup.setText(groupArrayList.get(i).getGroup_name());
                                         }
                                         strGroupmapping_ID = groupArrayList.get(i).getGroup_id();
+                                        strGroupmapping_Name = groupArrayList.get(i).getGroup_name();
                                     }
                                 } catch (Exception e) {
 //                                    StringWriter writer = new StringWriter();
@@ -355,6 +376,24 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
 //                                    Bugreport bg = new Bugreport();
 //                                    bg.sendbug(writer.toString());
                                 }
+
+                                // reset categories
+                                categories = new ArrayList<Needtype>();
+                                resourceCat.setText("");
+                                resourceCat.clearFocus();
+
+                                // reset sub-categories
+                                subcategories = new ArrayList<MultiSubCategories>();
+                                resSubCatLayout.setVisibility(View.VISIBLE);
+                                resourceSubCat.setText("");
+                                resourceSubCat.clearFocus();
+
+                                // reset audience
+                                groupArrayList = new ArrayList<GroupPOJO>();
+                                edselectAudiance.setEnabled(true);
+                                edselectAudiance.setText("");
+                                edselectAudiance.clearFocus();
+
                                 dialog.dismiss();
                             }
                         });
@@ -385,11 +424,12 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     }
 
     //--------------------------getting categories from server------------------------------------------
-    public void getCategory() {
+    public void getCategory(String groupid) {
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
         categories = new ArrayList<>();
+        customCategories = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -397,13 +437,14 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CategoryInterface service = retrofit.create(CategoryInterface.class);
-        Call<CategoryType> call = service.sendData("category");
+        Call<CategoryType> call = service.sendData(groupid);
         call.enqueue(new Callback<CategoryType>() {
             @Override
             public void onResponse(Response<CategoryType> response, Retrofit retrofit) {
                 simpleArcDialog.dismiss();
                 CategoryType categoryType = response.body();
                 categories.clear();
+                customCategories.clear();
                 try {
                     for (int i = 0; i < categoryType.getNeedtype().size(); i++) {
                         Needtype needtype = new Needtype();
@@ -416,6 +457,22 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
 
                 }
 
+                try {
+                    for (int i = 0; i < categoryType.getCustomneedtype().size(); i++) {
+                        CustomNeedtype customNeedtype = new CustomNeedtype();
+                        customNeedtype.setNeedMappingID(categoryType.getCustomneedtype().get(i).getNeedMappingID().toString());
+                        customNeedtype.setNeedName(categoryType.getCustomneedtype().get(i).getNeedName().toString());
+                        customNeedtype.setType(categoryType.getCustomneedtype().get(i).getType());
+                        customNeedtype.setIconPath(categoryType.getCustomneedtype().get(i).getIconPath());
+                        customNeedtype.setCharacterPath(categoryType.getCustomneedtype().get(i).getCharacterPath());
+                        customNeedtype.setChecked(false);
+                        customCategories.add(customNeedtype);
+                    }
+                } catch (Exception e) {
+
+                }
+                Log.d("response_categories", "" + categories.size());
+                Log.d("response_custom_cat", "" + customCategories.size());
                 showCatDialog();
             }
 
@@ -428,7 +485,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         });
     }
 
-    public void showCatDialog(){
+    public void showCatDialog() {
         final Dialog dialog = new Dialog(getContext());
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
@@ -437,24 +494,40 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.main_category_dialog);
-        dialog.getWindow().setLayout((6 * width)/7, (4 * height)/5);
+        dialog.getWindow().setLayout((6 * width) / 7, (4 * height) / 5);
         final RecyclerView categorylist = (RecyclerView) dialog.findViewById(R.id.main_category_list);
-        LinearLayoutManager layoutManager;
+        TextView tvheading1 = (TextView) dialog.findViewById(R.id.res_cat_heading);
+        TextView tvheading2 = (TextView) dialog.findViewById(R.id.res_custom_cat_heading);
+        final RecyclerView custom_categorylist = (RecyclerView) dialog.findViewById(R.id.res_custom_category_list);
+        LinearLayoutManager layoutManager, layoutManager1;
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         categorylist.addItemDecoration(new DividerItemDecoration(categorylist.getContext(), DividerItemDecoration.VERTICAL));
         categorylist.setLayoutManager(layoutManager);
+        custom_categorylist.addItemDecoration(new DividerItemDecoration(custom_categorylist.getContext(), DividerItemDecoration.VERTICAL));
+        custom_categorylist.setLayoutManager(layoutManager1);
         Button btnok = (Button) dialog.findViewById(R.id.main_category_ok);
         Button cancel = (Button) dialog.findViewById(R.id.main_category_cancel);
         Log.d("mulcatlist_size", "" + categories.size());
         if (categories.size() > 0) {
+            tvheading1.setVisibility(View.VISIBLE);
             categorylist.setVisibility(View.VISIBLE);
             btnok.setVisibility(View.VISIBLE);
             cancel.setVisibility(View.VISIBLE);
             categorylist.setAdapter(new ResourceMultiCatAdapter(categories, getContext()));
         } else {
+            tvheading1.setVisibility(View.GONE);
             btnok.setVisibility(View.GONE);
             cancel.setVisibility(View.VISIBLE);
             categorylist.setVisibility(View.GONE);
+        }
+        if (customCategories.size() > 0) {
+            tvheading2.setVisibility(View.VISIBLE);
+            custom_categorylist.setVisibility(View.VISIBLE);
+            custom_categorylist.setAdapter(new ResourceMultiCustomCatAdapter(customCategories, getContext()));
+        } else {
+            tvheading2.setVisibility(View.GONE);
+            custom_categorylist.setVisibility(View.GONE);
         }
 
         btnok.setOnClickListener(new View.OnClickListener() {
@@ -462,11 +535,20 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
             public void onClick(View view) {
                 typePrefId = new ArrayList<String>();
                 typePref = new ArrayList<String>();
+                customTypePrefId = new ArrayList<>();
                 for (int i = 0; i < categories.size(); i++) {
 //                            Log.d("multicat", categories.get(i).getNeedName() + ":" + categories.get(i).getChecked());
                     if (categories.get(i).getChecked() == true) {
                         typePrefId.add(categories.get(i).getNeedMappingID()); // add position of the row
                         typePref.add(categories.get(i).getNeedName());
+                    }
+                }
+                for (int i = 0; i < customCategories.size(); i++) {
+//                            Log.d("multicat", categories.get(i).getNeedName() + ":" + categories.get(i).getChecked());
+                    if (customCategories.get(i).getChecked() == true) {
+                        typePrefId.add(customCategories.get(i).getNeedMappingID()); // add position of the row
+                        typePref.add(customCategories.get(i).getNeedName());
+                        customTypePrefId.add(customCategories.get(i).getNeedMappingID());
                     }
                 }
                 dialog.dismiss();
@@ -475,6 +557,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     formattedTypePref = typePref.toString().replaceAll("\\[", "").replaceAll("\\]", "");
                     Log.d("formattedTypeIds", "" + formattedTypeIds);
                     subcategories = new ArrayList<MultiSubCategories>();
+                    resSubCatLayout.setVisibility(View.VISIBLE);
                     if (formattedTypePref.length() > 25) {
                         resourceCat.setText(formattedTypePref.substring(0, 24) + "...");
                         resourceSubCat.setText("");
@@ -485,6 +568,23 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         resourceSubCat.clearFocus();
                     }
                 }
+
+                if (customTypePrefId.size() > 0) {
+                    //if user select custom category then audience will be his from group only. Audience click will be disabled
+                    edselectAudiance.setText(strGroupmapping_Name);
+                    edselectAudiance.setEnabled(false);
+//                    resSubCatLayout.setVisibility(View.GONE);
+                } else {
+                    //Reset select audience
+//                    resSubCatLayout.setVisibility(View.VISIBLE);
+                    edselectAudiance.setEnabled(true);
+                    groupArrayList = new ArrayList<>();
+                    edselectAudiance.setText("");
+                    edselectAudiance.clearFocus();
+                }
+
+                //call getsubcategory to check subcategories available for selected main categories
+                getSubCategory("yes");
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -497,11 +597,12 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     }
 
     //--------------------------getting sub categories from server------------------------------------------
-    public void getSubCategory() {
+    public void getSubCategory(final String callingFromCat) {
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
         subcategories = new ArrayList<>();
+        resSubCatLayout.setVisibility(View.VISIBLE);
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -528,8 +629,11 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 } catch (Exception e) {
 
                 }
-
-                showSubCatDialog();
+                if (callingFromCat.equals("yes")) {
+                    //dont show subcat dialog
+                } else {
+                    showSubCatDialog();
+                }
             }
 
             @Override
@@ -541,7 +645,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         });
     }
 
-    public void showSubCatDialog(){
+    public void showSubCatDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -639,7 +743,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                             itemname = et_suggest_type.getText().toString();
                             Log.d("suggestion", itemid + itemname);
                             if (!(Validation.isNetworkAvailable(getContext()))) {
-                                Toast.makeText(getContext(), "OOPS! No INTERNET. Please check your network connection", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getResources().getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
                             } else {
                                 suggestSubType();
                             }
@@ -803,7 +907,6 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        String strDeviceid = SharedPrefManager.getInstance(getContext()).getDeviceToken();
         groupArrayList = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -828,7 +931,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -994,7 +1097,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     if (isblock == 1) {
                         simpleArcDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -1011,12 +1114,12 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), "Resource created successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.res_success), Toast.LENGTH_SHORT).show();
                             // move to mapview
                             fragmgr = getFragmentManager();
                             fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {

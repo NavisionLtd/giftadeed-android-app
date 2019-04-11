@@ -111,7 +111,7 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
         sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
-        TaggedneedsActivity.updateTitle("Group Info");
+        TaggedneedsActivity.updateTitle(getResources().getString(R.string.group_info));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
@@ -119,6 +119,7 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
+        TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
@@ -187,7 +188,7 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                     if (isblock == 1) {
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -265,7 +266,7 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                     }
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         int i = new DBGAD(getContext()).delete_row_message();

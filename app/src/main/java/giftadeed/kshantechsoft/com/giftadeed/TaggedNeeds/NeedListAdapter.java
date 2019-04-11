@@ -114,7 +114,7 @@ public class NeedListAdapter extends RecyclerView.Adapter<NeedListAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     if (!(Validation.isNetworkAvailable(context))) {
-                        Toast.makeText(context, "OOPS! No INTERNET. Please check your network connection", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
                     } else {
                         int i = 7;
                         TaggedneedsActivity activity = (TaggedneedsActivity) v.getContext();

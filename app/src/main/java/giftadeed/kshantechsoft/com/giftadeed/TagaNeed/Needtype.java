@@ -11,6 +11,9 @@ public class Needtype {
     @SerializedName("Need_Name")
     @Expose
     private String needName;
+    @SerializedName("type")
+    @Expose
+    private String type;
     @SerializedName("Icon_Path")
     @Expose
     private String iconPath;
@@ -57,5 +60,13 @@ public class Needtype {
 
     public void setChecked(Boolean checked) {
         isChecked = checked;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

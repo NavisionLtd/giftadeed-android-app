@@ -7,9 +7,17 @@
             android:icon="@drawable/home_icon"
             android:title="@string/drawer_home" />
         <item
+            android:id="@+id/nav_taganeed"
+            android:icon="@drawable/tag_a_deed_icon"
+            android:title="@string/drawer_tag_deed" />
+        <item
             android:id="@+id/nav_groups"
             android:icon="@drawable/group_icon"
             android:title="@string/drawer_groups" />
+        <item
+            android:id="@+id/nav_inspire_community"
+            android:icon="@drawable/group_icon"
+            android:title="@string/drawer_inspire" />
         <item
             android:id="@+id/nav_mytags"
             android:icon="@drawable/my_tags_icon"
@@ -20,10 +28,6 @@
             android:icon="@drawable/fulfill_a_deed_icon"
             android:visible="false"
             android:title="My Fulfilled Tags" />
-        <item
-            android:id="@+id/nav_taganeed"
-            android:icon="@drawable/tag_a_deed_icon"
-            android:title="@string/drawer_tag_deed" />
         <item
             android:id="@+id/nav_resources"
             android:icon="@drawable/resources_icon_1"
@@ -51,6 +55,10 @@
             android:id="@+id/settings"
             android:icon="@drawable/settings_icon"
             android:title="@string/drawer_settings" />
+        <item
+            android:id="@+id/emergency_contacts"
+            android:icon="@drawable/contact_book_icon"
+            android:title="@string/drawer_emergency_contacts" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/logout_icon"

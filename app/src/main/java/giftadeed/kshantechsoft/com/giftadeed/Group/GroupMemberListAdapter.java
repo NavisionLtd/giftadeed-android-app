@@ -23,12 +23,12 @@ import java.util.List;
 import giftadeed.kshantechsoft.com.giftadeed.MyProfile.Profile;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 public class GroupMemberListAdapter extends BaseAdapter {
     ArrayList<GroupMember> list = new ArrayList<>();
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
-    public static final String DATABASE_PROFILE_PIC_UPLOADS = "users";
     private List<Profile> profileList;
     Context context;
 
@@ -71,10 +71,10 @@ public class GroupMemberListAdapter extends BaseAdapter {
         }
 
         if (!(Validation.isNetworkAvailable(context))) {
-            Toast.makeText(context, "OOPS! No INTERNET. Please check your network connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getResources().getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
         } else {
             mFirebaseInstance = FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference(DATABASE_PROFILE_PIC_UPLOADS);
+            mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_PROFILE_PIC_UPLOADS);
             profileList = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase.child("profile");
             //adding an event listener to fetch values
