@@ -2,6 +2,7 @@ package giftadeed.kshantechsoft.com.giftadeed.Resources;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,23 +25,40 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Group.RecyclerTouchListener;
 import giftadeed.kshantechsoft.com.giftadeed.Group.RecyclerViewClickListener;
+import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class ResourceListFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
@@ -56,7 +76,7 @@ public class ResourceListFragment extends Fragment
     private GoogleApiClient mGoogleApiClient;
     ResListAdapter resListAdapter;
 
-    public static ResourceListFragment newInstance(int sectionNumber) {
+    public static ResourceListFragment newInstance() {
         ResourceListFragment fragment = new ResourceListFragment();
         return fragment;
     }
@@ -116,7 +136,7 @@ public class ResourceListFragment extends Fragment
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
-//                                            getResList(strUser_ID);
+                                            getResList(strUser_ID);
                                         }
                                     }
                                 }
@@ -135,10 +155,12 @@ public class ResourceListFragment extends Fragment
                 recyclerView, new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                /*ResourceDetailsFrag resourceDetailsFrag = new ResourceDetailsFrag();
-                Log.d("infogrp", "" + resArrayList.get(position).getGroup_id() + resArrayList.get(position).getGroup_name());
-                sessionManager.createGroupDetails("", resArrayList.get(position).getGroup_id(), resArrayList.get(position).getGroup_name(), resArrayList.get(position).getGroup_desc(), resArrayList.get(position).getGroup_image());
-                fragmgr.beginTransaction().replace(R.id.content_frame, resourceDetailsFrag).commit();*/
+                ResourceDetailsFrag resourceDetailsFrag = new ResourceDetailsFrag();
+                Bundle bundle = new Bundle();
+                bundle.putString("str_resid", resArrayList.get(position).getRes_id());
+                bundle.putString("callingFrom", "list");
+                resourceDetailsFrag.setArguments(bundle);
+                fragmgr.beginTransaction().replace(R.id.content_frame, resourceDetailsFrag).commit();
             }
         }));
         return rootview;
@@ -152,6 +174,8 @@ public class ResourceListFragment extends Fragment
         swipeRefreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.swipe_refresh_res_layout);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecor);
         recyclerView.setLayoutManager(layoutManager);
     }
 
@@ -180,12 +204,12 @@ public class ResourceListFragment extends Fragment
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             swipeRefreshLayout.setRefreshing(true);
-//            getResList(strUser_ID);
+            getResList(strUser_ID);
         }
     }
 
     //---------------------get the list of joined and created groups from server-----------------------------------------------
-   /* public void getResList(String user_id) {
+    public void getResList(String user_id) {
         resArrayList = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -193,18 +217,18 @@ public class ResourceListFragment extends Fragment
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
-        ResourcelistInterface service = retrofit.create(ResourcelistInterface.class);
-        Call<Modelresourcelist> call = service.fetchData(user_id);
-        call.enqueue(new Callback<Modelresourcelist>() {
+        UserResourcesInterface service = retrofit.create(UserResourcesInterface.class);
+        Call<List<ResourcePOJO>> call = service.fetchData(user_id);
+        call.enqueue(new Callback<List<ResourcePOJO>>() {
             @Override
-            public void onResponse(Response<Modelresourcelist> response, Retrofit retrofit) {
+            public void onResponse(Response<List<ResourcePOJO>> response, Retrofit retrofit) {
                 swipeRefreshLayout.setRefreshing(false);
-                Log.d("response_grouplist", "" + response.body());
+                Log.d("response_user_reslist", "" + response.body());
                 try {
-                    Modelresourcelist res = response.body();
+                    List<ResourcePOJO> res = response.body();
                     int isblock = 0;
                     try {
-                        isblock = res.getReslist();
+                        isblock = res.get(0).getIsBlocked();
                     } catch (Exception e) {
                         isblock = 0;
                     }
@@ -232,7 +256,11 @@ public class ResourceListFragment extends Fragment
                         try {
                             for (int i = 0; i < resourcePOJOList.size(); i++) {
                                 ResourcePOJO resourcePOJO = new ResourcePOJO();
+                                resourcePOJO.setRes_id(resourcePOJOList.get(i).getRes_id());
                                 resourcePOJO.setResName(resourcePOJOList.get(i).getResName());
+                                resourcePOJO.setGroup_name(resourcePOJOList.get(i).getGroup_name());
+                                resourcePOJO.setCreated_date(resourcePOJOList.get(i).getCreated_date());
+                                resourcePOJO.setNeedName(resourcePOJOList.get(i).getNeedName());
                                 resArrayList.add(resourcePOJO);
                             }
                         } catch (Exception e) {
@@ -240,14 +268,12 @@ public class ResourceListFragment extends Fragment
                         }
 
                         if (resArrayList.size() <= 0) {
-//            swipeRefreshLayout.setRefreshing(false);
-                            noGroupsText.setVisibility(View.VISIBLE);
-                            btnCreateGroup.setVisibility(View.VISIBLE);
+                            noResText.setVisibility(View.VISIBLE);
+                            btnCreateRes.setVisibility(View.VISIBLE);
                             recyclerView.setVisibility(View.GONE);
                         } else {
-//            swipeRefreshLayout.setRefreshing(false);
-                            noGroupsText.setVisibility(View.GONE);
-                            btnCreateGroup.setVisibility(View.GONE);
+                            noResText.setVisibility(View.GONE);
+                            btnCreateRes.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
                             resListAdapter = new ResListAdapter(resArrayList, myContext);
                             recyclerView.setAdapter(resListAdapter);
@@ -265,7 +291,7 @@ public class ResourceListFragment extends Fragment
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
         });
-    }*/
+    }
 
     @Override
     public void onResume() {

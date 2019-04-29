@@ -37,14 +37,10 @@ import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.Group.CreateGroupFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
@@ -72,8 +68,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     View rootview;
     private AlertDialog alertDialog;
     TextView txtgroupname, txtaddress, txtresname, txtDate, txttypes, txtSubtypes, txt_qty_perperson;
-    Button btnEditResource, btnDeleteResource;
-    String str_ResCreatorId, strUser_ID, str_resid, tab;
+    String str_ResCreatorId, strUser_ID, str_resid, callingFrom;
     static FragmentManager fragmgr;
     SessionManager sessionManager;
     SimpleArcDialog mDialog;
@@ -109,75 +104,34 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
         str_resid = this.getArguments().getString("str_resid");
+        callingFrom = this.getArguments().getString("callingFrom");
         if (!(Validation.isOnline(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             getResource_Details();
         }
 
-        btnEditResource.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!(Validation.isNetworkAvailable(myContext))) {
-                    ToastPopUp.show(myContext, getString(R.string.network_validation));
-                } else {
-                    CreateResourceFragment createResourceFragment = new CreateResourceFragment();
-                    sessionManager.createResourceDetails("");
-                    fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();
-                }
-            }
-        });
-
-        btnDeleteResource.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!(Validation.isNetworkAvailable(myContext))) {
-                    ToastPopUp.show(myContext, getString(R.string.network_validation));
-                } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    LayoutInflater li = LayoutInflater.from(getContext());
-                    View confirmDialog = li.inflate(R.layout.giftneeddialog, null);
-                    Button dialogconfirm = (Button) confirmDialog.findViewById(R.id.btn_submit_mobileno);
-                    Button dialogcancel = (Button) confirmDialog.findViewById(R.id.btn_Cancel_mobileno);
-                    TextView dialogtext = (TextView) confirmDialog.findViewById(R.id.txtgiftneeddialog);
-                    dialogtext.setText(getResources().getString(R.string.delete_resource_msg));
-                    alert.setView(confirmDialog);
-                    alert.setCancelable(false);
-                    alertDialog = alert.create();
-                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
-                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    alertDialog.show();
-                    dialogconfirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // call delete resource api
-                            if (!(Validation.isOnline(getActivity()))) {
-                                ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-                            } else {
-                                deleteResource();
-                            }
-                            alertDialog.dismiss();
-                        }
-                    });
-                    dialogcancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alertDialog.dismiss();
-                        }
-                    });
-                }
-            }
-        });
-
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // move to mapview
-                fragmgr = getFragmentManager();
-                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
+                if (callingFrom.equals("list")) {
+                    // move to resource list
+                    fragmgr = getFragmentManager();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance()).commit();
+                } else {
+                    // move to mapview
+                    fragmgr = getFragmentManager();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
+                }
             }
         });
         return rootview;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     public void getResource_Details() {
@@ -228,13 +182,6 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                         mDialog.dismiss();
                         txtgroupname.setText(resourcePOJO.get(0).getGroup_name());
                         str_ResCreatorId = resourcePOJO.get(0).getCreatorId();
-                        if (strUser_ID.equals(str_ResCreatorId)) {
-                            btnEditResource.setVisibility(View.VISIBLE);
-                            btnDeleteResource.setVisibility(View.VISIBLE);
-                        } else {
-                            btnEditResource.setVisibility(View.GONE);
-                            btnDeleteResource.setVisibility(View.GONE);
-                        }
                         txtresname.setText(resourcePOJO.get(0).getResName());
                         if (resourcePOJO.get(0).getDescription().length() > 0) {
                             qtyLayout.setVisibility(View.VISIBLE);
@@ -321,8 +268,15 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), "Resource deleted successfully", Toast.LENGTH_SHORT).show();
-                            fragmgr = getFragmentManager();
-                            fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
+                            if (callingFrom.equals("list")) {
+                                // move to resource list
+                                fragmgr = getFragmentManager();
+                                fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance()).commit();
+                            } else {
+                                // move to mapview
+                                fragmgr = getFragmentManager();
+                                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
+                            }
                         } else if (groupResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
@@ -344,6 +298,83 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         });
     }
 
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.resource_details_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (strUser_ID.equals(str_ResCreatorId)) {
+            //edit and delete resource options only visible to resource creator
+            getActivity().invalidateOptionsMenu();
+            menu.findItem(R.id.action_edit_resource).setVisible(true);
+            menu.findItem(R.id.action_delete_resource).setVisible(true);
+        } else {
+            getActivity().invalidateOptionsMenu();
+            menu.findItem(R.id.action_edit_resource).setVisible(false);
+            menu.findItem(R.id.action_delete_resource).setVisible(false);
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_edit_resource:
+                /*if (!(Validation.isNetworkAvailable(myContext))) {
+                    ToastPopUp.show(myContext, getString(R.string.network_validation));
+                } else {
+                    CreateResourceFragment createResourceFragment = new CreateResourceFragment();
+                    sessionManager.createResourceDetails("");
+                    fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();
+                }*/
+                return true;
+
+            case R.id.action_delete_resource:
+                if (!(Validation.isNetworkAvailable(myContext))) {
+                    ToastPopUp.show(myContext, getString(R.string.network_validation));
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    LayoutInflater li = LayoutInflater.from(getContext());
+                    View confirmDialog = li.inflate(R.layout.giftneeddialog, null);
+                    Button dialogconfirm = (Button) confirmDialog.findViewById(R.id.btn_submit_mobileno);
+                    Button dialogcancel = (Button) confirmDialog.findViewById(R.id.btn_Cancel_mobileno);
+                    TextView dialogtext = (TextView) confirmDialog.findViewById(R.id.txtgiftneeddialog);
+                    dialogtext.setText(getResources().getString(R.string.delete_resource_msg));
+                    alert.setView(confirmDialog);
+                    alert.setCancelable(false);
+                    alertDialog = alert.create();
+                    alertDialog.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog.show();
+                    dialogconfirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // call delete resource api
+                            if (!(Validation.isOnline(getActivity()))) {
+                                ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+                            } else {
+                                deleteResource();
+                            }
+                            alertDialog.dismiss();
+                        }
+                    });
+                    dialogcancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     @Override
     public void onAttach(Activity activity) {
         myContext = (FragmentActivity) activity;
@@ -360,8 +391,6 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         txtSubtypes = (TextView) rootview.findViewById(R.id.tv_res_subcat);
         txtaddress = (TextView) rootview.findViewById(R.id.txt_res_address);
         txtDate = (TextView) rootview.findViewById(R.id.tv_res_created);
-        btnEditResource = (Button) rootview.findViewById(R.id.btn_edit_resource);
-        btnDeleteResource = (Button) rootview.findViewById(R.id.btn_delete_resource);
     }
 
     @Override
@@ -375,8 +404,15 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                    fragmgr = getFragmentManager();
-                    fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
+                    if (callingFrom.equals("list")) {
+                        // move to resource list
+                        fragmgr = getFragmentManager();
+                        fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance()).commit();
+                    } else {
+                        // move to mapview
+                        fragmgr = getFragmentManager();
+                        fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
+                    }
                     return true;
                 }
                 return false;

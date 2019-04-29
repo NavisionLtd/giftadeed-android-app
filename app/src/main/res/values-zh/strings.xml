@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 28 March</string>
+    <string name="app_name">GAD P2 Test 26 April</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
@@ -50,6 +50,7 @@
     <!--Grid menu and details-->
     <string name="noti_history">通知歷史記錄</string>
     <string name="list_of_myfulfilled_tags">我的已完成標籤列表</string>
+    <string name="list_of_your">標記的列表</string>
     <string name="list_of_taggers">您所在城市的前10名標記列表</string>
     <string name="list_of_fulfillers">您所在城市的十大標籤履行者列表</string>
     <string name="dash1">你的最後一件好事還在繼續</string>
@@ -161,7 +162,9 @@
     <string name="female">女</string>
 
     <!--Tag a deed-->
-    <string name="edit_deed">Edit Deed</string>
+    <string name="main_cat">主要類別</string>
+    <string name="group_cat">集團類別</string>
+    <string name="edit_deed">編輯契約</string>
     <string name="select_category">选择类别</string>
     <string name="select_sub_category">選擇子類別</string>
     <string name="select_pref">選擇首選項</string>
@@ -185,6 +188,8 @@
     <string name="deed_location">契約地點 : </string>
     <string name="get_directions">獲取路線</string>
     <string name="deed_details">契約細節 : </string>
+    <string name="tagged_by_group">標記為組 : </string>
+    <string name="last_endorse_time">最後支持 : </string>
     <string name="see_more">看更多</string>
     <string name="comments">评论</string>
     <string name="tagged_by">标记为: </string>
@@ -239,6 +244,7 @@
     <string name="remove_member_dialog">從組中刪除此成員 ?</string>
 
     <!--Resource-->
+    <string name="resource_error">您沒有自己的組來創建資源</string>
     <string name="res_success">資源創建成功</string>
     <string name="action_create_resource">創建資源</string>
     <string name="edit_resource">編輯資源</string>
@@ -246,6 +252,9 @@
     <string name="no_res_found">找不到資源。 你想創造一個嗎？</string>
     <string name="res_details">資源詳情</string>
     <string name="select_res_group">選擇您的組</string>
+    <string name="category">類別 : </string>
+    <string name="created_by">由製作 : </string>
+    <string name="created_on">創建於 : </string>
     <string name="res_cat">資源類別</string>
     <string name="res_subcat">資源子類別</string>
     <string name="res_name">資源名稱 *</string>
@@ -274,7 +283,7 @@
     <string name="emergency"> </string>
     <string name="call_police">打電話給警察控制室</string>
     <string name="alert_contact">提醒你的緊急聯繫人</string>
-    <string name="no_emergency_contacts">沒有緊急聯繫人發送警報</string>
+    <string name="no_emergency_contacts">您尚未設置緊急聯繫人以發送警報</string>
     <string name="set">組</string>
     <string name="share_location">分享您的位置</string>
     <string name="close">關</string>
@@ -321,6 +330,7 @@
     <string name="todays_fulfilled_deeds">今天的履行行动</string>
     <string name="filter">过滤</string>
     <string name="filters">Filters</string>
+    <string name="filter_group">按組過濾</string>
     <string name="start_writing">开始在这里写... </string>
     <string name="apply_filters">应用过滤器</string>
     <string name="radius">半径</string>
@@ -582,11 +592,11 @@
 
     <P>Gift-a-Deed will have many different channels,</P>
     <p>1. people to people;</p>
-    <p>2. people to groups/organisations/charities;</p>
-    <p>3. groups/organisations/charities to people; &</p>
-    <p>4. groups/organisations/charities to groups/organisations/charities. </p>
+    <p>2. people to groups / organisations / charities;</p>
+    <p>3. groups / organisations / charities to people; &</p>
+    <p>4. groups / organisations / charities to groups / organisations / charities. </p>
     <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
-    <p>Once people and groups/organisations/charities come on board/register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
+    <p>Once people and groups / organisations / charities come on board / register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
     </body></html>
     ]]></string>
 
@@ -643,8 +653,8 @@
             </style>
 </head>
 
-    <P>As far as compliance and test for food/health/safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
-    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving /helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App ofc uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
+    <P>As far as compliance and test for food / health / safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
+    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving / helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App of course uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
     </body></html>
     ]]></string>
 

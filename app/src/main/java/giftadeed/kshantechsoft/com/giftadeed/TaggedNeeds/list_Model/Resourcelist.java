@@ -15,6 +15,15 @@ public class Resourcelist {
     @SerializedName("resource_name")
     @Expose
     private String resname;
+    @SerializedName("group_name")
+    @Expose
+    private String group_name;
+    @SerializedName("created_date")
+    @Expose
+    private String created_date;
+    @SerializedName("need_name")
+    @Expose
+    private String need_name;
 
     public String getId() {
         return id;
@@ -38,5 +47,29 @@ public class Resourcelist {
 
     public void setResname(String resname) {
         this.resname = resname;
+    }
+
+    public String getGroup_name() {
+        return group_name;
+    }
+
+    public void setGroup_name(String group_name) {
+        this.group_name = group_name;
+    }
+
+    public String getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(String created_date) {
+        this.created_date = created_date;
+    }
+
+    public String getNeed_name() {
+        return need_name;
+    }
+
+    public void setNeed_name(String need_name) {
+        this.need_name = need_name;
     }
 }

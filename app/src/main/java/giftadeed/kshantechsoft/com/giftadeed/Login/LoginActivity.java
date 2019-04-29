@@ -203,6 +203,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this, SOSOptionActivity.class);
+                sharedPreferences.store_sos_option1_clicked("no");
+                sharedPreferences.store_sos_option2_clicked("no");
+                sharedPreferences.store_sos_option3_clicked("no");
                 i.putExtra("callingfrom", "login");
                 startActivity(i);
 
@@ -686,8 +689,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //---------------------sending details of login to server and validating------------------------
     public void login() {
         String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
-       /* progressDialog = new ProgressDialog(SendBirdLoginActivity.this);
-        progressDialog.show();*/
         mDialog.setConfiguration(new ArcConfiguration(this));
         mDialog.show();
         mDialog.setCancelable(false);
@@ -883,7 +884,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void fetchinfo() {
-        String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,picture-urls::(orignal))";
+        String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,picture-urls::(original))";
         APIHelper apiHelper = APIHelper.getInstance(LoginActivity.this);
         apiHelper.getRequest(LoginActivity.this, url, new ApiListener() {
             @Override

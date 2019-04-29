@@ -30,6 +30,9 @@ public class Taggedlist {
     @SerializedName("Tagged_Datetime")
     @Expose
     private String taggedDatetime;
+    @SerializedName("cat_type")
+    @Expose
+    private String catType;
     @SerializedName("Icon_Path")
     @Expose
     private String iconPath;
@@ -78,6 +81,15 @@ public class Taggedlist {
     @SerializedName("is_permanent")
     @Expose
     private String permanent;
+    @SerializedName("all_groups")
+    @Expose
+    private String all_groups;
+    @SerializedName("user_grp_ids")
+    @Expose
+    private String userGrpIds;
+    @SerializedName("from_group")
+    @Expose
+    private String fromGroupID;
 
     public Taggedlist(String taggedTitle, String address, String fullFilledPhotoPath, String charpath, String fullFilledDatetime, String fullFilledPoints, String status,String views,String endorse,String permanent) {
         this.taggedTitle = taggedTitle;
@@ -295,5 +307,37 @@ public class Taggedlist {
 
     public void setFullFilledPoints(String fullFilledPoints) {
         this.fullFilledPoints = fullFilledPoints;
+    }
+
+    public String getCatType() {
+        return catType;
+    }
+
+    public void setCatType(String catType) {
+        this.catType = catType;
+    }
+
+    public String getAll_groups() {
+        return all_groups;
+    }
+
+    public void setAll_groups(String all_groups) {
+        this.all_groups = all_groups;
+    }
+
+    public String getUserGrpIds() {
+        return userGrpIds;
+    }
+
+    public void setUserGrpIds(String userGrpIds) {
+        this.userGrpIds = userGrpIds;
+    }
+
+    public String getFromGroupID() {
+        return fromGroupID;
+    }
+
+    public void setFromGroupID(String fromGroupID) {
+        this.fromGroupID = fromGroupID;
     }
 }

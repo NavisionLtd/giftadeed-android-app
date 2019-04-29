@@ -11,6 +11,9 @@ public class ResourcePOJO {
     @SerializedName("is_blocked")
     @Expose
     private Integer isBlocked;
+    @SerializedName("id")
+    @Expose
+    String res_id;
     @SerializedName("group_name")
     @Expose
     String group_name;
@@ -35,6 +38,12 @@ public class ResourcePOJO {
     @SerializedName("created_at")
     @Expose
     private String created_at;
+    @SerializedName("created_date")
+    @Expose
+    private String created_date;
+    @SerializedName("need_name")
+    @Expose
+    private String needName;
 
     public Integer getIsBlocked() {
         return isBlocked;
@@ -106,5 +115,29 @@ public class ResourcePOJO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getRes_id() {
+        return res_id;
+    }
+
+    public void setRes_id(String res_id) {
+        this.res_id = res_id;
+    }
+
+    public String getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(String created_date) {
+        this.created_date = created_date;
+    }
+
+    public String getNeedName() {
+        return needName;
+    }
+
+    public void setNeedName(String needName) {
+        this.needName = needName;
     }
 }

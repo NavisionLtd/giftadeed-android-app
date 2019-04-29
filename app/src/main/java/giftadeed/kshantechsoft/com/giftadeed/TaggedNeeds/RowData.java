@@ -17,7 +17,22 @@ public class RowData {
     private String views;
     private String endorse;
     private String getIconPath;
+    private String catType;
     private String permanent;
+    private String taggedID;
+    private String geopoint;
+    private String taggedPhotoPath;
+    private String description;
+    private String characterPath;
+    private String fname;
+    private String lname;
+    private String privacy;
+    private String userID;
+    private String needName;
+    private String totalTaggedCreditPoints;
+    private String totalFulfilledCreditPoints;
+    private String allGroups;
+    private String user_group_ids;
 
     public String getId() {
         return id;
@@ -83,8 +98,6 @@ public class RowData {
         this.address = address;
     }
 
-
-
     public String getImagepath() {
         return imagepath;
     }
@@ -92,40 +105,6 @@ public class RowData {
     public void setImagepath(String imagepath) {
         this.imagepath = imagepath;
     }
-
-
-
-
-    private String taggedID;
-
-
-
-
-    private String geopoint;
-
-    private String taggedPhotoPath;
-
-    private String description;
-
-
-
-
-
-    private String characterPath;
-
-    private String fname;
-
-    private String lname;
-
-    private String privacy;
-
-    private String userID;
-
-    private String needName;
-
-    private String totalTaggedCreditPoints;
-
-    private String totalFulfilledCreditPoints;
 
     public String getTaggedID() {
         return taggedID;
@@ -166,9 +145,6 @@ public class RowData {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
-
 
     public String getCharacterPath() {
         return characterPath;
@@ -232,5 +208,29 @@ public class RowData {
 
     public void setTotalFulfilledCreditPoints(String totalFulfilledCreditPoints) {
         this.totalFulfilledCreditPoints = totalFulfilledCreditPoints;
+    }
+
+    public String getCatType() {
+        return catType;
+    }
+
+    public void setCatType(String catType) {
+        this.catType = catType;
+    }
+
+    public String getAllGroups() {
+        return allGroups;
+    }
+
+    public void setAllGroups(String allGroups) {
+        this.allGroups = allGroups;
+    }
+
+    public String getUser_group_ids() {
+        return user_group_ids;
+    }
+
+    public void setUser_group_ids(String user_group_ids) {
+        this.user_group_ids = user_group_ids;
     }
 }

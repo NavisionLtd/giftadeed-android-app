@@ -210,7 +210,6 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
             getTypes();
         }
 
-
         btnSendDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -221,18 +220,18 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                 for (int i = 0; i < stList.size(); i++) {
                     EmergencyTypes type = stList.get(i);
                     if (type.isSelected()) {
-                        checkedList.add(type.getType());
+                        checkedList.add(type.getTypeid());
                     }
                 }
 
-                formattedChecked = checkedList.toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                formattedChecked = checkedList.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                 Log.d("checked_list", "" + formattedChecked);
 
                 if (!(Validation.isOnline(EmergencyStageTwo.this))) {
                     ToastPopUp.show(EmergencyStageTwo.this, getString(R.string.network_validation));
                 } else {
                     if (etCurrentLocation.getText().length() <= 0) {
-                        ToastPopUp.displayToast(EmergencyStageTwo.this,getResources().getString(R.string.sos_location_error));
+                        ToastPopUp.displayToast(EmergencyStageTwo.this, getResources().getString(R.string.sos_location_error));
                     } else {
                         if (strUser_ID != null) {
                             createSOS(strUser_ID, "", strGeopoints, strAddress, formattedChecked, "1");
@@ -260,6 +259,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CreateSOSInterface service = retrofit.create(CreateSOSInterface.class);
         Call<SOSResponseStatus> call = service.sendData(userid, devid, geopoints, address, sostypes, devtype);
+        Log.d("input_createsos", "userid : " + userid + " , sostypes : " + sostypes);
         call.enqueue(new Callback<SOSResponseStatus>() {
             @Override
             public void onResponse(Response<SOSResponseStatus> response, Retrofit retrofit) {
@@ -365,6 +365,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
         }
     }
 
+    // method to get nature of emergency types from server
     public void getTypes() {
         simpleArcDialog.setConfiguration(new ArcConfiguration(this));
         simpleArcDialog.show();

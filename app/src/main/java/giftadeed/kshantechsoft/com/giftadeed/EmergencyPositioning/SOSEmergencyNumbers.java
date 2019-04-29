@@ -170,6 +170,7 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
         } else if (callingfrom.equals("set")) {
             Intent i = new Intent(getBaseContext(), SOSOptionActivity.class);
             startActivity(i);
+            SOSEmergencyNumbers.this.finish();
         } else {
             Intent i = new Intent(getBaseContext(), TaggedneedsActivity.class);
             startActivity(i);

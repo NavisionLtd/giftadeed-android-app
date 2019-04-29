@@ -35,7 +35,6 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-
             android:fillViewport="true"
             android:scrollbars="vertical">
 
@@ -201,6 +200,40 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/tagged_by_groupname_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="2">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.9">
+
+                                <TextView
+                                    android:id="@+id/txt2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:text="@string/tagged_by_group"
+                                    android:textColor="@color/grey"
+                                    android:textSize="@dimen/finaltextfont" />
+
+                                <TextView
+                                    android:id="@+id/txt_from_group_name"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textSize="@dimen/finaltextfont" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -209,8 +242,8 @@
 
                             <LinearLayout
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.7"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -224,43 +257,40 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="0.2"
+                                android:layout_marginBottom="3dp"
+                                android:layout_weight="0.3"
+                                android:gravity="center"
                                 android:orientation="vertical">
 
-                                <LinearLayout
+
+                                <!-- <ImageView
+                                     android:id="@+id/details_locationicon"
+                                     android:layout_width="match_parent"
+                                     android:layout_height="0dp"
+                                     android:layout_gravity="center"
+                                     android:layout_marginRight="5dp"
+                                     android:layout_weight="0.5"
+                                     android:src="@drawable/map_icon" />-->
+
+                                <TextView
+                                    android:id="@+id/txtneeddetailsdistance"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.5"
                                     android:gravity="center"
-                                    android:orientation="vertical">
+                                    android:textColor="@color/colorAccent"
+                                    android:textSize="14sp" />
 
-                                   <!-- <ImageView
-                                        android:id="@+id/details_locationicon"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_gravity="center"
-                                        android:layout_marginRight="5dp"
-                                        android:layout_weight="0.5"
-                                        android:src="@drawable/map_icon" />-->
+                                <TextView
+                                    android:id="@+id/details_locationicon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.5"
+                                    android:gravity="center"
+                                    android:text="Get Directions"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="14sp" />
 
-                                    <TextView
-                                        android:id="@+id/txtneeddetailsdistance"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="0dp"
-                                        android:gravity="center"
-                                        android:layout_weight="0.5"
-                                        android:textColor="@color/colorAccent"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/details_locationicon"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="0dp"
-                                        android:gravity="center"
-                                        android:textColor="@color/colorPrimary"
-                                        android:layout_weight="0.5"
-                                        android:textSize="14sp"
-                                        android:text="Get Directions" />
-                                </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
 
@@ -429,6 +459,29 @@
                             android:visibility="gone"></WebView>-->
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/last_endorse_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/last_endorse_time"
+                            android:textColor="@color/grey"
+                            android:textSize="@dimen/finaltextfont" />
+
+                        <TextView
+                            android:id="@+id/tv_last_endorse_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@color/grey"
+                            android:textSize="@dimen/finaltextfont" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -1,32 +1,21 @@
 package giftadeed.kshantechsoft.com.giftadeed.Signup;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Html;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -46,7 +34,6 @@ import android.widget.Toast;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,20 +41,14 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.FirstLogin.First_Login;
-import giftadeed.kshantechsoft.com.giftadeed.Landing.MainActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.PrivacyPolicy.PrivacyPolicy;
 import giftadeed.kshantechsoft.com.giftadeed.PrivacyPolicy.Privacy_policy;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.RowData;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
-import giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Condition;
 import giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Conditions;
 import retrofit.Call;
 import retrofit.Callback;
@@ -1139,7 +1120,7 @@ public class SignUp extends AppCompatActivity {
                     MobileModel result = new MobileModel();
                     String successstatus = response.body().getCheckstatus().get(0).getStatus();
 
-                    Log.d("successstatus",successstatus);
+                    Log.d("successstatus", successstatus);
 
 
                     if (successstatus.equals("1")) {
@@ -1278,8 +1259,8 @@ public class SignUp extends AppCompatActivity {
                 startActivity(trmscondn);
             }
         }, spanTxt.length() - scndHighLight.length(), spanTxt.length(), 0);
-       // spanTxt.append(thirdBlackTest);
-       // spanTxt.setSpan(new ForegroundColorSpan(Color.WHITE), 83, spanTxt.length(), 0);
+        // spanTxt.append(thirdBlackTest);
+        // spanTxt.setSpan(new ForegroundColorSpan(Color.WHITE), 83, spanTxt.length(), 0);
         view.setMovementMethod(LinkMovementMethod.getInstance());
         view.setText(spanTxt, TextView.BufferType.SPANNABLE);
     }

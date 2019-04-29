@@ -49,14 +49,13 @@ public class CategoryAdapter extends BaseAdapter {
         LayoutInflater inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view=inflater.inflate(R.layout.category_item,null);
         TextView storename= (TextView) view.findViewById(R.id.store_name);
-        notifyDataSetChanged();
         storename.setText(categories.get(i).getNeedName());
-
+        notifyDataSetChanged();
         return view;
     }
 
 
-    public void filter(String charText) {
+    /*public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         categories.clear();
         if (charText.length() == 0) {
@@ -73,5 +72,5 @@ public class CategoryAdapter extends BaseAdapter {
             }
         }
         notifyDataSetChanged();
-    }
+    }*/
 }

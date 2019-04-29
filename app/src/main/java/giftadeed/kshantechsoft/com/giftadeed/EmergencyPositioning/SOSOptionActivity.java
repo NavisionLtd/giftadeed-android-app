@@ -34,8 +34,10 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import java.util.ArrayList;
 import java.util.List;
 
+import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 
 public class SOSOptionActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -43,7 +45,7 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
     private Location mylocation;
     private GoogleApiClient googleApiClient;
     LinearLayout layoutCall, layoutSMS, layoutShareLocation;
-    TextView tvClose, noContactFoundMSG;
+    TextView tvClose, noContactFoundMSG, sosOption1, sosOption2, sosOption3;
     Button btnSetContact;
     String Latitude = "", Longitude = "", message1, message2;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
@@ -53,6 +55,7 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
     ArrayList<Contact> contactArrayList;
     String msgNumber1 = "", msgNumber2 = "";
     ImageView callSign, smsSign, locationSign, correctSign1, correctSign2, correctSign3;
+    SessionManager sessionManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,10 +71,41 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         callSign = (ImageView) findViewById(R.id.call_sign);
         smsSign = (ImageView) findViewById(R.id.sms_sign);
         locationSign = (ImageView) findViewById(R.id.location_sign);
+        sosOption1 = (TextView) findViewById(R.id.sos_option_1);
+        sosOption2 = (TextView) findViewById(R.id.sos_option_2);
+        sosOption3 = (TextView) findViewById(R.id.sos_option_3);
         correctSign1 = (ImageView) findViewById(R.id.correct_sign_1);
         correctSign2 = (ImageView) findViewById(R.id.correct_sign_2);
         correctSign3 = (ImageView) findViewById(R.id.correct_sign_3);
         setUpGClient();
+        sessionManager = new SessionManager(SOSOptionActivity.this);
+        if (sessionManager.getSosOption1Clicked().equals("yes")) {  // check if CALL option performed already
+            callSign.setVisibility(View.GONE);
+            correctSign1.setVisibility(View.VISIBLE);
+            sosOption1.setTextColor(getResources().getColor(R.color.colorPurple));
+        } else {
+            callSign.setVisibility(View.VISIBLE);
+            correctSign1.setVisibility(View.GONE);
+            sosOption1.setTextColor(getResources().getColor(R.color.red));
+        }
+        if (sessionManager.getSosOption2Clicked().equals("yes")) {  // check if SMS option performed already
+            smsSign.setVisibility(View.GONE);
+            correctSign2.setVisibility(View.VISIBLE);
+            sosOption2.setTextColor(getResources().getColor(R.color.colorPurple));
+        } else {
+            smsSign.setVisibility(View.VISIBLE);
+            correctSign2.setVisibility(View.GONE);
+            sosOption2.setTextColor(getResources().getColor(R.color.red));
+        }
+        if (sessionManager.getSosOption3Clicked().equals("yes")) {  // check if SHARE LOCATION option performed already
+            locationSign.setVisibility(View.GONE);
+            correctSign3.setVisibility(View.VISIBLE);
+            sosOption3.setTextColor(getResources().getColor(R.color.colorPurple));
+        } else {
+            locationSign.setVisibility(View.VISIBLE);
+            correctSign3.setVisibility(View.GONE);
+            sosOption3.setTextColor(getResources().getColor(R.color.red));
+        }
         databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
         contactsCount = databaseAccess.getContactsCount();
@@ -97,12 +131,14 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         layoutCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String dial = "tel:9921316076";
+                String dial = "tel:7038676940";
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse(dial));
-                startActivity(intent);
                 callSign.setVisibility(View.GONE);
                 correctSign1.setVisibility(View.VISIBLE);
+                sosOption1.setTextColor(getResources().getColor(R.color.colorPurple));
+                sessionManager.store_sos_option1_clicked("yes");
+                startActivity(intent);
             }
         });
 
@@ -124,9 +160,11 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
                             Uri uri = Uri.parse("smsto:" + numbers);
                             Intent it = new Intent(Intent.ACTION_SENDTO, uri);
                             it.putExtra("sms_body", message1 + message2);
-                            startActivity(it);
                             smsSign.setVisibility(View.GONE);
                             correctSign2.setVisibility(View.VISIBLE);
+                            sosOption2.setTextColor(getResources().getColor(R.color.colorPurple));
+                            sessionManager.store_sos_option2_clicked("yes");
+                            startActivity(it);
                         }
                     }
                 }
@@ -140,9 +178,12 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
                     Intent intent = new Intent(SOSOptionActivity.this, EmergencyStageTwo.class);
                     intent.putExtra("latitude", Latitude);
                     intent.putExtra("longitude", Longitude);
-                    startActivity(intent);
+                    intent.putExtra("callingfrom", "app");
                     locationSign.setVisibility(View.GONE);
                     correctSign3.setVisibility(View.VISIBLE);
+                    sosOption3.setTextColor(getResources().getColor(R.color.colorPurple));
+                    sessionManager.store_sos_option3_clicked("yes");
+                    startActivity(intent);
                 }
             }
         });

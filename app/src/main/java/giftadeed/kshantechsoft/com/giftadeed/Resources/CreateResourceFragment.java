@@ -120,6 +120,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     public String str_Geopint, lat, longi, itemname, itemid;
     String checkedOtherGrp = "N";
     private GoogleApiClient mGoogleApiClient;
+    String calling = "screenload";
 
     public static CreateResourceFragment newInstance(int sectionNumber) {
         CreateResourceFragment fragment = new CreateResourceFragment();
@@ -166,6 +167,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         if (callingFrom.equals("create")) {
             //from create menu
             TaggedneedsActivity.updateTitle(getResources().getString(R.string.create_res));
+            getOwnedGroupList(strUser_ID);
         } else {
             //from edit menu
 //            groupName.setText(receivedGname);
@@ -179,6 +181,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 if (!(Validation.isOnline(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
+                    calling = "group";
                     getOwnedGroupList(strUser_ID);
                 }
             }
@@ -347,64 +350,81 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         } catch (Exception e) {
 
                         }
-                        final Dialog dialog = new Dialog(getContext());
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setCancelable(false);
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.setContentView(R.layout.groups_dialog);
-                        EditText edsearch = (EditText) dialog.findViewById(R.id.search_from_grouplist);
-                        edsearch.setVisibility(View.GONE);
-                        ListView ownedgrouplist = (ListView) dialog.findViewById(R.id.owned_group_list);
-                        Button cancel = (Button) dialog.findViewById(R.id.group_cancel);
-                        ownedgrouplist.setAdapter(new OwnedGroupsAdapter(groupArrayList, getContext()));
-                        ownedgrouplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                try {
-                                    if (groupArrayList.size() > 0) {
-                                        if (groupArrayList.get(i).getGroup_name().length() > 30) {
-                                            selectGroup.setText(groupArrayList.get(i).getGroup_name().substring(0, 29) + "...");
-                                        } else {
-                                            selectGroup.setText(groupArrayList.get(i).getGroup_name());
+                        if (calling.equals("screenload")) {
+                            if (groupArrayList.size() == 1) {
+                                if (groupArrayList.get(0).getGroup_name().length() > 30) {
+                                    selectGroup.setText(groupArrayList.get(0).getGroup_name().substring(0, 29) + "...");
+                                } else {
+                                    selectGroup.setText(groupArrayList.get(0).getGroup_name());
+                                }
+                                strGroupmapping_ID = groupArrayList.get(0).getGroup_id();
+                                strGroupmapping_Name = groupArrayList.get(0).getGroup_name();
+                                selectGroup.setEnabled(false);
+                                selectGroup.clearFocus();
+                            } else {
+                                selectGroup.setEnabled(true);
+                                selectGroup.clearFocus();
+                            }
+                        } else if (calling.equals("group")) {
+                            final Dialog dialog = new Dialog(getContext());
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog.setCancelable(false);
+                            dialog.setCanceledOnTouchOutside(false);
+                            dialog.setContentView(R.layout.groups_dialog);
+                            EditText edsearch = (EditText) dialog.findViewById(R.id.search_from_grouplist);
+                            edsearch.setVisibility(View.GONE);
+                            ListView ownedgrouplist = (ListView) dialog.findViewById(R.id.owned_group_list);
+                            Button cancel = (Button) dialog.findViewById(R.id.group_cancel);
+                            ownedgrouplist.setAdapter(new OwnedGroupsAdapter(groupArrayList, getContext()));
+                            ownedgrouplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    try {
+                                        if (groupArrayList.size() > 0) {
+                                            if (groupArrayList.get(i).getGroup_name().length() > 30) {
+                                                selectGroup.setText(groupArrayList.get(i).getGroup_name().substring(0, 29) + "...");
+                                            } else {
+                                                selectGroup.setText(groupArrayList.get(i).getGroup_name());
+                                            }
+                                            strGroupmapping_ID = groupArrayList.get(i).getGroup_id();
+                                            strGroupmapping_Name = groupArrayList.get(i).getGroup_name();
                                         }
-                                        strGroupmapping_ID = groupArrayList.get(i).getGroup_id();
-                                        strGroupmapping_Name = groupArrayList.get(i).getGroup_name();
-                                    }
-                                } catch (Exception e) {
+                                    } catch (Exception e) {
 //                                    StringWriter writer = new StringWriter();
 //                                    e.printStackTrace(new PrintWriter(writer));
 //                                    Bugreport bg = new Bugreport();
 //                                    bg.sendbug(writer.toString());
+                                    }
+
+                                    // reset categories
+                                    categories = new ArrayList<Needtype>();
+                                    resourceCat.setText("");
+                                    resourceCat.clearFocus();
+
+                                    // reset sub-categories
+                                    subcategories = new ArrayList<MultiSubCategories>();
+                                    resSubCatLayout.setVisibility(View.VISIBLE);
+                                    resourceSubCat.setText("");
+                                    resourceSubCat.clearFocus();
+
+                                    // reset audience
+                                    groupArrayList = new ArrayList<GroupPOJO>();
+                                    edselectAudiance.setEnabled(true);
+                                    edselectAudiance.setText("");
+                                    edselectAudiance.clearFocus();
+
+                                    dialog.dismiss();
                                 }
-
-                                // reset categories
-                                categories = new ArrayList<Needtype>();
-                                resourceCat.setText("");
-                                resourceCat.clearFocus();
-
-                                // reset sub-categories
-                                subcategories = new ArrayList<MultiSubCategories>();
-                                resSubCatLayout.setVisibility(View.VISIBLE);
-                                resourceSubCat.setText("");
-                                resourceSubCat.clearFocus();
-
-                                // reset audience
-                                groupArrayList = new ArrayList<GroupPOJO>();
-                                edselectAudiance.setEnabled(true);
-                                edselectAudiance.setText("");
-                                edselectAudiance.clearFocus();
-
-                                dialog.dismiss();
-                            }
-                        });
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialog.dismiss();
-                            }
-                        });
-                        simpleArcDialog.dismiss();
-                        dialog.show();
+                            });
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            simpleArcDialog.dismiss();
+                            dialog.show();
+                        }
                     }
                 } catch (Exception e) {
                     Log.d("response_ownedgrouplist", "" + e.getMessage());
@@ -513,7 +533,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
             tvheading1.setVisibility(View.VISIBLE);
             categorylist.setVisibility(View.VISIBLE);
             btnok.setVisibility(View.VISIBLE);
-            cancel.setVisibility(View.VISIBLE);
+            cancel.setVisibility(View.GONE);
             categorylist.setAdapter(new ResourceMultiCatAdapter(categories, getContext()));
         } else {
             tvheading1.setVisibility(View.GONE);
@@ -552,6 +572,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     }
                 }
                 dialog.dismiss();
+
                 if (categories.size() > 0) {
                     formattedTypeIds = typePrefId.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                     formattedTypePref = typePref.toString().replaceAll("\\[", "").replaceAll("\\]", "");
@@ -582,9 +603,10 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     edselectAudiance.setText("");
                     edselectAudiance.clearFocus();
                 }
-
-                //call getsubcategory to check subcategories available for selected main categories
-                getSubCategory("yes");
+                if ((typePrefId.size() > 0) || (customTypePrefId.size() > 0)) {
+                    //call getsubcategory to check subcategories available for selected main categories
+                    getSubCategory("yes");
+                }
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -666,7 +688,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
             tvMsg.setText("Select preferences for number of people");
             subcategorylist.setVisibility(View.VISIBLE);
             ok.setVisibility(View.VISIBLE);
-            cancel.setVisibility(View.VISIBLE);
+            cancel.setVisibility(View.GONE);
             subcategorylist.setAdapter(new ResourceSubCatAdapter(subcategories, getContext()));
         } else {
             tvMsg.setText("No subtypes found");

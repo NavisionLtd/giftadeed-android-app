@@ -122,11 +122,13 @@ public class SOSDetailsActivity extends AppCompatActivity {
                     } else {
                         creatorlayout.setVisibility(View.GONE);
                     }
-                    if (emergencyInfoPOJOS.get(0).getSostype().length() > 0) {
-                        emergencyLayout.setVisibility(View.VISIBLE);
-                        txtemergency.setText(emergencyInfoPOJOS.get(0).getSostype());
-                    } else {
-                        emergencyLayout.setVisibility(View.GONE);
+                    if (emergencyInfoPOJOS.get(0).getSostype() != null) {
+                        if (emergencyInfoPOJOS.get(0).getSostype().length() > 0) {
+                            emergencyLayout.setVisibility(View.VISIBLE);
+                            txtemergency.setText(emergencyInfoPOJOS.get(0).getSostype());
+                        } else {
+                            emergencyLayout.setVisibility(View.GONE);
+                        }
                     }
                     txtaddress.setText(emergencyInfoPOJOS.get(0).getAddress());
                     txtDate.setText(emergencyInfoPOJOS.get(0).getCdate());

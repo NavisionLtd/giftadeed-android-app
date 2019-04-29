@@ -9,13 +9,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import giftadeed.kshantechsoft.com.giftadeed.Group.RecyclerViewClickListener;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 
 public class ResListAdapter extends RecyclerView.Adapter<ResListAdapter.ViewHolder> {
     ArrayList<ResourcePOJO> list = new ArrayList<>();
     Context context;
-    private RecyclerViewClickListener mListener;
 
     public ResListAdapter(ArrayList<ResourcePOJO> resourcePOJOS, Context context) {
         this.list = resourcePOJOS;
@@ -30,13 +28,15 @@ public class ResListAdapter extends RecyclerView.Adapter<ResListAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String resname = list.get(position).getGroup_name();
+        String resname = list.get(position).getResName();
         if (resname.length() > 50) {
             holder.resName.setText(list.get(position).getResName().substring(0, 50) + " ...");
         } else {
             holder.resName.setText(list.get(position).getResName());
         }
-        holder.resAddress.setText(list.get(position).getAddress());
+        holder.resNeeds.setText(list.get(position).getNeedName());
+        holder.resGroup.setText(list.get(position).getGroup_name());
+        holder.resDate.setText(list.get(position).getCreated_date());
     }
 
     @Override
@@ -45,12 +45,14 @@ public class ResListAdapter extends RecyclerView.Adapter<ResListAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView resName, resAddress;
+        TextView resName, resNeeds, resGroup, resDate;
 
         public ViewHolder(View view) {
             super(view);
             resName = (TextView) view.findViewById(R.id.res_list_name);
-            resAddress = (TextView) view.findViewById(R.id.res_list_address);
+            resNeeds = (TextView) view.findViewById(R.id.res_list_needs);
+            resGroup = (TextView) view.findViewById(R.id.res_list_addedby);
+            resDate = (TextView) view.findViewById(R.id.res_list_created_date);
         }
     }
 }

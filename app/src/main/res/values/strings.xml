@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 28 March</string>
+    <string name="app_name">GAD P2 Test 26 April</string>
 
     <!--Login page-->
     <string name="login_terms">Terms and Conditions</string>
@@ -190,10 +190,12 @@
     <string name="see_more">See More</string>
     <string name="get_directions">Get Directions</string>
     <string name="tagged_by">Deed tagged By : </string>
+    <string name="tagged_by_group">Tagged By group : </string>
     <string name="edit">Edit</string>
     <string name="comment">COMMENT</string>
     <string name="report_deed">Report Deed</string>
     <string name="report_user">Report User</string>
+    <string name="last_endorse_time">Last endorsed on : </string>
     <string name="gift_now">Gift Now</string>
     <string name="press_enter_to_post">Press Enter to post</string>
     <string name="comments">Comments</string>
@@ -248,6 +250,9 @@
     <string name="edit_resource">Edit Resource</string>
     <string name="delete_resource">Delete Resource</string>
     <string name="res_details">Resource Details</string>
+    <string name="category">Category : </string>
+    <string name="created_by">Created By : </string>
+    <string name="created_on">Created on : </string>
     <string name="no_res_found">No resources found. Do you want to create one?</string>
     <string name="select_res_group">Select your group</string>
     <string name="res_cat">Resource category</string>
@@ -278,7 +283,7 @@
     <string name="emergency">EMERGENCY</string>
     <string name="call_police">Call Police Control Room</string>
     <string name="alert_contact">Alert your Emergency contact</string>
-    <string name="no_emergency_contacts">No Emergency contacts to send alert</string>
+    <string name="no_emergency_contacts">You have not set Emergency Contacts to send alert</string>
     <string name="set">Set</string>
     <string name="share_location">Share your location</string>
     <string name="close">CLOSE</string>
@@ -587,11 +592,11 @@
 
     <P>Gift-a-Deed will have many different channels,</P>
     <p>1. people to people;</p>
-    <p>2. people to groups/organisations/charities;</p>
-    <p>3. groups/organisations/charities to people; &</p>
-    <p>4. groups/organisations/charities to groups/organisations/charities. </p>
+    <p>2. people to groups / organisations / charities;</p>
+    <p>3. groups / organisations / charities to people; &</p>
+    <p>4. groups / organisations / charities to groups / organisations / charities. </p>
     <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
-    <p>Once people and groups/organisations/charities come on board/register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
+    <p>Once people and groups / organisations / charities come on board / register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
     </body></html>
     ]]></string>
 
@@ -648,8 +653,8 @@
             </style>
 </head>
 
-    <P>As far as compliance and test for food/health/safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
-    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving /helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App ofc uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
+    <P>As far as compliance and test for food / health / safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
+    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving / helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App of course uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
     </body></html>
     ]]></string>
 

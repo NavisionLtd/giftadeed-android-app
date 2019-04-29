@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.crash.FirebaseCrash;
 import com.sendbird.android.AdminMessage;
 import com.sendbird.android.BaseMessage;
 import com.sendbird.android.FileMessage;
@@ -185,7 +187,7 @@ class OpenChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     break;
             }
         } catch (Exception e) {
-//            FirebaseCrash.report(e);
+            FirebaseCrash.report(e);
         }
     }
 
@@ -400,7 +402,7 @@ class OpenChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
 
             } catch (Exception e) {
-//                FirebaseCrash.report(e);
+                FirebaseCrash.report(e);
             }
         }
     }

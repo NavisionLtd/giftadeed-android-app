@@ -58,12 +58,13 @@
             android:visibility="gone" />
 
         <TextView
+            android:id="@+id/sos_option_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:text="@string/call_police"
-            android:textColor="@color/black"
+            android:textColor="@color/red"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -95,12 +96,13 @@
             android:visibility="gone" />
 
         <TextView
+            android:id="@+id/sos_option_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:text="@string/alert_contact"
-            android:textColor="@color/black"
+            android:textColor="@color/red"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -112,7 +114,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:text="@string/no_emergency_contacts"
-        android:textColor="@color/red"
+        android:textColor="@color/grey"
         android:textSize="16sp"
         android:visibility="gone" />
 
@@ -154,12 +156,13 @@
             android:visibility="gone" />
 
         <TextView
+            android:id="@+id/sos_option_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:text="@string/share_location"
-            android:textColor="@color/black"
+            android:textColor="@color/red"
             android:textSize="16sp" />
 
     </LinearLayout>

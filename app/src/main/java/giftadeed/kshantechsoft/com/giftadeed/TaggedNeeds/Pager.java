@@ -44,11 +44,9 @@ public class Pager extends FragmentPagerAdapter {
     ArrayList<String> tag_title = new ArrayList<>();
     String strUser_ID;
     Context context;
-    List<RowData> item;
 
     public Pager(FragmentManager fm, int tabcount) {
         super(fm);
-        this.item = item;
         this.tabcount = tabcount;
     }
 

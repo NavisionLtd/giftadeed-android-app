@@ -81,7 +81,7 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.5"
                 android:background="@color/colorAccent"
                 android:text="@string/dialog_ok"
                 android:textAllCaps="false"
@@ -93,12 +93,13 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
-                android:layout_weight="0.3"
+                android:layout_weight="0.5"
                 android:background="@color/colorAccent"
                 android:text="@string/dialog_cancel"
+                android:visibility="gone"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

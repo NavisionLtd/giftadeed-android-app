@@ -405,7 +405,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 break;
             case 11:
 //                fragmgr.beginTransaction().replace(R.id.content_frame, CreateResourceFragment.newInstance(i)).addToBackStack(null).commit();
-                fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance(i)).addToBackStack(null).commit();
+                fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance()).addToBackStack(null).commit();
                 break;
             case 12:
                 Intent intent = new Intent(TaggedneedsActivity.this, SOSEmergencyNumbers.class);

@@ -42,6 +42,9 @@ public class SessionManager {
     public static final String GROUP_DESC = "Group_desc";
     public static final String GROUP_IMAGE = "Group_image";
     public static final String KEY_GROUPNAME = "GROUPNAME";
+    public static final String SOS_OPTION_1_CLICKED = "no"; // call
+    public static final String SOS_OPTION_2_CLICKED = "no"; // sms
+    public static final String SOS_OPTION_3_CLICKED = "no"; // share location
 
     public SessionManager(Context context) {
         this.context = context;
@@ -125,6 +128,36 @@ public class SessionManager {
     public String getLanguage() {
         String langugae = pref.getString(KEY_SELECTED_LANGUAGE, "en");
         return langugae;
+    }
+
+    public void store_sos_option1_clicked(String clicked) {
+        editor.putString(SOS_OPTION_1_CLICKED, clicked);
+        editor.commit();
+    }
+
+    public String getSosOption1Clicked() {
+        String clicked = pref.getString(SOS_OPTION_1_CLICKED, "no");
+        return clicked;
+    }
+
+    public void store_sos_option2_clicked(String clicked) {
+        editor.putString(SOS_OPTION_2_CLICKED, clicked);
+        editor.commit();
+    }
+
+    public String getSosOption2Clicked() {
+        String clicked = pref.getString(SOS_OPTION_2_CLICKED, "no");
+        return clicked;
+    }
+
+    public void store_sos_option3_clicked(String clicked) {
+        editor.putString(SOS_OPTION_3_CLICKED, clicked);
+        editor.commit();
+    }
+
+    public String getSosOption3Clicked() {
+        String clicked = pref.getString(SOS_OPTION_3_CLICKED, "no");
+        return clicked;
     }
 
     //-----------------------------Getting current drawer status

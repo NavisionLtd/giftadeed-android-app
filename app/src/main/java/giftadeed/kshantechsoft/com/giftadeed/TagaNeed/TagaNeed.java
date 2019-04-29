@@ -238,7 +238,6 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
         LONGITUDE = new GPSTracker(myContext).longitude;
         str_geopoint = LATITUDE + "," + LONGITUDE;
         strUser_ID = user.get(sessionManager.USER_ID);
-        getUserGroups(strUser_ID);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -304,14 +303,17 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                     Log.d("editimgpath", strImagenamereturned);
                 }
             } else if (fragmentpage.equals("map_permanent_dialog")) {
+                getUserGroups(strUser_ID);
                 permanentLayout.setVisibility(View.GONE);
                 addressLayout.setVisibility(View.GONE);
             } else {
+                getUserGroups(strUser_ID);
                 lat = String.valueOf(new GPSTracker(myContext).latitude);
                 longi = String.valueOf(new GPSTracker(myContext).longitude);
                 getAddress(lat, longi);
             }
         } else {
+            getUserGroups(strUser_ID);
             lat = String.valueOf(new GPSTracker(myContext).latitude);
             longi = String.valueOf(new GPSTracker(myContext).longitude);
             getAddress(lat, longi);
@@ -664,6 +666,16 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                         if (callingFrom.equals("screenload")) {
                             if (groupArrayList.size() > 0) {
                                 selectGroupLayout.setVisibility(View.VISIBLE);
+                                if (groupArrayList.size() == 1) {
+                                    edselectGroup.setText(groupArrayList.get(0).getGroup_name());
+                                    selectedFromGroupId = groupArrayList.get(0).getGroup_id();
+                                    selectedFromGroupName = groupArrayList.get(0).getGroup_name();
+                                    edselectGroup.setEnabled(false);
+                                    edselectGroup.clearFocus();
+                                } else {
+                                    edselectGroup.setEnabled(true);
+                                    edselectGroup.clearFocus();
+                                }
                             } else {
                                 selectGroupLayout.setVisibility(View.GONE);
                             }
@@ -1136,7 +1148,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
             tvMsg.setText("Select preferences for number of people");
             subcategorylist.setVisibility(View.VISIBLE);
             ok.setVisibility(View.VISIBLE);
-            cancel.setVisibility(View.VISIBLE);
+            cancel.setVisibility(View.GONE);
             subcategorylist.setAdapter(new SubCatAdapter(subcategories, getContext()));
         } else {
             tvMsg.setText("No subtypes found");
@@ -1180,9 +1192,9 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                 Button ok = (Button) dialog.findViewById(R.id.suggest_ok);
                 Button cancel = (Button) dialog.findViewById(R.id.suggest_cancel);
                 if (categories.size() > 0) {
-//                    ArrayAdapter<Needtype> adapter = new ArrayAdapter<Needtype>(getContext(), android.R.layout.simple_spinner_item, categories);
-//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerType.setAdapter(new CategoryAdapter(categories, getContext()));
+                    ArrayAdapter<Needtype> adapter = new ArrayAdapter<Needtype>(getContext(), android.R.layout.simple_spinner_item, categories);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerType.setAdapter(adapter);
                     for (int i = 0; i < categories.size(); i++) {
                         if (strNeedmapping_ID.equals(categories.get(i).getNeedMappingID())) {
                             spinnerPosition = i;

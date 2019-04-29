@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Validation {
     public static String FILTER_CATEGORY = "All";
-    public static String FILTER_GROUPS = "All";
+    public static String FILTER_GROUP_IDS = "All";
     public static String FILTER_GROUP_NAMES = "All";
     //    public static float inital_radius=10.0f;
     public static float inital_radius = 10000.0f;

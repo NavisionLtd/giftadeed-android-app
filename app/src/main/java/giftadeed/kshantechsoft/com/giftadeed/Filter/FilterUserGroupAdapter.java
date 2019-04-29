@@ -14,7 +14,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 
-import static giftadeed.kshantechsoft.com.giftadeed.Filter.FilterFrag.selectedFilterUserGroups;
+import static giftadeed.kshantechsoft.com.giftadeed.Filter.FilterFrag.selectedFilterUserGroupIds;
 import static giftadeed.kshantechsoft.com.giftadeed.Filter.FilterFrag.selectedFilterUserGrpNames;
 
 public class FilterUserGroupAdapter extends BaseAdapter {
@@ -50,17 +50,17 @@ public class FilterUserGroupAdapter extends BaseAdapter {
         chk.setText(list.get(i).getGroup_name());
         sessionManager = new SessionManager(context);
 
-        if (selectedFilterUserGroups.contains(list.get(i).getGroup_id())) {
+        if (selectedFilterUserGroupIds.contains(list.get(i).getGroup_id())) {
             chk.setChecked(true);
         }
         chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    selectedFilterUserGroups.add(list.get(i).getGroup_id());
+                    selectedFilterUserGroupIds.add(list.get(i).getGroup_id());
                     selectedFilterUserGrpNames.add(list.get(i).getGroup_name());
                 } else {
-                    selectedFilterUserGroups.remove(list.get(i).getGroup_id());
+                    selectedFilterUserGroupIds.remove(list.get(i).getGroup_id());
                     selectedFilterUserGrpNames.remove(list.get(i).getGroup_name());
                 }
             }

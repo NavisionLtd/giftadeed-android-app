@@ -27,8 +27,8 @@
         android:id="@+id/txt_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:gravity="center"
+        android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="15sp"
         android:visibility="visible" />
@@ -39,29 +39,30 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="10dp"
-        android:visibility="gone"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/sub_categorylist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:visibility="gone"
         android:padding="10dp"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/sub_category_ok"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.5"
             android:background="@color/colorAccent"
             android:text="@string/dialog_ok"
             android:textAllCaps="false"
@@ -71,10 +72,11 @@
         <Button
             android:id="@+id/suggest_sub_type"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:layout_margin="5dp"
-            android:layout_weight="0.4"
             android:background="@color/colorAccent"
+            android:padding="5dp"
             android:text="@string/suggest_sub_type"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -83,14 +85,14 @@
         <Button
             android:id="@+id/sub_category_cancel"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.5"
             android:background="@color/colorAccent"
             android:text="@string/dialog_cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="16sp"
+            android:visibility="gone" />
     </LinearLayout>
-
 </LinearLayout>

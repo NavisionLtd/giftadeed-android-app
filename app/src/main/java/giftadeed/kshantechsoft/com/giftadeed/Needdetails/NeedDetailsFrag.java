@@ -96,12 +96,13 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     FragmentActivity myContext;
     View rootview;
     ListView listviewcomments;
-    LinearLayout locationTypeLayout, subTypeLayout;
+    LinearLayout locationTypeLayout, subTypeLayout, fromGroupLayout, lastEndorseLayout;
     CircleImageView imgcharacter;
     TextView details_locationicon;
+    String strImagepath = "";
     ImageView img, imgback, img_endorse, img_endorse_over;
-    TextView txtheading, txtsubheading, txtaddress, txtdistance, txtDate, txt_name, txt_des, txtneeddetailsendorse,
-            txtneeddetailsview, txtcontaineravilable, txtcontaineravilableyes_no, dialogtext, tvLocationType, txtPermanent, txtSubtypes;
+    TextView txtheading, txtsubheading, txtaddress, txtdistance, txtDate, txt_name, txt_des, txtneeddetailsendorse, txtFromGroupName,
+            txtLastEndorse, txtneeddetailsview, txtcontaineravilable, txtcontaineravilableyes_no, dialogtext, tvLocationType, txtPermanent, txtSubtypes;
     WebView detailsofgieft;
     Button btnCamera, btnGallery, btnPost, dialogbtnconfirm, dialogbtncancel, btnOk;
     private AlertDialog alertDialogForgot, alertDialogreturn;
@@ -109,9 +110,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     EditText edComment;
     ScrollView detailspagemainscroll;
     int str_isreported, is_endorse, dist;
-    String str_address, str_tagid, str_geopoint, str_taggedPhotoPath, str_description, str_characterPath, str_fname, str_lname,
+    String str_address, str_tagid, str_geopoint, str_taggedPhotoPath, str_description, str_catType, str_iconPath, str_characterPath, str_fname, str_lname,
             str_privacy, str_userID, str_needName, str_totalTaggedCreditPoints, str_totalFulfilledCreditPoints, str_title, str_date,
-            str_subtypes, str_permanent, str_distance, tab, str_container, str_Views, str_endorse, str_validity, str_mappingId, strdeedowner_id;
+            str_subtypes, str_permanent, str_distance, tab, str_container, str_Views, str_endorse, str_validity, str_mappingId, strdeedowner_id, strGroup_name,
+            strLastEndorseTime;
     static FragmentManager fragmgr;
     LinearLayout layout_editdeed, layout_endorsedeed, layout_viewdeed, detailspage_containerlayout, comments_layout;
     SessionManager sessionManager;
@@ -369,6 +371,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeedDetailsInterface service = retrofit.create(DeedDetailsInterface.class);
         Call<DeedDetailsModel> call = service.fetchData(user_id, str_tagid);
+        Log.d("input_deeddetails", "" + user_id + " : " + str_tagid);
         call.enqueue(new Callback<DeedDetailsModel>() {
             @Override
             public void onResponse(Response<DeedDetailsModel> response, Retrofit retrofit) {
@@ -412,6 +415,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         str_privacy = deedDetailsModel.getDeedDetails().get(0).getPrivacy();
                         str_permanent = deedDetailsModel.getDeedDetails().get(0).getPermanent();
                         str_subtypes = deedDetailsModel.getDeedDetails().get(0).getSubtypes();
+                        str_catType = deedDetailsModel.getDeedDetails().get(0).getCatType();
                         str_container = deedDetailsModel.getDeedDetails().get(0).getContainer();
                         str_Views = deedDetailsModel.getDeedDetails().get(0).getViews();
                         str_endorse = deedDetailsModel.getDeedDetails().get(0).getEndorse();
@@ -422,12 +426,15 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         str_geopoint = deedDetailsModel.getDeedDetails().get(0).getGeoPts();
                         str_taggedPhotoPath = deedDetailsModel.getDeedDetails().get(0).getImgUrl();
                         str_characterPath = deedDetailsModel.getDeedDetails().get(0).getCharacterPath();
+                        str_iconPath = deedDetailsModel.getDeedDetails().get(0).getIconPath();
                         str_needName = deedDetailsModel.getDeedDetails().get(0).getTagName();
                         str_title = deedDetailsModel.getDeedDetails().get(0).getTagName();
                         str_date = deedDetailsModel.getDeedDetails().get(0).getDate();
                         str_mappingId = deedDetailsModel.getDeedDetails().get(0).getNeedMapId();
                         str_isreported = deedDetailsModel.getDeedDetails().get(0).getIsReported();
                         strdeedowner_id = deedDetailsModel.getDeedDetails().get(0).getOwnerId();
+                        strGroup_name = deedDetailsModel.getDeedDetails().get(0).getGroupName();
+                        strLastEndorseTime = deedDetailsModel.getDeedDetails().get(0).getLastEndorseTime();
                         Log.d("imgpath", str_taggedPhotoPath);
                         double current_latitude = new GPSTracker(myContext).getLatitude();
                         double current_longitude = new GPSTracker(myContext).getLongitude();
@@ -483,10 +490,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 for (int i = 0; i < elephantList.size(); i++) {
                                     edited.append(elephantList.get(i).replaceAll(":", " for ").trim() + "\n");
                                 }
-                                txtSubtypes.setText(str_needName + getResources().getString(R.string.pref_1) + "\n" + edited);
+                                txtSubtypes.setText(str_needName + " " + getResources().getString(R.string.pref_1) + "\n" + edited);
                             } else {
                                 String str = str_subtypes.replaceAll(":", " for ");
-                                txtSubtypes.setText(str_needName + getResources().getString(R.string.pref_1) + "\n" + str);
+                                txtSubtypes.setText(str_needName + " " + getResources().getString(R.string.pref_1) + "\n" + str);
                             }
                         } else {
                             subTypeLayout.setVisibility(View.GONE);
@@ -505,6 +512,20 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             txt_name.setText(str_fname + " " + str_lname);
                         } else {
                             txt_name.setText("Anonymous");
+                        }
+
+                        if (strGroup_name != null) {
+                            fromGroupLayout.setVisibility(View.GONE);
+                        } else {
+                            fromGroupLayout.setVisibility(View.VISIBLE);
+                            txtFromGroupName.setText(strGroup_name);
+                        }
+
+                        if (strLastEndorseTime != null) {
+                            lastEndorseLayout.setVisibility(View.VISIBLE);
+                            txtLastEndorse.setText(strLastEndorseTime);
+                        } else {
+                            lastEndorseLayout.setVisibility(View.GONE);
                         }
 
                         try {
@@ -529,8 +550,12 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
                         try {
                             mDialog.dismiss();
-                            String strImagepath = WebServices.MAIN_SUB_URL + str_characterPath;
-                            System.out.print("strImagepath" + strImagepath);
+                            if (str_catType.equals("C")) {
+                                strImagepath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + str_iconPath;
+                            } else {
+                                strImagepath = WebServices.MAIN_SUB_URL + str_characterPath;
+                            }
+                            Log.d("strImagepath", strImagepath);
                             Picasso.with(myContext).load(strImagepath).into(imgcharacter);
                         } catch (Exception e) {
                             StringWriter writer = new StringWriter();
@@ -1097,6 +1122,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
             txtdistance = (TextView) rootview.findViewById(R.id.txtneeddetailsdistance);
             txtSubtypes = (TextView) rootview.findViewById(R.id.tv_sub_types);
             subTypeLayout = (LinearLayout) rootview.findViewById(R.id.sub_type_layout);
+            fromGroupLayout = (LinearLayout) rootview.findViewById(R.id.tagged_by_groupname_layout);
+            lastEndorseLayout = (LinearLayout) rootview.findViewById(R.id.last_endorse_layout);
+            txtLastEndorse = (TextView) rootview.findViewById(R.id.tv_last_endorse_time);
+            txtFromGroupName = (TextView) rootview.findViewById(R.id.txt_from_group_name);
             txtDate = (TextView) rootview.findViewById(R.id.txtneeddetailsdate);
             img = (ImageView) rootview.findViewById(R.id.imgview);
             imgback = (ImageView) rootview.findViewById(R.id.backbutton);

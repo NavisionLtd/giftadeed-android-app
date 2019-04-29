@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.crash.FirebaseCrash;
 import com.sendbird.android.OpenChannel;
 import com.sendbird.android.OpenChannelListQuery;
 import com.sendbird.android.SendBirdException;
@@ -210,7 +212,7 @@ public class OpenChannelListFragment extends Fragment {
 
             });
         } catch (Exception e) {
-//            FirebaseCrash.report(e);
+            FirebaseCrash.report(e);
         }
     }
 }

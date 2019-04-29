@@ -24,6 +24,9 @@ public class DeedDetail {
     @SerializedName("desc")
     @Expose
     private String desc;
+    @SerializedName("cat_type")
+    @Expose
+    private String catType;
     @SerializedName("address")
     @Expose
     private String address;
@@ -42,6 +45,9 @@ public class DeedDetail {
     @SerializedName("characterPath")
     @Expose
     private String characterPath;
+    @SerializedName("iconPath")
+    @Expose
+    private String iconPath;
     @SerializedName("date")
     @Expose
     private String date;
@@ -66,9 +72,14 @@ public class DeedDetail {
     @SerializedName("is_reported")
     @Expose
     private Integer isReported;
+    @SerializedName("group_name")
+    @Expose
+    private String groupName;
+    @SerializedName("last_endorse_time")
+    @Expose
+    private String lastEndorseTime;
     @SerializedName("comments")
     @Expose
-
     private List<Comment> comments = null;
     @SerializedName("endorse_dist")
     @Expose
@@ -247,5 +258,37 @@ public class DeedDetail {
 
     public void setSubtypes(String subtypes) {
         this.subtypes = subtypes;
+    }
+
+    public String getCatType() {
+        return catType;
+    }
+
+    public void setCatType(String catType) {
+        this.catType = catType;
+    }
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getLastEndorseTime() {
+        return lastEndorseTime;
+    }
+
+    public void setLastEndorseTime(String lastEndorseTime) {
+        this.lastEndorseTime = lastEndorseTime;
     }
 }

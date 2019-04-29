@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -27,11 +26,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -75,10 +69,10 @@ import static giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed.setDynamic
 //     Used to filter the tags according to conditions          //
 /////////////////////////////////////////////////////////////////
 public class FilterFrag extends Fragment {
-    public static ArrayList<String> selectedFilterUserGroups = new ArrayList<String>();
+    public static ArrayList<String> selectedFilterUserGroupIds = new ArrayList<String>();
     public static ArrayList<String> selectedFilterUserGrpNames = new ArrayList<String>();
-    String formattedUserOrgs = "", formattedUserGroupNames = ""; // for removing brackets [ and ]
-    String checkedOtherOrg = "N";
+    private String formattedUserGroupIds = "", formattedUserGroupNames = ""; // for removing brackets [ ] and white spaces
+    String checkedAllGroups = "N";
     FragmentActivity myContext;
     View rootview;
     private ArrayList<GroupPOJO> groupArrayList;
@@ -88,7 +82,7 @@ public class FilterFrag extends Fragment {
     double radius;
     DiscreteSeekBar distance;
     EditText edselectcategory, edselectAudiance;
-    TextView txtapplyfilter, txtradius, txtselectcategory, txtdist;
+    TextView txtapplyfilter, txtradius, txtdist;
     Button btnapplyfilters;
     static FragmentManager fragmgr;
     SessionManager sessionManager;
@@ -160,12 +154,12 @@ public class FilterFrag extends Fragment {
                 strNeed_Name = edselectcategory.getText().toString();
                 Validation.FILTER_CATEGORY = strNeed_Name;
 
-                formattedUserOrgs = selectedFilterUserGroups.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
+                formattedUserGroupIds = selectedFilterUserGroupIds.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                 formattedUserGroupNames = selectedFilterUserGrpNames.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
-                if (checkedOtherOrg.equals("Y")) {
-                    Validation.FILTER_GROUPS = "All";
+                if (checkedAllGroups.equals("Y")) {
+                    Validation.FILTER_GROUP_IDS = "All";
                 } else {
-                    Validation.FILTER_GROUPS = formattedUserOrgs.trim();
+                    Validation.FILTER_GROUP_IDS = formattedUserGroupIds.trim();
                     Validation.FILTER_GROUP_NAMES = formattedUserGroupNames.trim();
                 }
                 fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).addToBackStack(null).commit();
@@ -264,7 +258,7 @@ public class FilterFrag extends Fragment {
     }
 
     public void init() {
-        selectedFilterUserGroups = new ArrayList<String>();
+        selectedFilterUserGroupIds = new ArrayList<String>();
         selectedFilterUserGrpNames = new ArrayList<String>();
         distance = (DiscreteSeekBar) rootview.findViewById(R.id.discreteProgressbar);
         edselectcategory = (EditText) rootview.findViewById(R.id.edfiltercategory);
@@ -275,9 +269,11 @@ public class FilterFrag extends Fragment {
         txtdist = (TextView) rootview.findViewById(R.id.txtdistance);
 
         btnapplyfilters.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
+        txtdist.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         txtradius.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         txtapplyfilter.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         edselectcategory.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
+        edselectAudiance.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
 //        distance.setMin((int) Validation.inital_radius);
     }
 
@@ -421,11 +417,12 @@ public class FilterFrag extends Fragment {
                         if (callingFrom.equals("screenload")) {
                             if (groupArrayList.size() > 0) {
                                 edselectAudiance.setVisibility(View.VISIBLE);
-                                if (Validation.FILTER_GROUPS.equals("All")) {
-                                    edselectAudiance.setText(Validation.FILTER_GROUPS);
+                                if (Validation.FILTER_GROUP_IDS.equals("All")) {
+//                                    edselectAudiance.setText(Validation.FILTER_GROUP_IDS);
+                                    edselectAudiance.setText("All");
                                 } else {
                                     edselectAudiance.setText(Validation.FILTER_GROUP_NAMES);
-                                    Log.d("selected_filter_grp", "" + Validation.FILTER_GROUPS);
+                                    Log.d("selected_filter_grpids", "" + Validation.FILTER_GROUP_IDS);
                                 }
                             } else {
                                 edselectAudiance.setVisibility(View.GONE);
@@ -438,7 +435,7 @@ public class FilterFrag extends Fragment {
                             dialog.setContentView(R.layout.user_orgs_dialog);
                             TextView txtHead = (TextView) dialog.findViewById(R.id.txt_head);
                             ListView userorglist = (ListView) dialog.findViewById(R.id.user_orgs_list);
-                            final CheckBox chkOtherOrg = (CheckBox) dialog.findViewById(R.id.chk_all_other_orgs);
+                            final CheckBox chkAllGrp = (CheckBox) dialog.findViewById(R.id.chk_all_other_orgs);
                             final CheckBox chkAllIndi = (CheckBox) dialog.findViewById(R.id.chk_all_individuals);
                             chkAllIndi.setVisibility(View.GONE);
                             Button ok = (Button) dialog.findViewById(R.id.user_org_ok);
@@ -453,17 +450,17 @@ public class FilterFrag extends Fragment {
                                 userorglist.setVisibility(View.GONE);
                             }
 
-                            if (checkedOtherOrg.equals("Y")) {
-                                chkOtherOrg.setChecked(true);
+                            if (checkedAllGroups.equals("Y")) {
+                                chkAllGrp.setChecked(true);
                             }
 
-                            chkOtherOrg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            chkAllGrp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                 @Override
                                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                    if (chkOtherOrg.isChecked()) {
-                                        checkedOtherOrg = "Y";
+                                    if (chkAllGrp.isChecked()) {
+                                        checkedAllGroups = "Y";
                                     } else {
-                                        checkedOtherOrg = "N";
+                                        checkedAllGroups = "N";
                                     }
                                 }
                             });
@@ -477,7 +474,7 @@ public class FilterFrag extends Fragment {
                                         if (selectedFilterUserGrpNames.get(0).length() > 15) {
                                             String txt = selectedFilterUserGrpNames.get(0).substring(0, 14) + "... ";
                                             int count = selectedFilterUserGrpNames.size();
-                                            if (checkedOtherOrg.equals("Y")) {
+                                            if (checkedAllGroups.equals("Y")) {
                                                 count++;
                                             }
                                             if (count > 1) {
@@ -488,7 +485,7 @@ public class FilterFrag extends Fragment {
                                         } else {
                                             String txt = selectedFilterUserGrpNames.get(0);
                                             int count = selectedFilterUserGrpNames.size();
-                                            if (checkedOtherOrg.equals("Y")) {
+                                            if (checkedAllGroups.equals("Y")) {
                                                 count++;
                                             }
                                             if (count > 1) {
@@ -498,8 +495,8 @@ public class FilterFrag extends Fragment {
                                             }
                                         }
                                     } else {
-                                        if (checkedOtherOrg.equals("Y")) {
-                                            edselectAudiance.setText(chkOtherOrg.getText());
+                                        if (checkedAllGroups.equals("Y")) {
+                                            edselectAudiance.setText(chkAllGrp.getText());
                                         } else {
                                             edselectAudiance.setText("");
                                             edselectAudiance.clearFocus();

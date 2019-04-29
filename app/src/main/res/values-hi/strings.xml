@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 28 March</string>
+    <string name="app_name">GAD P2 Test 26 April</string>
 
     <!--Login page-->
     <string name="login_terms">नियम और शर्तें</string>
@@ -49,9 +49,9 @@
     <string name="drawer_logout">लॉग आउट</string>
 
     <!--Grid menu and details-->
-    <string name="list_of_your">आपके द्वारा टैग की गई सूची</string>
     <string name="noti_history">अधिसूचना इतिहास</string>
     <string name="list_of_myfulfilled_tags">मेरे पूर्ण टैग की सूची</string>
+    <string name="list_of_your">आपके द्वारा टैग की गई सूची</string>
     <string name="list_of_taggers">अपने शहर के सर्वोच्च 10 टैगर्स की सूची</string>
     <string name="list_of_fulfillers">अपने शहर में सर्वोच्च 10 टैग पूरा करने वालों की सूची</string>
     <string name="dash1">आपने पिछला अच्छा काम किया है</string>
@@ -162,6 +162,9 @@
     <string name="female">महिला</string>
 
     <!--Tag a deed-->
+    <string name="main_cat">मुख्य कैटेगरी</string>
+    <string name="group_cat">समूह श्रेणियाँ</string>
+    <string name="edit_deed">डीड संपादित करें</string>
     <string name="select_category">श्रेणी का चयन करें</string>
     <string name="select_pref">प्राथमिकताएँ चुनें</string>
     <string name="select_location">स्थान चुनें</string>
@@ -183,6 +186,8 @@
     <string name="people_looking_2"> लोग आपकी मदद के लिए देख रहे हैं </string>
     <string name="pref_1"> व्यक्ति के लिए प्राथमिकताएं : </string>
     <string name="deed_location">डीड लोकेशन : </string>
+    <string name="tagged_by_group">समूह द्वारा टैग किया गया : </string>
+    <string name="last_endorse_time">अंतिम समर्थन : </string>
     <string name="deed_details">डीड विवरण : </string>
     <string name="get_directions">दिशा प्राप्त करें</string>
     <string name="see_more">और देखें</string>
@@ -239,6 +244,7 @@
     <string name="remove_member_dialog">इस सदस्य को समूह से निकालें ?</string>
 
     <!--Resource-->
+    <string name="resource_error">संसाधन बनाने के लिए आपके पास समूह नहीं हैं</string>
     <string name="res_success">संसाधन सफलतापूर्वक बनाया गया</string>
     <string name="action_create_resource">संसाधन बनाएँ</string>
     <string name="edit_resource">संसाधन संपादित करें</string>
@@ -247,6 +253,9 @@
     <string name="res_details">संसाधन विवरण</string>
     <string name="select_res_group">अपने समूह का चयन करें</string>
     <string name="res_cat">संसाधन श्रेणी</string>
+    <string name="category">वर्ग : </string>
+    <string name="created_by">द्वारा बनाई गई : </string>
+    <string name="created_on">को निर्मित : </string>
     <string name="res_subcat">संसाधन उप-श्रेणी</string>
     <string name="res_name">संसाधन का नाम *</string>
     <string name="res_desc">संसाधन विवरण</string>
@@ -274,7 +283,7 @@
     <string name="emergency">EMERGENCY</string>
     <string name="call_police">पुलिस कंट्रोल रूम को फोन करें</string>
     <string name="alert_contact">अपने आपातकालीन संपर्क को सचेत करें</string>
-    <string name="no_emergency_contacts">अलर्ट भेजने के लिए कोई आपातकालीन संपर्क नहीं हें</string>
+    <string name="no_emergency_contacts">आपने अलर्ट भेजने के लिए आपातकालीन संपर्क सेट नहीं किए हैं</string>
     <string name="set">सेट</string>
     <string name="share_location">अपना स्थान साझा करें</string>
     <string name="close">बंद करे</string>
@@ -318,6 +327,7 @@
     <string name="todays_deeds">आज का टैग किया हुआ कर्म</string>
     <string name="todays_fulfilled_deeds">आज के पूर्ण कर्म</string>
     <string name="filter">फ़िल्टर</string>
+    <string name="filter_group">समूह द्वारा फ़िल्टर करें</string>
     <string name="start_writing">यहां लिखना शुरू करें... </string>
     <string name="apply_filters">फ़िल्टर लागू करें</string>
     <string name="radius">त्रिज्या</string>
@@ -582,11 +592,11 @@
 
     <P>Gift-a-Deed will have many different channels,</P>
     <p>1. people to people;</p>
-    <p>2. people to groups/organisations/charities;</p>
-    <p>3. groups/organisations/charities to people; &</p>
-    <p>4. groups/organisations/charities to groups/organisations/charities. </p>
+    <p>2. people to groups / organisations / charities;</p>
+    <p>3. groups / organisations / charities to people; &</p>
+    <p>4. groups / organisations / charities to groups / organisations / charities. </p>
     <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
-    <p>Once people and groups/organisations/charities come on board/register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
+    <p>Once people and groups / organisations / charities come on board / register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
     </body></html>
     ]]></string>
 
@@ -643,8 +653,8 @@
             </style>
 </head>
 
-    <P>As far as compliance and test for food/health/safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
-    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving /helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App ofc uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
+    <P>As far as compliance and test for food / health / safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
+    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving / helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App of course uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
     </body></html>
     ]]></string>
 
@@ -679,5 +689,4 @@
     <string name="message_failed">असफल हुआ</string>
     <string name="invite">आमंत्रण</string>
     <string name="welcomechatmessage">GAD समूह चैट में आपका स्वागत है!</string>
-    <string name="errorMsg">ऐसा लगता है कि आपने इस सुविधा के लिए आवश्यक अनुमतियां बंद कर दी हैं। फोन सेटिंग के तहत इसे सक्षम किया जा सकता है Phone Settings > Apps > GiftADeed > Permissions</string>
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class NeedListAdapter extends RecyclerView.Adapter<NeedListAdapter.ViewHo
     Context context;
     static FragmentManager fragmgr;
     String tab = "";
+    String strCharpath = "";
 
     public NeedListAdapter(List<RowData> item, Context context, String tab) {
         this.item = item;
@@ -71,7 +73,13 @@ public class NeedListAdapter extends RecyclerView.Adapter<NeedListAdapter.ViewHo
             String strdate = item.get(position).getDate();
             // strdate=strdate.substring(0,10);
             String strImagepath = WebServices.MAIN_SUB_URL + item.get(position).getImagepath();
-            String strCharpath = WebServices.MAIN_SUB_URL + item.get(position).getCharacterPath();
+            if (item.get(position).getCatType().equals("C")) {
+                strCharpath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + item.get(position).getGetIconPath();
+                Log.d("tab2_C_character_path", strCharpath);
+            } else {
+                strCharpath = WebServices.MAIN_SUB_URL + item.get(position).getCharacterPath();
+            }
+            Log.d("tab_2_character_path", strCharpath);
             holder.title.setText(item.get(position).getTitle());
             holder.endorse.setText(item.get(position).getEndorse());
             holder.views.setText(item.get(position).getViews());
