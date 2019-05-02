@@ -739,62 +739,63 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     String str_geo_point = str_geopoint;
                     //String str_geo_point = str_geopoint_new;
                     String[] words = str_geo_point.split(",");
-                    Location tagLocation2 = new Location("tag Location");
-                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                    if (words.length > 1) {
+                        Location tagLocation2 = new Location("tag Location");
+                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
 
 //--------------------------distance in km----------------------------------------------------------
-                    float dist1 = myLocation.distanceTo(tagLocation2) / 1000;
+                        float dist1 = myLocation.distanceTo(tagLocation2) / 1000;
 //---------------------------distance in feet-------------------------------------------------------
-                    float ft_distance = dist1 * 3280.8f;
+                        float ft_distance = dist1 * 3280.8f;
 
 
-                    if (ft_distance < dist) {
+                        if (ft_distance < dist) {
 
-                        mDialog.setConfiguration(new ArcConfiguration(getContext()));
-                        mDialog.show();
-                        mDialog.setCancelable(false);
-                        isDeedDeleted();
-
-
-                    } else {
-                        //Toast.makeText(myContext, "You are not in the 10 feet area of needy persons", Toast.LENGTH_SHORT).show();
-                        //fragmgr.beginTransaction().replace(R.id.content_frame, GiftANeedFrag.newInstance()).commit();
-
-                        final AlertDialog.Builder alertdialog = new AlertDialog.Builder(getContext());
-                        LayoutInflater li = LayoutInflater.from(getContext());
-                        View confirmDialog = li.inflate(R.layout.signup_dialog, null);
-                        Button btnOk = (Button) confirmDialog.findViewById(R.id.btndialogsignupok);
-                        TextView txtheadingofdialog = (TextView) confirmDialog.findViewById(R.id.signupdialog_heading);
-                        TextView txtofdialog = (TextView) confirmDialog.findViewById(R.id.signupdialog_text);
-                        // txtheadingofdialog.setText("Sign up successful!");
-                        txtheadingofdialog.setVisibility(View.GONE);
-                        txtofdialog.setText("You need to be within " + dist + " feet area of the needy person");
-                        //-------------Adding dialog box to the view of alert dialog
-                        alertdialog.setView(confirmDialog);
-                        alertdialog.setCancelable(false);
-
-                        //----------------Creating an alert dialog
-                        alertDialogreturn = alertdialog.create();
-
-                        alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
-                        alertDialogForgot.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        //----------------Displaying the alert dialog
-                        alertDialogreturn.show();
+                            mDialog.setConfiguration(new ArcConfiguration(getContext()));
+                            mDialog.show();
+                            mDialog.setCancelable(false);
+                            isDeedDeleted();
 
 
-                        btnOk.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialogreturn.dismiss();
+                        } else {
+                            //Toast.makeText(myContext, "You are not in the 10 feet area of needy persons", Toast.LENGTH_SHORT).show();
+                            //fragmgr.beginTransaction().replace(R.id.content_frame, GiftANeedFrag.newInstance()).commit();
+
+                            final AlertDialog.Builder alertdialog = new AlertDialog.Builder(getContext());
+                            LayoutInflater li = LayoutInflater.from(getContext());
+                            View confirmDialog = li.inflate(R.layout.signup_dialog, null);
+                            Button btnOk = (Button) confirmDialog.findViewById(R.id.btndialogsignupok);
+                            TextView txtheadingofdialog = (TextView) confirmDialog.findViewById(R.id.signupdialog_heading);
+                            TextView txtofdialog = (TextView) confirmDialog.findViewById(R.id.signupdialog_text);
+                            // txtheadingofdialog.setText("Sign up successful!");
+                            txtheadingofdialog.setVisibility(View.GONE);
+                            txtofdialog.setText("You need to be within " + dist + " feet area of the needy person");
+                            //-------------Adding dialog box to the view of alert dialog
+                            alertdialog.setView(confirmDialog);
+                            alertdialog.setCancelable(false);
+
+                            //----------------Creating an alert dialog
+                            alertDialogreturn = alertdialog.create();
+
+                            alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+                            alertDialogForgot.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            //----------------Displaying the alert dialog
+                            alertDialogreturn.show();
+
+
+                            btnOk.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alertDialogreturn.dismiss();
                                /* Intent loginintent = new Intent(SignUp.this, SendBirdLoginActivity.class);
                                 loginintent.putExtra("message", message);
                                 startActivity(loginintent);*/
-                            }
-                        });
+                                }
+                            });
 
+                        }
                     }
-
 
                     //checkimage();
 
@@ -864,7 +865,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         String success_status = model.getCheckstatus().get(0).getStatus();
                         if (success_status.equals("1")) {
 
-                            String strImagepath = WebServices.MAIN_SUB_URL + str_characterPath;
+                            String strImagepath = str_characterPath;
                     /*Log.d("msg", model.getCheckstatus().get(0).getMsg().toString());
                     Log.d("points", model.getCheckstatus().get(0).getCreditsEarned().toString());
                     Log.d("total points", model.getCheckstatus().get(0).getTotalCredits().toString());

@@ -248,38 +248,39 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                             for (int j = 0; j < size; j++) {
                                 String str_geo_point = taggedlists.get(j).getGeopoint();
                                 String[] words = str_geo_point.split(",");
-                                Location tagLocation2 = new Location("tag Location");
-                                tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                float dist1 = myLocation.distanceTo(tagLocation2);
-                                if (dist1 < radius_set) {
-                                    RowData rowData = new RowData();
-                                    rowData.setTitle(taggedlists.get(j).getNeedName());
-                                    rowData.setAddress(taggedlists.get(j).getAddress());
-                                    rowData.setDate(taggedlists.get(j).getTaggedDatetime());
-                                    rowData.setImagepath(taggedlists.get(j).getTaggedPhotoPath());
-                                    rowData.setDistance(dist1);
-                                    rowData.setCharacterPath(taggedlists.get(j).getCharacterPath());
-                                    rowData.setFname(taggedlists.get(j).getFname());
-                                    rowData.setLname(taggedlists.get(j).getLname());
-                                    rowData.setPrivacy(taggedlists.get(j).getPrivacy());
-                                    rowData.setNeedName(taggedlists.get(j).getNeedName());
-                                    rowData.setTotalTaggedCreditPoints(taggedlists.get(j).getTotalTaggedCreditPoints());
-                                    rowData.setTotalFulfilledCreditPoints(taggedlists.get(j).getTotalFulfilledCreditPoints());
-                                    rowData.setUserID(taggedlists.get(j).getUserID());
-                                    rowData.setCatType(taggedlists.get(j).getCatType());
-                                    rowData.setGetIconPath(taggedlists.get(j).getIconPath());
-                                    rowData.setTaggedID(taggedlists.get(j).getTaggedID());
-                                    rowData.setGeopoint(taggedlists.get(j).getGeopoint());
-                                    rowData.setTaggedPhotoPath(taggedlists.get(j).getTaggedPhotoPath());
-                                    rowData.setDescription(taggedlists.get(j).getDescription());
-                                    rowData.setViews(taggedlists.get(j).getViews());
-                                    rowData.setEndorse(taggedlists.get(j).getEndorse());
-                                    rowData.setAllGroups("");
-                                    rowData.setUser_group_ids("");
-                                    item_list.add(rowData);
+                                if (words.length > 1) {
+                                    Location tagLocation2 = new Location("tag Location");
+                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                                    float dist1 = myLocation.distanceTo(tagLocation2);
+                                    if (dist1 < radius_set) {
+                                        RowData rowData = new RowData();
+                                        rowData.setTitle(taggedlists.get(j).getNeedName());
+                                        rowData.setAddress(taggedlists.get(j).getAddress());
+                                        rowData.setDate(taggedlists.get(j).getTaggedDatetime());
+                                        rowData.setImagepath(taggedlists.get(j).getTaggedPhotoPath());
+                                        rowData.setDistance(dist1);
+                                        rowData.setCharacterPath(taggedlists.get(j).getCharacterPath());
+                                        rowData.setFname(taggedlists.get(j).getFname());
+                                        rowData.setLname(taggedlists.get(j).getLname());
+                                        rowData.setPrivacy(taggedlists.get(j).getPrivacy());
+                                        rowData.setNeedName(taggedlists.get(j).getNeedName());
+                                        rowData.setTotalTaggedCreditPoints(taggedlists.get(j).getTotalTaggedCreditPoints());
+                                        rowData.setTotalFulfilledCreditPoints(taggedlists.get(j).getTotalFulfilledCreditPoints());
+                                        rowData.setUserID(taggedlists.get(j).getUserID());
+                                        rowData.setCatType(taggedlists.get(j).getCatType());
+                                        rowData.setGetIconPath(taggedlists.get(j).getIconPath());
+                                        rowData.setTaggedID(taggedlists.get(j).getTaggedID());
+                                        rowData.setGeopoint(taggedlists.get(j).getGeopoint());
+                                        rowData.setTaggedPhotoPath(taggedlists.get(j).getTaggedPhotoPath());
+                                        rowData.setDescription(taggedlists.get(j).getDescription());
+                                        rowData.setViews(taggedlists.get(j).getViews());
+                                        rowData.setEndorse(taggedlists.get(j).getEndorse());
+                                        rowData.setAllGroups("");
+                                        rowData.setUser_group_ids("");
+                                        item_list.add(rowData);
+                                    }
                                 }
-
                                 if (item_list.size() == 0) {
                                     recyclerView.setVisibility(View.GONE);
                                     countLayout.setVisibility(View.GONE);

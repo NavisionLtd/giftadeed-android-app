@@ -312,37 +312,39 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                     str_permanent = taggedlists.get(m).getPermanent();
                                     String str_geo_point = taggedlists.get(m).getGeopoint();
                                     String[] words = str_geo_point.split(",");
-                                    Location tagLocation2 = new Location("tag Location");
-                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                    float dist1 = myLocation.distanceTo(tagLocation2);
-                                    str_distance = String.valueOf(dist1);
+                                    if (words.length > 1) {
+                                        Location tagLocation2 = new Location("tag Location");
+                                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                                        float dist1 = myLocation.distanceTo(tagLocation2);
+                                        str_distance = String.valueOf(dist1);
 
-                                    android.support.v4.app.FragmentManager newfrag;
-                                    newfrag = getActivity().getSupportFragmentManager();
-                                    //  str_distance = Double.toString(item.get(position).getDistance());
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("str_address", str_address);
-                                    bundle.putString("str_tagid", str_tagid);
-                                    bundle.putString("str_geopoint", str_geopoint);
-                                    bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
-                                    bundle.putString("str_description", str_description);
-                                    bundle.putString("str_characterPath", str_characterPath);
-                                    bundle.putString("str_fname", str_fname);
-                                    bundle.putString("str_lname", str_lname);
-                                    bundle.putString("str_privacy", str_privacy);
-                                    bundle.putString("str_userID", str_userID);
-                                    bundle.putString("str_needName", str_needName);
-                                    bundle.putString("str_totalTaggedCreditPoints", str_totalTaggedCreditPoints);
-                                    bundle.putString("str_totalFulfilledCreditPoints", str_totalFulfilledCreditPoints);
-                                    bundle.putString("str_permanent", str_permanent);
-                                    bundle.putString("str_title", str_title);
-                                    bundle.putString("str_date", str_date);
-                                    bundle.putString("str_distance", str_distance);
-                                    bundle.putString("tab", "tab1");
-                                    NeedDetailsFrag fragInfo = new NeedDetailsFrag();
-                                    fragInfo.setArguments(bundle);
-                                    newfrag.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                                        android.support.v4.app.FragmentManager newfrag;
+                                        newfrag = getActivity().getSupportFragmentManager();
+                                        //  str_distance = Double.toString(item.get(position).getDistance());
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("str_address", str_address);
+                                        bundle.putString("str_tagid", str_tagid);
+                                        bundle.putString("str_geopoint", str_geopoint);
+                                        bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
+                                        bundle.putString("str_description", str_description);
+                                        bundle.putString("str_characterPath", str_characterPath);
+                                        bundle.putString("str_fname", str_fname);
+                                        bundle.putString("str_lname", str_lname);
+                                        bundle.putString("str_privacy", str_privacy);
+                                        bundle.putString("str_userID", str_userID);
+                                        bundle.putString("str_needName", str_needName);
+                                        bundle.putString("str_totalTaggedCreditPoints", str_totalTaggedCreditPoints);
+                                        bundle.putString("str_totalFulfilledCreditPoints", str_totalFulfilledCreditPoints);
+                                        bundle.putString("str_permanent", str_permanent);
+                                        bundle.putString("str_title", str_title);
+                                        bundle.putString("str_date", str_date);
+                                        bundle.putString("str_distance", str_distance);
+                                        bundle.putString("tab", "tab1");
+                                        NeedDetailsFrag fragInfo = new NeedDetailsFrag();
+                                        fragInfo.setArguments(bundle);
+                                        newfrag.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                                    }
                                 }
                             }
                         }
@@ -508,99 +510,178 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                     String audience_selected_groups = model.getTaggedlist().get(j).getUserGrpIds();  // group ids
                                     String str_geo_point = model.getTaggedlist().get(j).getGeopoint();
                                     String[] words = str_geo_point.split(",");
-                                    Location tagLocation2 = new Location("tag Location");
-                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                    double radi = sessionManager.getradius();
-                                    DecimalFormat df2 = new DecimalFormat("#.##");
-                                    double dist1 = myLocation.distanceTo(tagLocation2);
-                                    Log.d("radius", String.valueOf(dist1));
-                                    if (dist1 < radi) {
-                                        if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && filter_groups.equals("All")) || (filter_category.equals("All") && filter_groups.equals("All"))) {
-                                            // System.out.print(model.getTaggedlist().get(j).getIconPath());
-                                            lat_long.add(model.getTaggedlist().get(j).getGeopoint());
-                                            icon_path.add(model.getTaggedlist().get(j).getIconPath());
-                                            tag_title.add(model.getTaggedlist().get(j).getNeedName());
-                                            //---------------------for tab2
-                                            rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
-                                            rowData.setAddress(model.getTaggedlist().get(j).getAddress());
-                                            rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
-                                            rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                            rowData.setDistance(dist1);
-                                            rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
-                                            rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
-                                            rowData.setFname(model.getTaggedlist().get(j).getFname());
-                                            rowData.setLname(model.getTaggedlist().get(j).getLname());
-                                            rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
-                                            rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
-                                            rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
-                                            rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
-                                            rowData.setUserID(model.getTaggedlist().get(j).getUserID());
-                                            rowData.setCatType(model.getTaggedlist().get(j).getCatType());
-                                            rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
-                                            rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
-                                            rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                            rowData.setDescription(model.getTaggedlist().get(j).getDescription());
-                                            rowData.setViews(model.getTaggedlist().get(j).getViews());
-                                            rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
-                                            rowData.setPermanent(model.getTaggedlist().get(j).getPermanent());
-                                            rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
-                                            rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
-                                            item.add(rowData);
-                                            // new Tab2().get_Tag_data();
+                                    Log.d("words_size", String.valueOf(words.length));
+                                    if (words.length > 1) {
+                                        Location tagLocation2 = new Location("tag Location");
+                                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                                        double radi = sessionManager.getradius();
+                                        DecimalFormat df2 = new DecimalFormat("#.##");
+                                        double dist1 = myLocation.distanceTo(tagLocation2);
+                                        Log.d("radius", String.valueOf(dist1));
+                                        if (dist1 < radi) {
+                                            if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && filter_groups.equals("All")) || (filter_category.equals("All") && filter_groups.equals("All"))) {
+                                                // System.out.print(model.getTaggedlist().get(j).getIconPath());
+                                                lat_long.add(model.getTaggedlist().get(j).getGeopoint());
+                                                icon_path.add(model.getTaggedlist().get(j).getIconPath());
+                                                tag_title.add(model.getTaggedlist().get(j).getNeedName());
+                                                //---------------------for tab2
+                                                rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
+                                                rowData.setAddress(model.getTaggedlist().get(j).getAddress());
+                                                rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
+                                                rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDistance(dist1);
+                                                rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
+                                                rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
+                                                rowData.setFname(model.getTaggedlist().get(j).getFname());
+                                                rowData.setLname(model.getTaggedlist().get(j).getLname());
+                                                rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
+                                                rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
+                                                rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                                rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                                rowData.setUserID(model.getTaggedlist().get(j).getUserID());
+                                                rowData.setCatType(model.getTaggedlist().get(j).getCatType());
+                                                rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
+                                                rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
+                                                rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDescription(model.getTaggedlist().get(j).getDescription());
+                                                rowData.setViews(model.getTaggedlist().get(j).getViews());
+                                                rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
+                                                rowData.setPermanent(model.getTaggedlist().get(j).getPermanent());
+                                                rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
+                                                rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
+                                                item.add(rowData);
+                                                // new Tab2().get_Tag_data();
 
 
-                                            String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
-                                            String[] words_new = str_lati_logi.split(",");
-                                            final String id = model.getTaggedlist().get(j).getTaggedID();
-                                            final String permanent = model.getTaggedlist().get(j).getPermanent();
-                                            final String catType = model.getTaggedlist().get(j).getCatType();
-                                            final String markerTitle, icon_path_str_new;
-                                            if (permanent.equals("Y")) {
-                                                markerTitle = "Permanent";
-                                                icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
-                                            } else {
-                                                if (catType.equals("C")) {
-                                                    markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                    icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
-                                                } else {
-                                                    markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                    icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
-                                                }
-                                            }
+                                                String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
+                                                String[] words_new = str_lati_logi.split(",");
+                                                if (words_new.length > 1) {
+                                                    final String id = model.getTaggedlist().get(j).getTaggedID();
+                                                    final String permanent = model.getTaggedlist().get(j).getPermanent();
+                                                    final String catType = model.getTaggedlist().get(j).getCatType();
+                                                    final String markerTitle, icon_path_str_new;
+                                                    if (permanent.equals("Y")) {
+                                                        markerTitle = "Permanent";
+                                                        icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
+                                                    } else {
+                                                        if (catType.equals("C")) {
+                                                            markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                            icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
+                                                        } else {
+                                                            markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                            icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
+                                                        }
+                                                    }
 
-                                            Log.d("imagepath", icon_path_str_new);
+                                                    Log.d("imagepath", icon_path_str_new);
 //                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), model.getTaggedlist().get(j).getTaggedTitle(), model.getTaggedlist().get(j).getTaggedID(), icon_path_str_new);
 //                                            mClusterManager.addItem(offsetItem);
 //                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
 
-                                            Double maplat = Double.parseDouble(words_new[0]);
-                                            Double maplong = Double.parseDouble(words_new[1]);
-                                            final LatLng point = new LatLng(maplat, maplong);//
-                                            Glide.with(getApplicationContext())
-                                                    .asBitmap()
-                                                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
-                                                    .load(icon_path_str_new)
-                                                    .into(new SimpleTarget<Bitmap>() {
-                                                        @Override
-                                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                                            Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
-                                                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(markerTitle).anchor(0.5f, 0.907f));
-                                                            marker.setTag(markerTitle);
-                                                            marker.setSnippet(id);
+                                                    Double maplat = Double.parseDouble(words_new[0]);
+                                                    Double maplong = Double.parseDouble(words_new[1]);
+                                                    final LatLng point = new LatLng(maplat, maplong);//
+                                                    Glide.with(getApplicationContext())
+                                                            .asBitmap()
+                                                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                                                            .load(icon_path_str_new)
+                                                            .into(new SimpleTarget<Bitmap>() {
+                                                                @Override
+                                                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
+                                                                            .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(markerTitle).anchor(0.5f, 0.907f));
+                                                                    marker.setTag(markerTitle);
+                                                                    marker.setSnippet(id);
 //                                                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
-                                                        }
-                                                    });
-                                        } else if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && (!filter_groups.equals("All"))) || (filter_category.equals("All") && (!filter_groups.equals("All")))) {
-                                            String[] split_filter_groups = filter_groups.split(",");       // filter selected groupids
-                                            ArrayList<String> filterGroupList = new ArrayList<String>(Arrays.asList(split_filter_groups)); // arraylist for filter selected groupids
+                                                                }
+                                                            });
+                                                }
+                                            } else if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && (!filter_groups.equals("All"))) || (filter_category.equals("All") && (!filter_groups.equals("All")))) {
+                                                String[] split_filter_groups = filter_groups.split(",");       // filter selected groupids
+                                                ArrayList<String> filterGroupList = new ArrayList<String>(Arrays.asList(split_filter_groups)); // arraylist for filter selected groupids
 
-                                            String[] split_audience_groupids = audience_selected_groups.split(","); // server audience groupids
-                                            ArrayList<String> audienceGroupList = new ArrayList<String>(Arrays.asList(split_audience_groupids)); // arraylist server audience groupids
-                                            if (model.getTaggedlist().get(j).getFromGroupID() != null) {  // check for "from groupid"... if null means tagger is individual user
-                                                if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
-                                                    if (audience_all_groups.equals("N")) { // check for tagger selected all groups audience
-                                                        if (audienceGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {
+                                                String[] split_audience_groupids = audience_selected_groups.split(","); // server audience groupids
+                                                ArrayList<String> audienceGroupList = new ArrayList<String>(Arrays.asList(split_audience_groupids)); // arraylist server audience groupids
+                                                if (model.getTaggedlist().get(j).getFromGroupID() != null) {  // check for "from groupid"... if null means tagger is individual user
+                                                    if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
+                                                        if (audience_all_groups.equals("N")) { // check for tagger selected all groups audience
+                                                            if (audienceGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {
+                                                                lat_long.add(model.getTaggedlist().get(j).getGeopoint());
+                                                                icon_path.add(model.getTaggedlist().get(j).getIconPath());
+                                                                tag_title.add(model.getTaggedlist().get(j).getNeedName());
+                                                                //---------------------for tab2
+                                                                rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
+                                                                rowData.setAddress(model.getTaggedlist().get(j).getAddress());
+                                                                rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
+                                                                rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                                rowData.setDistance(dist1);
+                                                                rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
+                                                                rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
+                                                                rowData.setFname(model.getTaggedlist().get(j).getFname());
+                                                                rowData.setLname(model.getTaggedlist().get(j).getLname());
+                                                                rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
+                                                                rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
+                                                                rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                                                rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                                                rowData.setUserID(model.getTaggedlist().get(j).getUserID());
+                                                                rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
+                                                                rowData.setCatType(model.getTaggedlist().get(j).getCatType());
+                                                                rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
+                                                                rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                                rowData.setDescription(model.getTaggedlist().get(j).getDescription());
+                                                                rowData.setViews(model.getTaggedlist().get(j).getViews());
+                                                                rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
+                                                                rowData.setPermanent(model.getTaggedlist().get(j).getPermanent());
+                                                                rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
+                                                                rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
+                                                                item.add(rowData);
+
+                                                                String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
+                                                                String[] words_new = str_lati_logi.split(",");
+                                                                if (words_new.length > 1) {
+                                                                    final String marker_id = model.getTaggedlist().get(j).getTaggedID();
+                                                                    final String catType = model.getTaggedlist().get(j).getCatType();
+                                                                    final String permanent = model.getTaggedlist().get(j).getPermanent();
+                                                                    final String markerTitle, icon_path_str_new;
+                                                                    if (permanent.equals("Y")) {
+                                                                        markerTitle = "Permanent";
+                                                                        icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
+                                                                    } else {
+                                                                        if (catType.equals("C")) {
+                                                                            markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                                            icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
+                                                                        } else {
+                                                                            markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                                            icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
+                                                                        }
+                                                                    }
+
+                                                                    Log.d("imagepath2", icon_path_str_new);
+//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
+//                                            mClusterManager.addItem(offsetItem);
+//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
+
+                                                                    Double maplat = Double.parseDouble(words_new[0]);
+                                                                    Double maplong = Double.parseDouble(words_new[1]);
+                                                                    final LatLng point = new LatLng(maplat, maplong);//
+                                                                    Glide.with(getApplicationContext())
+                                                                            .asBitmap()
+                                                                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                                                                            .load(icon_path_str_new)
+                                                                            .into(new SimpleTarget<Bitmap>() {
+                                                                                @Override
+                                                                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                                                    Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
+                                                                                            .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(markerTitle).anchor(0.5f, 0.907f));
+                                                                                    marker.setTag(markerTitle);
+                                                                                    marker.setSnippet(marker_id);
+//                                                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
+                                                                                }
+                                                                            });
+                                                                }
+                                                            }
+                                                        } else {
                                                             lat_long.add(model.getTaggedlist().get(j).getGeopoint());
                                                             icon_path.add(model.getTaggedlist().get(j).getIconPath());
                                                             tag_title.add(model.getTaggedlist().get(j).getNeedName());
@@ -633,118 +714,48 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
 
                                                             String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
                                                             String[] words_new = str_lati_logi.split(",");
-                                                            final String marker_id = model.getTaggedlist().get(j).getTaggedID();
-                                                            final String catType = model.getTaggedlist().get(j).getCatType();
-                                                            final String permanent = model.getTaggedlist().get(j).getPermanent();
-                                                            final String markerTitle, icon_path_str_new;
-                                                            if (permanent.equals("Y")) {
-                                                                markerTitle = "Permanent";
-                                                                icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
-                                                            } else {
-                                                                if (catType.equals("C")) {
-                                                                    markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                                    icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
+                                                            if (words_new.length > 1) {
+                                                                final String marker_id = model.getTaggedlist().get(j).getTaggedID();
+                                                                final String catType = model.getTaggedlist().get(j).getCatType();
+                                                                final String permanent = model.getTaggedlist().get(j).getPermanent();
+                                                                final String markerTitle, icon_path_str_new;
+                                                                if (permanent.equals("Y")) {
+                                                                    markerTitle = "Permanent";
+                                                                    icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
                                                                 } else {
-                                                                    markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                                    icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
-                                                                }
-                                                            }
-
-                                                            Log.d("imagepath2", icon_path_str_new);
-//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
-//                                            mClusterManager.addItem(offsetItem);
-//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
-
-                                                            Double maplat = Double.parseDouble(words_new[0]);
-                                                            Double maplong = Double.parseDouble(words_new[1]);
-                                                            final LatLng point = new LatLng(maplat, maplong);//
-                                                            Glide.with(getApplicationContext())
-                                                                    .asBitmap()
-                                                                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
-                                                                    .load(icon_path_str_new)
-                                                                    .into(new SimpleTarget<Bitmap>() {
-                                                                        @Override
-                                                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                                                            Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
-                                                                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(markerTitle).anchor(0.5f, 0.907f));
-                                                                            marker.setTag(markerTitle);
-                                                                            marker.setSnippet(marker_id);
-//                                                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
-                                                                        }
-                                                                    });
-                                                        }
-                                                    } else {
-                                                        lat_long.add(model.getTaggedlist().get(j).getGeopoint());
-                                                        icon_path.add(model.getTaggedlist().get(j).getIconPath());
-                                                        tag_title.add(model.getTaggedlist().get(j).getNeedName());
-                                                        //---------------------for tab2
-                                                        rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
-                                                        rowData.setAddress(model.getTaggedlist().get(j).getAddress());
-                                                        rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
-                                                        rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                                        rowData.setDistance(dist1);
-                                                        rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
-                                                        rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
-                                                        rowData.setFname(model.getTaggedlist().get(j).getFname());
-                                                        rowData.setLname(model.getTaggedlist().get(j).getLname());
-                                                        rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
-                                                        rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
-                                                        rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
-                                                        rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
-                                                        rowData.setUserID(model.getTaggedlist().get(j).getUserID());
-                                                        rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
-                                                        rowData.setCatType(model.getTaggedlist().get(j).getCatType());
-                                                        rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
-                                                        rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                                        rowData.setDescription(model.getTaggedlist().get(j).getDescription());
-                                                        rowData.setViews(model.getTaggedlist().get(j).getViews());
-                                                        rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
-                                                        rowData.setPermanent(model.getTaggedlist().get(j).getPermanent());
-                                                        rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
-                                                        rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
-                                                        item.add(rowData);
-
-                                                        String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
-                                                        String[] words_new = str_lati_logi.split(",");
-                                                        final String marker_id = model.getTaggedlist().get(j).getTaggedID();
-                                                        final String catType = model.getTaggedlist().get(j).getCatType();
-                                                        final String permanent = model.getTaggedlist().get(j).getPermanent();
-                                                        final String markerTitle, icon_path_str_new;
-                                                        if (permanent.equals("Y")) {
-                                                            markerTitle = "Permanent";
-                                                            icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
-                                                        } else {
-                                                            if (catType.equals("C")) {
-                                                                markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                                icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
-                                                            } else {
-                                                                markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                                icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
-                                                            }
-                                                        }
-
-                                                        Log.d("imagepath2", icon_path_str_new);
-//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
-//                                            mClusterManager.addItem(offsetItem);
-//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
-
-                                                        Double maplat = Double.parseDouble(words_new[0]);
-                                                        Double maplong = Double.parseDouble(words_new[1]);
-                                                        final LatLng point = new LatLng(maplat, maplong);//
-                                                        Glide.with(getApplicationContext())
-                                                                .asBitmap()
-                                                                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
-                                                                .load(icon_path_str_new)
-                                                                .into(new SimpleTarget<Bitmap>() {
-                                                                    @Override
-                                                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                                                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
-                                                                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(markerTitle).anchor(0.5f, 0.907f));
-                                                                        marker.setTag(markerTitle);
-                                                                        marker.setSnippet(marker_id);
-//                                                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
+                                                                    if (catType.equals("C")) {
+                                                                        markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                                        icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
+                                                                    } else {
+                                                                        markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                                        icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
                                                                     }
-                                                                });
+                                                                }
+
+                                                                Log.d("imagepath2", icon_path_str_new);
+//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
+//                                            mClusterManager.addItem(offsetItem);
+//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
+
+                                                                Double maplat = Double.parseDouble(words_new[0]);
+                                                                Double maplong = Double.parseDouble(words_new[1]);
+                                                                final LatLng point = new LatLng(maplat, maplong);//
+                                                                Glide.with(getApplicationContext())
+                                                                        .asBitmap()
+                                                                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                                                                        .load(icon_path_str_new)
+                                                                        .into(new SimpleTarget<Bitmap>() {
+                                                                            @Override
+                                                                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                                                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
+                                                                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(markerTitle).anchor(0.5f, 0.907f));
+                                                                                marker.setTag(markerTitle);
+                                                                                marker.setSnippet(marker_id);
+//                                                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
+                                                                            }
+                                                                        });
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -829,45 +840,48 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                 for (int j = 0; j < model.getSoslist().size(); j++) {
                                     String str_geo_point = model.getSoslist().get(j).getGeopoints();
                                     String[] words = str_geo_point.split(",");
-                                    Location tagLocation2 = new Location("tag Location");
-                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                    double radi = sessionManager.getradius();
-                                    DecimalFormat df2 = new DecimalFormat("#.##");
-                                    double dist1 = myLocation.distanceTo(tagLocation2);
-                                    Log.d("radius", String.valueOf(dist1));
-                                    if (dist1 < radi) {
-                                        rowData.setTitle(model.getSoslist().get(j).getId());
-                                        rowData.setAddress(model.getSoslist().get(j).getGeopoints());
-                                        item.add(rowData);
+                                    if (words.length > 1) {
+                                        Location tagLocation2 = new Location("tag Location");
+                                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                                        double radi = sessionManager.getradius();
+                                        DecimalFormat df2 = new DecimalFormat("#.##");
+                                        double dist1 = myLocation.distanceTo(tagLocation2);
+                                        Log.d("radius", String.valueOf(dist1));
+                                        if (dist1 < radi) {
+                                            rowData.setTitle(model.getSoslist().get(j).getId());
+                                            rowData.setAddress(model.getSoslist().get(j).getGeopoints());
+                                            item.add(rowData);
 
-                                        String str_lati_logi = model.getSoslist().get(j).getGeopoints();
-                                        String[] words_new = str_lati_logi.split(",");
-                                        final String marker_id = model.getSoslist().get(j).getId();
-                                        String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
-                                        Log.d("sosiconpath", icon_path_str_new);
+                                            String str_lati_logi = model.getSoslist().get(j).getGeopoints();
+                                            String[] words_new = str_lati_logi.split(",");
+                                            if (words_new.length > 1) {
+                                                final String marker_id = model.getSoslist().get(j).getId();
+                                                String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
+                                                Log.d("sosiconpath", icon_path_str_new);
 //                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
 //                                            mClusterManager.addItem(offsetItem);
 //                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
 
-                                        Double maplat = Double.parseDouble(words_new[0]);
-                                        Double maplong = Double.parseDouble(words_new[1]);
-                                        final LatLng point = new LatLng(maplat, maplong);//
-                                        Glide.with(getApplicationContext())
-                                                .asBitmap()
-                                                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
-                                                .load(icon_path_str_new)
-                                                .into(new SimpleTarget<Bitmap>() {
-                                                    @Override
-                                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
-                                                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(marker_id).anchor(0.5f, 0.907f));
-                                                        marker.setTag("SOS");
-                                                        marker.setSnippet(marker_id);
+                                                Double maplat = Double.parseDouble(words_new[0]);
+                                                Double maplong = Double.parseDouble(words_new[1]);
+                                                final LatLng point = new LatLng(maplat, maplong);//
+                                                Glide.with(getApplicationContext())
+                                                        .asBitmap()
+                                                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                                                        .load(icon_path_str_new)
+                                                        .into(new SimpleTarget<Bitmap>() {
+                                                            @Override
+                                                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
+                                                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(marker_id).anchor(0.5f, 0.907f));
+                                                                marker.setTag("SOS");
+                                                                marker.setSnippet(marker_id);
 //                                                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
-                                                    }
-                                                });
-
+                                                            }
+                                                        });
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -945,46 +959,49 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                 for (int j = 0; j < model.getReslist().size(); j++) {
                                     String str_geo_point = model.getReslist().get(j).getGeopoints();
                                     String[] words = str_geo_point.split(",");
-                                    Location tagLocation2 = new Location("tag Location");
-                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                    double radi = sessionManager.getradius();
-                                    DecimalFormat df2 = new DecimalFormat("#.##");
-                                    double dist1 = myLocation.distanceTo(tagLocation2);
-                                    Log.d("radius", String.valueOf(dist1));
-                                    if (dist1 < radi) {
-                                        rowData.setId(model.getReslist().get(j).getId());
-                                        rowData.setTitle(model.getReslist().get(j).getResname());
-                                        rowData.setAddress(model.getReslist().get(j).getGeopoints());
-                                        item.add(rowData);
+                                    if (words.length > 1) {
+                                        Location tagLocation2 = new Location("tag Location");
+                                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                                        double radi = sessionManager.getradius();
+                                        DecimalFormat df2 = new DecimalFormat("#.##");
+                                        double dist1 = myLocation.distanceTo(tagLocation2);
+                                        Log.d("radius", String.valueOf(dist1));
+                                        if (dist1 < radi) {
+                                            rowData.setId(model.getReslist().get(j).getId());
+                                            rowData.setTitle(model.getReslist().get(j).getResname());
+                                            rowData.setAddress(model.getReslist().get(j).getGeopoints());
+                                            item.add(rowData);
 
-                                        String str_lati_logi = model.getReslist().get(j).getGeopoints();
-                                        String[] words_new = str_lati_logi.split(",");
-                                        final String marker_id = model.getReslist().get(j).getId();
-                                        String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
-                                        Log.d("resiconpath", icon_path_str_new);
+                                            String str_lati_logi = model.getReslist().get(j).getGeopoints();
+                                            String[] words_new = str_lati_logi.split(",");
+                                            if (words_new.length > 1) {
+                                                final String marker_id = model.getReslist().get(j).getId();
+                                                String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
+                                                Log.d("resiconpath", icon_path_str_new);
 //                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
 //                                            mClusterManager.addItem(offsetItem);
 //                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
 
-                                        Double maplat = Double.parseDouble(words_new[0]);
-                                        Double maplong = Double.parseDouble(words_new[1]);
-                                        final LatLng point = new LatLng(maplat, maplong);//
-                                        Glide.with(getApplicationContext())
-                                                .asBitmap()
-                                                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
-                                                .load(icon_path_str_new)
-                                                .into(new SimpleTarget<Bitmap>() {
-                                                    @Override
-                                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
-                                                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(marker_id).anchor(0.5f, 0.907f));
-                                                        marker.setTag("Resource");
-                                                        marker.setSnippet(marker_id);
+                                                Double maplat = Double.parseDouble(words_new[0]);
+                                                Double maplong = Double.parseDouble(words_new[1]);
+                                                final LatLng point = new LatLng(maplat, maplong);//
+                                                Glide.with(getApplicationContext())
+                                                        .asBitmap()
+                                                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                                                        .load(icon_path_str_new)
+                                                        .into(new SimpleTarget<Bitmap>() {
+                                                            @Override
+                                                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
+                                                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(marker_id).anchor(0.5f, 0.907f));
+                                                                marker.setTag("Resource");
+                                                                marker.setSnippet(marker_id);
 //                                                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
-                                                    }
-                                                });
-
+                                                            }
+                                                        });
+                                            }
+                                        }
                                     }
                                 }
                             }

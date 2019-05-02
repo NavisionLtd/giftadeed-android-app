@@ -33,9 +33,7 @@ public class WebUtils {
     public static List<String> extractUrls(String input)
     {
         List<String> result = new ArrayList<String>();
-
         String[] words = input.split("\\s+");
-
 
         Pattern pattern = Patterns.WEB_URL;
         for(String word : words)

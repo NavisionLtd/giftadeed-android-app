@@ -181,7 +181,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
     DiscreteSeekBar seekbarValidity;
     private AlertDialog alertDialogForgot, alertDialogreturn;
     String str_tagid, str_geopoint, str_characterPath, str_fname, str_lname, str_privacy, str_needName, str_totalTaggedCreditPoints,
-            str_totalFulfilledCreditPoints, str_title, str_date, str_distance, str_needid, str_tab, strcontainer = "0", str_validity = "3",
+            str_FromGroup, str_totalFulfilledCreditPoints, str_title, str_date, str_distance, str_needid, str_tab, strcontainer = "0", str_validity = "3",
             strCategory_click = "Clicked", strGroup_click = "Clicked", strSubCategory_click = "Clicked", strAudiance_click = "Clicked", callingFrom = "screenload";
     private GoogleApiClient mGoogleApiClient;
     DisplayMetrics metrics;
@@ -251,6 +251,8 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                 strlocation = this.getArguments().getString("str_address");
                 str_tagid = this.getArguments().getString("str_tagid");
                 str_geopoint = this.getArguments().getString("str_geopoint");
+                str_FromGroup = this.getArguments().getString("str_fromgroup");
+                selectedFromGroupId = this.getArguments().getString("str_fromgroupid");
                 strImagenamereturned = this.getArguments().getString("str_taggedPhotoPath");
                 strFullDescription = this.getArguments().getString("str_description");
                 str_characterPath = this.getArguments().getString("str_characterPath");
@@ -284,7 +286,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                 edselectlocation.setText(strlocation.trim());
                 edDescription.setText(strFullDescription);
                 layout_audiance.setVisibility(View.GONE);
-                selectGroupLayout.setVisibility(View.GONE);
+
                 if (formattedSubTypePref.length() > 0) {
                     selectedPref.setText(formattedSubTypePref);
                 }
@@ -293,7 +295,15 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                     paddress = "Y";
                 }
                 flag = "1";
-                getCategory("");
+                if (str_FromGroup != null) {
+                    selectGroupLayout.setVisibility(View.VISIBLE);
+                    edselectGroup.setText(str_FromGroup);
+                    edselectGroup.setEnabled(false);
+                    getCategory(selectedFromGroupId);
+                } else {
+                    selectGroupLayout.setVisibility(View.GONE);
+                    getCategory("");
+                }
                 String strImagepath = WebServices.MAIN_SUB_URL + strImagenamereturned;
                 if (strImagepath.length() > 57) {
                     Picasso.with(getContext()).load(strImagepath).placeholder(R.drawable.imgbackground).into(gieftneedimg);
@@ -403,7 +413,6 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                 if (!(Validation.isOnline(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else if (fragmentpage.equals("detailspage")) {
-                    btnPost.setEnabled(false);
                     editdeedValidations();
                 } else {
 //                    btnPost.setEnabled(false);
@@ -886,11 +895,34 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                             } else {
                                 layout_container.setVisibility(View.GONE);
                             }
-                            //seekbarValidity.setProgress(Integer.parseInt(str_validity));
                         }
-                        //  signupPOJO.setName(categoryType.getNeedtype().get(i).getNeedName().toString());
-                        //  signupPOJO.setCharacterpath(categoryType.getNeedtype().get(i).getCharacterPath());
-                        //   signupPOJO.setPhotoPath(categoryType.getNeedtype().get(i).getIconPath());
+                    }
+
+                    for (int i = 0; i < categoryType.getCustomneedtype().size(); i++) {
+                        if (strNeedmapping_ID.equals(categoryType.getCustomneedtype().get(i).getNeedMappingID().toString())) {
+                            spinnerPosition = i;
+                            edselectcategory.setText(categoryType.getCustomneedtype().get(i).getNeedName().toString());
+                            str_needid = categoryType.getCustomneedtype().get(i).getNeedMappingID().toString();
+                            strCharacter_Path = categoryType.getCustomneedtype().get(i).getIconPath();
+                            String path = WebServices.CUSTOM_CATEGORY_IMAGE_URL + strCharacter_Path;
+                            Picasso.with(getContext()).load(path).resize(50, 50).into(imgcategory);
+                            strNeedmapping_ID = str_needid;
+                            strCategory = str_needName;
+
+                            //No sub categories for custom category
+                            selectedPrefLayout.setVisibility(View.GONE);
+
+                            if (str_needid.equals("1") || str_needid.equals("21")) {
+                                layout_container.setVisibility(View.VISIBLE);
+                                if (strcontainer.equals("1")) {
+                                    Checkbox_container.setChecked(true);
+                                } else {
+                                    Checkbox_container.setChecked(false);
+                                }
+                            } else {
+                                layout_container.setVisibility(View.GONE);
+                            }
+                        }
                     }
                 } else {
                     categories.clear();
@@ -1337,26 +1369,23 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
         strShortDescription = edselectcategory.getText().toString().trim();
         strFullDescription = edDescription.getText().toString().trim();
 
-        if (selectGroupLayout.getVisibility() == View.VISIBLE) {
-            if (edselectGroup.getText().length() < 1) {
-                ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
-                btnPost.setEnabled(true);
-            }
+        if ((selectGroupLayout.getVisibility() == View.VISIBLE) && (edselectGroup.getText().length() < 1)) {
+            ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
+            btnPost.setEnabled(true);
         } else if (strCategory.length() < 1) {
             ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_category));
             btnPost.setEnabled(true);
-        } else if (selectedPrefLayout.getVisibility() == View.VISIBLE) {
-            if (selectedPref.getText().length() < 1) {
-                ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_sub_category));
-                btnPost.setEnabled(true);
-            }
+        } else if ((selectedPrefLayout.getVisibility() == View.VISIBLE) && (selectedPref.getText().length() < 1) && (subcategories.size() > 0)) {
+            ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_pref));
+            btnPost.setEnabled(true);
         } else if (strlocation.length() < 1) {
             ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_location));
             btnPost.setEnabled(true);
-        } else if (edselectAudiance.getText().length() < 1) {
+        } /*else if (edselectAudiance.getText().length() < 1) {
             ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_audiance));
             btnPost.setEnabled(true);
-        } /*else if (strFullDescription.length() < 1) {
+        } */
+        /*else if (strFullDescription.length() < 1) {
             ToastPopUp.displayToast(getContext(), "Enter description");
             edDescription.setText("");
             btnPost.setEnabled(true);

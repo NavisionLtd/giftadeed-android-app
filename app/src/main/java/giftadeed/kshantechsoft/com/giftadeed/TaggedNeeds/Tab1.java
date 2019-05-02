@@ -521,62 +521,63 @@ public class Tab1 extends android.support.v4.app.Fragment implements OnMapReadyC
 
                                     String str_geo_point = model.getTaggedlist().get(j).getGeopoint();
                                     String[] words = str_geo_point.split(",");
-                                    Location tagLocation2 = new Location("tag Location");
-                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                    double radi = sessionManager.getradius();
-                                    DecimalFormat df2 = new DecimalFormat("#.##");
-                                    double dist1 = myLocation.distanceTo(tagLocation2);
-                                    Log.d("radius", String.valueOf(dist1));
-                                    if (dist1 < radi) {
-                                        //  Log.d("val", "typenamet"+type_name);
-                                        if (type_name.equals(model.getTaggedlist().get(j).getNeedName())) {
+                                    if (words.length > 1) {
+                                        Location tagLocation2 = new Location("tag Location");
+                                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                                        double radi = sessionManager.getradius();
+                                        DecimalFormat df2 = new DecimalFormat("#.##");
+                                        double dist1 = myLocation.distanceTo(tagLocation2);
+                                        Log.d("radius", String.valueOf(dist1));
+                                        if (dist1 < radi) {
+                                            //  Log.d("val", "typenamet"+type_name);
+                                            if (type_name.equals(model.getTaggedlist().get(j).getNeedName())) {
 
-                                            // System.out.print(model.getTaggedlist().get(j).getIconPath());
-                                            lat_long.add(model.getTaggedlist().get(j).getGeopoint());
-                                            icon_path.add(model.getTaggedlist().get(j).getIconPath());
-                                            tag_title.add(model.getTaggedlist().get(j).getNeedName());
+                                                // System.out.print(model.getTaggedlist().get(j).getIconPath());
+                                                lat_long.add(model.getTaggedlist().get(j).getGeopoint());
+                                                icon_path.add(model.getTaggedlist().get(j).getIconPath());
+                                                tag_title.add(model.getTaggedlist().get(j).getNeedName());
 
-                                            //---------------------for tab2
+                                                //---------------------for tab2
 
-                                            rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
-                                            rowData.setAddress(model.getTaggedlist().get(j).getAddress());
-                                            rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
-                                            rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                            rowData.setDistance(dist1);
-                                            rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
-                                            rowData.setFname(model.getTaggedlist().get(j).getFname());
-                                            rowData.setLname(model.getTaggedlist().get(j).getLname());
-                                            rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
-                                            rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
-                                            rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
-                                            rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
-                                            rowData.setUserID(model.getTaggedlist().get(j).getUserID());
-                                            rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
-                                            rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
-                                            rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                            rowData.setDescription(model.getTaggedlist().get(j).getDescription());
-                                            rowData.setViews(model.getTaggedlist().get(j).getViews());
-                                            rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
+                                                rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
+                                                rowData.setAddress(model.getTaggedlist().get(j).getAddress());
+                                                rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
+                                                rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDistance(dist1);
+                                                rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
+                                                rowData.setFname(model.getTaggedlist().get(j).getFname());
+                                                rowData.setLname(model.getTaggedlist().get(j).getLname());
+                                                rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
+                                                rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
+                                                rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                                rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                                rowData.setUserID(model.getTaggedlist().get(j).getUserID());
+                                                rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
+                                                rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
+                                                rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDescription(model.getTaggedlist().get(j).getDescription());
+                                                rowData.setViews(model.getTaggedlist().get(j).getViews());
+                                                rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
 
-                                            item.add(rowData);
-                                            // new Tab2().get_Tag_data();
+                                                item.add(rowData);
+                                                // new Tab2().get_Tag_data();
 
 
-                                            String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
-                                            String[] words_new = str_lati_logi.split(",");
+                                                String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
+                                                String[] words_new = str_lati_logi.split(",");
 
-                                            String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getCharacterPath();
-                                            Log.d("imagepath", icon_path_str_new);
-                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), model.getTaggedlist().get(j).getTaggedTitle(), model.getTaggedlist().get(j).getTaggedID(), icon_path_str_new);
-                                            mClusterManager.addItem(offsetItem);
-                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
+                                                String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getCharacterPath();
+                                                Log.d("imagepath", icon_path_str_new);
+                                                MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), model.getTaggedlist().get(j).getTaggedTitle(), model.getTaggedlist().get(j).getTaggedID(), icon_path_str_new);
+                                                mClusterManager.addItem(offsetItem);
+                                                mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
 
-                                        } else if (type_name.equals("All")) {
+                                            } else if (type_name.equals("All")) {
 
-                                            lat_long.add(model.getTaggedlist().get(j).getGeopoint());
-                                            icon_path.add(model.getTaggedlist().get(j).getIconPath());
-                                            tag_title.add(model.getTaggedlist().get(j).getNeedName());
+                                                lat_long.add(model.getTaggedlist().get(j).getGeopoint());
+                                                icon_path.add(model.getTaggedlist().get(j).getIconPath());
+                                                tag_title.add(model.getTaggedlist().get(j).getNeedName());
 
 
                                       /*  RowData rowData = new RowData();
@@ -591,47 +592,47 @@ public class Tab1 extends android.support.v4.app.Fragment implements OnMapReadyC
 
                                         item.add(rowData);*/
 
-                                            //-----------new
+                                                //-----------new
 
 
-                                            //---------------------for tab2
+                                                //---------------------for tab2
 
-                                            rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
-                                            rowData.setAddress(model.getTaggedlist().get(j).getAddress());
-                                            rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
-                                            rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                            rowData.setDistance(dist1);
-                                            rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
-                                            rowData.setFname(model.getTaggedlist().get(j).getFname());
-                                            rowData.setLname(model.getTaggedlist().get(j).getLname());
-                                            rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
-                                            rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
-                                            rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
-                                            rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
-                                            rowData.setUserID(model.getTaggedlist().get(j).getUserID());
-                                            rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
-                                            rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
-                                            rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
-                                            rowData.setDescription(model.getTaggedlist().get(j).getDescription());
-                                            rowData.setViews(model.getTaggedlist().get(j).getViews());
-                                            rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
+                                                rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
+                                                rowData.setAddress(model.getTaggedlist().get(j).getAddress());
+                                                rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
+                                                rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDistance(dist1);
+                                                rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
+                                                rowData.setFname(model.getTaggedlist().get(j).getFname());
+                                                rowData.setLname(model.getTaggedlist().get(j).getLname());
+                                                rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
+                                                rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
+                                                rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                                rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                                rowData.setUserID(model.getTaggedlist().get(j).getUserID());
+                                                rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
+                                                rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
+                                                rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDescription(model.getTaggedlist().get(j).getDescription());
+                                                rowData.setViews(model.getTaggedlist().get(j).getViews());
+                                                rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
 
-                                            item.add(rowData);
+                                                item.add(rowData);
 
 
-                                            String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
-                                            String[] words_new = str_lati_logi.split(",");
-                                            String marker_title = model.getTaggedlist().get(j).getNeedName();
-                                            String marker_id = model.getTaggedlist().get(j).getTaggedID();
-                                            String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getCharacterPath();
-                                            Log.d("imagepath2", icon_path_str_new);
-                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
-                                            mClusterManager.addItem(offsetItem);
-                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
+                                                String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
+                                                String[] words_new = str_lati_logi.split(",");
+                                                String marker_title = model.getTaggedlist().get(j).getNeedName();
+                                                String marker_id = model.getTaggedlist().get(j).getTaggedID();
+                                                String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getCharacterPath();
+                                                Log.d("imagepath2", icon_path_str_new);
+                                                MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
+                                                mClusterManager.addItem(offsetItem);
+                                                mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
 
-                                        }
+                                            }
 
-                                        //for  tab 2
+                                            //for  tab 2
 
 
                                    /* RowData rowData = new RowData();
@@ -644,8 +645,8 @@ public class Tab1 extends android.support.v4.app.Fragment implements OnMapReadyC
 //
 //
 
+                                        }
                                     }
-
 
                                 }
 

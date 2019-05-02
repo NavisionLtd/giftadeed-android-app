@@ -72,6 +72,9 @@ public class DeedDetail {
     @SerializedName("is_reported")
     @Expose
     private Integer isReported;
+    @SerializedName("group_id")
+    @Expose
+    private String groupID;
     @SerializedName("group_name")
     @Expose
     private String groupName;
@@ -290,5 +293,13 @@ public class DeedDetail {
 
     public void setLastEndorseTime(String lastEndorseTime) {
         this.lastEndorseTime = lastEndorseTime;
+    }
+
+    public String getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(String groupID) {
+        this.groupID = groupID;
     }
 }

@@ -112,7 +112,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     int str_isreported, is_endorse, dist;
     String str_address, str_tagid, str_geopoint, str_taggedPhotoPath, str_description, str_catType, str_iconPath, str_characterPath, str_fname, str_lname,
             str_privacy, str_userID, str_needName, str_totalTaggedCreditPoints, str_totalFulfilledCreditPoints, str_title, str_date,
-            str_subtypes, str_permanent, str_distance, tab, str_container, str_Views, str_endorse, str_validity, str_mappingId, strdeedowner_id, strGroup_name,
+            str_subtypes, str_permanent, str_distance, tab, str_container, str_Views, str_endorse, str_validity, str_mappingId, strdeedowner_id, strGroup_id, strGroup_name,
             strLastEndorseTime;
     static FragmentManager fragmgr;
     LinearLayout layout_editdeed, layout_endorsedeed, layout_viewdeed, detailspage_containerlayout, comments_layout;
@@ -154,7 +154,9 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
         //detailsofgieft.loadDataWithBaseURL(null, getString(R.string.faq), "text/html", "utf-8", "");
         //-------------getting data
-
+        sessionManager = new SessionManager(getActivity());
+        HashMap<String, String> user = sessionManager.getUserDetails();
+        str_userID = user.get(sessionManager.USER_ID);
         str_tagid = this.getArguments().getString("str_tagid");
         tab = this.getArguments().getString("tab");
         getDeed_Details();
@@ -253,22 +255,24 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         String str_geo_point = str_geopoint;
                         //String str_geo_point = str_geopoint_new;
                         String[] words = str_geo_point.split(",");
-                        Location tagLocation2 = new Location("tag Location");
-                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                        if (words.length > 1) {
+                            Location tagLocation2 = new Location("tag Location");
+                            tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                            tagLocation2.setLongitude(Double.parseDouble(words[1]));
 
 //--------------------------distance in km----------------------------------------------------------
-                        float dist1 = myLocation.distanceTo(tagLocation2) / 1000;
+                            float dist1 = myLocation.distanceTo(tagLocation2) / 1000;
 //---------------------------distance in feet-------------------------------------------------------
-                        float ft_distance = dist1 * 3280.8f;
-                        if (is_endorse == 1) {
-                            Toast.makeText(getContext(), "You have already endorsed", Toast.LENGTH_SHORT).show();
-                        } else {
-
-                            if (ft_distance > dist) {
-                                Toast.makeText(getContext(), "You need to be within " + dist + " feet area of the needy person", Toast.LENGTH_SHORT).show();
+                            float ft_distance = dist1 * 3280.8f;
+                            if (is_endorse == 1) {
+                                Toast.makeText(getContext(), "You have already endorsed", Toast.LENGTH_SHORT).show();
                             } else {
-                                isDeedDeleted("endorse");
+
+                                if (ft_distance > dist) {
+                                    Toast.makeText(getContext(), "You need to be within " + dist + " feet area of the needy person", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    isDeedDeleted("endorse");
+                                }
                             }
                         }
                     } catch (Exception e) {
@@ -311,10 +315,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         btnReportUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sessionManager = new SessionManager(getActivity());
-                HashMap<String, String> user = sessionManager.getUserDetails();
-                String user_id = user.get(sessionManager.USER_ID);
-                if (user_id.equals(strdeedowner_id)) {
+                if (str_userID.equals(strdeedowner_id)) {
                     Toast.makeText(getContext(), "You cannot report yourself", Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -330,12 +331,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         btnReportDeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sessionManager = new SessionManager(getActivity());
-                HashMap<String, String> user = sessionManager.getUserDetails();
-                String user_id = user.get(sessionManager.USER_ID);
-
-
-                if (user_id.equals(strdeedowner_id)) {
+                if (str_userID.equals(strdeedowner_id)) {
                     Toast.makeText(getContext(), "You cannot report your own deed", Toast.LENGTH_SHORT).show();
                 } else {
                     isDeedDeleted("deed");
@@ -359,9 +355,6 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
         commentslist = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -370,8 +363,8 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeedDetailsInterface service = retrofit.create(DeedDetailsInterface.class);
-        Call<DeedDetailsModel> call = service.fetchData(user_id, str_tagid);
-        Log.d("input_deeddetails", "" + user_id + " : " + str_tagid);
+        Call<DeedDetailsModel> call = service.fetchData(str_userID, str_tagid);
+        Log.d("input_deeddetails", "" + str_userID + " : " + str_tagid);
         call.enqueue(new Callback<DeedDetailsModel>() {
             @Override
             public void onResponse(Response<DeedDetailsModel> response, Retrofit retrofit) {
@@ -434,6 +427,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         str_isreported = deedDetailsModel.getDeedDetails().get(0).getIsReported();
                         strdeedowner_id = deedDetailsModel.getDeedDetails().get(0).getOwnerId();
                         strGroup_name = deedDetailsModel.getDeedDetails().get(0).getGroupName();
+                        strGroup_id = deedDetailsModel.getDeedDetails().get(0).getGroupID();
                         strLastEndorseTime = deedDetailsModel.getDeedDetails().get(0).getLastEndorseTime();
                         Log.d("imgpath", str_taggedPhotoPath);
                         double current_latitude = new GPSTracker(myContext).getLatitude();
@@ -443,141 +437,143 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         myLocation.setLongitude(current_longitude);
 
                         String[] words = str_geopoint.split(",");
-                        Location tagLocation2 = new Location("tag Location");
-                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                        double radi = sessionManager.getradius();
-                        DecimalFormat df2 = new DecimalFormat("#.##");
-                        double dist1 = myLocation.distanceTo(tagLocation2) / 1000;
-                        str_distance = String.valueOf(dist1);
+                        if (words.length > 1) {
+                            Location tagLocation2 = new Location("tag Location");
+                            tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                            tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                            double radi = sessionManager.getradius();
+                            DecimalFormat df2 = new DecimalFormat("#.##");
+                            double dist1 = myLocation.distanceTo(tagLocation2) / 1000;
+                            str_distance = String.valueOf(dist1);
 
-                        if (str_mappingId.equals("1") || str_mappingId.equals("21")) {
-                            detailspage_containerlayout.setVisibility(View.VISIBLE);
-                            if (str_container.equals("1")) {
-                                txtcontaineravilableyes_no.setText("Available");
-                                txtcontaineravilableyes_no.setTextColor(getResources().getColor(R.color.colorPrimary));
-                            } else {
-                                txtcontaineravilableyes_no.setText("Not available");
-                                txtcontaineravilableyes_no.setTextColor(getResources().getColor(R.color.grey));
-                            }
-                        } else {
-                            detailspage_containerlayout.setVisibility(View.GONE);
-                        }
-
-                        if (is_endorse == 1) {
-                            img_endorse.setVisibility(View.GONE);
-                            img_endorse_over.setVisibility(View.VISIBLE);
-                        } else {
-                            img_endorse.setVisibility(View.VISIBLE);
-                            img_endorse_over.setVisibility(View.GONE);
-                        }
-                        txtneeddetailsendorse.setText(str_endorse);
-                        txtneeddetailsview.setText(str_Views);
-                        txtsubheading.setText(str_needName);
-                        if (str_permanent.equals("Y")) {
-                            txtaddress.setText(getResources().getString(R.string.deed_location) + "\n" + str_address.trim() + " [Permanent Location]");
-                        } else {
-                            txtaddress.setText(getResources().getString(R.string.deed_location) + "\n" + str_address.trim());
-                        }
-                        txtdistance.setText(String.format("%.2f", Double.parseDouble(str_distance)) + " km(s) away");
-
-                        List<String> elephantList = null;
-                        StringBuffer edited = new StringBuffer();
-                        if (str_subtypes.length() > 0) {
-                            subTypeLayout.setVisibility(View.VISIBLE);
-                            if (str_subtypes.contains(",")) {
-                                elephantList = Arrays.asList(str_subtypes.split(","));
-                                for (int i = 0; i < elephantList.size(); i++) {
-                                    edited.append(elephantList.get(i).replaceAll(":", " for ").trim() + "\n");
+                            if (str_mappingId.equals("1") || str_mappingId.equals("21")) {
+                                detailspage_containerlayout.setVisibility(View.VISIBLE);
+                                if (str_container.equals("1")) {
+                                    txtcontaineravilableyes_no.setText("Available");
+                                    txtcontaineravilableyes_no.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                } else {
+                                    txtcontaineravilableyes_no.setText("Not available");
+                                    txtcontaineravilableyes_no.setTextColor(getResources().getColor(R.color.grey));
                                 }
-                                txtSubtypes.setText(str_needName + " " + getResources().getString(R.string.pref_1) + "\n" + edited);
                             } else {
-                                String str = str_subtypes.replaceAll(":", " for ");
-                                txtSubtypes.setText(str_needName + " " + getResources().getString(R.string.pref_1) + "\n" + str);
+                                detailspage_containerlayout.setVisibility(View.GONE);
                             }
-                        } else {
-                            subTypeLayout.setVisibility(View.GONE);
-                        }
 
-                        txt_des.setText(getResources().getString(R.string.deed_details) + "\n" + str_description);
-                        txt_des.setMovementMethod(new ScrollingMovementMethod());
-                        if (commentslist.size() > 0) {
-                            comments_layout.setVisibility(View.VISIBLE);
-                            commentadapter = new CommentAdapter(getContext(), R.layout.commentcard, commentslist);
-                            listviewcomments.setAdapter(commentadapter);
-                        } else {
-                            comments_layout.setVisibility(View.GONE);
-                        }
-                        if (!str_privacy.equals("Anonymous")) {
-                            txt_name.setText(str_fname + " " + str_lname);
-                        } else {
-                            txt_name.setText("Anonymous");
-                        }
-
-                        if (strGroup_name != null) {
-                            fromGroupLayout.setVisibility(View.GONE);
-                        } else {
-                            fromGroupLayout.setVisibility(View.VISIBLE);
-                            txtFromGroupName.setText(strGroup_name);
-                        }
-
-                        if (strLastEndorseTime != null) {
-                            lastEndorseLayout.setVisibility(View.VISIBLE);
-                            txtLastEndorse.setText(strLastEndorseTime);
-                        } else {
-                            lastEndorseLayout.setVisibility(View.GONE);
-                        }
-
-                        try {
-                            String strImagepath = WebServices.MAIN_SUB_URL + str_taggedPhotoPath;
-                            System.out.print("strImagepath" + strImagepath);
-                            // Picasso.with(myContext).load(strImagepath).into(img);
-
-                            if (strImagepath.length() > 57) {
-                                Picasso.with(myContext).load(strImagepath).placeholder(R.drawable.imagedefault).into(img);
-                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            if (is_endorse == 1) {
+                                img_endorse.setVisibility(View.GONE);
+                                img_endorse_over.setVisibility(View.VISIBLE);
                             } else {
-                                img.setImageResource(R.drawable.imagedefault);
-                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                img_endorse.setVisibility(View.VISIBLE);
+                                img_endorse_over.setVisibility(View.GONE);
                             }
-                        } catch (Exception e) {
-                            mDialog.dismiss();
-                            StringWriter writer = new StringWriter();
-                            e.printStackTrace(new PrintWriter(writer));
-                            Bugreport bg = new Bugreport();
-                            bg.sendbug(writer.toString());
-                        }
-
-                        try {
-                            mDialog.dismiss();
-                            if (str_catType.equals("C")) {
-                                strImagepath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + str_iconPath;
+                            txtneeddetailsendorse.setText(str_endorse);
+                            txtneeddetailsview.setText(str_Views);
+                            txtsubheading.setText(str_needName);
+                            if (str_permanent.equals("Y")) {
+                                txtaddress.setText(getResources().getString(R.string.deed_location) + "\n" + str_address.trim() + " [Permanent Location]");
                             } else {
-                                strImagepath = WebServices.MAIN_SUB_URL + str_characterPath;
+                                txtaddress.setText(getResources().getString(R.string.deed_location) + "\n" + str_address.trim());
                             }
-                            Log.d("strImagepath", strImagepath);
-                            Picasso.with(myContext).load(strImagepath).into(imgcharacter);
-                        } catch (Exception e) {
-                            StringWriter writer = new StringWriter();
-                            e.printStackTrace(new PrintWriter(writer));
-                            Bugreport bg = new Bugreport();
-                            bg.sendbug(writer.toString());
-                        }
+                            txtdistance.setText(String.format("%.2f", Double.parseDouble(str_distance)) + " km(s) away");
 
-                        //---------------change date format
-                        String dateString = str_date;
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            List<String> elephantList = null;
+                            StringBuffer edited = new StringBuffer();
+                            if (str_subtypes.length() > 0) {
+                                subTypeLayout.setVisibility(View.VISIBLE);
+                                if (str_subtypes.contains(",")) {
+                                    elephantList = Arrays.asList(str_subtypes.split(","));
+                                    for (int i = 0; i < elephantList.size(); i++) {
+                                        edited.append(elephantList.get(i).replaceAll(":", " for ").trim() + "\n");
+                                    }
+                                    txtSubtypes.setText(str_needName + " " + getResources().getString(R.string.pref_1) + "\n" + edited);
+                                } else {
+                                    String str = str_subtypes.replaceAll(":", " for ");
+                                    txtSubtypes.setText(str_needName + " " + getResources().getString(R.string.pref_1) + "\n" + str);
+                                }
+                            } else {
+                                subTypeLayout.setVisibility(View.GONE);
+                            }
 
-                        // use SimpleDateFormat to define how to PARSE the INPUT
-                        Date date = null;
-                        try {
-                            date = sdf.parse(dateString);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                            txt_des.setText(getResources().getString(R.string.deed_details) + "\n" + str_description);
+                            txt_des.setMovementMethod(new ScrollingMovementMethod());
+                            if (commentslist.size() > 0) {
+                                comments_layout.setVisibility(View.VISIBLE);
+                                commentadapter = new CommentAdapter(getContext(), R.layout.commentcard, commentslist);
+                                listviewcomments.setAdapter(commentadapter);
+                            } else {
+                                comments_layout.setVisibility(View.GONE);
+                            }
+                            if (!str_privacy.equals("Anonymous")) {
+                                txt_name.setText(str_fname + " " + str_lname);
+                            } else {
+                                txt_name.setText("Anonymous");
+                            }
+
+                            if (strGroup_name != null) {
+                                fromGroupLayout.setVisibility(View.VISIBLE);
+                                txtFromGroupName.setText(strGroup_name);
+                            } else {
+                                fromGroupLayout.setVisibility(View.GONE);
+                            }
+
+                            if (strLastEndorseTime != null) {
+                                lastEndorseLayout.setVisibility(View.VISIBLE);
+                                txtLastEndorse.setText(strLastEndorseTime);
+                            } else {
+                                lastEndorseLayout.setVisibility(View.GONE);
+                            }
+
+                            try {
+                                String strImagepath = WebServices.MAIN_SUB_URL + str_taggedPhotoPath;
+                                System.out.print("strImagepath" + strImagepath);
+                                // Picasso.with(myContext).load(strImagepath).into(img);
+
+                                if (strImagepath.length() > 57) {
+                                    Picasso.with(myContext).load(strImagepath).placeholder(R.drawable.imagedefault).into(img);
+                                    img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                } else {
+                                    img.setImageResource(R.drawable.imagedefault);
+                                    img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                }
+                            } catch (Exception e) {
+                                mDialog.dismiss();
+                                StringWriter writer = new StringWriter();
+                                e.printStackTrace(new PrintWriter(writer));
+                                Bugreport bg = new Bugreport();
+                                bg.sendbug(writer.toString());
+                            }
+
+                            try {
+                                mDialog.dismiss();
+                                if (str_catType.equals("C")) {
+                                    strImagepath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + str_iconPath;
+                                } else {
+                                    strImagepath = WebServices.MAIN_SUB_URL + str_characterPath;
+                                }
+                                Log.d("strImagepath", strImagepath);
+                                Picasso.with(myContext).load(strImagepath).into(imgcharacter);
+                            } catch (Exception e) {
+                                StringWriter writer = new StringWriter();
+                                e.printStackTrace(new PrintWriter(writer));
+                                Bugreport bg = new Bugreport();
+                                bg.sendbug(writer.toString());
+                            }
+
+                            //---------------change date format
+                            String dateString = str_date;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                            // use SimpleDateFormat to define how to PARSE the INPUT
+                            Date date = null;
+                            try {
+                                date = sdf.parse(dateString);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            sdf = new SimpleDateFormat("dd-MMM-yyyy");
+                            System.out.println(sdf.format(date));
+                            txtDate.setText(sdf.format(date));
                         }
-                        sdf = new SimpleDateFormat("dd-MMM-yyyy");
-                        System.out.println(sdf.format(date));
-                        txtDate.setText(sdf.format(date));
                         mDialog.dismiss();
                     }
                 } catch (Exception e) {
@@ -601,10 +597,6 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
     public void endorseDeed() {
         // mDialog.show();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
-
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -613,7 +605,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         EndorsedeedInterface servvice = retrofit.create(EndorsedeedInterface.class);
-        Call<StatusModel> call = servvice.fetchData(user_id, str_tagid);
+        Call<StatusModel> call = servvice.fetchData(str_userID, str_tagid);
         call.enqueue(new Callback<StatusModel>() {
             @Override
             public void onResponse(Response<StatusModel> response, Retrofit retrofit) {
@@ -1007,7 +999,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 Bundle bundle = new Bundle();
                                 bundle.putString("str_tagid", str_tagid);
                                 bundle.putString("str_geopoint", str_geopoint);
-                                bundle.putString("str_characterPath", str_characterPath);
+                                bundle.putString("str_characterPath", strImagepath);
                                 bundle.putString("tab", "tab2");
                                 SingleDeedMap fragInfo = new SingleDeedMap();
                                 fragInfo.setArguments(bundle);
@@ -1023,7 +1015,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 bundle.putString("str_geopoint", str_geopoint);
                                 bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
                                 bundle.putString("str_description", str_description);
-                                bundle.putString("str_characterPath", str_characterPath);
+                                bundle.putString("str_characterPath", strImagepath);
                                 bundle.putString("str_fname", str_fname);
                                 bundle.putString("str_lname", str_lname);
                                 bundle.putString("str_privacy", str_privacy);
@@ -1031,6 +1023,8 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 bundle.putString("str_needName", str_needName);
                                 bundle.putString("str_permanent", str_permanent);
                                 bundle.putString("str_subtypes", str_subtypes);
+                                bundle.putString("str_fromgroupid", strGroup_id);
+                                bundle.putString("str_fromgroup", strGroup_name);
                                 bundle.putString("str_totalTaggedCreditPoints", str_totalTaggedCreditPoints);
                                 bundle.putString("str_totalFulfilledCreditPoints", str_totalFulfilledCreditPoints);
                                 bundle.putString("tab", tab);
@@ -1055,7 +1049,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 bundle.putString("str_geopoint", str_geopoint);
                                 bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
                                 bundle.putString("str_description", str_description);
-                                bundle.putString("str_characterPath", str_characterPath);
+                                bundle.putString("str_characterPath", strImagepath);
                                 bundle.putString("str_fname", str_fname);
                                 bundle.putString("str_lname", str_lname);
                                 bundle.putString("str_privacy", str_privacy);

@@ -229,48 +229,76 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                                 String audience_selected_groups = model.getTaggedlist().get(j).getUserGrpIds();  // group ids
                                 String str_geo_point = result.getTaggedlist().get(j).getGeopoint();
                                 String[] words = str_geo_point.split(",");
-                                Location tagLocation2 = new Location("tag Location");
-                                tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                float dist1 = myLocation.distanceTo(tagLocation2);
-                                if (dist1 < radius_set) {
-                                    if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && filter_groups.equals("All")) || (filter_category.equals("All") && filter_groups.equals("All"))) {
-                                        RowData rowData = new RowData();
-                                        rowData.setTitle(result.getTaggedlist().get(j).getNeedName());
-                                        rowData.setAddress(result.getTaggedlist().get(j).getAddress());
-                                        rowData.setDate(result.getTaggedlist().get(j).getTaggedDatetime());
-                                        rowData.setImagepath(result.getTaggedlist().get(j).getTaggedPhotoPath());
-                                        rowData.setDistance(dist1);
-                                        rowData.setCharacterPath(result.getTaggedlist().get(j).getCharacterPath());
-                                        rowData.setFname(result.getTaggedlist().get(j).getFname());
-                                        rowData.setLname(result.getTaggedlist().get(j).getLname());
-                                        rowData.setPrivacy(result.getTaggedlist().get(j).getPrivacy());
-                                        rowData.setNeedName(result.getTaggedlist().get(j).getNeedName());
-                                        rowData.setTotalTaggedCreditPoints(result.getTaggedlist().get(j).getTotalTaggedCreditPoints());
-                                        rowData.setTotalFulfilledCreditPoints(result.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
-                                        rowData.setUserID(result.getTaggedlist().get(j).getUserID());
-                                        rowData.setTaggedID(result.getTaggedlist().get(j).getTaggedID());
-                                        rowData.setCatType(model.getTaggedlist().get(j).getCatType());
-                                        rowData.setGeopoint(result.getTaggedlist().get(j).getGeopoint());
-                                        rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
-                                        rowData.setTaggedPhotoPath(result.getTaggedlist().get(j).getTaggedPhotoPath());
-                                        rowData.setDescription(result.getTaggedlist().get(j).getDescription());
-                                        rowData.setViews(result.getTaggedlist().get(j).getViews());
-                                        rowData.setEndorse(result.getTaggedlist().get(j).getEndorse());
-                                        rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
-                                        rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
-                                        item_list.add(rowData);
-                                    } else if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && (!filter_groups.equals("All"))) || (filter_category.equals("All") && (!filter_groups.equals("All")))) {
-                                        String[] split_filter_groups = filter_groups.split(",");       // filter selected groupids
-                                        ArrayList<String> filterGroupList = new ArrayList<String>(Arrays.asList(split_filter_groups)); // arraylist for filter selected groupids
+                                if (words.length > 1) {
+                                    Location tagLocation2 = new Location("tag Location");
+                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                                    float dist1 = myLocation.distanceTo(tagLocation2);
+                                    if (dist1 < radius_set) {
+                                        if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && filter_groups.equals("All")) || (filter_category.equals("All") && filter_groups.equals("All"))) {
+                                            RowData rowData = new RowData();
+                                            rowData.setTitle(result.getTaggedlist().get(j).getNeedName());
+                                            rowData.setAddress(result.getTaggedlist().get(j).getAddress());
+                                            rowData.setDate(result.getTaggedlist().get(j).getTaggedDatetime());
+                                            rowData.setImagepath(result.getTaggedlist().get(j).getTaggedPhotoPath());
+                                            rowData.setDistance(dist1);
+                                            rowData.setCharacterPath(result.getTaggedlist().get(j).getCharacterPath());
+                                            rowData.setFname(result.getTaggedlist().get(j).getFname());
+                                            rowData.setLname(result.getTaggedlist().get(j).getLname());
+                                            rowData.setPrivacy(result.getTaggedlist().get(j).getPrivacy());
+                                            rowData.setNeedName(result.getTaggedlist().get(j).getNeedName());
+                                            rowData.setTotalTaggedCreditPoints(result.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                            rowData.setTotalFulfilledCreditPoints(result.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                            rowData.setUserID(result.getTaggedlist().get(j).getUserID());
+                                            rowData.setTaggedID(result.getTaggedlist().get(j).getTaggedID());
+                                            rowData.setCatType(model.getTaggedlist().get(j).getCatType());
+                                            rowData.setGeopoint(result.getTaggedlist().get(j).getGeopoint());
+                                            rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
+                                            rowData.setTaggedPhotoPath(result.getTaggedlist().get(j).getTaggedPhotoPath());
+                                            rowData.setDescription(result.getTaggedlist().get(j).getDescription());
+                                            rowData.setViews(result.getTaggedlist().get(j).getViews());
+                                            rowData.setEndorse(result.getTaggedlist().get(j).getEndorse());
+                                            rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
+                                            rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
+                                            item_list.add(rowData);
+                                        } else if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && (!filter_groups.equals("All"))) || (filter_category.equals("All") && (!filter_groups.equals("All")))) {
+                                            String[] split_filter_groups = filter_groups.split(",");       // filter selected groupids
+                                            ArrayList<String> filterGroupList = new ArrayList<String>(Arrays.asList(split_filter_groups)); // arraylist for filter selected groupids
 
-                                        String[] split_audience_groupids = audience_selected_groups.split(","); // server audience groupids
-                                        ArrayList<String> audienceGroupList = new ArrayList<String>(Arrays.asList(split_audience_groupids)); // arraylist server audience groupids
+                                            String[] split_audience_groupids = audience_selected_groups.split(","); // server audience groupids
+                                            ArrayList<String> audienceGroupList = new ArrayList<String>(Arrays.asList(split_audience_groupids)); // arraylist server audience groupids
 
-                                        if (model.getTaggedlist().get(j).getFromGroupID() != null) {  // check for "from groupid"... if null means tagger is individual user
-                                            if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
-                                                if (audience_all_groups.equals("N")) { // check for tagger selected all groups audience
-                                                    if (audienceGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {
+                                            if (model.getTaggedlist().get(j).getFromGroupID() != null) {  // check for "from groupid"... if null means tagger is individual user
+                                                if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
+                                                    if (audience_all_groups.equals("N")) { // check for tagger selected all groups audience
+                                                        if (audienceGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {
+                                                            RowData rowData = new RowData();
+                                                            rowData.setTitle(result.getTaggedlist().get(j).getNeedName());
+                                                            rowData.setAddress(result.getTaggedlist().get(j).getAddress());
+                                                            rowData.setDate(result.getTaggedlist().get(j).getTaggedDatetime());
+                                                            rowData.setImagepath(result.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                            rowData.setDistance(dist1);
+                                                            rowData.setCharacterPath(result.getTaggedlist().get(j).getCharacterPath());
+                                                            rowData.setFname(result.getTaggedlist().get(j).getFname());
+                                                            rowData.setLname(result.getTaggedlist().get(j).getLname());
+                                                            rowData.setPrivacy(result.getTaggedlist().get(j).getPrivacy());
+                                                            rowData.setCatType(model.getTaggedlist().get(j).getCatType());
+                                                            rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
+                                                            rowData.setNeedName(result.getTaggedlist().get(j).getNeedName());
+                                                            rowData.setTotalTaggedCreditPoints(result.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                                            rowData.setTotalFulfilledCreditPoints(result.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                                            rowData.setUserID(result.getTaggedlist().get(j).getUserID());
+                                                            rowData.setTaggedID(result.getTaggedlist().get(j).getTaggedID());
+                                                            rowData.setGeopoint(result.getTaggedlist().get(j).getGeopoint());
+                                                            rowData.setTaggedPhotoPath(result.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                            rowData.setDescription(result.getTaggedlist().get(j).getDescription());
+                                                            rowData.setViews(result.getTaggedlist().get(j).getViews());
+                                                            rowData.setEndorse(result.getTaggedlist().get(j).getEndorse());
+                                                            rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
+                                                            rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
+                                                            item_list.add(rowData);
+                                                        }
+                                                    } else {
                                                         RowData rowData = new RowData();
                                                         rowData.setTitle(result.getTaggedlist().get(j).getNeedName());
                                                         rowData.setAddress(result.getTaggedlist().get(j).getAddress());
@@ -297,38 +325,11 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                                                         rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
                                                         item_list.add(rowData);
                                                     }
-                                                } else {
-                                                    RowData rowData = new RowData();
-                                                    rowData.setTitle(result.getTaggedlist().get(j).getNeedName());
-                                                    rowData.setAddress(result.getTaggedlist().get(j).getAddress());
-                                                    rowData.setDate(result.getTaggedlist().get(j).getTaggedDatetime());
-                                                    rowData.setImagepath(result.getTaggedlist().get(j).getTaggedPhotoPath());
-                                                    rowData.setDistance(dist1);
-                                                    rowData.setCharacterPath(result.getTaggedlist().get(j).getCharacterPath());
-                                                    rowData.setFname(result.getTaggedlist().get(j).getFname());
-                                                    rowData.setLname(result.getTaggedlist().get(j).getLname());
-                                                    rowData.setPrivacy(result.getTaggedlist().get(j).getPrivacy());
-                                                    rowData.setCatType(model.getTaggedlist().get(j).getCatType());
-                                                    rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
-                                                    rowData.setNeedName(result.getTaggedlist().get(j).getNeedName());
-                                                    rowData.setTotalTaggedCreditPoints(result.getTaggedlist().get(j).getTotalTaggedCreditPoints());
-                                                    rowData.setTotalFulfilledCreditPoints(result.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
-                                                    rowData.setUserID(result.getTaggedlist().get(j).getUserID());
-                                                    rowData.setTaggedID(result.getTaggedlist().get(j).getTaggedID());
-                                                    rowData.setGeopoint(result.getTaggedlist().get(j).getGeopoint());
-                                                    rowData.setTaggedPhotoPath(result.getTaggedlist().get(j).getTaggedPhotoPath());
-                                                    rowData.setDescription(result.getTaggedlist().get(j).getDescription());
-                                                    rowData.setViews(result.getTaggedlist().get(j).getViews());
-                                                    rowData.setEndorse(result.getTaggedlist().get(j).getEndorse());
-                                                    rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
-                                                    rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
-                                                    item_list.add(rowData);
                                                 }
                                             }
                                         }
                                     }
                                 }
-
                                 if (item_list.size() == 0) {
                                     recyclerView.setVisibility(View.GONE);
                                     txtlist_count.setVisibility(View.GONE);

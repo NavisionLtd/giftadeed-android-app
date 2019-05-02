@@ -42,9 +42,9 @@ public class SessionManager {
     public static final String GROUP_DESC = "Group_desc";
     public static final String GROUP_IMAGE = "Group_image";
     public static final String KEY_GROUPNAME = "GROUPNAME";
-    public static final String SOS_OPTION_1_CLICKED = "no"; // call
-    public static final String SOS_OPTION_2_CLICKED = "no"; // sms
-    public static final String SOS_OPTION_3_CLICKED = "no"; // share location
+    public static final String SOS_OPTION_1_CLICKED = "option1"; // call
+    public static final String SOS_OPTION_2_CLICKED = "option2"; // sms
+    public static final String SOS_OPTION_3_CLICKED = "option3"; // share location
 
     public SessionManager(Context context) {
         this.context = context;
@@ -136,8 +136,7 @@ public class SessionManager {
     }
 
     public String getSosOption1Clicked() {
-        String clicked = pref.getString(SOS_OPTION_1_CLICKED, "no");
-        return clicked;
+        return pref.getString(SOS_OPTION_1_CLICKED, "no");
     }
 
     public void store_sos_option2_clicked(String clicked) {
@@ -146,8 +145,7 @@ public class SessionManager {
     }
 
     public String getSosOption2Clicked() {
-        String clicked = pref.getString(SOS_OPTION_2_CLICKED, "no");
-        return clicked;
+        return pref.getString(SOS_OPTION_2_CLICKED, "no");
     }
 
     public void store_sos_option3_clicked(String clicked) {
@@ -156,8 +154,7 @@ public class SessionManager {
     }
 
     public String getSosOption3Clicked() {
-        String clicked = pref.getString(SOS_OPTION_3_CLICKED, "no");
-        return clicked;
+        return pref.getString(SOS_OPTION_3_CLICKED, "no");
     }
 
     //-----------------------------Getting current drawer status

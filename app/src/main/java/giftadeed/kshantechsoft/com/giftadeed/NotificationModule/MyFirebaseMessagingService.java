@@ -262,50 +262,51 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                 if (str_geo_point != null) {
                     if (!(str_geo_point.equals(""))) {
                         String[] words = str_geo_point.split(",");
-                        Location tagLocation2 = new Location("tag Location");
-                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                        if (words.length > 1) {
+                            Location tagLocation2 = new Location("tag Location");
+                            tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                            tagLocation2.setLongitude(Double.parseDouble(words[1]));
 
 //---------------taking current location-----------------------
-                        DecimalFormat df2 = new DecimalFormat("#.##");
-                        double radi = sessionManager.getradius();
-                        if (radi == 0.0f) {
-                            radi = 10.0f;
-                        }
-                        double dist1 = mLocation.distanceTo(tagLocation2);
-
-                        if (dist1 < radi) {
-                            MyNotificationManager mNotificationManager = new MyNotificationManager(getApplicationContext());
-                            Intent intent;
-                            //------------------------recive notification
-                            String Notification_status = "";
-                            HashMap<String, String> Notification_status_map;
-                            sessionManager = new SessionManager(getApplicationContext());
-                            Notification_status_map = sessionManager.get_notification_status();
-                            Notification_status = Notification_status_map.get(sessionManager.KEY_NOTIFICATION);
-
-                            if (strUserId == null) {
-                                if (type.equals("1")) {
-                                    // move to sos details
-                                    intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
-                                    intent.putExtra("sos_id", id);
-                                } else {
-                                    intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    //pass value
-                                    intent.putExtra("tag_id", "1001");
-                                }
-                            } else {
-                                if (type.equals("1")) {
-                                    // move to sos details
-                                    intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
-                                    intent.putExtra("sos_id", id);
-                                } else {
-                                    intent = new Intent(getApplicationContext(), TaggedneedsActivity.class);
-                                    intent.putExtra("tag_id", "1001");
-                                }
+                            DecimalFormat df2 = new DecimalFormat("#.##");
+                            double radi = sessionManager.getradius();
+                            if (radi == 0.0f) {
+                                radi = 10.0f;
                             }
+                            double dist1 = mLocation.distanceTo(tagLocation2);
 
-                            if (Notification_status.equals("ON")) {
+                            if (dist1 < radi) {
+                                MyNotificationManager mNotificationManager = new MyNotificationManager(getApplicationContext());
+                                Intent intent;
+                                //------------------------recive notification
+                                String Notification_status = "";
+                                HashMap<String, String> Notification_status_map;
+                                sessionManager = new SessionManager(getApplicationContext());
+                                Notification_status_map = sessionManager.get_notification_status();
+                                Notification_status = Notification_status_map.get(sessionManager.KEY_NOTIFICATION);
+
+                                if (strUserId == null) {
+                                    if (type.equals("1")) {
+                                        // move to sos details
+                                        intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
+                                        intent.putExtra("sos_id", id);
+                                    } else {
+                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        //pass value
+                                        intent.putExtra("tag_id", "1001");
+                                    }
+                                } else {
+                                    if (type.equals("1")) {
+                                        // move to sos details
+                                        intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
+                                        intent.putExtra("sos_id", id);
+                                    } else {
+                                        intent = new Intent(getApplicationContext(), TaggedneedsActivity.class);
+                                        intent.putExtra("tag_id", "1001");
+                                    }
+                                }
+
+                                if (Notification_status.equals("ON")) {
 //                                if (selectedCategoryOn > 0) { // check for notification category setting is ON
                                     if (groupids.equals("")) {
                                         if (savedGroupList.size() == 0) {
@@ -329,10 +330,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                                         }
                                     }
 //                                }
-                            } else if (Notification_status.equals("OFF")) {
+                                } else if (Notification_status.equals("OFF")) {
 
-                            } else {
-                                mNotificationManager.showSmallNotification(title, message, intent);
+                                } else {
+                                    mNotificationManager.showSmallNotification(title, message, intent);
+                                }
                             }
                         }
                     }

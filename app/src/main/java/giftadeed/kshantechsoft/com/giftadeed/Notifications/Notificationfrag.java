@@ -391,30 +391,32 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
                         myLocation.setLatitude(current_latitude);
                         myLocation.setLongitude(current_longitude);
                         String[] words = geopoints.split(",");
-                        Location tagLocation2 = new Location("tag Location");
-                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                        float dist1 = myLocation.distanceTo(tagLocation2);
+                        if (words.length > 1) {
+                            Location tagLocation2 = new Location("tag Location");
+                            tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                            tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                            float dist1 = myLocation.distanceTo(tagLocation2);
 
-                        a1.setDate(msg_data_new.getString(1));
-                        a1.setTime(msg_data_new.getString(2));
-                        a1.setNtType(msg_data_new.getString(3));
-                        a1.setTagType(msg_data_new.getString(4));
-                        a1.setGeopoint(msg_data_new.getString(5));
-                        a1.setNeedName(msg_data_new.getString(6));
-                        a1.setTagid(msg_data_new.getString(7));
+                            a1.setDate(msg_data_new.getString(1));
+                            a1.setTime(msg_data_new.getString(2));
+                            a1.setNtType(msg_data_new.getString(3));
+                            a1.setTagType(msg_data_new.getString(4));
+                            a1.setGeopoint(msg_data_new.getString(5));
+                            a1.setNeedName(msg_data_new.getString(6));
+                            a1.setTagid(msg_data_new.getString(7));
 
-                        Log.d("date", msg_data_new.getString(1));
-                        Log.d("time", msg_data_new.getString(2));
-                        Log.d("nttype", msg_data_new.getString(3));
-                        Log.d("mapingid", msg_data_new.getString(4));
-                        System.out.print(msg_data_new.getString(1));
-                        System.out.print(msg_data_new.getString(2));
-                        System.out.print(msg_data_new.getString(3));
-                        System.out.print(msg_data_new.getString(4));
-                        System.out.print(msg_data_new.getString(5));
-                        if (dist1 < notification_radius) {
-                            notification_list.add(a1);
+                            Log.d("date", msg_data_new.getString(1));
+                            Log.d("time", msg_data_new.getString(2));
+                            Log.d("nttype", msg_data_new.getString(3));
+                            Log.d("mapingid", msg_data_new.getString(4));
+                            System.out.print(msg_data_new.getString(1));
+                            System.out.print(msg_data_new.getString(2));
+                            System.out.print(msg_data_new.getString(3));
+                            System.out.print(msg_data_new.getString(4));
+                            System.out.print(msg_data_new.getString(5));
+                            if (dist1 < notification_radius) {
+                                notification_list.add(a1);
+                            }
                         }
                     } while ((msg_data_new.moveToNext()));
                     System.out.print(notification_list.size());
@@ -561,36 +563,38 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
                     myLocation.setLongitude(current_longitude);
 
                     String[] words = geopoints.split(",");
-                    Location tagLocation2 = new Location("tag Location");
-                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                    float dist1 = myLocation.distanceTo(tagLocation2);
+                    if (words.length > 1) {
+                        Location tagLocation2 = new Location("tag Location");
+                        tagLocation2.setLatitude(Double.parseDouble(words[0]));
+                        tagLocation2.setLongitude(Double.parseDouble(words[1]));
+                        float dist1 = myLocation.distanceTo(tagLocation2);
 
-                    a1.setDate(msg_data_new.getString(1));
-                    a1.setTime(msg_data_new.getString(2));
-                    a1.setNtType(msg_data_new.getString(3));
-                    a1.setTagType(msg_data_new.getString(4));
-                    a1.setGeopoint(msg_data_new.getString(5));
-                    a1.setNeedName(msg_data_new.getString(6));
-                    a1.setTagid(msg_data_new.getString(7));
+                        a1.setDate(msg_data_new.getString(1));
+                        a1.setTime(msg_data_new.getString(2));
+                        a1.setNtType(msg_data_new.getString(3));
+                        a1.setTagType(msg_data_new.getString(4));
+                        a1.setGeopoint(msg_data_new.getString(5));
+                        a1.setNeedName(msg_data_new.getString(6));
+                        a1.setTagid(msg_data_new.getString(7));
 
-                    Log.d("date", msg_data_new.getString(1));
-                    Log.d("time", msg_data_new.getString(2));
-                    Log.d("nttype", msg_data_new.getString(3));
-                    Log.d("mapingid", msg_data_new.getString(4));
-                    System.out.print(msg_data_new.getString(1));
-                    System.out.print(msg_data_new.getString(2));
-                    System.out.print(msg_data_new.getString(3));
-                    System.out.print(msg_data_new.getString(4));
-                    System.out.print(msg_data_new.getString(5));
-                    if (dist1 < notification_radius) {
-                        if (strFiltertype.equals(msg_data_new.getString(6))) {
-                            notification_list.add(a1);
-                        } else if (strFiltertype.equals("All")) {
-                            notification_list.add(a1);
+                        Log.d("date", msg_data_new.getString(1));
+                        Log.d("time", msg_data_new.getString(2));
+                        Log.d("nttype", msg_data_new.getString(3));
+                        Log.d("mapingid", msg_data_new.getString(4));
+                        System.out.print(msg_data_new.getString(1));
+                        System.out.print(msg_data_new.getString(2));
+                        System.out.print(msg_data_new.getString(3));
+                        System.out.print(msg_data_new.getString(4));
+                        System.out.print(msg_data_new.getString(5));
+                        if (dist1 < notification_radius) {
+                            if (strFiltertype.equals(msg_data_new.getString(6))) {
+                                notification_list.add(a1);
+                            } else if (strFiltertype.equals("All")) {
+                                notification_list.add(a1);
+                            }
                         }
+                        System.out.print(msg_data_new.getString(7));
                     }
-                    System.out.print(msg_data_new.getString(7));
                 } while ((msg_data_new.moveToNext()));
                 System.out.print("Notification size: " + notification_list.size());
                 Log.d("Notification size:", String.valueOf(notification_list.size()));
