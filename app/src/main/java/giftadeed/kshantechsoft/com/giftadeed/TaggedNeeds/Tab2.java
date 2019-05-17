@@ -105,10 +105,6 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
         recyclerView.setLayoutManager(layoutManager);
         txtlist_count = (TextView) rootview.findViewById(R.id.txtlist_count);
         textView = (TextView) rootview.findViewById(R.id.textView3);
-        // myContext = (FragmentActivity) getContext();
-        //item_tab2=Tab1.item;
-        /*needListAdapter = new NeedListAdapter(item_tab2, getActivity(), Tab2.this);
-        recyclerView.setAdapter(needListAdapter);*/
         mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetails();

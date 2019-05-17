@@ -36,12 +36,16 @@ public class SessionManager {
     public static final String RES_CALL_FROM = "Res_Call_From";
     public static final String RESOURCE_ID = "Resource_Id";
     public static final String RESOURCE_NAME = "Resource_name";
-    public static final String CALL_FROM = "Call_From";
+    public static final String GRP_CALL_FROM = "Grp_Call_From";
     public static final String GROUP_ID = "Group_Id";
     public static final String GROUP_NAME = "Group_name";
     public static final String GROUP_DESC = "Group_desc";
     public static final String GROUP_IMAGE = "Group_image";
     public static final String KEY_GROUPNAME = "GROUPNAME";
+    public static final String COLAB_CALL_FROM = "Colab_Call_From";
+    public static final String COLAB_ID = "Colab_Id";
+    public static final String COLAB_NAME = "Colab_name";
+    public static final String COLAB_DESC = "Colab_desc";
     public static final String SOS_OPTION_1_CLICKED = "option1"; // call
     public static final String SOS_OPTION_2_CLICKED = "option2"; // sms
     public static final String SOS_OPTION_3_CLICKED = "option3"; // share location
@@ -78,7 +82,7 @@ public class SessionManager {
     }
 
     public void createGroupDetails(String callingfrom, String gid, String gname, String gdesc, String gimage) {
-        editor.putString(CALL_FROM, callingfrom);
+        editor.putString(GRP_CALL_FROM, callingfrom);
         editor.putString(GROUP_ID, gid);
         editor.putString(GROUP_NAME, gname);
         editor.putString(GROUP_DESC, gdesc);
@@ -88,11 +92,28 @@ public class SessionManager {
 
     public HashMap<String, String> getSelectedGroupDetails() {
         HashMap<String, String> group = new HashMap<String, String>();
-        group.put(CALL_FROM, pref.getString(CALL_FROM, null));
+        group.put(GRP_CALL_FROM, pref.getString(GRP_CALL_FROM, null));
         group.put(GROUP_ID, pref.getString(GROUP_ID, null));
         group.put(GROUP_NAME, pref.getString(GROUP_NAME, null));
         group.put(GROUP_DESC, pref.getString(GROUP_DESC, null));
         group.put(GROUP_IMAGE, pref.getString(GROUP_IMAGE, null));
+        return group;
+    }
+
+    public void createColabDetails(String callingfrom, String cid, String cname, String cdesc) {
+        editor.putString(COLAB_CALL_FROM, callingfrom);
+        editor.putString(COLAB_ID, cid);
+        editor.putString(COLAB_NAME, cname);
+        editor.putString(COLAB_DESC, cdesc);
+        editor.commit();
+    }
+
+    public HashMap<String, String> getSelectedColabDetails() {
+        HashMap<String, String> group = new HashMap<String, String>();
+        group.put(COLAB_CALL_FROM, pref.getString(COLAB_CALL_FROM, null));
+        group.put(COLAB_ID, pref.getString(COLAB_ID, null));
+        group.put(COLAB_NAME, pref.getString(COLAB_NAME, null));
+        group.put(COLAB_DESC, pref.getString(COLAB_DESC, null));
         return group;
     }
 

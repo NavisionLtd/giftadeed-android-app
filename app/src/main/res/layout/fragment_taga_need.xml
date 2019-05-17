@@ -72,14 +72,15 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="10dp"
+                            android:layout_margin="10dp"
                             android:gravity="center"
                             android:orientation="horizontal">
 
                             <Button
                                 android:id="@+id/btngiftaneedcamera"
-                                android:layout_width="150dp"
+                                android:layout_width="0dp"
                                 android:layout_height="40dp"
+                                android:layout_weight="1"
                                 android:background="@drawable/white_button_background"
                                 android:drawableLeft="@drawable/cam_1"
                                 android:drawablePadding="10dp"
@@ -92,9 +93,10 @@
 
                             <Button
                                 android:id="@+id/btngiftaneedgallary"
-                                android:layout_width="150dp"
+                                android:layout_width="0dp"
                                 android:layout_height="40dp"
                                 android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
                                 android:background="@drawable/white_button_background"
                                 android:drawableLeft="@drawable/gallery_1"
                                 android:paddingLeft="10dp"
@@ -155,10 +157,10 @@
                                     android:drawableRight="@android:drawable/arrow_down_float"
                                     android:editable="false"
                                     android:focusable="false"
-                                    android:textSize="16sp"
-                                    android:textColor="@color/grey"
                                     android:hint="@string/select_res_group"
-                                    android:longClickable="false" />
+                                    android:longClickable="false"
+                                    android:textColor="@color/grey"
+                                    android:textSize="16sp" />
                             </android.support.design.widget.TextInputLayout>
 
                             <ImageView
@@ -188,15 +190,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="5dp"
                                     android:backgroundTint="@color/grey"
                                     android:drawableRight="@android:drawable/arrow_down_float"
                                     android:editable="false"
                                     android:focusable="false"
-                                    android:textSize="16sp"
-                                    android:textColor="@color/grey"
                                     android:hint="@string/select_category"
-                                    android:longClickable="false" />
+                                    android:longClickable="false"
+                                    android:textColor="@color/grey"
+                                    android:textSize="16sp" />
                             </android.support.design.widget.TextInputLayout>
 
                             <ImageView
@@ -231,11 +232,11 @@
                                     android:backgroundTint="@color/grey"
                                     android:drawableRight="@android:drawable/arrow_down_float"
                                     android:editable="false"
-                                    android:textColor="@color/grey"
-                                    android:textSize="16sp"
                                     android:focusable="false"
                                     android:hint="@string/select_pref"
-                                    android:longClickable="false" />
+                                    android:longClickable="false"
+                                    android:textColor="@color/grey"
+                                    android:textSize="16sp" />
                             </android.support.design.widget.TextInputLayout>
 
                             <ImageView
@@ -265,17 +266,17 @@
                                 android:id="@+id/Checkbox_container"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/grey"
                                 android:text="@string/container_available"
+                                android:textColor="@color/grey"
                                 android:textSize="16sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
-                                android:textColor="@color/grey"
                                 android:paddingLeft="5dp"
-                                android:text="@string/container_note" />
+                                android:text="@string/container_note"
+                                android:textColor="@color/grey" />
                         </LinearLayout>
                         <!--<TextView
                             android:id="@+id/txttaganeedlocation"
@@ -316,9 +317,9 @@
                                     android:backgroundTint="@color/grey"
                                     android:editable="false"
                                     android:focusable="false"
-                                    android:textSize="16sp"
                                     android:hint="@string/select_location"
-                                    android:textColor="@color/grey" />
+                                    android:textColor="@color/grey"
+                                    android:textSize="16sp" />
                             </android.support.design.widget.TextInputLayout>
                         </LinearLayout>
 
@@ -345,7 +346,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="0.2" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -355,6 +355,7 @@
                             android:layout_marginTop="10dp"
                             android:gravity="left"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             android:weightSum="2">
 
                             <TextView
@@ -389,6 +390,8 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginRight="10dp"
+                            android:clickable="false"
+                            android:visibility="gone"
                             app:dsb_indicatorColor="@color/colorAccent"
                             app:dsb_indicatorElevation="0dp"
                             app:dsb_max="48"
@@ -418,11 +421,11 @@
                                     android:backgroundTint="@color/grey"
                                     android:drawableRight="@android:drawable/arrow_down_float"
                                     android:editable="false"
-                                    android:textSize="16sp"
                                     android:focusable="false"
-                                    android:textColor="@color/grey"
                                     android:hint="@string/select_audiance"
-                                    android:longClickable="false" />
+                                    android:longClickable="false"
+                                    android:textColor="@color/grey"
+                                    android:textSize="16sp" />
                             </android.support.design.widget.TextInputLayout>
 
                             <ImageView
@@ -497,11 +500,11 @@
                                 android:layout_marginBottom="50dp"
                                 android:backgroundTint="@color/grey"
                                 android:hint=""
-                                android:textSize="16sp"
-                                android:textColor="@color/grey"
                                 android:inputType="textMultiLine|textFilter"
                                 android:maxLength="501"
-                                android:scrollbars="vertical" />
+                                android:scrollbars="vertical"
+                                android:textColor="@color/grey"
+                                android:textSize="16sp" />
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -513,13 +516,13 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/button_background"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/button_background"
             android:text="@string/post"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/finalheaderfont" />
+            android:textSize="16sp" />
     </RelativeLayout>
 </FrameLayout>

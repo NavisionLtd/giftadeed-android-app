@@ -147,7 +147,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
         HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
-        callingFrom = group.get(sessionManager.CALL_FROM);
+        callingFrom = group.get(sessionManager.GRP_CALL_FROM);
         receivedGid = group.get(sessionManager.GROUP_ID);
         receivedGname = group.get(sessionManager.GROUP_NAME);
         receivedGdesc = group.get(sessionManager.GROUP_DESC);
@@ -222,8 +222,9 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
             @Override
             public void onClick(View v) {
                 if (callingFrom.equals("create")) {
-                    GroupsListFragment groupsListFragment = new GroupsListFragment();
-                    fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+//                    GroupsListFragment groupsListFragment = new GroupsListFragment();
+//                    fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, GroupCollabFrag.newInstance(9)).commit();
                 } else {
                     GroupDetailsFragment groupDetailsFragment = new GroupDetailsFragment();
                     fragmgr.beginTransaction().replace(R.id.content_frame, groupDetailsFragment).commit();
@@ -292,7 +293,8 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     } else {
                         int generatedGroupId = groupResponseStatus.getGroupid();
                         String channelName = "";
-                        channelName = groupname + " - " + generatedGroupId;
+                        // Sendbird create channel. Concat with GRP for Group and CLB for Collaboration
+                        channelName = groupname + " - GRP" + generatedGroupId;
                         Log.d("channel_name", channelName);
                         if (groupResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.group_created_msg), Toast.LENGTH_SHORT).show();
@@ -305,8 +307,9 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                                 createGroupChannel(lstusers, channelName, strMessage, mIsDistinct);
                             }
                             // move to groups list fragment
-                            GroupsListFragment groupsListFragment = new GroupsListFragment();
-                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+//                            GroupsListFragment groupsListFragment = new GroupsListFragment();
+//                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                            fragmgr.beginTransaction().replace(R.id.content_frame, GroupCollabFrag.newInstance(9)).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
@@ -379,13 +382,15 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
 
                             // update sendbird also
                             String channelName = "";
-                            channelName = groupname + " - " + groupid;
-                            filterGroupChannel(receivedGname + " - " + receivedGid);
+                            // Sendbird edit channel. Concat with GRP for Group and CLB for Collaboration
+                            channelName = groupname + " - GRP" + groupid;
+                            filterGroupChannel(receivedGname + " - GRP" + receivedGid);
                             callUpdateSendBird(fetchedChannelUrl, channelName);
 
                             // move to groups list fragment
-                            GroupsListFragment groupsListFragment = new GroupsListFragment();
-                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+//                            GroupsListFragment groupsListFragment = new GroupsListFragment();
+//                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                            fragmgr.beginTransaction().replace(R.id.content_frame, GroupCollabFrag.newInstance(9)).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
@@ -478,20 +483,22 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAMERA) {
-            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (resultCode == RESULT_OK) {
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    try {
+                        bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-            } else {
-                bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                strimagePath = file.getAbsolutePath();
+                imageView.setImageBitmap(bitmap);
             }
-            strimagePath = file.getAbsolutePath();
-            imageView.setImageBitmap(bitmap);
         }
 
         if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
@@ -551,8 +558,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     if (callingFrom.equals("create")) {
-                        GroupsListFragment groupsListFragment = new GroupsListFragment();
-                        fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                        fragmgr.beginTransaction().replace(R.id.content_frame, GroupCollabFrag.newInstance(9)).commit();
                     } else {
                         GroupDetailsFragment groupDetailsFragment = new GroupDetailsFragment();
                         fragmgr.beginTransaction().replace(R.id.content_frame, groupDetailsFragment).commit();

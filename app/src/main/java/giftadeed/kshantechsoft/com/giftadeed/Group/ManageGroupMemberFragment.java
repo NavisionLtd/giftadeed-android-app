@@ -382,8 +382,8 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                             if (groupResponseStatus.getStatus() == 1) {
                                 Toast.makeText(getContext(), getResources().getString(R.string.member_removed), Toast.LENGTH_SHORT).show();
 
-                                //remove member from sendbird channel
-                                String channel_name = receivedGname + " - " + receivedGid;
+                                //remove member from sendbird channel. Concat with GRP for Group and CLB for Collaboration
+                                String channel_name = receivedGname + " - GRP" + receivedGid;
                                 if (lstGetChannelsList.size() != 0) {
                                     for (int i = 0; i < lstGetChannelsList.size(); i++) {
                                         if (lstGetChannelsList.get(i).getmChannelName().equals(channel_name)) {

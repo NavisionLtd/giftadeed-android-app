@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -121,7 +122,7 @@ import static giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails.context;
 /////////////////////////////////////////////////////////////////
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private TextView txtagreet_C, txtagreePolicy;
-    LinearLayout fblayout, linkedinlayout, googlelayout;
+    ImageView fbbtn, linkedinbtn, googlebtn;
     TextView signup, forgot, loginheading, txtloginTermsandcondn, txtagree1, txtTermsAnd, txtSelectLanguage;
     private CheckBox chkbx;
     Button btnLogin, dialogconfirm, dialogcancel;
@@ -394,7 +395,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        fblayout.setOnClickListener(new View.OnClickListener() {
+        fbbtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -460,7 +461,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
         //-------------------------------Linkedin Login
-        linkedinlayout.setOnClickListener(new View.OnClickListener() {
+        linkedinbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                if (!(chkbx.isChecked())) {
@@ -470,7 +471,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //                }
             }
         });
-        googlelayout.setOnClickListener(new View.OnClickListener() {
+        googlebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                if (!(chkbx.isChecked())) {
@@ -505,9 +506,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //  fb_login = (TextView) findViewById(R.id.txtfb_login);
         // txtlinkedIn_login = (TextView) findViewById(R.id.txtlinkedIn_login);
         txtsaperator = (TextView) findViewById(R.id.txtsaperator);
-        fblayout = (LinearLayout) findViewById(R.id.fblayout);
-        linkedinlayout = (LinearLayout) findViewById(R.id.linkedinlayout);
-        googlelayout = (LinearLayout) findViewById(R.id.googlelayout);
+        fbbtn = (ImageView) findViewById(R.id.fb_btn);
+        linkedinbtn = (ImageView) findViewById(R.id.linkedin_btn);
+        googlebtn = (ImageView) findViewById(R.id.google_btn);
 //---------------------------------------setting font style-------------------------
         btnLogin.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         forgot.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);

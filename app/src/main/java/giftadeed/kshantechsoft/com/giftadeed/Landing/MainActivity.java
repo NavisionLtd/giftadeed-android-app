@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //-----------------------initlizing the UI elements-------------------------------------------------
+    //-----------------------initializing the UI elements-------------------------------------------------
     private void init() {
         btncharity = (Button) findViewById(R.id.charity);
         btnsubscription = (Button) findViewById(R.id.subscription);

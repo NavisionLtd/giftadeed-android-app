@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_colab_add_member"
+        android:title="@string/add_member"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_colab_member_list"
+        android:title="@string/view_member_list"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_edit_colab"
+        android:title="@string/edit_collab"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_delete_colab"
+        android:title="@string/delete_collab"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_colab_info"
+        android:title="@string/collab_info"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_exit_colab"
+        android:title="@string/exit_collab"
+        app:showAsAction="never" />
+</menu>

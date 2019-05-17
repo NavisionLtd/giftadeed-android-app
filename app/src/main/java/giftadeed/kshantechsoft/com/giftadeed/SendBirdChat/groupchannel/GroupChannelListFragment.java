@@ -1,7 +1,6 @@
 package giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsListFragment;
+import giftadeed.kshantechsoft.com.giftadeed.Group.GroupCollabFrag;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.main.ConnectionManager;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
@@ -44,7 +43,6 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 
 import static android.app.Activity.RESULT_OK;
-import static giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChannelActivity.strStaicRedirectionPage;
 
 public class GroupChannelListFragment extends Fragment {
     static FragmentManager fragmgr;
@@ -180,8 +178,8 @@ public class GroupChannelListFragment extends Fragment {
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupsListFragment groupsListFragment = new GroupsListFragment();
-                fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
             }
         });
 
@@ -205,8 +203,8 @@ public class GroupChannelListFragment extends Fragment {
                     //  fragmgr.beginTransaction().replace(R.id.container_open_channel, MapviewFragment.newInstance(i)).addToBackStack(null).commit();
 
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                    GroupsListFragment groupsListFragment = new GroupsListFragment();
-                    fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                    GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
 
                     /*TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);

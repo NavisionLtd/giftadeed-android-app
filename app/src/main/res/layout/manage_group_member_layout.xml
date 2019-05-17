@@ -47,6 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search_member"
+            android:inputType="text"
+            android:singleLine="true"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:visibility="gone" />

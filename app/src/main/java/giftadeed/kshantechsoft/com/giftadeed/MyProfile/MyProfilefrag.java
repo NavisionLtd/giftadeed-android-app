@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CircularBorderDrawable;
 import android.support.design.widget.TextInputLayout;
 import android.content.Intent;
 import android.os.Bundle;
@@ -80,6 +81,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.BuildConfig;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
@@ -129,7 +131,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     String path = "";
     String strimagePath = "", firebasePhotoUrl = "", strAvatarPath = "";
     View rootview;
-    ImageView profilePic;
+    CircleImageView profilePic;
     Button changeProfilePic;
     static android.support.v4.app.Fragment fragment;
     // FragmentManager fragmentManager;
@@ -233,7 +235,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         }
                         if (path.length() > 0) {
                             Glide.with(getContext()).load(path).into(profilePic);
-                            //                            Picasso.with(getContext()).load(profile.getPhotourl()).placeholder(R.drawable.profimg).into(profilePic);
                         } else {
                             Glide.with(getContext()).load(R.drawable.profimg).into(profilePic);
                         }
@@ -834,23 +835,27 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         if (requestCode == 100) {
-            // camera clicked image
-            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(fileUri), null, options);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (resultCode == RESULT_OK) {
+                // camera clicked image
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    try {
+                        bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(fileUri), null, options);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-            } else {
-                bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                strimagePath = file.getAbsolutePath();
+                profilePic.setImageBitmap(bitmap);
+                profilePic.setScaleType(ImageView.ScaleType.FIT_XY);
+                strAvatarPath = "";
+            } else if (resultCode == RESULT_CANCELED) {
+
             }
-            strimagePath = file.getAbsolutePath();
-            profilePic.setImageBitmap(bitmap);
-            profilePic.setScaleType(ImageView.ScaleType.FIT_XY);
-            strAvatarPath = "";
         } else if (requestCode == 200 && resultCode == RESULT_OK && imageReturnedIntent != null) {
             // Get the Image from gallery data
             fileUri = imageReturnedIntent.getData();
@@ -910,7 +915,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 
     //-------------------------Initilizing UI veriables-------------------------------------------------
     private void init() {
-        profilePic = (ImageView) rootview.findViewById(R.id.profile_pic);
+        profilePic = (CircleImageView) rootview.findViewById(R.id.profile_pic);
         changeProfilePic = (Button) rootview.findViewById(R.id.btn_change_pic);
         txtName = (TextView) rootview.findViewById(R.id.myprofiletxtname);
         txtCredits = (TextView) rootview.findViewById(R.id.myprofiletxtcredits);

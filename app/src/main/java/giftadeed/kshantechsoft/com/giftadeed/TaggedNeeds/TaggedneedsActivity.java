@@ -55,10 +55,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSEmergencyNumbers;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
+import giftadeed.kshantechsoft.com.giftadeed.Group.GroupCollabFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsListFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.MyFullFillTag.MyFullFillTags;
 import giftadeed.kshantechsoft.com.giftadeed.MyProfile.MyProfilefrag;
@@ -96,9 +97,10 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
     Locale locale;
     Configuration config;
     static Fragment frag;
+    String path = "";
     static android.support.v4.app.FragmentManager fragmgr;
     public static TextView headingtext, editprofile, saveprofile;
-    ImageView profilePic;
+    CircleImageView profilePic;
     public static ImageView imgHamburger, imgappbarcamera, imgfilter, imgappbarsetting, back, imgShare;
     NavigationView navigationView;
     public static DrawerLayout drawer;
@@ -164,7 +166,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
 
         navigationView.setNavigationItemSelectedListener(this);
         View hView = navigationView.getHeaderView(0);
-        profilePic = (ImageView) hView.findViewById(R.id.imageView_profile_pic);
+        profilePic = (CircleImageView) hView.findViewById(R.id.imageView_profile_pic);
         txtProfileName = (TextView) hView.findViewById(R.id.txtProfilename);
         profiletxtview = (TextView) hView.findViewById(R.id.txtviewprofile);
         txtProfileName.setText(strUserName);
@@ -190,8 +192,14 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                     if (profileList.size() > 0) {
                         for (Profile profile : profileList) {
                             if (profile.getUserid().equals(strUserId)) {
-                                Glide.with(getApplicationContext()).load(profile.getPhotourl()).into(profilePic);
+                                path = profile.getPhotourl();
+//                                Glide.with(getApplicationContext()).load(profile.getPhotourl()).into(profilePic);
                             }
+                        }
+                        if (path.length() > 0) {
+                            Glide.with(getApplicationContext()).load(path).into(profilePic);
+                        } else {
+                            Glide.with(getApplicationContext()).load(R.drawable.profimg).into(profilePic);
                         }
                     }
                 }
@@ -394,11 +402,12 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 transaction.commit();
                 break;
             case 9:
-                android.support.v4.app.FragmentTransaction transaction1 = fragmgr.beginTransaction();
+                fragmgr.beginTransaction().replace(R.id.content_frame, GroupCollabFrag.newInstance(i)).commit();
+                /*android.support.v4.app.FragmentTransaction transaction1 = fragmgr.beginTransaction();
                 transaction1.setCustomAnimations(R.anim.slide_right, R.anim.slide_left);
                 transaction1.replace(R.id.content_frame, GroupsListFragment.newInstance(i));
                 transaction1.addToBackStack(null);
-                transaction1.commit();
+                transaction1.commit();*/
                 break;
             case 10:
                 fragmgr.beginTransaction().replace(R.id.content_frame, SettingsFragment.newInstance(i)).addToBackStack(null).commit();

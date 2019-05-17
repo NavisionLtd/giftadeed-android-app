@@ -114,7 +114,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     private ArrayList<Needtype> categories = new ArrayList<Needtype>();
     private ArrayList<CustomNeedtype> customCategories = new ArrayList<>();
     private ArrayList<MultiSubCategories> subcategories = new ArrayList<MultiSubCategories>();
-    String strCharacter_Path, strNeedmapping_ID, strGroupmapping_ID, strGroupmapping_Name;
+    String strGroupmapping_ID, strGroupmapping_Name;
     ImageView catImage;
     String latitude_source, longitude_source;
     public String str_Geopint, lat, longi, itemname, itemid;

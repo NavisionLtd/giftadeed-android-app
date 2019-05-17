@@ -30,7 +30,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 public class ShowImageActivity extends AppCompatActivity {
     //recyclerview object
     private RecyclerView recyclerView;
-    public static final String DATABASE_PATH_UPLOADS = "Avtaars";
+    public static final String DATABASE_PATH_UPLOADS = "liveAvtaars";
     //adapter object
     private RecyclerView.Adapter adapter;
     //database reference

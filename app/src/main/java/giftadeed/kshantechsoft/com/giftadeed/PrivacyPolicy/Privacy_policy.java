@@ -21,8 +21,6 @@ public class Privacy_policy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
-        Bundle bundle = getIntent().getExtras();
-        // message = bundle.getString("message");
         imgback = (ImageView) findViewById(R.id.tc_backbutton);
         txtprivacypolicy = (WebView) findViewById(R.id.txtAgreementText);
 //        txtprivacypolicy.loadUrl("file:///android_asset/PrivacyPolicy.html");

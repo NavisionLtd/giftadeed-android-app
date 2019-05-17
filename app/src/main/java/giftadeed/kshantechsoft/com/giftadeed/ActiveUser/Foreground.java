@@ -1,51 +1,28 @@
 package giftadeed.kshantechsoft.com.giftadeed.ActiveUser;
 
 import android.app.Activity;
-
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.multidex.MultiDex;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.leo.simplearcloader.ArcConfiguration;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.FirstLogin.First_Login;
-import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Login.LoginInterface;
-import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.Signup.MobileModel;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails.context;
 
 
 /**
@@ -87,7 +64,6 @@ public class Foreground extends Application implements Application.ActivityLifec
     public interface Listener {
 
         public void onBecameForeground();
-
         public void onBecameBackground();
 
     }

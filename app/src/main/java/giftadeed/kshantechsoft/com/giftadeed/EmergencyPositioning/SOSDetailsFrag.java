@@ -31,11 +31,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -83,7 +87,9 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
     private List<UploadSOS> soslist;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
-    String path = "";
+    private FirebaseStorage mStorageInstance;
+    private StorageReference photoRef;
+    String path = "", mImageUrl = "";
 
     public static SOSDetailsFrag newInstance(int sectionNumber) {
         SOSDetailsFrag fragment = new SOSDetailsFrag();
@@ -121,6 +127,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
             getSOS_Details();
             mFirebaseInstance = FirebaseDatabase.getInstance();
             mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_SOS_UPLOADS);
+            photoRef = FirebaseStorage.getInstance().getReference();
             soslist = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase;
             //adding an event listener to fetch values
@@ -141,7 +148,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                         }
                         if (path.length() > 0) {
                             sosImage.setVisibility(View.VISIBLE);
-                            Glide.with(getActivity()).load(path).into(sosImage);
+                            Glide.with(myContext).load(path).into(sosImage);
                         }
                     }
                 }
@@ -269,8 +276,8 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SOSDeleteInterface service = retrofit.create(SOSDeleteInterface.class);
-        // TODO: 08-Jan-19 Change sos id
         Call<GroupResponseStatus> call = service.fetchData(strUser_ID, str_sosid);
+        Log.d("input_sos", strUser_ID + ":" + str_sosid);
         call.enqueue(new Callback<GroupResponseStatus>() {
             @Override
             public void onResponse(Response<GroupResponseStatus> response, Retrofit retrofit) {
@@ -303,6 +310,52 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), "SOS deleted successfully", Toast.LENGTH_SHORT).show();
+
+                            //Deleting SOS image from firebase
+                            mFirebaseDatabase.child(str_sosid).child("sosurl").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot snapshot) {
+                                    try {
+                                        if (snapshot.getValue() != null) {
+                                            try {
+                                                mImageUrl = "" + snapshot.getValue();
+                                                Log.d("sos_imageurl", mImageUrl);
+                                                mStorageInstance = FirebaseStorage.getInstance();
+                                                //delete image reference file
+                                                photoRef = mStorageInstance.getReferenceFromUrl(mImageUrl);
+                                                photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // File deleted successfully
+                                                        Log.d("sos_firebase", "onSuccess: deleted file");
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception exception) {
+                                                        // Uh-oh, an error occurred!
+                                                        Log.d("sos_firebase", "onFailure: did not delete file");
+                                                    }
+                                                });
+
+                                                //delete database child
+                                                mFirebaseDatabase.child(str_sosid).removeValue();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            Log.e("sos_imageurl", " it's null.");
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("onCancelled", " cancelled");
+                                }
+                            });
+
                             fragmgr = getFragmentManager();
                             fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {

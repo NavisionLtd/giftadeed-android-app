@@ -19,6 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_weight="0.8"
+            android:singleLine="true"
+            android:inputType="text"
             android:hint="@string/search_email"
             android:textColor="@color/colorPrimary"
             android:textSize="16sp" />

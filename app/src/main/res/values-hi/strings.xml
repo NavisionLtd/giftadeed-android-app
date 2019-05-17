@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 30 April</string>
+    <string name="app_name">GAD P2 Test 14 May</string>
 
     <!--Login page-->
     <string name="login_terms">नियम और शर्तें</string>
@@ -73,12 +73,14 @@
     <string name="cookies_heading">कुकीज़ नीति</string>
     <string name="end_user_heading">एंड-यूजर समझौता</string>
     <string name="dis_heading">अस्वीकरण</string>
-    <string name="help_heading">मदद</string>
+    <string name="help_heading">FAQ</string>
     <string name="contact_us_heading">संपर्क करें</string>
 
     <!--App update-->
     <string name="map_map">नक्षा</string>
     <string name="map_list">सूची</string>
+    <string name="tab_group">Groups</string>
+    <string name="tab_colab">Collaborations</string>
     <string name="map_tagged_deeds">टैग किए गए कर्म</string>
 
     <!--Toast messages-->
@@ -89,10 +91,13 @@
     <string name="block_toast">आपको ब्लॉक कर दिया गया है</string>
     <string name="group_deleted">समूह को सफलतापूर्वक हटा दिया गया</string>
     <string name="error">त्रुटि</string>
+    <string name="accepted">Accepted</string>
     <string name="exit_group_msg">आप सफलतापूर्वक समूह से बाहर हो गए</string>
     <string name="group_created_msg">समूह सफलतापूर्वक बनाया गया</string>
+    <string name="colab_created_msg">Collaboration created successfully</string>
     <string name="you_havnt_change">आपने समूह की जानकारी नहीं बदली है</string>
     <string name="group_edited">समूह सफलतापूर्वक संपादित किया गया</string>
+    <string name="collab_edited">Collaboration edited successfully</string>
     <string name="member_removed">सदस्य को सफलतापूर्वक हटा दिया गया</string>
     <string name="member_added">सदस्य सफलतापूर्वक जोड़ा गया</string>
     <string name="no_data_found">कोई डेटा नहीं मिला</string>
@@ -126,6 +131,8 @@
     <string name="active_tags">सक्रिय टैग</string>
     <string name="no_group_found">कोई समूह नहीं मिला। क्या आप एक बनाना चाहते हैं?</string>
     <string name="action_create_group">समूह बनाएँ</string>
+    <string name="action_create_collab">सहयोग बनाएं</string>
+    <string name="action_collab_invitation">सहयोग निमंत्रण</string>
     <string name="edit_group">समूह संपादित करें</string>
     <string name="search_email">ईमेल ढूंढें *</string>
     <string name="group_name">समूह का नाम *</string>
@@ -146,6 +153,17 @@
     <string name="remove_member">सदस्य निकालें</string>
     <string name="make_admin">ग्रुप एडमिन बनाएं</string>
     <string name="dismiss_admin">प्रशासन को खारिज करें</string>
+
+    <!--Collab-->
+    <string name="collab_name">Collaboration Name *</string>
+    <string name="collab_desc">Collaboration Description *</string>
+    <string name="edit_collab">Edit Collaboration</string>
+    <string name="delete_collab">Delete Collab</string>
+    <string name="exit_collab">Exit Collab</string>
+    <string name="collab_info">Collab Info</string>
+    <string name="no_colab_found">No collaborations found. Do you want to create one?</string>
+    <string name="no_pending_invites">No pending invites</string>
+    <string name="collab_details">Collab Details</string>
 
     <!--My profile-->
     <string name="my_profile">मेरी प्रोफाइल</string>
@@ -352,311 +370,6 @@
     <string name="your_groups">आपके समूह</string>
     <string name="tell_people_remaining">लोगों को बताओ कि क्या शेष है</string>
     <string name="already_deeds_msg">चयनित स्थानों के लिए निम्नलिखित कर्म पहले से ही टैग किए गए हैं :</string>
-
-    <string name="first"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >Gift-A-Deed app hopes to bridge the gap between the ‘haves’ and the ‘have-nots’ with regards to life’s basic necessities.
-    </P></body></html>
-    ]]></string>
-
-    <string name="second"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >Yes. This app is accessible globally.
-    </P></body></html>
-    ]]></string>
-
-    <!--<P >Currently, this is app is available only in Hong Kong, India, Canada, China, France, and Thailand. We do plan to launch this app world-wide in the coming future.-->
-    <!--</P></body></html>-->
-
-    <string name="third"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >Only your Full Name will be visible to others. If you wish, you can go Anonymous by changing the Privacy Settings by visiting the My Profile option.
-    </P></body></html>
-    ]]></string>
-
-    <string name="fourth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >To tag a needy person, just go to the Tag a Deed section of the app. On the Tag a Deed page, fill in the required information, and click a photo of the needy person (optional), and you are all set to post the tag.
-    </P></body></html>
-    ]]></string>
-
-    <string name="fifth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >Once your tag has been fulfilled, you will get a notification regarding the same.
-    </P></body></html>
-    ]]></string>
-
-    <string name="sixth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >No. There is no monetary exchange expected while fulfilling a need.
-    </P></body></html>
-    ]]></string>
-
-    <string name="seventh"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >No. You cannot fulfill a need that has already been fulfilled.
-    </P></body></html>
-    ]]></string>
-
-    <string name="eighth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >All the Gift-A-Deed app users who are in a vicinity of 10 km from the tag will get notified once you tag a deed.
-    </P></body></html>
-    ]]></string>
-
-    <string name="nineth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >All needs have a predefined validity that is set during tagging the need itself. All the needs that have passed the validity stop being shown in the app. Also, whenever a tag is fulfilled, it stops being shown in the app.
-    </P></body></html>
-    ]]></string>
-
-    <string name="tenth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >For every successful tag, the user earns 100 reward points. Similarly, for every fulfillment by the user, the user earns 200 reward points.
-    </P></body></html>
-    ]]></string>
-
-    <string name="eleventh"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P >You can report a user, or a need to the admin by going to the details page of that need.
-    </P></body></html>
-    ]]></string>
-
-
-    <string name="twelvth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P >Please check your Junk/Spam folder to check whether emails from Gift-A-Deed are going to that folder. If mails form Gift-A-Deed are going to your Junk/Spam folder, then please mark them as ‘Safe’. This way, the emails from Gift-A-Deed will start landing in your Inbox.
-    </P></body></html>
-    ]]></string>
-
-    <string name="thirteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>Gift-a-Deed will have many different channels,</P>
-    <p>1. people to people;</p>
-    <p>2. people to groups / organisations / charities;</p>
-    <p>3. groups / organisations / charities to people; &</p>
-    <p>4. groups / organisations / charities to groups / organisations / charities. </p>
-    <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
-    <p>Once people and groups / organisations / charities come on board / register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
-    </body></html>
-    ]]></string>
-
-    <string name="fourteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>Organisations like Food banks, (or Goonj in India etc) are designed to be important partners, each connecting to their network via the App or simply using the App as a tool in their private group (similar to WhatsApp group function). In summary, Gift-a-Deed aims to be an aggregator of different needs in a community, city and even country level.
-    </P></body></html>
-    ]]></string>
-
-    <string name="fifteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>To this extent as Airbnb and Uber doesn't itself own any properties or taxis', Gift-a-Deed need not themselves collect, store or distribute. Partnerships and getting other volunteer groups /people with cause orientation, are requirements.
-    </P></body></html>
-    ]]></string>
-
-    <string name="sixteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>As far as compliance and test for food / health / safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
-    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving / helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App of course uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
-    </body></html>
-    ]]></string>
 
     //--------------------key-------------------
     <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>

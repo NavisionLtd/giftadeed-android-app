@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
+import giftadeed.kshantechsoft.com.giftadeed.Needdetails.SingleDeedMap;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
@@ -67,8 +69,9 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     LinearLayout qtyLayout, subTypeLayout;
     View rootview;
     private AlertDialog alertDialog;
+    ImageView resLocation;
     TextView txtgroupname, txtaddress, txtresname, txtDate, txttypes, txtSubtypes, txt_qty_perperson;
-    String str_ResCreatorId, strUser_ID, str_resid, callingFrom;
+    String str_ResCreatorId, strUser_ID, str_resid, callingFrom, str_geopoint;
     static FragmentManager fragmgr;
     SessionManager sessionManager;
     SimpleArcDialog mDialog;
@@ -110,6 +113,20 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         } else {
             getResource_Details();
         }
+
+        resLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("str_resid", str_resid);
+                bundle.putString("str_geopoint", str_geopoint);
+                bundle.putString("str_characterPath", "https://kshandemo.co.in/gad3p2/api/image/resource/resource_marker.png");
+                bundle.putString("tab", "from_resource");
+                SingleDeedMap fragInfo = new SingleDeedMap();
+                fragInfo.setArguments(bundle);
+                fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+            }
+        });
 
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +220,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
 //                        } else {
 //                            subTypeLayout.setVisibility(View.GONE);
 //                        }
-
+                        str_geopoint = resourcePOJO.get(0).getGeopoint();
                         txtaddress.setText(resourcePOJO.get(0).getAddress());
                         txtDate.setText(resourcePOJO.get(0).getCreated_at());
                     }
@@ -386,6 +403,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         txtresname = (TextView) rootview.findViewById(R.id.tv_res_name);
         txt_qty_perperson = (TextView) rootview.findViewById(R.id.tv_qty_per_person);
         txttypes = (TextView) rootview.findViewById(R.id.tv_res_cat);
+        resLocation = (ImageView) rootview.findViewById(R.id.res_details_location_icon);
         subTypeLayout = (LinearLayout) rootview.findViewById(R.id.res_subtype_layout);
         qtyLayout = (LinearLayout) rootview.findViewById(R.id.res_qty_layout);
         txtSubtypes = (TextView) rootview.findViewById(R.id.tv_res_subcat);

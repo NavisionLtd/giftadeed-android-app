@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -86,10 +87,10 @@ public class GridadapterRecycler extends RecyclerView.Adapter<GridadapterRecycle
             shape.getPaint().setColor(Color.parseColor("#FF7302"));
             shape.getPaint().setStyle(Paint.Style.STROKE);
             shape.getPaint().setStrokeWidth(3);
-            mholder.row_linearlayout.setBackground(shape);
+            mholder.row_relativelayout.setBackground(shape);
 
         } else {
-            mholder.row_linearlayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            mholder.row_relativelayout.setBackgroundColor(Color.parseColor("#ffffff"));
             // mholder.tv1.setTextColor(Color.parseColor("#000000"));
         }
 
@@ -110,7 +111,7 @@ public class GridadapterRecycler extends RecyclerView.Adapter<GridadapterRecycle
         private TextView rowtext, notificationcount;
         private ImageView rowImage;
         private CardView card;
-        private LinearLayout row_linearlayout;
+        private RelativeLayout row_relativelayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -118,7 +119,7 @@ public class GridadapterRecycler extends RecyclerView.Adapter<GridadapterRecycle
             rowImage = (ImageView) view.findViewById(R.id.grid_image);
             card = (CardView) view.findViewById(R.id.cardlaout);
             rowtext.setTypeface(new FontDetails(context).fontStandardForPage);
-            row_linearlayout = view.findViewById(R.id.linearlayout_card);
+            row_relativelayout = view.findViewById(R.id.relativelayout_card);
             notificationcount = view.findViewById(R.id.notificationcount);
             rowtext.setTypeface(new FontDetails(context).fontStandardForPage);
         }

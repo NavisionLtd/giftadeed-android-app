@@ -16,9 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -49,8 +46,6 @@ import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChannelListFragment;
-import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.main.SendBirdLoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
@@ -121,7 +116,6 @@ public class GroupsListFragment extends Fragment
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_groups));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -173,10 +167,12 @@ public class GroupsListFragment extends Fragment
                 recyclerView, new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                GroupDetailsFragment groupDetailsFragment = new GroupDetailsFragment();
+                android.support.v4.app.FragmentManager newfrag;
+                newfrag = getActivity().getSupportFragmentManager();
                 Log.d("infogrp", "" + groupArrayList.get(position).getGroup_id() + groupArrayList.get(position).getGroup_name());
                 sessionManager.createGroupDetails("", groupArrayList.get(position).getGroup_id(), groupArrayList.get(position).getGroup_name(), groupArrayList.get(position).getGroup_desc(), groupArrayList.get(position).getGroup_image());
-                fragmgr.beginTransaction().replace(R.id.content_frame, groupDetailsFragment).commit();
+                GroupDetailsFragment fragment = new GroupDetailsFragment();
+                newfrag.beginTransaction().replace(R.id.content_frame, fragment).commit();
             }
         }));
         return rootview;
@@ -193,45 +189,6 @@ public class GroupsListFragment extends Fragment
         DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecor);
         recyclerView.setLayoutManager(layoutManager);
-    }
-
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.groups_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_create_group:
-                CreateGroupFragment createGroupFragment = new CreateGroupFragment();
-                sessionManager.createGroupDetails("create", "", "", "", "");
-                fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
-                return true;
-            case R.id.action_group_messages:
-                if (userClubCount != null) {
-                    if (userClubCount.equals("Yes")) {
-                        int i = 0;
-                        /*SendBirdLoginActivity sendBirdLoginActivity = new SendBirdLoginActivity();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("CHATPAGE", "MSGPAGE");
-                        bundle.putString("PAGE", "MESSAGES");
-                        sendBirdLoginActivity.setArguments(bundle);
-                        fragmgr.beginTransaction().replace(R.id.content_frame, sendBirdLoginActivity).commit();*/
-
-                        // Load list of Group Channels
-                        Fragment fragment = GroupChannelListFragment.newInstance();
-                        fragmgr.beginTransaction()
-                                .replace(R.id.content_frame, fragment)
-                                .commit();
-                    } else if (userClubCount.equals("No")) {
-                        Toast.makeText(getContext(), getResources().getString(R.string.no_channel), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

@@ -16,7 +16,7 @@
             android:title="@string/drawer_groups" />
         <item
             android:id="@+id/nav_inspire_community"
-            android:icon="@drawable/group_icon"
+            android:icon="@drawable/inspire_icon"
             android:title="@string/drawer_inspire" />
         <item
             android:id="@+id/nav_mytags"

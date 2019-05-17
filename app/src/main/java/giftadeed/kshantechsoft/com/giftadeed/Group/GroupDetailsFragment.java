@@ -173,8 +173,8 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupsListFragment groupsListFragment = new GroupsListFragment();
-                fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
             }
         });
         return rootview;
@@ -598,14 +598,14 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                             Toast.makeText(getContext(), getResources().getString(R.string.group_deleted), Toast.LENGTH_SHORT).show();
                             databaseAccess.Delete_Group(groupid);
 
-                            //delete channel from sendbird
-                            String channelName = receivedGname + " - " + groupid;
+                            //delete channel from sendbird. Concat with GRP for Group and CLB for Collaboration
+                            String channelName = receivedGname + " - GRP" + groupid;
                             filterGroupChannel(channelName); //fetch data based on given club name
                             callDeleteGrpChannels(fetchedChannelUrl); //will delete channels based on certain url of grp
 
                             //move to group list
-                            GroupsListFragment groupsListFragment = new GroupsListFragment();
-                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                            GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                            fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
@@ -677,8 +677,8 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                             Toast.makeText(getContext(), getResources().getString(R.string.exit_group_msg), Toast.LENGTH_SHORT).show();
                             databaseAccess.Delete_Group(groupid);
 
-                            //remove member from sendbird channel
-                            String channel_name = receivedGname + " - " + groupid;
+                            //remove member from sendbird channel. Concat with GRP for Group and CLB for Collaboration
+                            String channel_name = receivedGname + " - GRP" + groupid;
                             if (lstGetChannelsList.size() != 0) {
                                 for (int i = 0; i < lstGetChannelsList.size(); i++) {
                                     if (lstGetChannelsList.get(i).getmChannelName().equals(channel_name)) {
@@ -704,8 +704,8 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                             }
 
                             //move to group list
-                            GroupsListFragment groupsListFragment = new GroupsListFragment();
-                            fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                            GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                            fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
@@ -739,8 +739,8 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                    GroupsListFragment groupsListFragment = new GroupsListFragment();
-                    fragmgr.beginTransaction().replace(R.id.content_frame, groupsListFragment).commit();
+                    GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                     return true;
                 }
                 return false;

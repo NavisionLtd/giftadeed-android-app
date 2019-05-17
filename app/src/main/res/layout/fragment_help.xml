@@ -2,54 +2,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="giftadeed.kshantechsoft.com.giftadeed.ContactUs.Contactus">
+    android:background="@color/white"
+    tools:context="giftadeed.kshantechsoft.com.giftadeed.Help.Help">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/nav_height"
             android:background="@color/colorAccent"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:orientation="vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="@dimen/negative_margin"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:background="#fafafa"
             android:orientation="vertical">
 
-
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:scrollbars="none">
 
-                <ExpandableListView
-                    android:id="@+id/lvExp"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:cacheColorHint="#00000000"
-                    android:divider="@color/black"
-                    android:layout_marginTop="10dp"
-                    android:dividerHeight="1dp"
-                    android:groupIndicator="@null"
-                    android:listSelector="@android:color/transparent" />
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical">
 
-
+                    <WebView
+                        android:id="@+id/txtfaq"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:scrollbars="none"
+                        android:textColor="#000"
+                        android:textSize="@dimen/finaltextfont" />
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>

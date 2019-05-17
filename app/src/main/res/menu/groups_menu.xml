@@ -3,12 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_create_group"
+        android:icon="@drawable/create_group"
         android:title="@string/action_create_group"
-        app:showAsAction="always"
-        android:icon="@drawable/create_group" />
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_create_collab"
+        android:icon="@drawable/create_group"
+        android:title="@string/action_create_collab"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_collab_invitations"
+        android:icon="@drawable/create_group"
+        android:title="@string/action_collab_invitation"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_group_messages"
+        android:icon="@drawable/messages"
         android:title="@string/action_group_messages"
-        app:showAsAction="always"
-        android:icon="@drawable/messages" />
+        app:showAsAction="always" />
 </menu>

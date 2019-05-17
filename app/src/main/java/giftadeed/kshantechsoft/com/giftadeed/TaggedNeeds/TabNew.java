@@ -575,10 +575,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                                     }
 
                                                     Log.d("imagepath", icon_path_str_new);
-//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), model.getTaggedlist().get(j).getTaggedTitle(), model.getTaggedlist().get(j).getTaggedID(), icon_path_str_new);
-//                                            mClusterManager.addItem(offsetItem);
-//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
-
                                                     Double maplat = Double.parseDouble(words_new[0]);
                                                     Double maplong = Double.parseDouble(words_new[1]);
                                                     final LatLng point = new LatLng(maplat, maplong);//
@@ -658,10 +654,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                                                     }
 
                                                                     Log.d("imagepath2", icon_path_str_new);
-//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
-//                                            mClusterManager.addItem(offsetItem);
-//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
-
                                                                     Double maplat = Double.parseDouble(words_new[0]);
                                                                     Double maplong = Double.parseDouble(words_new[1]);
                                                                     final LatLng point = new LatLng(maplat, maplong);//
@@ -733,10 +725,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                                                 }
 
                                                                 Log.d("imagepath2", icon_path_str_new);
-//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
-//                                            mClusterManager.addItem(offsetItem);
-//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
-
                                                                 Double maplat = Double.parseDouble(words_new[0]);
                                                                 Double maplong = Double.parseDouble(words_new[1]);
                                                                 final LatLng point = new LatLng(maplat, maplong);//
@@ -859,10 +847,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                                 final String marker_id = model.getSoslist().get(j).getId();
                                                 String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
                                                 Log.d("sosiconpath", icon_path_str_new);
-//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
-//                                            mClusterManager.addItem(offsetItem);
-//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
-
                                                 Double maplat = Double.parseDouble(words_new[0]);
                                                 Double maplong = Double.parseDouble(words_new[1]);
                                                 final LatLng point = new LatLng(maplat, maplong);//
@@ -979,10 +963,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                                 final String marker_id = model.getReslist().get(j).getId();
                                                 String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
                                                 Log.d("resiconpath", icon_path_str_new);
-//                                            MyItem offsetItem = new MyItem(Double.parseDouble(words_new[0]), Double.parseDouble(words_new[1]), marker_title, marker_id, icon_path_str_new);
-//                                            mClusterManager.addItem(offsetItem);
-//                                            mClusterManager.setRenderer(new JobRenderer(getContext(), mGoogleMap, mClusterManager));
-
                                                 Double maplat = Double.parseDouble(words_new[0]);
                                                 Double maplong = Double.parseDouble(words_new[1]);
                                                 final LatLng point = new LatLng(maplat, maplong);//
@@ -1136,6 +1116,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                 newfrag = getActivity().getSupportFragmentManager();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("page", "map_permanent_dialog");
+                                bundle.putString("tab", "tab1");
                                 bundle.putString("permanent_address", str_address);
                                 bundle.putString("permanent_geopoints", geopoints);
                                 dialog.dismiss();
@@ -1170,6 +1151,7 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                                 newfrag = getActivity().getSupportFragmentManager();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("page", "map_permanent_dialog");
+                                bundle.putString("tab", "tab1");
                                 bundle.putString("permanent_address", str_address);
                                 bundle.putString("permanent_geopoints", geopoints);
                                 dialog.dismiss();

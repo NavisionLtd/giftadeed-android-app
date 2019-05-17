@@ -4,7 +4,7 @@
     android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/loginbg"
+    android:background="@drawable/loginimg"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="giftadeed.kshantechsoft.com.giftadeed.Signup.SignUp">

@@ -22,12 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsListFragment;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
-
 
 public class GroupChannelActivity extends AppCompatActivity {
     public SessionManager sessionManager;
@@ -81,7 +79,7 @@ public class GroupChannelActivity extends AppCompatActivity {
 */
         //geting the value from login activity
         /*channelurl : used  for getting the url name of group from owned club adapter and joined club
-        * redirectionPage: used for abck to  certain page whlle user tried to back to specific page */
+         * redirectionPage: used for abck to  certain page whlle user tried to back to specific page */
         channelUrl = getIntent().getStringExtra("groupChannelUrl");
         strRedirectionPage = getIntent().getStringExtra("REDIRECTPAGE");
         strStaicRedirectionPage = getIntent().getStringExtra("REDIRECTPAGE");

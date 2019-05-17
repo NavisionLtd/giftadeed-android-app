@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 30 April</string>
+    <string name="app_name">GAD P2 Test 14 May</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
@@ -72,12 +72,14 @@
     <string name="cookies_heading">Cookies政策</string>
     <string name="end_user_heading">最終用戶協議</string>
     <string name="dis_heading">放棄</string>
-    <string name="help_heading">救命</string>
+    <string name="help_heading">FAQ</string>
     <string name="contact_us_heading">聯繫我們</string>
 
     <!--App update-->
     <string name="map_map">地图</string>
     <string name="map_list">名单</string>
+    <string name="tab_group">Groups</string>
+    <string name="tab_colab">Collaborations</string>
     <string name="map_tagged_deeds">标记的行为</string>
 
     <!--Toast messages-->
@@ -88,10 +90,13 @@
     <string name="block_toast">你被封鎖了</string>
     <string name="group_deleted">組已成功刪除</string>
     <string name="error">錯誤</string>
+    <string name="accepted">Accepted</string>
     <string name="exit_group_msg">您已成功退出群組</string>
     <string name="group_created_msg">組成功創建</string>
+    <string name="colab_created_msg">Collaboration created successfully</string>
     <string name="you_havnt_change">你沒有改變團體信息</string>
     <string name="group_edited">組編輯成功</string>
+    <string name="collab_edited">Collaboration edited successfully</string>
     <string name="member_removed">會員已成功刪除</string>
     <string name="member_added">會員成功添加</string>
     <string name="no_data_found">沒有找到數據</string>
@@ -126,6 +131,8 @@
     <string name="active_tags">有源標籤</string>
     <string name="no_group_found">没有找到任何组。你想创造一个吗？</string>
     <string name="action_create_group">创建组</string>
+    <string name="action_create_collab">創造合作</string>
+    <string name="action_collab_invitation">合作邀請</string>
     <string name="edit_group">编辑组</string>
     <string name="group_name">团队名字 *</string>
     <string name="group_desc">小组介绍</string>
@@ -145,6 +152,17 @@
     <string name="remove_member">刪除會員</string>
     <string name="make_admin">組管理員</string>
     <string name="dismiss_admin">作為管理員解僱</string>
+
+    <!--Collab-->
+    <string name="collab_name">Collaboration Name *</string>
+    <string name="collab_desc">Collaboration Description *</string>
+    <string name="edit_collab">Edit Collaboration</string>
+    <string name="delete_collab">Delete Collab</string>
+    <string name="exit_collab">Exit Collab</string>
+    <string name="collab_info">Collab Info</string>
+    <string name="no_colab_found">No collaborations found. Do you want to create one?</string>
+    <string name="no_pending_invites">No pending invites</string>
+    <string name="collab_details">Collab Details</string>
 
     <!--My profile-->
     <string name="my_profile">我的简历</string>
@@ -352,311 +370,6 @@
     <string name="your_groups">你的團體</string>
     <string name="tell_people_remaining">告訴別人剩下的是什麼</string>
     <string name="already_deeds_msg">以下契約已經標記為選定的位置:</string>
-
-    <string name="first"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >Gift-A-Deed应用程序希望在生活的基本必需品方面弥合“富人”和“穷人”之间的差距.
-    </P></body></html>
-    ]]></string>
-
-    <string name="second"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >是. 此应用程序可在全球访问.
-    </P></body></html>
-    ]]></string>
-
-    <!--<P >Currently, this is app is available only in Hong Kong, India, Canada, China, France, and Thailand. We do plan to launch this app world-wide in the coming future.-->
-    <!--</P></body></html>-->
-
-    <string name="third"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >其他人只能看到您的全名. 如果您愿意,可以通过访问“我的个人资料”选项更改“隐私设置”来匿名.
-    </P></body></html>
-    ]]></string>
-
-    <string name="fourth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >要标记有需要的人,只需转到应用的标记契约部分即可.在标记契约页面上,填写所需信息,然后单击有需要的人的照片（可选）,您就可以发布标签了.
-    </P></body></html>
-    ]]></string>
-
-    <string name="fifth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >完成标记后,您将收到有关相同标记的通知.
-    </P></body></html>
-    ]]></string>
-
-    <string name="sixth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >没有.在满足需求的同时,没有预期的货币兑换.
-    </P></body></html>
-    ]]></string>
-
-    <string name="seventh"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >不,您无法满足已经实现的需求.
-    </P></body></html>
-    ]]></string>
-
-    <string name="eighth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >标记契约后,距离标记10公里附近的所有Gift-A-Deed应用程序用户都会收到通知.
-    </P></body></html>
-    ]]></string>
-
-    <string name="nineth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >所有需求都具有在标记需求本身期间设置的预定义有效性.已通过有效性的所有需求都会停止在应用程序中显示.此外,无论何时完成标记,它都会停止在应用程序中显示.
-    </P></body></html>
-    ]]></string>
-
-    <string name="tenth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-    <P >对于每个成功的标签,用户获得100个奖励积分.类似地,对于用户的每次履行,用户获得200个奖励积分.
-    </P></body></html>
-    ]]></string>
-
-    <string name="eleventh"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P >您可以转到该需求的详细信息页面来报告用户或管理员的需求.
-    </P></body></html>
-    ]]></string>
-
-
-    <string name="twelvth"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P >请检查您的垃圾/垃圾邮件文件夹，检查来自Gift-A-Deed的电子邮件是否会转到该文件夹​​。如果邮件形式的礼品 - 契约将转到您的垃圾/垃圾邮件文件夹，请将其标记为“安全”。这样，来自Gift-A-Deed的电子邮件将开始登陆您的收件箱。
-    </P></body></html>
-    ]]></string>
-
-    <string name="thirteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>Gift-a-Deed will have many different channels,</P>
-    <p>1. people to people;</p>
-    <p>2. people to groups / organisations / charities;</p>
-    <p>3. groups / organisations / charities to people; &</p>
-    <p>4. groups / organisations / charities to groups / organisations / charities. </p>
-    <p>Gift-a-Deed is basically an Eco-system, digitally connecting Resources with Needs.</p>
-    <p>Once people and groups / organisations / charities come on board / register, they will leverage the network effect, sharing excess resources, in real time, to needy where ever they can, on the go using Gift-a-Deed as tool.</p>
-    </body></html>
-    ]]></string>
-
-    <string name="fourteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>Organisations like Food banks, (or Goonj in India etc) are designed to be important partners, each connecting to their network via the App or simply using the App as a tool in their private group (similar to WhatsApp group function). In summary, Gift-a-Deed aims to be an aggregator of different needs in a community, city and even country level.
-    </P></body></html>
-    ]]></string>
-
-    <string name="fifteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>To this extent as Airbnb and Uber doesn't itself own any properties or taxis', Gift-a-Deed need not themselves collect, store or distribute. Partnerships and getting other volunteer groups /people with cause orientation, are requirements.
-    </P></body></html>
-    ]]></string>
-
-    <string name="sixteen"><![CDATA[
-    <html><body style="text-align:justify;>
-<head>
-<meta http-equiv="content-type" content="text/html;" charset="UTF-8"  />
- <style>
-
-                @font-face {
-                    font-family: "MyFont";
-                    word-spacing:-1px;
-                    src: url("file:///android_asset/roboto.ttf");
-                }
-                p { font-family:"MyFont"}
-            </style>
-</head>
-
-    <P>As far as compliance and test for food / health / safety etc is concerned, our approach is that Gift-a-Deed is a humanitarian mobile App, which allows humanitarian aid to be distributed effectively.</P>
-    <p>Just like when a person in emergency maybe helped by a stranger in good faith with available resources in hand, for saving a human life, similarly the responsibility of doing a humanitarian deed falls on the person giving / helping. The App does have a function to report users who are found misusing or faking deeds. More than this the App of course uses geo-location verification before allowing a need to be marked as fulfilled on the App.</p>
-    </body></html>
-    ]]></string>
 
     //--------------------key-------------------
     <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>

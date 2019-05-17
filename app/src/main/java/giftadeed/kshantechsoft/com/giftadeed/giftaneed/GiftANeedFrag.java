@@ -422,27 +422,25 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         //------------------------------------Taking image from camera------------------------------
 
         if (requestCode == REQUEST_CAMERA) {
-            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
-            //bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 1000, 700);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-
-
-            options.inSampleSize = 8;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+            if (resultCode == RESULT_OK) {
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
+                //bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 1000, 700);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    try {
+                        bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-            } else {
-                bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                //Toast.makeText(UploadImage.this, "camera" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                strimagePath = file.getAbsolutePath();
+                gieftneedimg.setImageBitmap(bitmap);
+                gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
             }
-            //Toast.makeText(UploadImage.this, "camera" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-            strimagePath = file.getAbsolutePath();
-            gieftneedimg.setImageBitmap(bitmap);
-            gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
-
-
         }
 
 

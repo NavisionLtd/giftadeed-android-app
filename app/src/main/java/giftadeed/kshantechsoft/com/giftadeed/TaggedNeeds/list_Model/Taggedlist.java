@@ -1,5 +1,3 @@
-
-
 package giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model;
 
 import com.google.gson.annotations.Expose;

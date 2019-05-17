@@ -5,5 +5,5 @@
         android:id="@+id/action_create_resource"
         android:title="@string/action_create_resource"
         app:showAsAction="always"
-        android:icon="@drawable/create_group" />
+        android:icon="@drawable/create_resource" />
 </menu>

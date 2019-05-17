@@ -1,12 +1,10 @@
 package giftadeed.kshantechsoft.com.giftadeed.GridMenu;
 
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -14,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,11 +25,9 @@ import giftadeed.kshantechsoft.com.giftadeed.ContactUs.Contactus;
 import giftadeed.kshantechsoft.com.giftadeed.CookiesPolicy.CookiesPolicy;
 import giftadeed.kshantechsoft.com.giftadeed.Dashboard.Dashboard;
 import giftadeed.kshantechsoft.com.giftadeed.Disclaimer.Disclaimer;
-import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSDetailsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.EnduserAggrement.EnduserAggrement;
 import giftadeed.kshantechsoft.com.giftadeed.Help.Help;
 import giftadeed.kshantechsoft.com.giftadeed.MyFullFillTag.MyFullFillTags;
-import giftadeed.kshantechsoft.com.giftadeed.MyProfile.MyProfilefrag;
 import giftadeed.kshantechsoft.com.giftadeed.Mytags.MyTagsList;
 import giftadeed.kshantechsoft.com.giftadeed.PrivacyPolicy.PrivacyPolicy;
 import giftadeed.kshantechsoft.com.giftadeed.R;
@@ -41,9 +36,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Tagcounter.Tagcounter;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Utility;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.TaggerList;
 import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.TopTenFullfillerList;
 import giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Condition;
@@ -54,23 +47,16 @@ import giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Condition;
 public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     static android.support.v4.app.FragmentManager fragmgr;
     SessionManager sharedPreferences;
-    SharedPreferences.Editor editor;
     String strUserId, strUserName;
     static String NotificationCountnum;
     private GoogleApiClient mGoogleApiClient;
-    Button btnLogin, dialogconfirm, dialogcancel;
-    TextView dialogtext;
-    private AlertDialog alertDialogForgot;
     static int color_pos = 0;
-    // boolean drawervalue;
-    TextView txt_app_version, txtviewprofile, txtUsername;
+    TextView txt_app_version;
     String currentVersion = "";
     View rootview;
     GridadapterRecycler adptr;
-    String drawervalue;
     double longitude_gps;
     double latitude_gps;
-    HashMap<String, String> draerwe_status;
     public int[] mThumbIds = {
             R.drawable.my_tags_icon, R.drawable.myfulltilltags_icon,
             R.drawable.top10taggers_icon, R.drawable.top10tagfullfillers_icon,
@@ -83,7 +69,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
 
     public String[] texts = {"MY TAGS", "MY FULFILLED TAGS",
             "TOP 10 TAGGERS", "TOP 10 TAG FULFILLERS", "TAG COUNTER", "DASHBOARD", "ABOUT US", "TERMS AND CONDITIONS",
-            "PRIVACY POLICY", "COOKIES POLICY", "END-USER AGREEMENT", "DISCLAIMER", "HELP", "CONTACT US"};
+            "PRIVACY POLICY", "COOKIES POLICY", "END-USER AGREEMENT", "DISCLAIMER", "FAQ", "CONTACT US"};
 
     public static MenuGrid newInstance(String sectionNumber) {
         NotificationCountnum = sectionNumber;
@@ -123,8 +109,6 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
         mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         RecyclerView recyclerView = (RecyclerView) rootview.findViewById(R.id.recycler_view);
         txt_app_version = rootview.findViewById(R.id.tv_about_app_version);
-        txtviewprofile = rootview.findViewById(R.id.txt_drawer_viewprofile);
-        txtUsername = rootview.findViewById(R.id.txt_drawer_Profilename);
         try {
             currentVersion = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
             if (currentVersion.length() > 0) {
@@ -146,32 +130,19 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
             } else {
                 user_Name = strUserName;
             }
-            txtUsername.setText(user_Name);
         } catch (Exception e) {
 
         }
         recyclerView.setHasFixedSize(true);
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
-        recyclerView.setLayoutManager(layoutManager);
+
+        /**
+         Simple GridLayoutManager that spans two columns
+         **/
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(manager);
+
         final ArrayList<DataModel> androidversions = new ArrayList<>();
 
-        txtviewprofile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!(Validation.isOnline(getContext()))) {
-                    ToastPopUp.show(getContext(), getString(R.string.network_validation));
-                } else {
-                    sharedPreferences.set_drawer_status("close");
-                    int k = 0;
-                    FragmentTransaction transaction = fragmgr.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.slide_right, R.anim.slide_left);
-                    transaction.replace(R.id.content_frame, MyProfilefrag.newInstance(k));
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-            }
-        });
         for (int i = 0; i < texts.length; i++) {
             DataModel model = new DataModel();
             model.setVersionName(texts[i]);

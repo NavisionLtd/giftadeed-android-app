@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
@@ -25,10 +27,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 public class Help extends Fragment {
     static android.support.v4.app.FragmentManager fragmgr;
     View rootview;
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    WebView txtAgreementDetails;
 
     public static Help newInstance(int sectionNumber) {
         Help fragment = new Help();
@@ -57,62 +56,22 @@ public class Help extends Fragment {
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
-        expListView = (ExpandableListView) rootview.findViewById(R.id.lvExp);
-        expListView.setFooterDividersEnabled(true);
-        expListView.addFooterView(new View(expListView.getContext()));
-        prepareListData();
-        listAdapter = new ExpandableListAdapter(getContext(), listDataHeader, listDataChild);
-        expListView.setAdapter(listAdapter);
+        txtAgreementDetails = (WebView) rootview.findViewById(R.id.txtfaq);
+        txtAgreementDetails.loadUrl("https://giftadeed.com/gad3/GAD-mobile_App-html/FAQ.html");
 
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-
+        WebSettings settings = txtAgreementDetails.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setTextZoom(100);
+        txtAgreementDetails.getSettings().setJavaScriptEnabled(true);
+        txtAgreementDetails.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        txtAgreementDetails.getSettings().setAppCacheEnabled(true);
+        txtAgreementDetails.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                return false;
+            public boolean onLongClick(View v) {
+                return true;
             }
         });
-// Listview Group expanded listener
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            int previousGroup = -1;
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                /*Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();*/
-                if (groupPosition != previousGroup)
-                    expListView.collapseGroup(previousGroup);
-                previousGroup = groupPosition;
-            }
-        });
-
-        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-
-
-            }
-        });
-
-        // Listview on child click listener
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                // TODO Auto-generated method stub
-               /* Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();*/
-                return false;
-            }
-        });
-
+        txtAgreementDetails.setLongClickable(false);
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,108 +81,6 @@ public class Help extends Fragment {
         });
         return rootview;
     }
-
-
-    private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-        // Adding child data
-        listDataHeader.add("What social issue does GAD plan to address?");
-        listDataHeader.add("Is this app accessible globally?");
-        listDataHeader.add("What information I share is public to other users? Can I maintain privacy as a user?");
-        listDataHeader.add("How do I tag the needy person?");
-        listDataHeader.add("How do I know that the needs of the person I tagged have been fulfilled?");
-        listDataHeader.add("Is there any monetary exchange expected while fulfilling a need?");
-        listDataHeader.add("Can I fulfill a need that has already been fulfilled?");
-        listDataHeader.add("Who all get notified once I tag a need?");
-        listDataHeader.add("Why does the need I tag do not show up after some time?");
-        listDataHeader.add("How are the Reward points calculated?");
-        listDataHeader.add("What option do I have to report a need I think is not genuine?");
-        listDataHeader.add("I am not receiving any emails from Gift-A-Deed. What do I do?");
-        listDataHeader.add("What are the channels of GiftADeed?");
-        listDataHeader.add("Is the App similar to other aggregator like Food Bank and Circular economy?");
-        listDataHeader.add("Will the App itself do charitable work?");
-        listDataHeader.add("How are compliance/food/health/safety issues addressed by the App?");
-
-        // Adding child data
-        List<String> first = new ArrayList<String>();
-        // first.add("Gift-A-Deed app hopes to bridge the gap between the ‘haves’ and the‘have-nots’ with regards to life’s basic necessities.");
-        first.add(getString(R.string.first));
-
-        List<String> second = new ArrayList<String>();
-        //second.add("Currently, this is app is available only in Hong Kong, India, Canada, China, France, and Thailand. We do plan to launch this app world-wide in the coming future.");
-        second.add(getString(R.string.second));
-
-        List<String> third = new ArrayList<String>();
-        // third.add("Only your Full Name will be visible to others. If you wish, you can go Anonymous by changing the Privacy Settings by visiting the My Profile option.");
-        third.add(getString(R.string.third));
-
-        List<String> fourth = new ArrayList<String>();
-        // fourth.add("To tag a Needy person, just go to the Tag a Deed section of the app. On the Tag a Deed page, fill in the required information, and click a photo of the needy person (optional), and you are all set to post the tag.");
-        fourth.add(getString(R.string.fourth));
-
-        List<String> fifth = new ArrayList<String>();
-        // fifth.add("Once your tag has been fulfilled, you will get a notification regarding the same.");
-        fifth.add(getString(R.string.fifth));
-
-        List<String> sixth = new ArrayList<String>();
-        // sixth.add("No. There is no monetary exchange expected while fulfilling a need.");
-        sixth.add(getString(R.string.sixth));
-
-        List<String> seventh = new ArrayList<String>();
-        //seventh.add("No. You cannot fulfill a need that has already been fulfilled.");
-        seventh.add(getString(R.string.seventh));
-
-        List<String> eighth = new ArrayList<String>();
-        // eighth.add("All the Gift-A-Deed app users who are in a vicinity of 10 km from the tag will get notified once you tag a deed.");
-        eighth.add(getString(R.string.eighth));
-
-        List<String> nineth = new ArrayList<String>();
-        //nineth.add("All needs have a predefined validity that is set during tagging the need itself. All the needs that have passed the validity stop being shown in the app. Also, whenever a tag is fulfilled, it stops being shown in the app.");
-        nineth.add(getString(R.string.nineth));
-
-        List<String> tenth = new ArrayList<String>();
-        // tenth.add("– For every successful tag, the user earns 100 reward points. Similarly, for every fulfillment by the user, the user earns 200 reward points.");
-        tenth.add(getString(R.string.tenth));
-
-        List<String> eleventh = new ArrayList<String>();
-        //eleventh.add("You can report a user, or a need to the admin by going to the details page of that need.");
-        eleventh.add(getString(R.string.eleventh));
-
-        List<String> twelvth = new ArrayList<String>();
-        //eleventh.add("You can report a user, or a need to the admin by going to the details page of that need.");
-        twelvth.add(getString(R.string.twelvth));
-
-        List<String> thirteen = new ArrayList<String>();
-        thirteen.add(getString(R.string.thirteen));
-
-        List<String> fourteen = new ArrayList<String>();
-        fourteen.add(getString(R.string.fourteen));
-
-        List<String> fifteen = new ArrayList<String>();
-        fifteen.add(getString(R.string.fifteen));
-
-        List<String> sixteen = new ArrayList<String>();
-        sixteen.add(getString(R.string.sixteen));
-
-        listDataChild.put(listDataHeader.get(0), first); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), second);
-        listDataChild.put(listDataHeader.get(2), third);
-        listDataChild.put(listDataHeader.get(3), fourth);
-        listDataChild.put(listDataHeader.get(4), fifth);
-        listDataChild.put(listDataHeader.get(5), sixth);
-        listDataChild.put(listDataHeader.get(6), seventh);
-        listDataChild.put(listDataHeader.get(7), eighth);
-        listDataChild.put(listDataHeader.get(8), nineth);
-        listDataChild.put(listDataHeader.get(9), tenth);
-        listDataChild.put(listDataHeader.get(10), eleventh);
-        listDataChild.put(listDataHeader.get(11), twelvth);
-        listDataChild.put(listDataHeader.get(12), thirteen);
-        listDataChild.put(listDataHeader.get(13), fourteen);
-        listDataChild.put(listDataHeader.get(14), fifteen);
-        listDataChild.put(listDataHeader.get(15), sixteen);
-    }
-
 
     @Override
     public void onResume() {

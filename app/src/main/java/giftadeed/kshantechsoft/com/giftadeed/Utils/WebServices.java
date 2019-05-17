@@ -97,6 +97,16 @@ public class WebServices {
     public static final String Exit_Group = SUB_URL + "exit_group.php";
     public static final String Owned_Groups = SUB_URL + "owned_groups.php";
 
+    //Collaboration api
+    public static final String Create_Collab = SUB_URL + "create_collaboration.php";
+    public static final String Collab_List = SUB_URL + "users_collaboration_list.php";
+    public static final String Collab_Request_List = SUB_URL + "collaboration_request_list.php";
+    public static final String Accept_Reject_Request = SUB_URL + "edit_collaboration_request_status.php";
+    public static final String Collab_Member_List = SUB_URL + "member_list.php";
+    public static final String Invite_Group_Creator = SUB_URL + "invite_group_creators.php";
+    public static final String Group_Creators_List = SUB_URL + "group_creators_list.php";
+    public static final String Collab_Info = SUB_URL + "group_info.php";
+
     //Resource api
     public static final String Add_Resource = SUB_URL + "add_resource.php";
     public static final String User_Resource = SUB_URL + "user_resource.php";

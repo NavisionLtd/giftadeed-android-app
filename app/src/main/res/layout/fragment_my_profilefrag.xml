@@ -35,7 +35,7 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profile_pic"
                         android:layout_width="@dimen/uploadimg"
                         android:layout_height="@dimen/uploadimg"

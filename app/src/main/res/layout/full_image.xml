@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="120dp"
-    android:layout_height="120dp"
-    android:layout_gravity="center"
-    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardlaout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="130dp"
         card_view:cardCornerRadius="0dp"
         card_view:cardUseCompatPadding="true">
 
-        <LinearLayout
-            android:id="@+id/linearlayout_card"
+        <RelativeLayout
+            android:id="@+id/relativelayout_card"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -27,8 +22,10 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -51,19 +48,17 @@
 
             <TextView
                 android:id="@+id/grid_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_margin="5dp"
+                android:layout_below="@+id/layout1"
                 android:gravity="center"
                 android:paddingBottom="3dp"
                 android:text="Top 10 tag fulfiller"
                 android:textColor="#000"
                 android:textSize="@dimen/gridmenu_textsize"
                 android:textStyle="bold" />
-        </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

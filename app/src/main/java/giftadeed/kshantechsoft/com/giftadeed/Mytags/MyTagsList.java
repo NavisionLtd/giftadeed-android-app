@@ -42,13 +42,10 @@ import java.util.List;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupsListFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.DeedDetailsModel;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
@@ -147,7 +144,8 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
         });
         return rootview;
     }
-//----------------getting own tag list--------------------------------------------------------------
+
+    //----------------getting own tag list--------------------------------------------------------------
     public void fetch_ListOfMyTags(String strUSERID) {
 
         mDialog.setConfiguration(new ArcConfiguration(getContext()));

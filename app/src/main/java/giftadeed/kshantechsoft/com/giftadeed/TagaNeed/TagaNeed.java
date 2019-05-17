@@ -1390,7 +1390,8 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
             edDescription.setText("");
             btnPost.setEnabled(true);
             edDescription.requestFocus();
-        } */ else if (layout_container.getVisibility() == View.VISIBLE) {
+        } */
+        else if (layout_container.getVisibility() == View.VISIBLE) {
             if (Checkbox_container.isChecked()) {
                 strcontainer = "1";
             } else {
@@ -1489,7 +1490,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         TagAneedInterface service = retrofit.create(TagAneedInterface.class);
-        Call<MobileModel> call = service.sendData(user_id, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, paddress, subTypePref, checkedOtherOrg, checkedIndi, userOrgs, selectedFromGroupId);
+        Call<MobileModel> call = service.sendData(user_id, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, "1000", paddress, subTypePref, checkedOtherOrg, checkedIndi, userOrgs, selectedFromGroupId);
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
@@ -1576,7 +1577,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditdeedInterface service = retrofit.create(EditdeedInterface.class);
-        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, str_subtypes, str_permanent);
+        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, "1000", str_subtypes, str_permanent);
         Log.d("edit_deed_params", "" + user_id + "," + deedId + "," + NeedMapping_ID + "," + geopoints + "," + Imagename + "," + title + "," + description + "," + locat + "," + container + "," + validity + "," + str_subtypes + "," + str_permanent);
         call.enqueue(new Callback<StatusModel>() {
             @Override
@@ -1706,23 +1707,25 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
 
 
         if (requestCode == REQUEST_CAMERA) {
-            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (resultCode == RESULT_OK) {
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    try {
+                        bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-            } else {
-                bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                strimagePath = file.getAbsolutePath();
+                int bitmap_file_size = bitmap.getByteCount();
+                Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
+                gieftneedimg.setImageBitmap(bitmap);
+                gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
             }
-            strimagePath = file.getAbsolutePath();
-            int bitmap_file_size = bitmap.getByteCount();
-            Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
-            gieftneedimg.setImageBitmap(bitmap);
-            gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
         }
 
         if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {

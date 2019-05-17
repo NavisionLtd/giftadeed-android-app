@@ -94,7 +94,6 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
     Button btnOpenCamera, btnSendDetails;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private List<EmergencyTypes> emergencyList;
     TextView tvRefreshLocation;
     ImageView imageCaptured;
@@ -436,22 +435,24 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CAMERA) {
-            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    bitmap = BitmapFactory.decodeStream(EmergencyStageTwo.this.getContentResolver().openInputStream(fileUri), null, options);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (resultCode == RESULT_OK) {
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    try {
+                        bitmap = BitmapFactory.decodeStream(EmergencyStageTwo.this.getContentResolver().openInputStream(fileUri), null, options);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-            } else {
-                bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                strimagePath = file.getAbsolutePath();
+                imageCaptured.setVisibility(View.VISIBLE);
+                imageCaptured.setImageBitmap(bitmap);
+                imageCaptured.setScaleType(ImageView.ScaleType.FIT_XY);
             }
-            strimagePath = file.getAbsolutePath();
-            imageCaptured.setVisibility(View.VISIBLE);
-            imageCaptured.setImageBitmap(bitmap);
-            imageCaptured.setScaleType(ImageView.ScaleType.FIT_XY);
         }
     }
 
