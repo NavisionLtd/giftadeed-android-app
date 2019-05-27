@@ -23,6 +23,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.HashMap;
 
+import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
@@ -209,7 +210,13 @@ public class SplashActivity extends AppCompatActivity {
 //                    //show update dialog
 //                    showForceUpdateDialog();
 //                } else {
-                    proceedToApp();
+            proceedToApp();
+
+            // Animation trial
+//            Intent log = new Intent(getApplicationContext(), FadeInActivity.class);
+//            startActivity(log);
+
+
 //                }
 //            }
             Log.d("appinfodetails", "Current version " + currentVersion + "playstore version " + onlineVersion);

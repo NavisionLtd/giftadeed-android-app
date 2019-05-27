@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Colablist {
-    @SerializedName("id")
+    @SerializedName("collaboration_id")
     @Expose
     private String id;
     @SerializedName("collaboration_name")

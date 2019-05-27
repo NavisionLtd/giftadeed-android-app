@@ -99,13 +99,16 @@ public class WebServices {
 
     //Collaboration api
     public static final String Create_Collab = SUB_URL + "create_collaboration.php";
+    public static final String Edit_Collab = SUB_URL + "edit_collaboration.php";
+    public static final String Delete_Collab = SUB_URL + "delete_collaboration.php";
     public static final String Collab_List = SUB_URL + "users_collaboration_list.php";
     public static final String Collab_Request_List = SUB_URL + "collaboration_request_list.php";
     public static final String Accept_Reject_Request = SUB_URL + "edit_collaboration_request_status.php";
-    public static final String Collab_Member_List = SUB_URL + "member_list.php";
+    public static final String Collab_Member_List = SUB_URL + "collaboration_members_list.php";
     public static final String Invite_Group_Creator = SUB_URL + "invite_group_creators.php";
     public static final String Group_Creators_List = SUB_URL + "group_creators_list.php";
-    public static final String Collab_Info = SUB_URL + "group_info.php";
+    public static final String Collab_Info = SUB_URL + "collaboration_information.php";
+    public static final String Remove_Collab_Member = SUB_URL + "remove_member_from_collaboration.php";
 
     //Resource api
     public static final String Add_Resource = SUB_URL + "add_resource.php";

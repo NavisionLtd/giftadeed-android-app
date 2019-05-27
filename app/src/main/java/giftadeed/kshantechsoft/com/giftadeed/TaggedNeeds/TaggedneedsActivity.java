@@ -169,7 +169,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         profilePic = (CircleImageView) hView.findViewById(R.id.imageView_profile_pic);
         txtProfileName = (TextView) hView.findViewById(R.id.txtProfilename);
         profiletxtview = (TextView) hView.findViewById(R.id.txtviewprofile);
-        txtProfileName.setText(strUserName);
+//        txtProfileName.setText(strUserName);
 //        profiletxtview.setText(getResources().getString(R.string.view_profile));
 
         if (!(Validation.isOnline(TaggedneedsActivity.this))) {
@@ -494,6 +494,9 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         MenuItem logout = menu.findItem(R.id.logout);
         logout.setTitle(getResources().getString(R.string.drawer_logout));
         profiletxtview.setText(getResources().getString(R.string.view_profile));
+        HashMap<String, String> user = sharedPreferences.getUserDetails();
+        strUserName = user.get(sharedPreferences.USER_NAME);
+        txtProfileName.setText(strUserName);
     }
 
     @Override

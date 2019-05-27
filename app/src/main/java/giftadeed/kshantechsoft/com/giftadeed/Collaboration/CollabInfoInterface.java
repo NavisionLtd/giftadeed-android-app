@@ -19,5 +19,5 @@ public interface CollabInfoInterface {
 
     @FormUrlEncoded
     @POST(path)
-    Call<List<GroupInfoPOJO>> sendData(@Field("user_id") String userid, @Field("group_id") String groupid);
+    Call<CollabPOJO> sendData(@Field("collaboration_id") String collabid);
 }

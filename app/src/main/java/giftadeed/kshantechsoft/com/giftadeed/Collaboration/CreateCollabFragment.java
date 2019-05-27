@@ -131,20 +131,23 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
         mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
-        HashMap<String, String> group = sessionManager.getSelectedColabDetails();
-        callingFrom = group.get(sessionManager.COLAB_CALL_FROM);
-        receivedCollabid = group.get(sessionManager.COLAB_ID);
-        receivedCollabname = group.get(sessionManager.COLAB_NAME);
-        receivedCollabdesc = group.get(sessionManager.COLAB_DESC);
+        HashMap<String, String> collab = sessionManager.getSelectedColabDetails();
+        callingFrom = collab.get(sessionManager.COLAB_CALL_FROM);
+        receivedCollabid = collab.get(sessionManager.COLAB_ID);
+        receivedCollabname = collab.get(sessionManager.COLAB_NAME);
+        receivedCollabdesc = collab.get(sessionManager.COLAB_DESC);
+        strGroupmapping_ID = collab.get(sessionManager.COLAB_FROMGID);
+        strGroupmapping_Name = collab.get(sessionManager.COLAB_FROMGNAME);
         if (callingFrom.equals("create")) {
             //from create menu
             TaggedneedsActivity.updateTitle(getResources().getString(R.string.action_create_collab));
             getOwnedGroupList(strUser_ID);
         } else {
-            //from edit menu
+            //from edit collab menu
+            selectGroup.setText(strGroupmapping_Name);
             collabName.setText(receivedCollabname);
             collabDesc.setText(receivedCollabdesc);
-            TaggedneedsActivity.updateTitle(getResources().getString(R.string.edit_group));
+            TaggedneedsActivity.updateTitle(getResources().getString(R.string.edit_collab));
             getChannelsDetails();
         }
 
@@ -182,7 +185,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                             createCollab(strUser_ID, strGroupmapping_ID, collabName.getText().toString(), collabDesc.getText().toString());
                         } else {
                             // call edit collab api
-//                                    editCollab(collabName.getText().toString(), collabDesc.getText().toString(), strUser_ID, receivedGid);
+                            editCollab(receivedCollabid, strGroupmapping_ID, collabName.getText().toString(), collabDesc.getText().toString());
                         }
                     }
                 }
@@ -196,8 +199,8 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                     GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
                     fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                 } else {
-                    GroupDetailsFragment groupDetailsFragment = new GroupDetailsFragment();
-                    fragmgr.beginTransaction().replace(R.id.content_frame, groupDetailsFragment).commit();
+                    CollabDetailsFragment collabDetailsFragment = new CollabDetailsFragment();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, collabDetailsFragment).commit();
                 }
             }
         });
@@ -427,7 +430,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
     }
 
     //---------------------sending group details to server for edit group-----------------------------------------------
-    public void editCollab(final String collabname, String collabdesc, String user_id, final String collabid) {
+    public void editCollab(final String collabid, String groupid, final String collabname, String collabdesc) {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -440,13 +443,13 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditCollabInterface service = retrofit.create(EditCollabInterface.class);
-        Call<CollabResponseStatus> call = service.sendData(collabname, user_id, collabdesc, collabid);
-        Log.d("edit_group_params", collabname + ":" + user_id + ":" + collabdesc + ":" + collabid);
+        Call<CollabResponseStatus> call = service.sendData(collabid, groupid, collabname, collabdesc);
+        Log.d("edit_collab_params", collabid + ":" + groupid + ":" + collabname + ":" + collabdesc);
         call.enqueue(new Callback<CollabResponseStatus>() {
             @Override
             public void onResponse(Response<CollabResponseStatus> response, Retrofit retrofit) {
                 mDialog.dismiss();
-                Log.d("responsegrp_onresponse", "" + response.body());
+                Log.d("responseclb_onresponse", "" + response.body());
                 try {
                     CollabResponseStatus collabResponseStatus = response.body();
                     int isblock = 0;
@@ -474,7 +477,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        Log.d("edit_group_status", collabResponseStatus.getStatus().toString());
+                        Log.d("edit_collab_status", collabResponseStatus.getStatus().toString());
                         if (collabResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.collab_edited), Toast.LENGTH_SHORT).show();
 
@@ -485,7 +488,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                             filterGroupChannel(receivedCollabname + " - CLB" + receivedCollabid);
                             callUpdateSendBird(fetchedChannelUrl, channelName);
 
-                            // move to groups list fragment
+                            // move to collaboration list fragment
                             GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (collabResponseStatus.getStatus() == 0) {
@@ -493,7 +496,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                         }
                     }
                 } catch (Exception e) {
-                    Log.d("responsegroup", "" + e.getMessage());
+                    Log.d("responseclb_onresponse", "" + e.getMessage());
                     StringWriter writer = new StringWriter();
                     e.printStackTrace(new PrintWriter(writer));
                     Bugreport bg = new Bugreport();
@@ -504,7 +507,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
             @Override
             public void onFailure(Throwable t) {
                 mDialog.dismiss();
-                Log.d("responsegroup", "" + t.getMessage());
+                Log.d("responseclb_onresponse", "" + t.getMessage());
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
         });

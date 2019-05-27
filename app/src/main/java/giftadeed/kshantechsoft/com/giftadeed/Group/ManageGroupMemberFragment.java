@@ -153,6 +153,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
+                                            listView.setAdapter(null);
                                             getMemberListForAdmin(strUser_ID, receivedGid, "1");
                                             getChannelsDetails();
                                             loadNextUserList();
@@ -214,7 +215,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         editsearch = (EditText) rootview.findViewById(R.id.et_search_member);
         noGroupMember = (TextView) rootview.findViewById(R.id.tv_no_group_members);
         memberCount = (TextView) rootview.findViewById(R.id.tv_member_count);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.manage_swipe_refresh_layout);
         listView = (ListView) rootview.findViewById(R.id.listview_groupmembers);
     }
 
@@ -690,6 +691,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             swipeRefreshLayout.setRefreshing(true);
+            listView.setAdapter(null);
             getMemberListForAdmin(strUser_ID, receivedGid, "1");
             getChannelsDetails();
             loadNextUserList();

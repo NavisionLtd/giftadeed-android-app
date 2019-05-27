@@ -9,7 +9,6 @@ import java.util.List;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 
 public class Memberlist {
-    //
     @SerializedName("is_blocked")
     @Expose
     private Integer isBlocked;

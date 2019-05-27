@@ -136,6 +136,7 @@ public class ResourceListFragment extends Fragment
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
+                                            recyclerView.setAdapter(null);
                                             getResList(strUser_ID);
                                         }
                                     }
@@ -204,6 +205,7 @@ public class ResourceListFragment extends Fragment
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             swipeRefreshLayout.setRefreshing(true);
+            recyclerView.setAdapter(null);
             getResList(strUser_ID);
         }
     }

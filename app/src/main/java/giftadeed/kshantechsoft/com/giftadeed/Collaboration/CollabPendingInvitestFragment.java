@@ -129,6 +129,7 @@ public class CollabPendingInvitestFragment extends Fragment
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
+                                            recyclerView.setAdapter(null);
                                             getPendingInviteList(strUser_ID);
                                         }
                                     }
@@ -177,6 +178,7 @@ public class CollabPendingInvitestFragment extends Fragment
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             swipeRefreshLayout.setRefreshing(true);
+            recyclerView.setAdapter(null);
             getPendingInviteList(strUser_ID);
         }
     }
@@ -230,7 +232,7 @@ public class CollabPendingInvitestFragment extends Fragment
                             colabrequestlist.setId(res.getColab_requestlist().get(i).getId());
                             colabrequestlist.setColabName(res.getColab_requestlist().get(i).getColabName());
                             colabrequestlist.setColabDesc(res.getColab_requestlist().get(i).getColabDesc());
-                            colabrequestlist.setColabStartDate(res.getColab_requestlist().get(i).getInviteStatus());
+                            colabrequestlist.setColabStartDate(res.getColab_requestlist().get(i).getColabStartDate());
                             colabrequestlist.setInviteStatus(res.getColab_requestlist().get(i).getInviteStatus());
                             colabArrayList.add(colabrequestlist);
                         }
@@ -243,7 +245,7 @@ public class CollabPendingInvitestFragment extends Fragment
 //            swipeRefreshLayout.setRefreshing(false);
                             noPendingInvites.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
-                            collabListAdapter = new CollabInvitesAdapter(colabArrayList, myContext);
+                            collabListAdapter = new CollabInvitesAdapter(strUser_ID,colabArrayList, myContext);
                             recyclerView.setAdapter(collabListAdapter);
                         }
                     }

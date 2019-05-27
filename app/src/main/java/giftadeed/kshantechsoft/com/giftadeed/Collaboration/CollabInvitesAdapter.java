@@ -65,8 +65,8 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         sessionManager = new SessionManager(context);
         mGoogleApiClient = ((TaggedneedsActivity) context).mGoogleApiClient;
         holder.colabInviteFromName.setText(list.get(position).getColabName());
-        holder.colabInviteFromDesc.setText(list.get(position).getColabDesc());
-        holder.colabInviteFromStartDate.setText(list.get(position).getColabStartDate());
+        holder.colabInviteFromDesc.setText("Details : " + list.get(position).getColabDesc());
+        holder.colabInviteFromStartDate.setText("Started on : " + list.get(position).getColabStartDate());
 
         holder.ivAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,9 +110,10 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
+        mDialog = new SimpleArcDialog(context);
         mDialog.setConfiguration(new ArcConfiguration(context));
         mDialog.show();
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.Accept_Reject_Request)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ChangeInviteInterface service = retrofit.create(ChangeInviteInterface.class);
         Call<CollabResponseStatus> call = service.sendData(user_id, collabid, invite_status);
@@ -148,7 +149,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                         context.startActivity(loginintent);
                     } else {
                         if (collabResponseStatus.getStatus() == 1) {
-                            Toast.makeText(context, context.getResources().getString(R.string.accepted), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Status changed", Toast.LENGTH_SHORT).show();
                         } else if (collabResponseStatus.getStatus() == 0) {
                             Toast.makeText(context, context.getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }

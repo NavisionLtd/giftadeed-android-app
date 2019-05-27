@@ -193,7 +193,7 @@ public class GroupCollabFrag extends Fragment {
                 return true;
             case R.id.action_create_collab:
                 CreateCollabFragment createCollabFragment = new CreateCollabFragment();
-                sessionManager.createColabDetails("create", "", "", "");
+                sessionManager.createColabDetails("create", "", "", "", "", "");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createCollabFragment).commit();
                 return true;
             case R.id.action_collab_invitations:

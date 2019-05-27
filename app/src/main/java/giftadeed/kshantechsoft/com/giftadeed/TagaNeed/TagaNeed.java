@@ -1490,7 +1490,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         TagAneedInterface service = retrofit.create(TagAneedInterface.class);
-        Call<MobileModel> call = service.sendData(user_id, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, "1000", paddress, subTypePref, checkedOtherOrg, checkedIndi, userOrgs, selectedFromGroupId);
+        Call<MobileModel> call = service.sendData(user_id, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, paddress, subTypePref, checkedOtherOrg, checkedIndi, userOrgs, selectedFromGroupId);
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
@@ -1577,7 +1577,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditdeedInterface service = retrofit.create(EditdeedInterface.class);
-        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, "1000", str_subtypes, str_permanent);
+        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, str_subtypes, str_permanent);
         Log.d("edit_deed_params", "" + user_id + "," + deedId + "," + NeedMapping_ID + "," + geopoints + "," + Imagename + "," + title + "," + description + "," + locat + "," + container + "," + validity + "," + str_subtypes + "," + str_permanent);
         call.enqueue(new Callback<StatusModel>() {
             @Override

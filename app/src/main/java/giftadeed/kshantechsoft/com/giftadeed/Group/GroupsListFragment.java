@@ -68,7 +68,6 @@ public class GroupsListFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
     View rootview;
     FragmentActivity myContext;
-    static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
     RecyclerView recyclerView;
     ArrayList<GroupPOJO> groupArrayList;
@@ -116,7 +115,6 @@ public class GroupsListFragment extends Fragment
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_groups));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
@@ -147,6 +145,7 @@ public class GroupsListFragment extends Fragment
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
+                                            recyclerView.setAdapter(null);
                                             getGroupList(strUser_ID);
                                             getChannelsDetails();
                                         }
@@ -157,9 +156,11 @@ public class GroupsListFragment extends Fragment
         btnCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                android.support.v4.app.FragmentManager newfrag;
+                newfrag = getActivity().getSupportFragmentManager();
                 CreateGroupFragment createGroupFragment = new CreateGroupFragment();
                 sessionManager.createGroupDetails("create", "", "", "", "");
-                fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
+                newfrag.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
             }
         });
 
@@ -198,6 +199,7 @@ public class GroupsListFragment extends Fragment
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             swipeRefreshLayout.setRefreshing(true);
+            recyclerView.setAdapter(null);
             getGroupList(strUser_ID);
             getChannelsDetails();
         }

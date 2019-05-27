@@ -126,6 +126,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
+                                            recyclerView.setAdapter(null);
                                             get_Tag_data();
                                             getGroupList(strUser_ID);
                                             getCategory();
@@ -512,6 +513,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             swipeRefreshLayout.setRefreshing(true);
+            recyclerView.setAdapter(null);
             get_Tag_data();
             getGroupList(strUser_ID);
             getCategory();

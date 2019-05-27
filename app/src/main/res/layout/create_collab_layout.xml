@@ -1,62 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical">
+    android:background="@color/white"
+    tools:context="giftadeed.kshantechsoft.com.giftadeed.Collaboration.CreateCollabFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:baselineAligned="false">
 
-        <android.support.design.widget.TextInputLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1.8"
-            android:textColorHint="@color/grey">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="60dp"
+            android:fillViewport="true">
 
-            <EditText
-                android:id="@+id/tv_select_collab_group"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/grey"
-                android:drawableRight="@android:drawable/arrow_down_float"
-                android:editable="false"
-                android:focusable="false"
-                android:hint="@string/select_res_group"
-                android:longClickable="false"
-                android:textColor="@color/grey"
-                android:textSize="16sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText_collab_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="@string/collab_name"
-            android:inputType="text"
-            android:maxLength="100"
-            android:singleLine="true"
-            android:textColor="@color/grey"
-            android:textSize="16sp" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textColorHint="@color/grey">
 
-        <EditText
-            android:id="@+id/editText_collab_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:hint="@string/collab_desc"
-            android:inputType="textMultiLine"
-            android:maxLength="300"
-            android:maxLines="4"
-            android:scrollbars="vertical"
-            android:textColor="@color/grey"
-            android:textSize="16sp" />
+                    <EditText
+                        android:id="@+id/tv_select_collab_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/grey"
+                        android:drawableRight="@android:drawable/arrow_down_float"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="@string/select_res_group"
+                        android:longClickable="false"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <EditText
+                    android:id="@+id/editText_collab_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:hint="@string/collab_name"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:singleLine="true"
+                    android:textColor="@color/grey"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/editText_collab_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="@string/collab_desc"
+                    android:inputType="textMultiLine"
+                    android:maxLength="300"
+                    android:maxLines="4"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/grey"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/button_create_collab"
@@ -64,12 +84,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/button_background"
-            android:text="@string/action_create_collab"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp" />
-    </LinearLayout>
-</ScrollView>
+    </RelativeLayout>
+</FrameLayout>

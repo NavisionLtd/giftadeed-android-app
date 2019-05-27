@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_no_group_creators"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/et_search_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_no_group_creators"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:hint="@string/search_group"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/creatorlist_swipe_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_search_group"
+        android:layout_above="@+id/btn_invite">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listview_group_creators"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:visibility="gone" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <Button
+        android:id="@+id/btn_invite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:background="@drawable/button_background"
+        android:text="@string/invite"
+        android:textColor="@color/white" />
+</RelativeLayout>

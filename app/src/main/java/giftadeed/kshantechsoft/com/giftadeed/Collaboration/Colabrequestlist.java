@@ -7,7 +7,7 @@ public class Colabrequestlist {
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("id")
+    @SerializedName("collaboration_id")
     @Expose
     private String id;
     @SerializedName("collaboration_name")

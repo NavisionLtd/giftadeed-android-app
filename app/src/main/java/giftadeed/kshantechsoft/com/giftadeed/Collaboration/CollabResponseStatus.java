@@ -11,6 +11,9 @@ public class CollabResponseStatus {
     @SerializedName("status")
     @Expose
     private Integer status;
+    @SerializedName("validation_message")
+    @Expose
+    private String validationMsg;
     @SerializedName("collaboration_id")
     @Expose
     private Integer collabid;
@@ -37,5 +40,13 @@ public class CollabResponseStatus {
 
     public void setCollabid(Integer collabid) {
         this.collabid = collabid;
+    }
+
+    public String getValidationMsg() {
+        return validationMsg;
+    }
+
+    public void setValidationMsg(String validationMsg) {
+        this.validationMsg = validationMsg;
     }
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import giftadeed.kshantechsoft.com.giftadeed.Collaboration.CollaborationListFragment;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 
 /**
  * Created by I-Sys on 30-Nov-16.

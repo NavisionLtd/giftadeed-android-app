@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,44 +44,30 @@ import com.sendbird.android.User;
 import com.sendbird.android.UserListQuery;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.ResponseBody;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.Group.AddGroupMemberFragment;
-import giftadeed.kshantechsoft.com.giftadeed.Group.CreateGroupFragment;
-import giftadeed.kshantechsoft.com.giftadeed.Group.DeleteGroupInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Group.ExitGroupInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupCollabFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupInfoFragment;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupInfoInterface;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupInfoPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupListInfo;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GrouptagsInterface;
-import giftadeed.kshantechsoft.com.giftadeed.Group.ManageGroupMemberFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.DeleteChannelGroup;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.RemoveMemberFromChannel;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.RemoveUserFromClub;
-import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.NeedListAdapter;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.RowData;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -102,7 +86,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
     SessionManager sessionManager;
-    TextView collabName, memberCount, noRecordsFound;
+    TextView collabName, collabDesc, collabGroup, collabStartDate, memberCount, noRecordsFound;
     LinearLayout countLayout;
     String strUser_ID;
     private AlertDialog alertDialog;
@@ -112,7 +96,6 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     ArrayList<String> split = new ArrayList<String>();
     int isMember = 1;
     float radius_set;
-    DatabaseAccess databaseAccess;
     private UserListQuery mUserListQuery;
     private List<String> lstCurrentMembersInfo = new ArrayList<>();
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
@@ -145,10 +128,9 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
-        HashMap<String, String> group = sessionManager.getSelectedColabDetails();
-        receivedCid = group.get(sessionManager.COLAB_ID);
-        receivedCname = group.get(sessionManager.COLAB_NAME);
-
+        HashMap<String, String> collab = sessionManager.getSelectedColabDetails();
+        receivedCid = collab.get(sessionManager.COLAB_ID);
+        receivedCname = collab.get(sessionManager.COLAB_NAME);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.collab_details));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         FragmentManager fragManager = myContext.getSupportFragmentManager();
@@ -165,8 +147,6 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
-        databaseAccess = DatabaseAccess.getInstance(getContext());
-        databaseAccess.open();
         getChannelsDetails();
         loadNextUserList();
         collabName.setText(receivedCname);
@@ -174,14 +154,16 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         if (!(Validation.isOnline(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
-//            get_Tag_data();
-            collabInfo(strUser_ID, receivedCid);
+            collabInfo(receivedCid);
         }
         mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("tab", "tab2");  // tab2 for collaborations
                 GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                groupCollabFrag.setArguments(bundle);
                 fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
             }
         });
@@ -191,6 +173,9 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     //--------------------------Initializing the UI variables--------------------------------------------
     private void init() {
         collabName = (TextView) rootview.findViewById(R.id.tv_collab_name);
+        collabDesc = (TextView) rootview.findViewById(R.id.tv_collab_desc);
+        collabGroup = (TextView) rootview.findViewById(R.id.tv_collab_group_name);
+        collabStartDate = (TextView) rootview.findViewById(R.id.tv_collab_start_date);
         countLayout = (LinearLayout) rootview.findViewById(R.id.count_layout);
         memberCount = (TextView) rootview.findViewById(R.id.collabdetails_member_count);
         noRecordsFound = (TextView) rootview.findViewById(R.id.no_members);
@@ -200,37 +185,39 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    public void get_Tag_data() {
-        item_list = new ArrayList<>();
+    //---------------------getting collab info from server-----------------------------------------------
+    public void collabInfo(String colab_id) {
+        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.show();
+        mDialog.setCancelable(false);
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
-        GrouptagsInterface service = retrofit.create(GrouptagsInterface.class);
-        Call<List<Taggedlist>> call = service.fetchData(strUser_ID, receivedCid);
-        Log.d("input_grouptags", strUser_ID + " : " + receivedCid);
-        call.enqueue(new Callback<List<Taggedlist>>() {
+        CollabInfoInterface service = retrofit.create(CollabInfoInterface.class);
+        Call<CollabPOJO> call = service.sendData(colab_id);
+        Log.d("clbinfo_input_params", "" + colab_id);
+        call.enqueue(new Callback<CollabPOJO>() {
             @Override
-            public void onResponse(Response<List<Taggedlist>> response, Retrofit retrofit) {
-                // listData=null;
+            public void onResponse(Response<CollabPOJO> response, Retrofit retrofit) {
+                mDialog.dismiss();
+                Log.d("responsecollabinfo", "" + response.body());
                 try {
-                    List<Taggedlist> res = response.body();
+                    CollabPOJO collabPOJO = response.body();
                     int isblock = 0;
                     try {
-                        isblock = res.get(0).getIsBlocked();
+                        isblock = collabPOJO.getIsBlocked();
                     } catch (Exception e) {
                         isblock = 0;
                     }
                     if (isblock == 1) {
+                        mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        int i = new DBGAD(getContext()).delete_row_message();
-                        sessionManager.set_notification_status("ON");
-
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
@@ -238,71 +225,26 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                                         //updateUI(false);
                                     }
                                 });
-
+                        int i = new DBGAD(getContext()).delete_row_message();
+                        sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        List<Taggedlist> taggedlists = response.body();
-                        int size = taggedlists.size();
-                        double current_latitude = new GPSTracker(getContext()).getLatitude();
-                        double current_longitude = new GPSTracker(getContext()).getLongitude();
-                        Location myLocation = new Location("My Location");
-                        myLocation.setLatitude(current_latitude);
-                        myLocation.setLongitude(current_longitude);
-
-                        if (size > 0) {
-                            for (int j = 0; j < size; j++) {
-                                String str_geo_point = taggedlists.get(j).getGeopoint();
-                                String[] words = str_geo_point.split(",");
-                                if (words.length > 1) {
-                                    Location tagLocation2 = new Location("tag Location");
-                                    tagLocation2.setLatitude(Double.parseDouble(words[0]));
-                                    tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                    float dist1 = myLocation.distanceTo(tagLocation2);
-                                    if (dist1 < radius_set) {
-                                        RowData rowData = new RowData();
-                                        rowData.setTitle(taggedlists.get(j).getNeedName());
-                                        rowData.setAddress(taggedlists.get(j).getAddress());
-                                        rowData.setDate(taggedlists.get(j).getTaggedDatetime());
-                                        rowData.setImagepath(taggedlists.get(j).getTaggedPhotoPath());
-                                        rowData.setDistance(dist1);
-                                        rowData.setCharacterPath(taggedlists.get(j).getCharacterPath());
-                                        rowData.setFname(taggedlists.get(j).getFname());
-                                        rowData.setLname(taggedlists.get(j).getLname());
-                                        rowData.setPrivacy(taggedlists.get(j).getPrivacy());
-                                        rowData.setNeedName(taggedlists.get(j).getNeedName());
-                                        rowData.setTotalTaggedCreditPoints(taggedlists.get(j).getTotalTaggedCreditPoints());
-                                        rowData.setTotalFulfilledCreditPoints(taggedlists.get(j).getTotalFulfilledCreditPoints());
-                                        rowData.setUserID(taggedlists.get(j).getUserID());
-                                        rowData.setCatType(taggedlists.get(j).getCatType());
-                                        rowData.setGetIconPath(taggedlists.get(j).getIconPath());
-                                        rowData.setTaggedID(taggedlists.get(j).getTaggedID());
-                                        rowData.setGeopoint(taggedlists.get(j).getGeopoint());
-                                        rowData.setTaggedPhotoPath(taggedlists.get(j).getTaggedPhotoPath());
-                                        rowData.setDescription(taggedlists.get(j).getDescription());
-                                        rowData.setViews(taggedlists.get(j).getViews());
-                                        rowData.setEndorse(taggedlists.get(j).getEndorse());
-                                        rowData.setAllGroups("");
-                                        rowData.setUser_group_ids("");
-                                        item_list.add(rowData);
-                                    }
-                                }
-                                if (item_list.size() == 0) {
-                                    recyclerView.setVisibility(View.GONE);
-                                    countLayout.setVisibility(View.GONE);
-                                    noRecordsFound.setVisibility(View.VISIBLE);
-                                } else {
-                                    noRecordsFound.setVisibility(View.GONE);
-                                    countLayout.setVisibility(View.VISIBLE);
-                                    memberCount.setText(String.valueOf(item_list.size()));
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                    recyclerView.setAdapter(new NeedListAdapter(item_list, getActivity(), "group"));
-                                }
-                            }
+                        int colabstatus = collabPOJO.getStatus();
+                        Log.d("colabstatus", "" + colabstatus);
+                        if (colabstatus == 1) {
+                            collabName.setText(collabPOJO.getColabinfo().getCollabname());
+                            collabDesc.setText("Description : " + collabPOJO.getColabinfo().getCollabdesc());
+                            collabGroup.setText("Created by : " + collabPOJO.getColabinfo().getGroupname() + " (" + collabPOJO.getColabinfo().getUsername() + ")");
+                            collabStartDate.setText("Start date : " + collabPOJO.getColabinfo().getCollabstartDate());
+                            collabCreatorId = collabPOJO.getColabinfo().getUserid();
                         }
+                        sessionManager.createColabDetails("", receivedCid, collabPOJO.getColabinfo().getCollabname(), collabPOJO.getColabinfo().getCollabdesc(), collabPOJO.getColabinfo().getGroupid(), collabPOJO.getColabinfo().getGroupname());
                     }
                 } catch (Exception e) {
+                    mDialog.dismiss();
+                    Log.d("responsecollabinfo", "" + e.getMessage());
                     StringWriter writer = new StringWriter();
                     e.printStackTrace(new PrintWriter(writer));
                     Bugreport bg = new Bugreport();
@@ -312,49 +254,29 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
 
             @Override
             public void onFailure(Throwable t) {
+                mDialog.dismiss();
+                Log.d("responsecollabinfo", "" + t.getMessage());
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
         });
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_group_details, menu);
+        inflater.inflate(R.menu.menu_colab_details, menu);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         if (collabCreatorId.equals(strUser_ID)) {
-            //group creator
+            //collaboration creator
             getActivity().invalidateOptionsMenu();
-            menu.findItem(R.id.action_group_info).setVisible(false);
-            menu.findItem(R.id.action_exit_group).setVisible(false);
-        } else if (admin_ids.length() > 0) {
-            for (int i = 0; i < split.size(); i++) {
-                if (split.get(i).equals(strUser_ID)) {
-                    //group admin
-                    getActivity().invalidateOptionsMenu();
-                    menu.findItem(R.id.action_delete_group).setVisible(false);
-                    menu.findItem(R.id.action_group_info).setVisible(false);
-//                    menu.findItem(R.id.action_exit_group).setVisible(false);
-                    isMember = 0;
-                    break;
-                }
-            }
-            if (isMember == 1) {
-                //group member
-                getActivity().invalidateOptionsMenu();
-                menu.findItem(R.id.action_add_member).setVisible(false);
-                menu.findItem(R.id.action_member_list).setVisible(false);
-                menu.findItem(R.id.action_edit_group).setVisible(false);
-                menu.findItem(R.id.action_delete_group).setVisible(false);
-            }
+            menu.findItem(R.id.action_exit_colab).setVisible(false);
         } else {
-            //group member
+            //collaboration member
             getActivity().invalidateOptionsMenu();
-            menu.findItem(R.id.action_add_member).setVisible(false);
-            menu.findItem(R.id.action_member_list).setVisible(false);
-            menu.findItem(R.id.action_edit_group).setVisible(false);
-            menu.findItem(R.id.action_delete_group).setVisible(false);
+            menu.findItem(R.id.action_colab_add_member).setVisible(false);
+            menu.findItem(R.id.action_edit_colab).setVisible(false);
+            menu.findItem(R.id.action_delete_colab).setVisible(false);
         }
         super.onPrepareOptionsMenu(menu);
     }
@@ -363,35 +285,32 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_add_member:
-                AddGroupMemberFragment addGroupMemberFragment = new AddGroupMemberFragment();
-                Bundle bundle2 = new Bundle();
-                bundle2.putString("gid", receivedCid);
-                addGroupMemberFragment.setArguments(bundle2);
-                fragmgr.beginTransaction().replace(R.id.content_frame, addGroupMemberFragment).commit();
+            case R.id.action_colab_add_member:
+                AddCollabMemberFragment addCollabMemberFragment = new AddCollabMemberFragment();
+                fragmgr.beginTransaction().replace(R.id.content_frame, addCollabMemberFragment).commit();
                 return true;
 
-            case R.id.action_member_list:
-                ManageGroupMemberFragment manageGroupMemberFragment = new ManageGroupMemberFragment();
+            case R.id.action_colab_member_list:
+                ManageCollabMemberFragment manageCollabMemberFragment = new ManageCollabMemberFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("groupCreatorId", collabCreatorId);
-                manageGroupMemberFragment.setArguments(bundle);
-                fragmgr.beginTransaction().replace(R.id.content_frame, manageGroupMemberFragment).commit();
+                bundle.putString("collabCreatorId", collabCreatorId);
+                manageCollabMemberFragment.setArguments(bundle);
+                fragmgr.beginTransaction().replace(R.id.content_frame, manageCollabMemberFragment).commit();
                 return true;
 
-            case R.id.action_edit_group:
-                CreateGroupFragment createGroupFragment = new CreateGroupFragment();
-                fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
+            case R.id.action_edit_colab:
+                CreateCollabFragment createCollabFragment = new CreateCollabFragment();
+                fragmgr.beginTransaction().replace(R.id.content_frame, createCollabFragment).commit();
                 return true;
 
-            case R.id.action_delete_group:
+            case R.id.action_delete_colab:
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 LayoutInflater li = LayoutInflater.from(getContext());
                 View confirmDialog = li.inflate(R.layout.giftneeddialog, null);
                 Button dialogconfirm = (Button) confirmDialog.findViewById(R.id.btn_submit_mobileno);
                 Button dialogcancel = (Button) confirmDialog.findViewById(R.id.btn_Cancel_mobileno);
                 TextView dialogtext = (TextView) confirmDialog.findViewById(R.id.txtgiftneeddialog);
-                dialogtext.setText(getResources().getString(R.string.delete_grp_msg));
+                dialogtext.setText(getResources().getString(R.string.delete_clb_msg));
                 alert.setView(confirmDialog);
                 alert.setCancelable(false);
                 alertDialog = alert.create();
@@ -405,7 +324,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                         if (!(Validation.isOnline(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
-                            deleteCollab(receivedCid, strUser_ID);
+                            deleteCollab(receivedCid);
                         }
                         alertDialog.dismiss();
                     }
@@ -418,12 +337,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                 });
                 return true;
 
-            case R.id.action_group_info:
-                GroupInfoFragment groupInfoFragment = new GroupInfoFragment();
-                fragmgr.beginTransaction().replace(R.id.content_frame, groupInfoFragment).commit();
-                return true;
-
-            case R.id.action_exit_group:
+            case R.id.action_exit_colab:
                 AlertDialog.Builder alertexit = new AlertDialog.Builder(getContext());
                 LayoutInflater lin = LayoutInflater.from(getContext());
                 View confirmDialog1 = lin.inflate(R.layout.giftneeddialog, null);
@@ -462,97 +376,8 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         }
     }
 
-    //---------------------getting group info from server-----------------------------------------------
-    public void collabInfo(String user_id, String group_id) {
-        mDialog.setConfiguration(new ArcConfiguration(getContext()));
-        mDialog.show();
-        mDialog.setCancelable(false);
-        OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(1, TimeUnit.HOURS);
-        client.setReadTimeout(1, TimeUnit.HOURS);
-        client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        CollabInfoInterface service = retrofit.create(CollabInfoInterface.class);
-        Call<List<GroupInfoPOJO>> call = service.sendData(user_id, group_id);
-        Log.d("clbinfo_input_params", user_id + ":" + group_id);
-        call.enqueue(new Callback<List<GroupInfoPOJO>>() {
-            @Override
-            public void onResponse(Response<List<GroupInfoPOJO>> response, Retrofit retrofit) {
-                mDialog.dismiss();
-                Log.d("responsecollabinfo", "" + response.body());
-                try {
-                    List<GroupInfoPOJO> groupInfoPOJO = response.body();
-                    int isblock = 0;
-                    try {
-                        isblock = groupInfoPOJO.get(0).getIsBlocked();
-                    } catch (Exception e) {
-                        isblock = 0;
-                    }
-                    if (isblock == 1) {
-                        mDialog.dismiss();
-                        FacebookSdk.sdkInitialize(getActivity());
-                        Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
-                        LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });
-                        int i = new DBGAD(getContext()).delete_row_message();
-                        sessionManager.set_notification_status("ON");
-                        Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
-                        startActivity(loginintent);
-                    } else {
-//                        groupName.setText(groupInfoPOJO.get(0).getGroup_name());
-                        admin_ids = groupInfoPOJO.get(0).getAdmin_ids();
-                        Log.d("admin_ids", "" + admin_ids);
-                        if (!admin_ids.equals("")) {
-                            if (admin_ids.contains(",")) {
-                                Collections.addAll(split, admin_ids.split(","));
-                                Log.d("split_admin_ids", "" + split.toString());
-                            } else {
-                                split.add(admin_ids);
-                                Log.d("split_admin_id", "" + split.toString());
-                            }
-                        }
-
-                        collabCreatorId = groupInfoPOJO.get(0).getCreator_id();
-//                        createdBy.setText("Created by - " + groupInfoPOJO.get(0).getCreator_name());
-//                        createdDate.setText("Created date - " + groupInfoPOJO.get(0).getCreate_date());
-//                        if (groupInfoPOJO.get(0).getGroup_desc().length() == 0) {
-//                            groupDesc.setVisibility(View.GONE);
-//                        } else {
-//                            groupDesc.setVisibility(View.VISIBLE);
-//                            groupDesc.setText(groupInfoPOJO.get(0).getGroup_desc());
-//                        }
-                        sessionManager.createGroupDetails("", receivedCid, groupInfoPOJO.get(0).getGroup_name(), groupInfoPOJO.get(0).getGroup_desc(), groupInfoPOJO.get(0).getGroup_image());
-                    }
-                } catch (Exception e) {
-                    mDialog.dismiss();
-                    Log.d("responsecollabinfo", "" + e.getMessage());
-                    StringWriter writer = new StringWriter();
-                    e.printStackTrace(new PrintWriter(writer));
-                    Bugreport bg = new Bugreport();
-                    bg.sendbug(writer.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                mDialog.dismiss();
-                Log.d("responsecollabinfo", "" + t.getMessage());
-                ToastPopUp.show(myContext, getString(R.string.server_response_error));
-            }
-        });
-    }
-
     //---------------------group delete only for group creator-----------------------------------------------
-    public void deleteCollab(final String groupid, String user_id) {
+    public void deleteCollab(final String collabid) {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
@@ -562,18 +387,18 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
-        DeleteGroupInterface service = retrofit.create(DeleteGroupInterface.class);
-        Call<GroupResponseStatus> call = service.sendData(groupid, user_id);
-        call.enqueue(new Callback<GroupResponseStatus>() {
+        DeleteCollabInterface service = retrofit.create(DeleteCollabInterface.class);
+        Call<CollabResponseStatus> call = service.sendData(collabid);
+        call.enqueue(new Callback<CollabResponseStatus>() {
             @Override
-            public void onResponse(Response<GroupResponseStatus> response, Retrofit retrofit) {
+            public void onResponse(Response<CollabResponseStatus> response, Retrofit retrofit) {
                 mDialog.dismiss();
-                Log.d("responsegroup", "" + response.body());
+                Log.d("responsecollab", "" + response.body());
                 try {
-                    GroupResponseStatus groupResponseStatus = response.body();
+                    CollabResponseStatus collabResponseStatus = response.body();
                     int isblock = 0;
                     try {
-                        isblock = groupResponseStatus.getIsBlocked();
+                        isblock = collabResponseStatus.getIsBlocked();
                     } catch (Exception e) {
                         isblock = 0;
                     }
@@ -595,25 +420,27 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        if (groupResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.group_deleted), Toast.LENGTH_SHORT).show();
-                            databaseAccess.Delete_Group(groupid);
+                        if (collabResponseStatus.getStatus() == 1) {
+                            Toast.makeText(getContext(), getResources().getString(R.string.collab_deleted), Toast.LENGTH_SHORT).show();
 
                             //delete channel from sendbird. Concat with GRP for Group and CLB for Collaboration
-                            String channelName = receivedCname + " - CLB" + groupid;
+                            String channelName = receivedCname + " - CLB" + collabid;
                             filterGroupChannel(channelName); //fetch data based on given club name
                             callDeleteGrpChannels(fetchedChannelUrl); //will delete channels based on certain url of grp
 
-                            //move to group list
+                            // move to collaboration list fragment
+                            Bundle bundle = new Bundle();
+                            bundle.putString("tab", "tab2");  // tab2 for collaborations
                             GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                            groupCollabFrag.setArguments(bundle);
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
-                        } else if (groupResponseStatus.getStatus() == 0) {
+                        } else if (collabResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
                     mDialog.dismiss();
-                    Log.d("responsegroup", "" + e.getMessage());
+                    Log.d("responsecollab", "" + e.getMessage());
                     StringWriter writer = new StringWriter();
                     e.printStackTrace(new PrintWriter(writer));
                     Bugreport bg = new Bugreport();
@@ -624,7 +451,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
             @Override
             public void onFailure(Throwable t) {
                 mDialog.dismiss();
-                Log.d("responsegroup", "" + t.getMessage());
+                Log.d("responsecollab", "" + t.getMessage());
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
         });
@@ -676,7 +503,6 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.exit_group_msg), Toast.LENGTH_SHORT).show();
-                            databaseAccess.Delete_Group(groupid);
 
                             //remove member from sendbird channel. Concat with GRP for Group and CLB for Collaboration
                             String channel_name = receivedCname + " - CLB" + groupid;
@@ -705,7 +531,10 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                             }
 
                             //move to group list
+                            Bundle bundle = new Bundle();
+                            bundle.putString("tab", "tab2");  // tab2 for collaborations
                             GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                            groupCollabFrag.setArguments(bundle);
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -740,7 +569,10 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("tab", "tab2");  // tab2 for collaborations
                     GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                    groupCollabFrag.setArguments(bundle);
                     fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                     return true;
                 }

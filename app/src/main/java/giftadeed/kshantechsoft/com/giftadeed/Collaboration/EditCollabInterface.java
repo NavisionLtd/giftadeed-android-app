@@ -13,9 +13,10 @@ import retrofit.http.POST;
 
 
 public interface EditCollabInterface {
-    String path = WebServices.Edit_Group;
+    String path = WebServices.Edit_Collab;
 
     @FormUrlEncoded
     @POST(path)
-    Call<CollabResponseStatus> sendData(@Field("name") String name, @Field("user_id") String userid, @Field("desc") String desc, @Field("group_id") String groupid);
+    Call<CollabResponseStatus> sendData(@Field("collaboration_id") String cid, @Field("group_id") String gid,
+                                        @Field("collaboration_name") String cname, @Field("collaboration_description") String cdesc);
 }

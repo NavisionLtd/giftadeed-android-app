@@ -61,7 +61,6 @@ public class CollaborationListFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
     View rootview;
     FragmentActivity myContext;
-    static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
     RecyclerView recyclerView;
     ArrayList<Colablist> colabArrayList;
@@ -103,7 +102,6 @@ public class CollaborationListFragment extends Fragment
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_groups));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
@@ -132,6 +130,7 @@ public class CollaborationListFragment extends Fragment
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
+                                            recyclerView.setAdapter(null);
                                             getCollaborationList(strUser_ID);
                                         }
                                     }
@@ -141,9 +140,11 @@ public class CollaborationListFragment extends Fragment
         btnCreateColab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateGroupFragment createGroupFragment = new CreateGroupFragment();
-                sessionManager.createColabDetails("create", "", "", "");
-                fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
+                FragmentManager newfrag;
+                newfrag = getActivity().getSupportFragmentManager();
+                CreateCollabFragment createCollabFragment = new CreateCollabFragment();
+                sessionManager.createColabDetails("create", "", "", "", "", "");
+                newfrag.beginTransaction().replace(R.id.content_frame, createCollabFragment).commit();
             }
         });
 
@@ -151,12 +152,12 @@ public class CollaborationListFragment extends Fragment
                 recyclerView, new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                /*FragmentManager newfrag;
+                FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
-                Log.d("infogrp", "" + colabArrayList.get(position).getId() + colabArrayList.get(position).getColabName());
-                sessionManager.createColabDetails("", colabArrayList.get(position).getId(), colabArrayList.get(position).getColabName(), colabArrayList.get(position).getUserRole());
-                GroupDetailsFragment fragment = new GroupDetailsFragment();
-                newfrag.beginTransaction().replace(R.id.content_frame, fragment).commit();*/
+                Log.d("infoclb", "" + colabArrayList.get(position).getId() + colabArrayList.get(position).getColabName());
+                sessionManager.createColabDetails("", colabArrayList.get(position).getId(), colabArrayList.get(position).getColabName(),"","","");
+                CollabDetailsFragment fragment = new CollabDetailsFragment();
+                newfrag.beginTransaction().replace(R.id.content_frame, fragment).commit();
             }
         }));
         return rootview;
@@ -182,6 +183,7 @@ public class CollaborationListFragment extends Fragment
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             swipeRefreshLayout.setRefreshing(true);
+            recyclerView.setAdapter(null);
             getCollaborationList(strUser_ID);
         }
     }

@@ -1,97 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical">
+    android:background="@color/white"
+    tools:context="giftadeed.kshantechsoft.com.giftadeed.Group.CreateGroupFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:baselineAligned="false">
 
-        <ImageView
-            android:id="@+id/group_profile_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/group_default_wallpaper" />
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="60dp"
+            android:fillViewport="true">
 
-            <Button
-                android:id="@+id/group_take_picture"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="40dp"
-                android:background="@drawable/white_button_background"
-                android:drawableLeft="@drawable/cam_1"
-                android:drawablePadding="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="11dp"
-                android:text="@string/take_picture"
-                android:textAllCaps="false"
-                android:textColor="@color/grey"
-                android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/group_browse_image"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/white_button_background"
-                android:drawableLeft="@drawable/gallery_1"
-                android:paddingLeft="10dp"
-                android:paddingRight="11dp"
-                android:text="@string/browse"
-                android:textAllCaps="false"
-                android:textColor="@color/grey"
-                android:textSize="16sp" />
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/group_profile_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/group_default_wallpaper" />
 
-        <EditText
-            android:id="@+id/editText_group_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:hint="@string/group_name"
-            android:inputType="text"
-            android:maxLength="100"
-            android:singleLine="true"
-            android:textColor="@color/grey"
-            android:textSize="16sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/editText_group_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:hint="@string/group_desc"
-            android:inputType="textMultiLine"
-            android:maxLength="300"
-            android:maxLines="4"
-            android:scrollbars="vertical"
-            android:textColor="@color/grey"
-            android:textSize="16sp" />
+                    <Button
+                        android:id="@+id/group_take_picture"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_button_background"
+                        android:drawableLeft="@drawable/cam_1"
+                        android:drawablePadding="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="11dp"
+                        android:text="@string/take_picture"
+                        android:textAllCaps="false"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp" />
+
+                    <Button
+                        android:id="@+id/group_browse_image"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_button_background"
+                        android:drawableLeft="@drawable/gallery_1"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="11dp"
+                        android:text="@string/browse"
+                        android:textAllCaps="false"
+                        android:textColor="@color/grey"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editText_group_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:hint="@string/group_name"
+                    android:inputType="text"
+                    android:maxLength="100"
+                    android:singleLine="true"
+                    android:textColor="@color/grey"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/editText_group_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="@string/group_desc"
+                    android:inputType="textMultiLine"
+                    android:maxLength="300"
+                    android:maxLines="4"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/grey"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/button_save_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="30dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/button_background"
             android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp" />
-    </LinearLayout>
-</ScrollView>
+    </RelativeLayout>
+</FrameLayout>
