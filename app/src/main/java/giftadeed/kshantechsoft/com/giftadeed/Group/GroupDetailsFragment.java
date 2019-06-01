@@ -96,7 +96,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
     SessionManager sessionManager;
     TextView groupName, groupActiveCount, noRecordsFound;
     LinearLayout countLayout;
-    String strUser_ID;
+    String strUser_ID = "";
     private AlertDialog alertDialog;
     String receivedGid = "", receivedGname = "", receivedGimage = "";
     private GoogleApiClient mGoogleApiClient;

@@ -108,7 +108,7 @@ public class WebServices {
     public static final String Invite_Group_Creator = SUB_URL + "invite_group_creators.php";
     public static final String Group_Creators_List = SUB_URL + "group_creators_list.php";
     public static final String Collab_Info = SUB_URL + "collaboration_information.php";
-    public static final String Remove_Collab_Member = SUB_URL + "remove_member_from_collaboration.php";
+    public static final String Remove_Collab_Member = SUB_URL + "remove_member_from_collaboration.php";  // same api used for exit collaboration from member side
 
     //Resource api
     public static final String Add_Resource = SUB_URL + "add_resource.php";

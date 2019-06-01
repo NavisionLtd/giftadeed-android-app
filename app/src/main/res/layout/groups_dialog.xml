@@ -23,21 +23,6 @@
             android:src="@drawable/first_login" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/search_from_grouplist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/search_background"
-        android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
-        android:hint="@string/search"
-        android:imeOptions="actionDone"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:singleLine="true" />
-
     <ListView
         android:id="@+id/owned_group_list"
         android:layout_width="match_parent"

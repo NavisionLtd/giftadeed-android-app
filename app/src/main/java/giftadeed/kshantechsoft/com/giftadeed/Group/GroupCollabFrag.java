@@ -25,7 +25,7 @@ import com.leo.simplearcloader.SimpleArcDialog;
 import java.util.HashMap;
 import java.util.Locale;
 
-import giftadeed.kshantechsoft.com.giftadeed.Collaboration.CollabPendingInvitestFragment;
+import giftadeed.kshantechsoft.com.giftadeed.Collaboration.CollabPendingInvitesFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Collaboration.CreateCollabFragment;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChannelListFragment;
@@ -197,8 +197,8 @@ public class GroupCollabFrag extends Fragment {
                 fragmgr.beginTransaction().replace(R.id.content_frame, createCollabFragment).commit();
                 return true;
             case R.id.action_collab_invitations:
-                CollabPendingInvitestFragment collabPendingInvitestFragment = new CollabPendingInvitestFragment();
-                fragmgr.beginTransaction().replace(R.id.content_frame, collabPendingInvitestFragment).commit();
+                CollabPendingInvitesFragment collabPendingInvitesFragment = new CollabPendingInvitesFragment();
+                fragmgr.beginTransaction().replace(R.id.content_frame, collabPendingInvitesFragment).commit();
                 return true;
             case R.id.action_group_messages:
                 if (userClubCount != null) {

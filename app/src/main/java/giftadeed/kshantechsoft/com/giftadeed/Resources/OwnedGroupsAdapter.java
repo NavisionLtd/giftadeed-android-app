@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.Signup.SignupPOJO;
 
 /**
  * Created by I-Sys on 21-Jan-17.
@@ -49,10 +48,10 @@ public class OwnedGroupsAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.category_item, null);
-        TextView storename = (TextView) view.findViewById(R.id.store_name);
+        view = inflater.inflate(R.layout.user_group_item, null);
+        TextView groupname = (TextView) view.findViewById(R.id.user_group_name);
         notifyDataSetChanged();
-        storename.setText(groups.get(i).getGroup_name());
+        groupname.setText(groups.get(i).getGroup_name());
         return view;
     }
 

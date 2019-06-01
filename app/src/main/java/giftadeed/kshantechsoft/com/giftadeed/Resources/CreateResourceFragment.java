@@ -371,8 +371,6 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                             dialog.setCancelable(false);
                             dialog.setCanceledOnTouchOutside(false);
                             dialog.setContentView(R.layout.groups_dialog);
-                            EditText edsearch = (EditText) dialog.findViewById(R.id.search_from_grouplist);
-                            edsearch.setVisibility(View.GONE);
                             ListView ownedgrouplist = (ListView) dialog.findViewById(R.id.owned_group_list);
                             Button cancel = (Button) dialog.findViewById(R.id.group_cancel);
                             ownedgrouplist.setAdapter(new OwnedGroupsAdapter(groupArrayList, getContext()));

@@ -50,17 +50,17 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/iv_accept_invite"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_btn_reject_filled" />
-
-            <ImageView
                 android:id="@+id/iv_reject_invite"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_btn_accept_filled" />
+                android:background="@drawable/reject_button_effect" />
+
+            <ImageView
+                android:id="@+id/iv_accept_invite"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/accept_button_effect" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

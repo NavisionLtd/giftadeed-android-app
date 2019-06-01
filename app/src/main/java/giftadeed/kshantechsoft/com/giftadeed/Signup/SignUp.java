@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -561,7 +563,7 @@ public class SignUp extends AppCompatActivity {
 
                     Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                     categorylist.setAdapter(ctryadptr);
-
+                    setDynamicHeight(categorylist);
                     //------------search
                     txtsearch.addTextChangedListener(new TextWatcher() {
 
@@ -656,6 +658,25 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
+    public static void setDynamicHeight(ListView listView) {
+        ListAdapter adapter = listView.getAdapter();
+        //check adapter if null
+        if (adapter == null) {
+            return;
+        }
+        int height = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            height += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
+        layoutParams.height = height + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(layoutParams);
+        listView.requestLayout();
+    }
+
     //--------------------getting states from sever-------------------------------------------------
     public void getstate(String cntryid) {
         states = new ArrayList<>();
@@ -701,7 +722,7 @@ public class SignUp extends AppCompatActivity {
                         Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                         stateadptr = new StateAdapter(states, context);
                         categorylist.setAdapter(stateadptr);
-
+                        setDynamicHeight(categorylist);
                         //------------search
                         txtsearch.addTextChangedListener(new TextWatcher() {
 
@@ -840,6 +861,7 @@ public class SignUp extends AppCompatActivity {
                     Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                     cityadptr = new CityAdapter(cities, context);
                     categorylist.setAdapter(cityadptr);
+                    setDynamicHeight(categorylist);
                     //------------search
                     txtsearch.addTextChangedListener(new TextWatcher() {
 

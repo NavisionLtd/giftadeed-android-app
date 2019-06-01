@@ -50,7 +50,6 @@ import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupCollabFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupDetailsFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupListInfo;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
@@ -86,7 +85,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
     private GoogleApiClient mGoogleApiClient;
     private List<String> lstusers = new ArrayList<String>();
     private boolean mIsDistinct;
-    private String strMessage = "Welcome to GiftADeed Chat";
+    private String strMessage = "Welcome to GiftADeed chat";
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
     private String fetchedChannelUrl;
     private ArrayList<GroupPOJO> groupArrayList;
@@ -196,7 +195,11 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
             @Override
             public void onClick(View v) {
                 if (callingFrom.equals("create")) {
+                    //move to group list
+                    Bundle bundle = new Bundle();
+                    bundle.putString("tab", "tab1");  // tab2 for collaborations
                     GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                    groupCollabFrag.setArguments(bundle);
                     fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                 } else {
                     CollabDetailsFragment collabDetailsFragment = new CollabDetailsFragment();
@@ -276,8 +279,11 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                                 mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
                                 createCollabChannel(lstusers, channelName, strMessage, mIsDistinct);
                             }
-                            // move to groups list fragment
+                            //move to group list
+                            Bundle bundle = new Bundle();
+                            bundle.putString("tab", "tab2");  // tab2 for collaborations
                             GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                            groupCollabFrag.setArguments(bundle);
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (collabResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -375,8 +381,6 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                             dialog.setCancelable(false);
                             dialog.setCanceledOnTouchOutside(false);
                             dialog.setContentView(R.layout.groups_dialog);
-                            EditText edsearch = (EditText) dialog.findViewById(R.id.search_from_grouplist);
-                            edsearch.setVisibility(View.GONE);
                             ListView ownedgrouplist = (ListView) dialog.findViewById(R.id.owned_group_list);
                             Button cancel = (Button) dialog.findViewById(R.id.group_cancel);
                             ownedgrouplist.setAdapter(new OwnedGroupsAdapter(groupArrayList, getContext()));
@@ -488,8 +492,11 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                             filterGroupChannel(receivedCollabname + " - CLB" + receivedCollabid);
                             callUpdateSendBird(fetchedChannelUrl, channelName);
 
-                            // move to collaboration list fragment
+                            //move to group list
+                            Bundle bundle = new Bundle();
+                            bundle.putString("tab", "tab2");  // tab2 for collaborations
                             GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                            groupCollabFrag.setArguments(bundle);
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (collabResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -524,11 +531,15 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     if (callingFrom.equals("create")) {
+                        //move to group list
+                        Bundle bundle = new Bundle();
+                        bundle.putString("tab", "tab1");  // tab2 for collaborations
                         GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
+                        groupCollabFrag.setArguments(bundle);
                         fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                     } else {
-                        GroupDetailsFragment groupDetailsFragment = new GroupDetailsFragment();
-                        fragmgr.beginTransaction().replace(R.id.content_frame, groupDetailsFragment).commit();
+                        CollabDetailsFragment collabDetailsFragment = new CollabDetailsFragment();
+                        fragmgr.beginTransaction().replace(R.id.content_frame, collabDetailsFragment).commit();
                     }
                     return true;
                 }

@@ -57,8 +57,6 @@ import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupListInfo;
-import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
-import giftadeed.kshantechsoft.com.giftadeed.Group.RemoveMemberInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.RemoveMemberFromChannel;
@@ -83,7 +81,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
     SimpleArcDialog mDialog;
     SessionManager sessionManager;
     String strUser_ID;
-    String receivedCid = "", receivedCname = "";
+    String receivedCid = "", receivedCname = "", userRole = "";
     EditText editsearch;
     TextView noCollabMember, memberCount;
     ListView listView;
@@ -91,7 +89,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
     ArrayList<CollabMember> collabMemberList;
     private AlertDialog alertDialog;
     private GoogleApiClient mGoogleApiClient;
-    String collabCreatorId, clickedMemberId;
+    String collabCreatorId = "", clickedMemberId;
     SwipeRefreshLayout swipeRefreshLayout;
     private UserListQuery mUserListQuery;
     private List<String> lstCurrentMembersInfo = new ArrayList<>();
@@ -143,6 +141,12 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
             collabCreatorId = bundle.getString("collabCreatorId");
         }
 
+        if (collabCreatorId.equals(strUser_ID)) {
+            userRole = "creator_login";
+        } else {
+            userRole = "member_login";
+        }
+
         swipeRefreshLayout.setOnRefreshListener(this);
         /**
          * Showing Swipe Refresh animation on activity create
@@ -169,11 +173,13 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 clickedMemberId = collabMemberList.get(i).getMemberid();
-                if (collabMemberList.get(i).getUserRole().equals("M")) {
-                    // collaboration member
-                    showDialogM();
-                } else if (collabMemberList.get(i).getUserRole().equals("C")) {
-                    // no options to select for collaboration creator
+                if (collabCreatorId.equals(strUser_ID)) { // only allow remove member functionality to collaboration creator
+                    if (collabMemberList.get(i).getUserRole().equals("M")) {
+                        // collaboration member
+                        showDialogM();
+                    } else if (collabMemberList.get(i).getUserRole().equals("C")) {
+                        // no options to select for collaboration creator
+                    }
                 }
             }
         });
@@ -429,7 +435,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
                                 noCollabMember.setText(getResources().getString(R.string.total_members));
                                 editsearch.setVisibility(View.VISIBLE);
                                 listView.setVisibility(View.VISIBLE);
-                                adapter = new FilterCollabMemberAdapter(myContext, collabMemberList);
+                                adapter = new FilterCollabMemberAdapter(myContext, collabMemberList, userRole);
                                 listView.setAdapter(adapter);
                             } else {
                                 listView.setVisibility(View.GONE);

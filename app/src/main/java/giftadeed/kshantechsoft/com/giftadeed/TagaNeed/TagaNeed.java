@@ -38,6 +38,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -95,6 +97,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
+import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.BuildConfig;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
@@ -129,7 +132,7 @@ import static android.app.Activity.RESULT_OK;
 // Description : Used to tag a new deed or edit existing deed
 ////////////////////////////////////////////////////////
 
-public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class TagaNeed extends Fragment implements Animation.AnimationListener, GoogleApiClient.OnConnectionFailedListener {
     String flag = "1";
     int spinnerPosition = 0;
     Spinner spinnerType;
@@ -150,7 +153,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
     View rootview;
     String itemname, itemid;
     ImageView gieftneedimg, imgcategory, imgshare, imgchar;
-    Button btnCamera, btnGallery, btnPost, dialogbtnconfirm, dialogbtncancel, btnOk;
+    Button btnCamera, btnGallery, btnPost, dialogbtnconfirm, dialogbtncancel, btnOk, btnShare;
     TextView dialogtext, txtDescription, txtvalidity, txtdialogcreditpoints, txttotalpoints, txtneedname;
     EditText edselectGroup, edselectcategory, selectedPref, edselectAudiance, edselectlocation, edDescription, edshortdescription;
     String latitude_source, longitude_source;
@@ -186,6 +189,8 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
     private GoogleApiClient mGoogleApiClient;
     DisplayMetrics metrics;
     int deviceWidth, deviceHeight;
+    ImageView imageView, imageViewClose;
+    Animation animFadein;
 
     public static TagaNeed newInstance(int sectionNumber) {
         TagaNeed fragment = new TagaNeed();
@@ -693,17 +698,12 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
                             dialog.setCanceledOnTouchOutside(false);
-                            dialog.setContentView(R.layout.category_dialog);
-                            EditText edsearch = (EditText) dialog.findViewById(R.id.search_from_list);
-                            edsearch.setVisibility(View.GONE);
-                            TextView catHeading = (TextView) dialog.findViewById(R.id.cat_heading);
-                            catHeading.setVisibility(View.GONE);
-                            ListView grouplist = (ListView) dialog.findViewById(R.id.category_list);
+                            dialog.setContentView(R.layout.groups_dialog);
+                            ListView grouplist = (ListView) dialog.findViewById(R.id.owned_group_list);
                             grouplist.setVisibility(View.VISIBLE);
-                            Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
+                            Button cancel = (Button) dialog.findViewById(R.id.group_cancel);
                             grouplist.setAdapter(new UserGroupListAdapter(groupArrayList, getContext()));
-                            //set dynamic height for all listviews
-                            setDynamicHeight(grouplist);
+
                             grouplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -975,7 +975,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setContentView(R.layout.category_dialog);
-//                        dialog.getWindow().setLayout((6 * deviceWidth) / 7, (4 * deviceHeight) / 5);
+                        dialog.getWindow().setLayout((6 * deviceWidth) / 7, (4 * deviceHeight) / 5);
             EditText edsearch = (EditText) dialog.findViewById(R.id.search_from_list);
             edsearch.setVisibility(View.GONE);
             TextView catHeading = (TextView) dialog.findViewById(R.id.cat_heading);
@@ -986,7 +986,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
             Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
             categorylist.setAdapter(new CategoryAdapter(categories, getContext()));
             //set dynamic height for all listviews
-            setDynamicHeight(categorylist);
+//            setDynamicHeight(categorylist);
             categorylist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -1038,7 +1038,7 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                 customCategorylist.setVisibility(View.VISIBLE);
                 customCategorylist.setAdapter(new CustomCatAdapter(customCategories, getContext()));
                 //set dynamic height for all listviews
-                setDynamicHeight(customCategorylist);
+//                setDynamicHeight(customCategorylist);
             } else {
                 customCatHeading.setVisibility(View.GONE);
                 customCategorylist.setVisibility(View.GONE);
@@ -1541,7 +1541,14 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
                             strTotalpoints = mobilemodel.getCheckstatus().get(0).getTotalCredits().toString();
                             //String char_path=mobilemodel.getCheckstatus().get(0).get().toString();
 //                            gifDialog(strImagepath);
-                            returnDialog(strCreditpoints, strTotalpoints, strImagepath, strNeed_Name);
+//                            returnDialog(strCreditpoints, strTotalpoints, strImagepath, strNeed_Name);
+//                            tagRewardDialog(strCreditpoints, strTotalpoints, strNeed_Name);
+
+                            Intent intent = new Intent(getContext(), FadeInActivity.class);
+                            intent.putExtra("credit_points", strCreditpoints);
+                            intent.putExtra("total_points", strTotalpoints);
+                            intent.putExtra("need_name", strNeed_Name);
+                            startActivity(intent);
                         } else {
                             if (!(Validation.isOnline(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
@@ -1800,6 +1807,65 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
             }
         });
         btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogreturn.dismiss();
+                int i = 1;
+                fragmgr = getFragmentManager();
+                // fragmentManager.beginTransaction().replace( R.id.Myprofile_frame,TaggedneedsFrag.newInstance(i)).commit();
+                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).commit();
+            }
+        });
+    }
+
+    //----------------------------------------
+    private void tagRewardDialog(final String credits_points, final String total_points, String needtype) {
+        AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater li = LayoutInflater.from(getActivity());
+        View tagRewardDialog = li.inflate(R.layout.reward_dialog, null);
+        txtdialogcreditpoints = (TextView) tagRewardDialog.findViewById(R.id.text_deed_points);
+        txttotalpoints = (TextView) tagRewardDialog.findViewById(R.id.text_deed_total_points);
+        txtneedname = (TextView) tagRewardDialog.findViewById(R.id.text_deed_type);
+        btnShare = (Button) tagRewardDialog.findViewById(R.id.btn_tag_reward_share);
+        imageView = (ImageView) tagRewardDialog.findViewById(R.id.image_reward);
+        imageViewClose = (ImageView) tagRewardDialog.findViewById(R.id.ic_close);
+
+        // load the animation
+        animFadein = AnimationUtils.loadAnimation(getContext(),
+                R.anim.zoom_out);
+        // set animation listener
+        animFadein.setAnimationListener(this);
+        imageView.setVisibility(View.VISIBLE);
+        // start the animation
+        imageView.startAnimation(animFadein);
+        //-------------Adding dialog box to the view of alert dialog
+        alertdialog.setView(tagRewardDialog);
+        alertdialog.setCancelable(false);
+        //----------------Creating an alert dialog
+        alertDialogreturn = alertdialog.create();
+        //----------------Displaying the alert dialog
+        alertDialogreturn.show();
+        txtneedname.setText(needtype);
+        txtdialogcreditpoints.setText(credits_points);
+        txttotalpoints.setText(total_points);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String android_shortlink = "http://tiny.cc/kwb33y";
+                String ios_shortlink = "http://tiny.cc/h4533y";
+                String website = "https://www.giftadeed.com/";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest points are " + total_points + " in the GiftADeed App.\n" +
+                        "You can earn your points by downloading the app from\n\n" +
+                        "Android : " + android_shortlink + "\n" +
+                        "iOS : " + ios_shortlink + "\n\n" +
+                        "Also, check the website at " + website);
+                startActivity(Intent.createChooser(share, "Share your points on:"));
+            }
+        });
+
+        imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialogreturn.dismiss();
@@ -2400,6 +2466,21 @@ public class TagaNeed extends Fragment implements GoogleApiClient.OnConnectionFa
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 }
 

@@ -82,7 +82,7 @@ public class GroupsListFragment extends Fragment
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
     private List<String> channelList = new ArrayList<String>();
     private boolean mIsDistinct;
-    private String strMessage = "Welcome to GiftADeed Chat";
+    private String strMessage = "Welcome to GiftADeed chat";
     private List<String> lstusers = new ArrayList<String>();
 
     public static GroupsListFragment newInstance(int sectionNumber) {

@@ -458,7 +458,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     }
 
     //---------------------exit group only for group member or group admin-----------------------------------------------
-    public void exitCollab(final String groupid, final String user_id) {
+    public void exitCollab(final String collabid, final String user_id) {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
@@ -468,18 +468,19 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
-        ExitGroupInterface service = retrofit.create(ExitGroupInterface.class);
-        Call<GroupResponseStatus> call = service.sendData(groupid, user_id);
-        call.enqueue(new Callback<GroupResponseStatus>() {
+        RemoveCollabMemberInterface service = retrofit.create(RemoveCollabMemberInterface.class);
+        Call<CollabResponseStatus> call = service.sendData(collabid, user_id);
+        Log.d("input_exit", collabid + ":" + user_id);
+        call.enqueue(new Callback<CollabResponseStatus>() {
             @Override
-            public void onResponse(Response<GroupResponseStatus> response, Retrofit retrofit) {
+            public void onResponse(Response<CollabResponseStatus> response, Retrofit retrofit) {
                 mDialog.dismiss();
                 Log.d("exit_responsegroup", "" + response.body());
                 try {
-                    GroupResponseStatus groupResponseStatus = response.body();
+                    CollabResponseStatus collabResponseStatus = response.body();
                     int isblock = 0;
                     try {
-                        isblock = groupResponseStatus.getIsBlocked();
+                        isblock = collabResponseStatus.getIsBlocked();
                     } catch (Exception e) {
                         isblock = 0;
                     }
@@ -501,11 +502,11 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        if (groupResponseStatus.getStatus() == 1) {
+                        if (collabResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.exit_group_msg), Toast.LENGTH_SHORT).show();
 
                             //remove member from sendbird channel. Concat with GRP for Group and CLB for Collaboration
-                            String channel_name = receivedCname + " - CLB" + groupid;
+                            String channel_name = receivedCname + " - CLB" + collabid;
                             if (lstGetChannelsList.size() != 0) {
                                 for (int i = 0; i < lstGetChannelsList.size(); i++) {
                                     if (lstGetChannelsList.get(i).getmChannelName().equals(channel_name)) {
@@ -536,7 +537,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                             GroupCollabFrag groupCollabFrag = new GroupCollabFrag();
                             groupCollabFrag.setArguments(bundle);
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
-                        } else if (groupResponseStatus.getStatus() == 0) {
+                        } else if (collabResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -2,6 +2,7 @@ package giftadeed.kshantechsoft.com.giftadeed.Collaboration;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,14 +20,21 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.GroupChannel;
+import com.sendbird.android.GroupChannelListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
+import giftadeed.kshantechsoft.com.giftadeed.Group.GroupListInfo;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
@@ -43,15 +51,24 @@ import retrofit.Retrofit;
 public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdapter.ViewHolder> {
     ArrayList<Colabrequestlist> list = new ArrayList<>();
     Context context;
-    String userid;
+    String strUser_ID;
     SimpleArcDialog mDialog;
     SessionManager sessionManager;
     private GoogleApiClient mGoogleApiClient;
+    private Fragment fragment;
+    private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
+    private String strClubName = "";
 
-    public CollabInvitesAdapter(String userid, ArrayList<Colabrequestlist> colabs, Context context) {
-        this.userid = userid;
+    public CollabInvitesAdapter(Fragment fragment, String userid, ArrayList<Colabrequestlist> colabs, Context context) {
+        this.fragment = fragment;
+        this.strUser_ID = userid;
         this.list = colabs;
         this.context = context;
+        try {
+            getChannelsDetails();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -71,8 +88,11 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         holder.ivAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Sendbird channel. Concat with GRP for Group and CLB for Collaboration
+                strClubName = list.get(position).getColabName() + " - CLB" + list.get(position).getId();
+                Log.d("club_channel_name", strClubName);
                 // call accept invite api. Send A for accept
-                updateInviteRequest(userid, list.get(position).getId(), "A");
+                updateInviteRequest(strUser_ID, list.get(position).getId(), "A");
             }
         });
 
@@ -80,7 +100,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
             @Override
             public void onClick(View v) {
                 // call reject invite api. Send R for reject
-                updateInviteRequest(userid, list.get(position).getId(), "R");
+                updateInviteRequest(strUser_ID, list.get(position).getId(), "R");
             }
         });
     }
@@ -105,7 +125,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
     }
 
     //---------------------call accept/reject invite status api-----------------------------------------------
-    public void updateInviteRequest(final String user_id, final String collabid, String invite_status) {
+    public void updateInviteRequest(final String user_id, final String collabid, final String invite_status) {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -117,6 +137,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ChangeInviteInterface service = retrofit.create(ChangeInviteInterface.class);
         Call<CollabResponseStatus> call = service.sendData(user_id, collabid, invite_status);
+        Log.d("input_accept_reject", user_id + ":" + collabid + ":" + invite_status);
         call.enqueue(new Callback<CollabResponseStatus>() {
             @Override
             public void onResponse(Response<CollabResponseStatus> response, Retrofit retrofit) {
@@ -150,6 +171,21 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                     } else {
                         if (collabResponseStatus.getStatus() == 1) {
                             Toast.makeText(context, "Status changed", Toast.LENGTH_SHORT).show();
+
+                            ((CollabPendingInvitesFragment) fragment).getPendingInviteList();
+
+                            //============add member in sendbird group channel==============
+                            if (invite_status.equals("A")) {
+                                if (lstGetChannelsList != null) {
+                                    for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                                        Log.d("channel_name", lstGetChannelsList.get(i).getmChannelName());
+                                        if (lstGetChannelsList.get(i).getmChannelName().equals(strClubName)) {
+                                            Log.d("channel_url", lstGetChannelsList.get(i).getmUrl());
+                                            inviteUser(lstGetChannelsList.get(i).getmUrl().toString(), strUser_ID);
+                                        }
+                                    }
+                                }
+                            }
                         } else if (collabResponseStatus.getStatus() == 0) {
                             Toast.makeText(context, context.getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
@@ -169,6 +205,70 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                 mDialog.dismiss();
                 Log.d("response_invite_request", "" + t.getMessage());
                 ToastPopUp.show(context, context.getString(R.string.server_response_error));
+            }
+        });
+    }
+
+    public void getChannelsDetails() {
+        //always use connect() along with any method of chat
+        SendBird.connect("562", new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                GroupChannelListQuery channelListQuery = GroupChannel.createMyGroupChannelListQuery();
+                channelListQuery.setIncludeEmpty(true);
+                channelListQuery.next(new GroupChannelListQuery.GroupChannelListQueryResultHandler() {
+                    @Override
+                    public void onResult(List<GroupChannel> list, SendBirdException e) {
+                        if (e != null) {
+                            // Error.
+                            return;
+
+                        }
+                        if (list != null) {
+                            for (int i = 0; i < list.size(); i++) {
+                                System.out.println("Chnalls: " + list.get(i).getName());
+                                /// lstGetChannelsList.add(list.get(i).getName().toString());
+                                lstGetChannelsList.add(new GroupListInfo(list.get(i).getData().toString(), list.get(i).getName().toString(), list.get(i).getUrl().toString()));
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void inviteUser(final String url, final String searchedMemberId) {
+        SendBird.connect("562", new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                if (e != null) {
+                    // Error.
+                    return;
+                }
+                // Get channel instance from URL first.
+                GroupChannel.getChannel(url, new GroupChannel.GroupChannelGetHandler() {
+                    @Override
+                    public void onResult(GroupChannel groupChannel, SendBirdException e) {
+                        if (e != null) {
+                            // Error!
+                            return;
+                        }
+                        // Then invite the selected members to the channel.
+                        groupChannel.inviteWithUserId(searchedMemberId, new GroupChannel.GroupChannelInviteHandler() {
+                            @Override
+                            public void onResult(SendBirdException e) {
+                                if (e != null) {
+                                    // Error!
+                                    return;
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
     }

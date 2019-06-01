@@ -27,8 +27,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_margin="10dp"
                 android:src="@drawable/ic_dialog_close_light" />
 
             <ImageView
@@ -41,58 +40,132 @@
                 android:visibility="visible" />
 
             <TextView
-                android:id="@+id/text1"
+                android:id="@+id/you_have_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/image_reward"
-                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="You've tagged Water need"
+                android:text="@string/tag_success_msg1"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/text2"
+            <LinearLayout
+                android:id="@+id/tag_reward_layout_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text1"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
+                android:layout_below="@+id/you_have_txt"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="and earned 100 points"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/text_deed_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="100"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tag_reward_layout_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tag_reward_layout_1"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/tag_success_msg4"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/text2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="center"
+                    android:text="@string/tag_success_msg3"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/text_deed_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="center"
+                    android:text="@string/tag_success_msg2"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/text3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text2"
+                android:layout_below="@+id/tag_reward_layout_2"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:gravity="center"
-                android:text="Fantastic !"
+                android:text="Fantastic!"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/text4"
+            <LinearLayout
+                android:id="@+id/tag_reward_layout_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text3"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="Your total points are 5800"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/tag_success_msg5"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/text_deed_total_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
             <Button
+                android:id="@+id/btn_tag_reward_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text4"
+                android:layout_below="@+id/tag_reward_layout_3"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="40dp"

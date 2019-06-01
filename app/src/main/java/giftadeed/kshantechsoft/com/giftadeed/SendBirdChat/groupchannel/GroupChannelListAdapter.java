@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.DateUtils;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.FileUtils;
@@ -174,7 +175,7 @@ class GroupChannelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     void setGroupChannelList(List<GroupChannel> channelList) {
         mChannelList = channelList;
         mIsCacheLoading = false;
-         notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     void addLast(GroupChannel channel) {
@@ -220,7 +221,7 @@ class GroupChannelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private class ChannelHolder extends RecyclerView.ViewHolder {
 
         TextView topicText, lastMessageText, unreadCountText, dateText, memberCountText;
-        MultiImageView coverImage;
+        CircleImageView coverImage;
         LinearLayout typingIndicatorContainer;
 
         ChannelHolder(View itemView) {
@@ -231,8 +232,8 @@ class GroupChannelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             unreadCountText = (TextView) itemView.findViewById(R.id.text_group_channel_list_unread_count);
             dateText = (TextView) itemView.findViewById(R.id.text_group_channel_list_date);
             memberCountText = (TextView) itemView.findViewById(R.id.text_group_channel_list_member_count);
-            coverImage = (MultiImageView) itemView.findViewById(R.id.image_group_channel_list_cover);
-            coverImage.setShape(MultiImageView.Shape.CIRCLE);
+            coverImage = (CircleImageView) itemView.findViewById(R.id.image_group_channel_list_cover);
+//            coverImage.setShape(MultiImageView.Shape.CIRCLE);
 
             typingIndicatorContainer = (LinearLayout) itemView.findViewById(R.id.container_group_channel_list_typing_indicator);
         }
@@ -252,9 +253,27 @@ class GroupChannelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             topicText.setText(channel.getName());
             memberCountText.setText(String.valueOf(channel.getMemberCount()));
 
-            if (!mIsCacheLoading) {
-                setChannelImage(context, channel, coverImage);
+            RequestOptions myOptions = new RequestOptions()
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+
+            if (channel.getName().contains("- CLB")) {
+                Glide.with(context)
+                        .asBitmap()
+                        .load(R.drawable.agreement_icon)
+                        .apply(myOptions)
+                        .into(coverImage);
+            } else {
+                Glide.with(context)
+                        .asBitmap()
+                        .load(R.drawable.group_icon)
+                        .apply(myOptions)
+                        .into(coverImage);
             }
+
+//            if (!mIsCacheLoading) {
+//                setChannelImage(context, channel, coverImage);
+//            }
 
             int unreadCount = channel.getUnreadMessageCount();
             // If there are no unread messages, hide the unread count badge.

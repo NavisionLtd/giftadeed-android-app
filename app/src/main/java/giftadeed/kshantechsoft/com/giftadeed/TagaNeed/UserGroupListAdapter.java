@@ -39,7 +39,7 @@ public class UserGroupListAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.user_group_name, null);
+        view = inflater.inflate(R.layout.user_group_item, null);
         TextView tvgroup = (TextView) view.findViewById(R.id.user_group_name);
         tvgroup.setText(list.get(i).getGroup_name());
         notifyDataSetChanged();

@@ -36,11 +36,13 @@ public class FilterCollabMemberAdapter extends BaseAdapter {
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
     private List<Profile> profileList;
+    private String user_role = "";
 
     public FilterCollabMemberAdapter(Context context,
-                                     List<CollabMember> list) {
+                                     List<CollabMember> list, String user_role) {
         mContext = context;
         this.memberList = list;
+        this.user_role = user_role;
         inflater = LayoutInflater.from(mContext);
         this.arraylist = new ArrayList<CollabMember>();
         this.arraylist.addAll(list);
@@ -86,13 +88,24 @@ public class FilterCollabMemberAdapter extends BaseAdapter {
         // Set the results into TextViews
         holder.username.setText(memberList.get(position).getFirstName() + " " + memberList.get(position).getLastName());
         holder.useremail.setText(memberList.get(position).getGroupName());
-        if (memberList.get(position).getUserRole().equals("C")) {
+
+        if (user_role.equals("creator_login")) {
+            if (memberList.get(position).getUserRole().equals("C")) {
+                holder.threeDot.setVisibility(View.GONE);
+                holder.role.setVisibility(View.VISIBLE);
+                holder.role.setText("Creator");
+            } else if (memberList.get(position).getUserRole().equals("M")) {
+                holder.threeDot.setVisibility(View.VISIBLE);
+                holder.role.setVisibility(View.GONE);
+            }
+        } else {
             holder.threeDot.setVisibility(View.GONE);
-            holder.role.setVisibility(View.VISIBLE);
-            holder.role.setText("Creator");
-        } else if (memberList.get(position).getUserRole().equals("M")) {
-            holder.threeDot.setVisibility(View.VISIBLE);
-            holder.role.setVisibility(View.GONE);
+            if (memberList.get(position).getUserRole().equals("C")) {
+                holder.role.setVisibility(View.VISIBLE);
+                holder.role.setText("Creator");
+            } else if (memberList.get(position).getUserRole().equals("M")) {
+                holder.role.setVisibility(View.GONE);
+            }
         }
 
         if (!(Validation.isOnline(mContext))) {

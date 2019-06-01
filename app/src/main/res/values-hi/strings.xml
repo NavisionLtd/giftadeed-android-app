@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 24 May</string>
+    <string name="app_name">GAD P2 Test 30 May</string>
 
     <!--Login page-->
     <string name="login_terms">नियम और शर्तें</string>
@@ -191,7 +191,7 @@
     <string name="remove_location">स्थान निकालें</string>
     <string name="deed_validity_heading">कार्य वैधता (1 से 48 घंटे)</string>
     <string name="select_audiance">दर्शकों का चयन करें</string>
-    <string name="description">विवरण</string>
+    <string name="description">जरूरत की कहानी</string>
     <string name="post">पोस्ट </string>
     <string name="container_available">कंटेनर उपलब्ध है</string>
     <string name="container_note">* क्या उस जरूरतमंद व्यक्ति को दान किए गए भोजन / पानी को पिलाने के लिए भोजन की थाली / पानी का पात्र है?</string>
@@ -401,5 +401,5 @@
     <string name="message_sending">भेज रहे है</string>
     <string name="message_failed">असफल हुआ</string>
     <string name="invite">आमंत्रण</string>
-    <string name="welcomechatmessage">GAD समूह चैट में आपका स्वागत है!</string>
+    <string name="welcomechatmessage">GiftADeed चैट में आपका स्वागत है</string>
 </resources>

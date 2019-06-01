@@ -123,7 +123,7 @@ import static giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails.context;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private TextView txtagreet_C, txtagreePolicy;
     ImageView fbbtn, linkedinbtn, googlebtn;
-    TextView signup, forgot, loginheading, txtloginTermsandcondn, txtagree1, txtTermsAnd, txtSelectLanguage;
+    TextView notregistered,signup, forgot, loginheading, txtloginTermsandcondn, txtagree1, txtTermsAnd, txtSelectLanguage;
     private CheckBox chkbx;
     Button btnLogin, dialogconfirm, dialogcancel;
     TextInputLayout txtInpLoiginid, txtInpPasswrd;
@@ -490,6 +490,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         txtagreet_C = (TextView) findViewById(R.id.txtagreeT_C_1);
         txtagreePolicy = (TextView) findViewById(R.id.txtagreePolicy_1);
         btnSos = (Button) findViewById(R.id.btn_set_sos);
+        notregistered = (TextView) findViewById(R.id.not_registered);
         signup = (TextView) findViewById(R.id.signuptxt);
         forgot = (TextView) findViewById(R.id.forgotpwd);
         btnLogin = (Button) findViewById(R.id.login);
@@ -512,6 +513,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //---------------------------------------setting font style-------------------------
         btnLogin.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         forgot.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
+        notregistered.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         signup.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         loginheading.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         email.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
@@ -533,6 +535,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         txtInpLoiginid.setHint(getResources().getString(R.string.email_string));
         txtInpPasswrd.setHint(getResources().getString(R.string.password_string));
         btnLogin.setText(getResources().getString(R.string.login_string));
+        notregistered.setText(getResources().getString(R.string.not_registered));
         signup.setText(getResources().getString(R.string.signup));
         forgot.setText(getResources().getString(R.string.forgot));
         txtsaperator.setText(getResources().getString(R.string.txtseperator));

@@ -196,7 +196,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
         return rootview;
     }
 
-    //--------------------------Initilizing the UI variables--------------------------------------------
+    //--------------------------Initializing the UI variables--------------------------------------------
     private void init() {
         selectedCreatorIds = new ArrayList<String>();
         editsearch = (EditText) rootview.findViewById(R.id.et_search_group);

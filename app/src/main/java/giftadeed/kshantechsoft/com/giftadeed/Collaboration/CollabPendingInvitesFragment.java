@@ -55,7 +55,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class CollabPendingInvitestFragment extends Fragment
+public class CollabPendingInvitesFragment extends Fragment
         implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
     View rootview;
     FragmentActivity myContext;
@@ -70,8 +70,8 @@ public class CollabPendingInvitestFragment extends Fragment
     private GoogleApiClient mGoogleApiClient;
     CollabInvitesAdapter collabListAdapter;
 
-    public static CollabPendingInvitestFragment newInstance(int sectionNumber) {
-        CollabPendingInvitestFragment fragment = new CollabPendingInvitestFragment();
+    public static CollabPendingInvitesFragment newInstance(int sectionNumber) {
+        CollabPendingInvitesFragment fragment = new CollabPendingInvitesFragment();
         return fragment;
     }
 
@@ -130,7 +130,7 @@ public class CollabPendingInvitestFragment extends Fragment
                                         } else {
                                             swipeRefreshLayout.setRefreshing(true);
                                             recyclerView.setAdapter(null);
-                                            getPendingInviteList(strUser_ID);
+                                            getPendingInviteList();
                                         }
                                     }
                                 }
@@ -179,12 +179,12 @@ public class CollabPendingInvitestFragment extends Fragment
         } else {
             swipeRefreshLayout.setRefreshing(true);
             recyclerView.setAdapter(null);
-            getPendingInviteList(strUser_ID);
+            getPendingInviteList();
         }
     }
 
     //---------------------get the list of group creators-----------------------------------------------
-    public void getPendingInviteList(String user_id) {
+    public void getPendingInviteList() {
         colabArrayList = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -193,7 +193,7 @@ public class CollabPendingInvitestFragment extends Fragment
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ColabRequestListInterface service = retrofit.create(ColabRequestListInterface.class);
-        Call<CollabPOJO> call = service.sendData(user_id);
+        Call<CollabPOJO> call = service.sendData(strUser_ID);
         call.enqueue(new Callback<CollabPOJO>() {
             @Override
             public void onResponse(Response<CollabPOJO> response, Retrofit retrofit) {
@@ -245,7 +245,7 @@ public class CollabPendingInvitestFragment extends Fragment
 //            swipeRefreshLayout.setRefreshing(false);
                             noPendingInvites.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
-                            collabListAdapter = new CollabInvitesAdapter(strUser_ID,colabArrayList, myContext);
+                            collabListAdapter = new CollabInvitesAdapter(CollabPendingInvitesFragment.this, strUser_ID, colabArrayList, myContext);
                             recyclerView.setAdapter(collabListAdapter);
                         }
                     }

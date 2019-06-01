@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -484,6 +485,7 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
                     ListView categorylist = (ListView) dialog.findViewById(R.id.category_list);
                     Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                     categorylist.setAdapter(new CategoriesAdaptor(categories, getContext()));
+                    setDynamicHeight(categorylist);
                     categorylist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -516,6 +518,25 @@ public class Notificationfrag extends Fragment implements GoogleApiClient.OnConn
                 mDialog.dismiss();
             }
         });
+    }
+
+    public static void setDynamicHeight(ListView listView) {
+        ListAdapter adapter = listView.getAdapter();
+        //check adapter if null
+        if (adapter == null) {
+            return;
+        }
+        int height = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            height += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
+        layoutParams.height = height + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(layoutParams);
+        listView.requestLayout();
     }
 
     public void filterNotification() throws ParseException {

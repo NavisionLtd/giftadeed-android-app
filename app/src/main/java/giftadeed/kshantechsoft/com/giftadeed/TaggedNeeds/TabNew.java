@@ -10,9 +10,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.bottomnavigation.LabelVisibilityMode;
@@ -25,6 +28,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,6 +49,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -102,7 +108,7 @@ import retrofit.Retrofit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class TabNew extends android.support.v4.app.Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class TabNew extends android.support.v4.app.Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, Animation.AnimationListener {
     ArrayList<TaggedDeedsPojo> taggeddeeds = new ArrayList<TaggedDeedsPojo>();
     FragmentActivity myContext;
     List<Taggedlist> taggedlists = new ArrayList<>();
@@ -131,6 +137,9 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
     String selectedLangugae;
     Locale locale;
     Configuration config;
+    MediaPlayer mp;
+    ImageView imageView;
+    Animation animFadein;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -206,11 +215,47 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                     sessionManager.store_sos_option2_clicked("no");
                     sessionManager.store_sos_option3_clicked("no");
                     startActivity(i);
+//                    endorseDialog();
                     return true;
             }
             return false;
         }
     };
+
+    private void endorseDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        mp = MediaPlayer.create(getActivity(), R.raw.endorsed_sound);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.endorse_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(true);
+        dialog.show();
+        imageView = (ImageView) dialog.findViewById(R.id.image_endorsed);
+        Glide.with(this)
+                .load(R.drawable.verified)
+                .into(imageView);
+        // load the animation
+        animFadein = AnimationUtils.loadAnimation(getContext(),
+                R.anim.zoom_in);
+        // set animation listener
+        animFadein.setAnimationListener(this);
+        imageView.setVisibility(View.VISIBLE);
+
+        // start the animation
+        imageView.startAnimation(animFadein);
+        mp.start();
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+
+                }
+            }
+        };
+        handler.postDelayed(runnable, 5000);
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -1350,5 +1395,20 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 }

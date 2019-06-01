@@ -102,7 +102,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     private GoogleApiClient mGoogleApiClient;
     private List<String> lstusers = new ArrayList<String>();
     private boolean mIsDistinct;
-    private String strMessage = "Welcome to GiftADeed Chat";
+    private String strMessage = "Welcome to GiftADeed chat";
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
     private String fetchedChannelUrl;
 

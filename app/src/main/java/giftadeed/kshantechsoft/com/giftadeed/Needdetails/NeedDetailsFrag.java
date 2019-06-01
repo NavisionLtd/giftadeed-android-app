@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -25,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -92,7 +95,7 @@ import java.util.concurrent.TimeUnit;
 //  Shows details of deed and also can comment,endorse,report,edit deed//
 ////////////////////////////////////////////////////////////////////////
 
-public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener, Animation.AnimationListener {
     FragmentActivity myContext;
     View rootview;
     ListView listviewcomments;
@@ -122,6 +125,9 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     SimpleArcDialog mDialog;
     private GoogleApiClient mGoogleApiClient;
     Button img_view_send_comment;
+    Animation animFadein;
+    ImageView imageView;
+    MediaPlayer mp;
 
     public static NeedDetailsFrag newInstance(int sectionNumber) {
         NeedDetailsFrag fragment = new NeedDetailsFrag();
@@ -267,7 +273,6 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             if (is_endorse == 1) {
                                 Toast.makeText(getContext(), "You have already endorsed", Toast.LENGTH_SHORT).show();
                             } else {
-
                                 if (ft_distance > dist) {
                                     Toast.makeText(getContext(), "You need to be within " + dist + " feet area of the needy person", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -459,13 +464,13 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 detailspage_containerlayout.setVisibility(View.GONE);
                             }
 
-                            if (is_endorse == 1) {
+                            /*if (is_endorse == 1) {
                                 img_endorse.setVisibility(View.GONE);
                                 img_endorse_over.setVisibility(View.VISIBLE);
                             } else {
                                 img_endorse.setVisibility(View.VISIBLE);
                                 img_endorse_over.setVisibility(View.GONE);
-                            }
+                            }*/
                             txtneeddetailsendorse.setText(str_endorse);
                             txtneeddetailsview.setText(str_Views);
                             txtsubheading.setText(str_needName);
@@ -494,7 +499,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 subTypeLayout.setVisibility(View.GONE);
                             }
 
-                            txt_des.setText(getResources().getString(R.string.deed_details) + "\n" + str_description);
+                            txt_des.setText(getResources().getString(R.string.description) + "\n" + str_description);
                             txt_des.setMovementMethod(new ScrollingMovementMethod());
                             if (commentslist.size() > 0) {
                                 comments_layout.setVisibility(View.VISIBLE);
@@ -648,11 +653,12 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             is_endorse = 1;
                             int endor = Integer.parseInt(str_endorse) + 1;
                             txtneeddetailsendorse.setText(String.valueOf(endor));
-                            img_endorse.setVisibility(View.GONE);
-                            img_endorse_over.setVisibility(View.VISIBLE);
+//                            img_endorse.setVisibility(View.GONE);
+//                            img_endorse_over.setVisibility(View.VISIBLE);
 
 
-                            gifDialog();
+//                            gifDialog();
+                            endorseDialog();
                         } else {
                             Toast.makeText(getContext(), "Endorsement failed", Toast.LENGTH_SHORT).show();
                             mDialog.dismiss();
@@ -954,8 +960,6 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-
-
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
@@ -1292,5 +1296,55 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
             }
         };
         handler.postDelayed(runnable, 5000);
+    }
+
+    //----------------------------------------
+    private void endorseDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        mp = MediaPlayer.create(getActivity(), R.raw.endorsed_sound);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.endorse_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(true);
+        dialog.show();
+        imageView = (ImageView) dialog.findViewById(R.id.image_endorsed);
+        Glide.with(this)
+                .load(R.drawable.verified)
+                .into(imageView);
+        // load the animation
+        animFadein = AnimationUtils.loadAnimation(getContext(),
+                R.anim.zoom_in);
+        // set animation listener
+        animFadein.setAnimationListener(this);
+        imageView.setVisibility(View.VISIBLE);
+        // start the animation
+        imageView.startAnimation(animFadein);
+        mp.start();
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+
+                }
+            }
+        };
+        handler.postDelayed(runnable, 5000);
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 }

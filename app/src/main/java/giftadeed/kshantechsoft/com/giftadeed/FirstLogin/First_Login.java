@@ -10,11 +10,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,7 +75,7 @@ import retrofit.Retrofit;
 //                                                               //
 //     Used to complete details required to complete profile    //
 /////////////////////////////////////////////////////////////////
-public class First_Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class First_Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     EditText edfirstlogin_country, edfirstlogin_state, edfirstlogin_city, edfirstlogin_email;
     Button btnsubmit;
     TextView firstloginhead;
@@ -83,7 +85,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
     private ArrayList<SignupPOJO> countri = new ArrayList<>();
     String contryid = null, strCountry_Id;
     String stateid = null;
-    String cityid = null, strCountry, strCity, strState, strUserId, strEmail, message, strFname, strLname,strPrivacy;
+    String cityid = null, strCountry, strCity, strState, strUserId, strEmail, message, strFname, strLname, strPrivacy;
     Context context;
     ListView categorylist;
     EditText txtsearch;
@@ -115,7 +117,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
             strLname = bundle.getString("LName");
             message = bundle.getString("message");
             strCountry_Id = bundle.getString("countryid");
-            strPrivacy=bundle.getString("privacy");
+            strPrivacy = bundle.getString("privacy");
         } catch (Exception e) {
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
@@ -173,7 +175,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
 
     }
 
-//-----------------getting country
+    //-----------------getting country
     public void getcountry() {
         countries = new ArrayList<>();
         countries.clear();
@@ -231,7 +233,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
 
                         Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                         categorylist.setAdapter(ctryadptr);
-
+                        setDynamicHeight(categorylist);
                         //------------search
                         txtsearch.addTextChangedListener(new TextWatcher() {
 
@@ -330,6 +332,25 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                 mDialog.dismiss();
             }
         });
+    }
+
+    public static void setDynamicHeight(ListView listView) {
+        ListAdapter adapter = listView.getAdapter();
+        //check adapter if null
+        if (adapter == null) {
+            return;
+        }
+        int height = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            height += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
+        layoutParams.height = height + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(layoutParams);
+        listView.requestLayout();
     }
 
     public void getSelectedcountry() {
@@ -454,7 +475,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                             Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                             stateadptr = new StateAdapter(states, context);
                             categorylist.setAdapter(stateadptr);
-
+                            setDynamicHeight(categorylist);
                             //------------search
                             txtsearch.addTextChangedListener(new TextWatcher() {
 
@@ -600,6 +621,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                         cityadptr = new CityAdapter(cities, context);
                         categorylist.setAdapter(cityadptr);
+                        setDynamicHeight(categorylist);
                         //------------search
                         txtsearch.addTextChangedListener(new TextWatcher() {
 
@@ -693,7 +715,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
         });
     }
 
-//---------------views initlizations
+    //---------------views initlizations
     public void init() {
         firstloginhead = (TextView) findViewById(R.id.firstloginhead);
         edfirstlogin_country = (EditText) findViewById(R.id.edfirstlogin_country);
@@ -724,25 +746,24 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
             ToastPopUp.displayToast(First_Login.this, getResources().getString(R.string.select_state));
         } else if (strCity_name.length() < 1) {
             ToastPopUp.displayToast(First_Login.this, getResources().getString(R.string.select_city));
-        }else if (edfirstlogin_email.getVisibility() == View.VISIBLE) {
+        } else if (edfirstlogin_email.getVisibility() == View.VISIBLE) {
             strEmail = edfirstlogin_email.getText().toString();
-             if (!(Validation.isOnline(First_Login.this))) {
+            if (!(Validation.isOnline(First_Login.this))) {
                 ToastPopUp.show(First_Login.this, getString(R.string.network_validation));
             } else if (strEmail.length() < 1) {
                 ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
-                 edfirstlogin_email.requestFocus();
+                edfirstlogin_email.requestFocus();
             } else if (!(Validation.isValidEmailAddress(edfirstlogin_email.getText().toString().trim()))) {
                 ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
-                 edfirstlogin_email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                 edfirstlogin_email.requestFocus();
-                 edfirstlogin_email.selectAll();
+                edfirstlogin_email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                edfirstlogin_email.requestFocus();
+                edfirstlogin_email.selectAll();
 
-            }else {
-                 checkemail(0);
-             }
-        }
-        else {
-            firstLogin(contryid, stateid, cityid, strEmail, strUserId,strPrivacy);
+            } else {
+                checkemail(0);
+            }
+        } else {
+            firstLogin(contryid, stateid, cityid, strEmail, strUserId, strPrivacy);
         }
     }
 
@@ -769,7 +790,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                     String strFullName = strFname + " " + strLname;
                     if (SuccessStatus.equals("1")) {
                         mDialog.dismiss();
-                        sharedPreferences.createUserCredentialSession(User_Id, strFullName,privacy);
+                        sharedPreferences.createUserCredentialSession(User_Id, strFullName, privacy);
                         sharedPreferences.store_radius(Validation.inital_radius);
                         Intent in = new Intent(First_Login.this, TaggedneedsActivity.class);
                         in.putExtra("message", message);
@@ -800,7 +821,6 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
         LoginManager.getInstance().logOut();
 
 
-
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -808,7 +828,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         //updateUI(false);
                     }
                 });
-        Intent in =new Intent(First_Login.this,LoginActivity.class);
+        Intent in = new Intent(First_Login.this, LoginActivity.class);
         in.putExtra("message", message);
         startActivity(in);
 
@@ -820,11 +840,11 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
     }
 
 
-//--------------------------check email already exist
+    //--------------------------check email already exist
     public void checkemail(final int chkemail) {
 
 
-       String stremailaddress = edfirstlogin_email.getText().toString();
+        String stremailaddress = edfirstlogin_email.getText().toString();
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -854,8 +874,8 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         edfirstlogin_email.setText("");
 
 
-                    } else{
-                        firstLogin(contryid, stateid, cityid, strEmail, strUserId,strPrivacy);
+                    } else {
+                        firstLogin(contryid, stateid, cityid, strEmail, strUserId, strPrivacy);
                     }
 
                     /*else {

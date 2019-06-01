@@ -35,6 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -1286,7 +1287,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 
                     ctryadptr = new CountryAdapter(countries, getContext());
                     categorylist.setAdapter(ctryadptr);
-
+                    setDynamicHeight(categorylist);
                     //------------search
                     txtsearch.addTextChangedListener(new TextWatcher() {
 
@@ -1376,6 +1377,25 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         }
     }
 
+    public static void setDynamicHeight(ListView listView) {
+        ListAdapter adapter = listView.getAdapter();
+        //check adapter if null
+        if (adapter == null) {
+            return;
+        }
+        int height = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            height += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams layoutParams = listView.getLayoutParams();
+        layoutParams.height = height + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(layoutParams);
+        listView.requestLayout();
+    }
+
     public void selectState() {
         if (!(Validation.isNetworkAvailable(myContext))) {
             Toast.makeText(myContext, getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
@@ -1394,7 +1414,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                     stateadptr = new StateAdapter(states, getContext());
                     categorylist.setAdapter(stateadptr);
-
+                    setDynamicHeight(categorylist);
                     //------------search
                     txtsearch.addTextChangedListener(new TextWatcher() {
 
@@ -1496,7 +1516,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     Button cancel = (Button) dialog.findViewById(R.id.category_cancel);
                     cityadptr = new CityAdapter(cities, getContext());
                     categorylist.setAdapter(cityadptr);
-
+                    setDynamicHeight(categorylist);
                     //------------search
                     txtsearch.addTextChangedListener(new TextWatcher() {
 

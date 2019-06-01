@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 24 May</string>
+    <string name="app_name">GAD P2 Test 30 May</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
@@ -191,7 +191,7 @@
     <string name="remove_location">Remove Location</string>
     <string name="deed_validity_heading">契约有效期（1至48小时）</string>
     <string name="select_audiance">选择受众</string>
-    <string name="description">描述</string>
+    <string name="description">需要的故事</string>
     <string name="post">岗位</string>
     <string name="container_available">可用的容器</string>
     <string name="container_note">* 這個有需要的人是否有食物盤/水容器來收回捐贈的食物/水？</string>
@@ -398,7 +398,7 @@
     <string name="delete_message">刪除</string>
     <string name="message_sending">發出</string>
     <string name="message_failed">失敗</string>
-    <string name="welcomechatmessage">歡迎來到瑜伽俱樂部聊天組。</string>
+    <string name="welcomechatmessage">歡迎來到GiftADeed聊天</string>
     <string name="no_channel">找不到頻道</string>
     <string name="action_group_messages">群組消息</string>
     <string name="invite">邀請</string>

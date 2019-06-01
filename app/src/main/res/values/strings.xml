@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 24 May</string>
+    <string name="app_name">GAD P2 Test 30 May</string>
 
     <!--Login page-->
     <string name="login_terms">Terms and Conditions</string>
@@ -8,7 +8,8 @@
     <string name="login_string">Login</string>
     <string name="email_string">Email</string>
     <string name="password_string">Password</string>
-    <string name="signup">Not registered yet? Sign up</string>
+    <string name="not_registered">Not registered yet?</string>
+    <string name="signup">Sign up</string>
     <string name="forgot">Forgot Password?</string>
     <string name="txtseperator">OR LOGIN WITH</string>
     <string name="txtagree1">By logging in, you agree to our </string>
@@ -195,7 +196,7 @@
     <string name="remove_location">Remove Location</string>
     <string name="deed_validity_heading">Deed Validity (1 to 48 Hours)</string>
     <string name="select_audiance">Select audience</string>
-    <string name="description">Description</string>
+    <string name="description">Story of need</string>
     <string name="post">Post</string>
     <string name="container_available">Container Available</string>
     <string name="container_note">* Whether that needy person has a food plate/water container to recive the donated food/water?</string>
@@ -262,11 +263,11 @@
     <string name="remove_collab_member_dialog">Remove this member from collaboration?</string>
     <string name="exit_yes">Yes</string>
     <string name="exit_no">No</string>
-    <string name="tag_success_msg1">You have tagged </string>
+    <string name="tag_success_msg1">You\'ve won </string>
     <string name="tag_success_msg2">need</string>
-    <string name="tag_success_msg3">You have earned </string>
-    <string name="tag_success_msg4">point(s) </string>
-    <string name="tag_success_msg5">Your total point(s) are </string>
+    <string name="tag_success_msg3">by tagging </string>
+    <string name="tag_success_msg4">points </string>
+    <string name="tag_success_msg5">Your total points are </string>
 
     <!--Resource-->
     <string name="resource_error">You don\'t own groups to create the resource</string>
@@ -408,5 +409,5 @@
     <string name="delete_message">Delete</string>
     <string name="message_sending">Sending</string>
     <string name="message_failed">Failed</string>
-    <string name="welcomechatmessage">Welcome to GAD group chat</string>
+    <string name="welcomechatmessage">Welcome to GiftADeed chat</string>
 </resources>
