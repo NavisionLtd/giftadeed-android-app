@@ -154,7 +154,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     String itemname, itemid;
     ImageView gieftneedimg, imgcategory, imgshare, imgchar;
     Button btnCamera, btnGallery, btnPost, dialogbtnconfirm, dialogbtncancel, btnOk, btnShare;
-    TextView dialogtext, txtDescription, txtvalidity, txtdialogcreditpoints, txttotalpoints, txtneedname;
+    TextView dialogtext, txtDescription, txtvalidity, txtdialogcreditpoints, txttotalpoints, txt2, txtneedname;
     EditText edselectGroup, edselectcategory, selectedPref, edselectAudiance, edselectlocation, edDescription, edshortdescription;
     String latitude_source, longitude_source;
     String selectedFromGroupId = "", selectedFromGroupName, strNeedmapping_ID, strNeed_Name, strCharacter_Path, strImagenamereturned, strUser_ID, strCreditpoints, strTotalpoints;
@@ -975,7 +975,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             dialog.setCancelable(false);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setContentView(R.layout.category_dialog);
-                        dialog.getWindow().setLayout((6 * deviceWidth) / 7, (4 * deviceHeight) / 5);
+            dialog.getWindow().setLayout((6 * deviceWidth) / 7, (4 * deviceHeight) / 5);
             EditText edsearch = (EditText) dialog.findViewById(R.id.search_from_list);
             edsearch.setVisibility(View.GONE);
             TextView catHeading = (TextView) dialog.findViewById(R.id.cat_heading);
@@ -1454,9 +1454,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     public void onErrorResponse(VolleyError error) {
                         ToastPopUp.show(myContext, getString(R.string.server_response_error));
                     }
-                })
-
-        {
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //Converting Bitmap to String
@@ -1542,12 +1540,12 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             //String char_path=mobilemodel.getCheckstatus().get(0).get().toString();
 //                            gifDialog(strImagepath);
 //                            returnDialog(strCreditpoints, strTotalpoints, strImagepath, strNeed_Name);
-//                            tagRewardDialog(strCreditpoints, strTotalpoints, strNeed_Name);
 
                             Intent intent = new Intent(getContext(), FadeInActivity.class);
                             intent.putExtra("credit_points", strCreditpoints);
                             intent.putExtra("total_points", strTotalpoints);
                             intent.putExtra("need_name", strNeed_Name);
+                            intent.putExtra("reason", "by tagging");
                             startActivity(intent);
                         } else {
                             if (!(Validation.isOnline(getActivity()))) {
@@ -1764,7 +1762,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         LayoutInflater li = LayoutInflater.from(getActivity());
         View confirmDialog = li.inflate(R.layout.gift_dialog, null);
 
-
         btnOk = (Button) confirmDialog.findViewById(R.id.btndialogok);
         txtdialogcreditpoints = (TextView) confirmDialog.findViewById(R.id.txtcredit_points);
         txttotalpoints = (TextView) confirmDialog.findViewById(R.id.txttotal_points);
@@ -1818,65 +1815,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         });
     }
 
-    //----------------------------------------
-    private void tagRewardDialog(final String credits_points, final String total_points, String needtype) {
-        AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
-        LayoutInflater li = LayoutInflater.from(getActivity());
-        View tagRewardDialog = li.inflate(R.layout.reward_dialog, null);
-        txtdialogcreditpoints = (TextView) tagRewardDialog.findViewById(R.id.text_deed_points);
-        txttotalpoints = (TextView) tagRewardDialog.findViewById(R.id.text_deed_total_points);
-        txtneedname = (TextView) tagRewardDialog.findViewById(R.id.text_deed_type);
-        btnShare = (Button) tagRewardDialog.findViewById(R.id.btn_tag_reward_share);
-        imageView = (ImageView) tagRewardDialog.findViewById(R.id.image_reward);
-        imageViewClose = (ImageView) tagRewardDialog.findViewById(R.id.ic_close);
-
-        // load the animation
-        animFadein = AnimationUtils.loadAnimation(getContext(),
-                R.anim.zoom_out);
-        // set animation listener
-        animFadein.setAnimationListener(this);
-        imageView.setVisibility(View.VISIBLE);
-        // start the animation
-        imageView.startAnimation(animFadein);
-        //-------------Adding dialog box to the view of alert dialog
-        alertdialog.setView(tagRewardDialog);
-        alertdialog.setCancelable(false);
-        //----------------Creating an alert dialog
-        alertDialogreturn = alertdialog.create();
-        //----------------Displaying the alert dialog
-        alertDialogreturn.show();
-        txtneedname.setText(needtype);
-        txtdialogcreditpoints.setText(credits_points);
-        txttotalpoints.setText(total_points);
-        btnShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String android_shortlink = "http://tiny.cc/kwb33y";
-                String ios_shortlink = "http://tiny.cc/h4533y";
-                String website = "https://www.giftadeed.com/";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest points are " + total_points + " in the GiftADeed App.\n" +
-                        "You can earn your points by downloading the app from\n\n" +
-                        "Android : " + android_shortlink + "\n" +
-                        "iOS : " + ios_shortlink + "\n\n" +
-                        "Also, check the website at " + website);
-                startActivity(Intent.createChooser(share, "Share your points on:"));
-            }
-        });
-
-        imageViewClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialogreturn.dismiss();
-                int i = 1;
-                fragmgr = getFragmentManager();
-                // fragmentManager.beginTransaction().replace( R.id.Myprofile_frame,TaggedneedsFrag.newInstance(i)).commit();
-                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).commit();
-            }
-        });
-    }
-
     //-----------------get address-----------------
     public void getAddress(final String latitude, final String longitude) {
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
@@ -1910,9 +1848,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
 
                     }
-                })
-
-        {
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new Hashtable<String, String>();

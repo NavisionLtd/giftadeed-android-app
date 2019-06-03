@@ -22,6 +22,7 @@ import android.support.design.bottomnavigation.LabelVisibilityMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -137,9 +138,6 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
     String selectedLangugae;
     Locale locale;
     Configuration config;
-    MediaPlayer mp;
-    ImageView imageView;
-    Animation animFadein;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -215,47 +213,11 @@ public class TabNew extends android.support.v4.app.Fragment implements OnMapRead
                     sessionManager.store_sos_option2_clicked("no");
                     sessionManager.store_sos_option3_clicked("no");
                     startActivity(i);
-//                    endorseDialog();
                     return true;
             }
             return false;
         }
     };
-
-    private void endorseDialog() {
-        final Dialog dialog = new Dialog(getActivity());
-        mp = MediaPlayer.create(getActivity(), R.raw.endorsed_sound);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.endorse_dialog);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(true);
-        dialog.show();
-        imageView = (ImageView) dialog.findViewById(R.id.image_endorsed);
-        Glide.with(this)
-                .load(R.drawable.verified)
-                .into(imageView);
-        // load the animation
-        animFadein = AnimationUtils.loadAnimation(getContext(),
-                R.anim.zoom_in);
-        // set animation listener
-        animFadein.setAnimationListener(this);
-        imageView.setVisibility(View.VISIBLE);
-
-        // start the animation
-        imageView.startAnimation(animFadein);
-        mp.start();
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
-
-                }
-            }
-        };
-        handler.postDelayed(runnable, 5000);
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

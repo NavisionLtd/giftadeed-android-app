@@ -10,6 +10,9 @@ public class Colabrequestlist {
     @SerializedName("collaboration_id")
     @Expose
     private String id;
+    @SerializedName("creator_id")
+    @Expose
+    private String creator_id;
     @SerializedName("collaboration_name")
     @Expose
     private String colabName;
@@ -37,6 +40,14 @@ public class Colabrequestlist {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCreator_id() {
+        return creator_id;
+    }
+
+    public void setCreator_id(String creator_id) {
+        this.creator_id = creator_id;
     }
 
     public String getColabName() {

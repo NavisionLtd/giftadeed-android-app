@@ -38,6 +38,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -79,6 +81,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.BuildConfig;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
@@ -111,21 +114,16 @@ import static android.app.Activity.RESULT_OK;
 //                                                               //
 //     Used to fulfill a need                                   //
 /////////////////////////////////////////////////////////////////
-public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener, Animation.AnimationListener {
     FragmentActivity myContext;
     View rootview;
     public static final int RequestPermissionCode = 1;
-    ImageView img, imgback;
-    TextView txtheading, txtsubheading, txtaddress, txtdistance, txtDate;
-    WebView detailsofgieft;
-    Button giftnow;
     int dist;
     ScrollView scrollview;
     int feet_distance;
-    private static final int CAMERA_REQUEST = 1888;
     //--------------------Ui variable------------------------
     Button btncamera, btngallary, btnsubmit, dialogbtnconfirm, dialogbtncancel, btnOk;
-    ImageView gieftneedimg, imgbacck;
+    ImageView gieftneedimg;
     TextView dialogtext, txttellpeople, switchText;
     TextView txtdialogcreditpoints, txttotalpoints, txtneedname;
     ImageView imgshare, imgchar;
@@ -144,7 +142,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     SessionManager sessionManager;
     public static final int STORAGE_PERMISSION_CODE = 23;
     public String strimagePath;
-    File file;
     Uri filee;
     int REQUEST_CAMERA = 0;
     private GoogleApiClient mGoogleApiClient;
@@ -203,10 +200,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         tab = this.getArguments().getString("tab");
         str_totalTaggedCreditPoints = this.getArguments().getString("str_totalTaggedCreditPoints");
         str_totalFulfilledCreditPoints = this.getArguments().getString("str_totalFulfilledCreditPoints");
-
-
         str_title = this.getArguments().getString("str_title");
-
         str_date = this.getArguments().getString("str_date");
         str_distance = this.getArguments().getString("str_distance");
 
@@ -248,9 +242,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 try {
                     if (!isReadStorageAllowed()) {
                         requestStoragePermission();
-
                     }
-
 
                     if (checkgallPermission()) {
 
@@ -266,16 +258,12 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, filee);
                         } else {
                             fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                         }
                         startActivityForResult(intent, REQUEST_CAMERA);
-
                     } else {
-
                         requestgallPermission();
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     StringWriter writer = new StringWriter();
@@ -283,7 +271,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     Bugreport bg = new Bugreport();
                     bg.sendbug(writer.toString());
                 }
-
             }
         });
 
@@ -292,9 +279,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             public void onClick(View v) {
                 if (checkgallPermission()) {
                     loadImagefromGallery();
-
                 } else {
-
                     requestgallPermission();
                 }
             }
@@ -317,9 +302,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 } else {
                     int i = 7;
                     //fragmgr.beginTransaction().replace(R.id.content_frame, NeedDetailsFrag.newInstance(i)).commit();
-
                     Bundle bundle = new Bundle();
-
                     bundle.putString("str_address", str_address);
                     bundle.putString("str_tagid", str_tagid);
                     bundle.putString("str_geopoint", str_geopoint);
@@ -337,12 +320,9 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     bundle.putString("str_title", str_title);
                     bundle.putString("str_date", str_date);
                     bundle.putString("str_distance", str_distance);
-
                     NeedDetailsFrag fragInfo = new NeedDetailsFrag();
                     fragInfo.setArguments(bundle);
-
                     fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
-
                 }
             }
         });
@@ -387,24 +367,20 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     private boolean isReadStorageAllowed() {
         //Getting the permission status
         int result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
-
         //If permission is granted returning true
         if (result == PackageManager.PERMISSION_GRANTED)
             return true;
-
         //If permission is not granted returning false
         return false;
     }
 
 
     private void requestStoragePermission() {
-
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
             //If the user has denied the permission previously your code will come to this block
             //Here you can explain why you need this permission
             //Explain here why you need this permission
         }
-
         //And finally ask for the permission
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
     }
@@ -418,9 +394,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         //------------------------------------Taking image from camera------------------------------
-
         if (requestCode == REQUEST_CAMERA) {
             if (resultCode == RESULT_OK) {
                 File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
@@ -442,10 +416,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
             }
         }
-
-
-
-
 
  /*       if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -480,7 +450,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     filePathColumn, null, null, null);
             // Move to first row
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             imgDecodableString = cursor.getString(columnIndex);
             cursor.close();
@@ -498,7 +467,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
     private File createImageFile() throws IOException {
         // Create an image file name
-
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "GAD_" + timeStamp;
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
@@ -511,7 +479,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         }
         // mCurrentPhotoPath = file.getAbsolutePath();
         return mediaFile;
-
         // Save a file: path for use with ACTION_VIEW intents
         //"file:" + image.getAbsolutePath();
         // return file;
@@ -531,10 +498,8 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     }
 
     private static File getOutputMediaFile(int type) {
-
         // External sdcard location
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
-
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -561,7 +526,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         btncamera = (Button) rootview.findViewById(R.id.giftcamera);
         btngallary = (Button) rootview.findViewById(R.id.giftgallary);
         gieftneedimg = (ImageView) rootview.findViewById(R.id.giftneedimg);
-        // imgbacck= (ImageView)rootview. findViewById(R.id.backbutton);
         btnsubmit = (Button) rootview.findViewById(R.id.btnsubmitgift);
         txttellpeople = (TextView) rootview.findViewById(R.id.txtgiftaneed);
         edstartwriting = (EditText) rootview.findViewById(R.id.edgiftaneedsomething);
@@ -581,12 +545,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             if (bitmap == null) {
-
                 //Toast.makeText(getContext(), "You have not selected any image", Toast.LENGTH_SHORT).show();
                 // Log.d("image",image);
                 fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);
                 //sendaTag(strUser_ID, strNeedmapping_ID, str_Geopint, strImagenamereturned, strShortDescription, strFullDescription, strlocation);
-
             } else {
 
                 image = getStringImage(bitmap);
@@ -602,8 +564,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     //---------------------------sending image to server--------------------------------------------
     public void sendImageToServer() {
         //final Bitmap photo = ((BitmapDrawable)gieftneedimg.getDrawable()).getBitmap();
-
-
        /* mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);*/
@@ -681,7 +641,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     //-----------------------checking validations before sending to server--------------------------
     public void checkvalidations() {
         strAboutgift = edstartwriting.getText().toString().trim();
-
         if (strAboutgift.length() < 1) {
             ToastPopUp.displayToast(getContext(), "Tell people something about your gift");
             edstartwriting.setText("");
@@ -692,7 +651,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             if (dist == 0) {
                 dist = 10;
             }
-
             submitdialog();
         }
     }
@@ -873,7 +831,13 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                             strTotalpoints = model.getCheckstatus().get(0).getTotalCredits().toString();
                             mDialog.dismiss();
                             //------------------showing gif image
-                            gifDialog(strImagepath);
+//                            gifDialog(strImagepath);
+                            Intent intent = new Intent(getContext(), FadeInActivity.class);
+                            intent.putExtra("credit_points", strCreditpoints);
+                            intent.putExtra("total_points", strTotalpoints);
+                            intent.putExtra("need_name", str_needName);
+                            intent.putExtra("reason", "by fulfilling");
+                            startActivity(intent);
 
                     /*Toast.makeText(getContext(),model.getCheckstatus().get(0).getMsg().toString(),Toast.LENGTH_SHORT).show();
                     Toast.makeText(getContext(),model.getCheckstatus().get(0).getUserID().toString(),Toast.LENGTH_SHORT).show();
@@ -901,67 +865,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
     }
 
-    //---------------------------Return dialog on fullfiling need-----------------------------------
-    private void returnDialog(final String credits_points, final String total_points, String char_path, String needtype) {
-        AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
-        LayoutInflater li = LayoutInflater.from(getActivity());
-        View confirmDialog = li.inflate(R.layout.gift_dialog, null);
-
-
-        btnOk = (Button) confirmDialog.findViewById(R.id.btndialogok);
-        txtdialogcreditpoints = (TextView) confirmDialog.findViewById(R.id.txtcredit_points);
-        txttotalpoints = (TextView) confirmDialog.findViewById(R.id.txttotal_points);
-        txtneedname = (TextView) confirmDialog.findViewById(R.id.typefulfill);
-        imgshare = (ImageView) confirmDialog.findViewById(R.id.imgdialogshare);
-        imgchar = (ImageView) confirmDialog.findViewById(R.id.imgdialogchar);
-
-        //-------------Adding dialog box to the view of alert dialog
-        alertdialog.setView(confirmDialog);
-        alertdialog.setCancelable(false);
-
-        //----------------Creating an alert dialog
-        alertDialogreturn = alertdialog.create();
-        //alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
-        // alertDialogForgot.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //----------------Displaying the alert dialog
-        alertDialogreturn.show();
-
-        txtneedname.setText(" You have fulfilled " + needtype + " need");
-        txtdialogcreditpoints.setText("You have earned " + credits_points + " point(s)");
-        txttotalpoints.setText("Your total point(s) are " + total_points);
-        Picasso.with(getContext()).load(char_path).resize(50, 50).into(imgchar);
-        imgshare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String android_shortlink = "http://tiny.cc/kwb33y";
-                String ios_shortlink = "http://tiny.cc/h4533y";
-                String website = "https://www.giftadeed.com/";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest points are " + total_points + " in the GiftADeed App.\n" +
-                        "You can earn your points by downloading the app from\n\n" +
-                        "Android : " + android_shortlink + "\n" +
-                        "iOS : " + ios_shortlink + "\n\n" +
-                        "Also, check the website at " + website);
-                startActivity(Intent.createChooser(share, "Share your points on:"));
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialogreturn.dismiss();
-                int i = 1;
-                fragmgr = getFragmentManager();
-                // fragmentManager.beginTransaction().replace( R.id.Myprofile_frame,TaggedneedsFrag.newInstance(i)).commit();
-                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).commit();
-            }
-        });
-
-
-    }
-
     //-------getting distance from server to fulfill
-
     public int getFeetDistance() {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
@@ -1291,10 +1195,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         Glide.with(this)
                 .load(R.drawable.clap)
                 .into(img);
-
         dialog.show();
-
-
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
@@ -1305,10 +1206,76 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 }
             }
         };
-
-
         handler.postDelayed(runnable, 5000);
     }
 
+    //---------------------------Return dialog on fullfiling need-----------------------------------
+    private void returnDialog(final String credits_points, final String total_points, String char_path, String needtype) {
+        AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater li = LayoutInflater.from(getActivity());
+        View confirmDialog = li.inflate(R.layout.gift_dialog, null);
+        btnOk = (Button) confirmDialog.findViewById(R.id.btndialogok);
+        txtdialogcreditpoints = (TextView) confirmDialog.findViewById(R.id.txtcredit_points);
+        txttotalpoints = (TextView) confirmDialog.findViewById(R.id.txttotal_points);
+        txtneedname = (TextView) confirmDialog.findViewById(R.id.typefulfill);
+        imgshare = (ImageView) confirmDialog.findViewById(R.id.imgdialogshare);
+        imgchar = (ImageView) confirmDialog.findViewById(R.id.imgdialogchar);
 
+        //-------------Adding dialog box to the view of alert dialog
+        alertdialog.setView(confirmDialog);
+        alertdialog.setCancelable(false);
+
+        //----------------Creating an alert dialog
+        alertDialogreturn = alertdialog.create();
+        //alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
+        // alertDialogForgot.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //----------------Displaying the alert dialog
+        alertDialogreturn.show();
+
+        txtneedname.setText(" You have fulfilled " + needtype + " need");
+        txtdialogcreditpoints.setText("You have earned " + credits_points + " point(s)");
+        txttotalpoints.setText("Your total point(s) are " + total_points);
+        Picasso.with(getContext()).load(char_path).resize(50, 50).into(imgchar);
+        imgshare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String android_shortlink = "http://tiny.cc/kwb33y";
+                String ios_shortlink = "http://tiny.cc/h4533y";
+                String website = "https://www.giftadeed.com/";
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest points are " + total_points + " in the GiftADeed App.\n" +
+                        "You can earn your points by downloading the app from\n\n" +
+                        "Android : " + android_shortlink + "\n" +
+                        "iOS : " + ios_shortlink + "\n\n" +
+                        "Also, check the website at " + website);
+                startActivity(Intent.createChooser(share, "Share your points on:"));
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogreturn.dismiss();
+                int i = 1;
+                fragmgr = getFragmentManager();
+                // fragmentManager.beginTransaction().replace( R.id.Myprofile_frame,TaggedneedsFrag.newInstance(i)).commit();
+                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).commit();
+            }
+        });
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
 }

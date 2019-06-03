@@ -52,6 +52,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
     ArrayList<Colabrequestlist> list = new ArrayList<>();
     Context context;
     String strUser_ID;
+    String collabCreatorID = "";
     SimpleArcDialog mDialog;
     SessionManager sessionManager;
     private GoogleApiClient mGoogleApiClient;
@@ -64,11 +65,6 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         this.strUser_ID = userid;
         this.list = colabs;
         this.context = context;
-        try {
-            getChannelsDetails();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -88,6 +84,12 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         holder.ivAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                collabCreatorID = list.get(position).getCreator_id();
+                try {
+                    getChannelsDetails();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 // Sendbird channel. Concat with GRP for Group and CLB for Collaboration
                 strClubName = list.get(position).getColabName() + " - CLB" + list.get(position).getId();
                 Log.d("club_channel_name", strClubName);
@@ -211,7 +213,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
 
     public void getChannelsDetails() {
         //always use connect() along with any method of chat
-        SendBird.connect("562", new SendBird.ConnectHandler() {
+        SendBird.connect(collabCreatorID, new SendBird.ConnectHandler() {
             @Override
             public void onConnected(User user, SendBirdException e) {
                 if (e != null) {
@@ -242,7 +244,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
     }
 
     public void inviteUser(final String url, final String searchedMemberId) {
-        SendBird.connect("562", new SendBird.ConnectHandler() {
+        SendBird.connect(collabCreatorID, new SendBird.ConnectHandler() {
             @Override
             public void onConnected(User user, SendBirdException e) {
                 if (e != null) {

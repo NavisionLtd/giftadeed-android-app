@@ -96,7 +96,6 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="4dp"
                     android:gravity="center"
-                    android:text="@string/tag_success_msg3"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 

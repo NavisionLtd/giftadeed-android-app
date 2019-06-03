@@ -11,17 +11,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import giftadeed.kshantechsoft.com.giftadeed.Collaboration.CreateCollabFragment;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 
 public class FadeInActivity extends AppCompatActivity implements Animation.AnimationListener {
-    private TextView txtcreditpoints, txttotalpoints, txtneedname;
+    private TextView txt2, txtcreditpoints, txttotalpoints, txtneedname;
     private ImageView imageView, imageViewClose;
     private Button btnShare;
     private Animation animFadein;
-    private String needtype = "", credits_points = "", total_points = "";
+    private String reason = "", needtype = "", credits_points = "", total_points = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,24 +32,34 @@ public class FadeInActivity extends AppCompatActivity implements Animation.Anima
         setContentView(R.layout.reward_dialog);
         imageView = (ImageView) findViewById(R.id.image_reward);
         imageViewClose = (ImageView) findViewById(R.id.ic_close);
+        txt2 = (TextView) findViewById(R.id.text2);
         txtcreditpoints = (TextView) findViewById(R.id.text_deed_points);
         txttotalpoints = (TextView) findViewById(R.id.text_deed_total_points);
         txtneedname = (TextView) findViewById(R.id.text_deed_type);
         btnShare = (Button) findViewById(R.id.btn_tag_reward_share);
 
+        reason = getIntent().getStringExtra("reason");
         needtype = getIntent().getStringExtra("need_name");
         credits_points = getIntent().getStringExtra("credit_points");
         total_points = getIntent().getStringExtra("total_points");
 
+        if (reason.equals("by tagging")) {
+            Glide.with(this)
+                    .load(R.drawable.tag_reward)
+                    .into(imageView);
+        } else {
+            Glide.with(this)
+                    .load(R.drawable.gift_reward)
+                    .into(imageView);
+        }
         // load the animation
         animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.zoom_out);
         // set animation listener
         animFadein.setAnimationListener(this);
-        imageView.setVisibility(View.VISIBLE);
         // start the animation
         imageView.startAnimation(animFadein);
-
+        txt2.setText(reason);
         txtneedname.setText(needtype);
         txtcreditpoints.setText(credits_points);
         txttotalpoints.setText(total_points);

@@ -230,6 +230,7 @@ public class CollabPendingInvitesFragment extends Fragment
                         for (int i = 0; i < res.getColab_requestlist().size(); i++) {
                             Colabrequestlist colabrequestlist = new Colabrequestlist();
                             colabrequestlist.setId(res.getColab_requestlist().get(i).getId());
+                            colabrequestlist.setId(res.getColab_requestlist().get(i).getCreator_id());
                             colabrequestlist.setColabName(res.getColab_requestlist().get(i).getColabName());
                             colabrequestlist.setColabDesc(res.getColab_requestlist().get(i).getColabDesc());
                             colabrequestlist.setColabStartDate(res.getColab_requestlist().get(i).getColabStartDate());
