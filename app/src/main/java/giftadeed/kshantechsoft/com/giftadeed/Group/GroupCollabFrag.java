@@ -4,12 +4,6 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +14,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.leo.simplearcloader.SimpleArcDialog;
 
 import java.util.HashMap;
@@ -47,7 +50,7 @@ public class GroupCollabFrag extends Fragment {
     SessionManager sessionManager;
     String strUserId;
     SimpleArcDialog mDialog;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     String selectedLangugae;
     Locale locale;
     Configuration config;
@@ -145,7 +148,7 @@ public class GroupCollabFrag extends Fragment {
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();

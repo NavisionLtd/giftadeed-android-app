@@ -14,8 +14,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:baselineAligned="false">
 
@@ -23,10 +23,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/change_profile_pic"
@@ -39,23 +39,24 @@
                         android:id="@+id/profile_pic"
                         android:layout_width="@dimen/uploadimg"
                         android:layout_height="@dimen/uploadimg"
-                        android:src="@drawable/profimg" />
+                        android:src="@drawable/ic_default_profile_pic" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_change_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
-                    android:text="@string/change_pic"
-                    android:textAllCaps="false"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:gravity="center"
-                    android:visibility="gone"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
+                    android:background="@color/grey"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/change_pic"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:background="@color/grey"/>
+                    android:textSize="15dp"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,10 +91,10 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:text="Org name"
-                        android:visibility="gone"
                         android:textColor="#000000"
                         android:textSize="@dimen/finalheaderfont"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -125,7 +126,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
-
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
@@ -162,7 +162,6 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -170,10 +169,11 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColorHint="#000">
+                            android:textColorHint="#000"
+                            app:hintTextAppearance="@style/TextLabel">
 
                             <EditText
                                 android:id="@+id/edmyprofilefname"
@@ -189,7 +189,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
 
                     </LinearLayout>
@@ -198,15 +198,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/signupmargin"
-
                         android:gravity="center">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
-
-                            android:textColorHint="#000">
+                            android:textColorHint="#000"
+                            app:hintTextAppearance="@style/TextLabel">
 
                             <EditText
                                 android:id="@+id/edmyprofilelname"
@@ -221,7 +219,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
 
@@ -229,13 +227,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/signupmargin"
-
                         android:gravity="center">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
+                            app:hintTextAppearance="@style/TextLabel"
                             android:textColorHint="#000">
 
                             <EditText
@@ -250,7 +247,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -260,7 +257,7 @@
                         android:gravity="center"
                         android:visibility="gone">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
@@ -279,7 +276,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -289,7 +286,7 @@
                         android:gravity="center"
                         android:visibility="gone">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
 
@@ -307,7 +304,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -317,10 +314,10 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
+                            app:hintTextAppearance="@style/TextLabel"
                             android:textColorHint="#000">
 
                             <EditText
@@ -338,7 +335,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -348,11 +345,10 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <android.support.design.widget.TextInputLayout
-
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
+                            app:hintTextAppearance="@style/TextLabel"
                             android:textColorHint="#000">
 
                             <EditText
@@ -370,7 +366,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
 
                     </LinearLayout>
@@ -382,9 +378,10 @@
                         android:gravity="left"
                         android:orientation="horizontal">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:hintTextAppearance="@style/TextLabel"
                             android:textColorHint="#000">
 
                             <EditText
@@ -402,7 +399,7 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
 
@@ -460,12 +457,13 @@
                         android:layout_marginTop="@dimen/signupmargin"
                         android:gravity="center">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/txtinputlayoutmyprofilepassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColorHint="#000"
                             app:passwordToggleEnabled="true"
+                            app:hintTextAppearance="@style/TextLabel"
                             app:passwordToggleTint="@color/colorHint">
 
                             <EditText
@@ -481,14 +479,14 @@
                                 android:textColor="#000"
                                 android:textColorHint="#000"
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="@dimen/signupmargin"
+                        android:layout_marginBottom="10dp"
                         android:gravity="left"
                         android:orientation="horizontal">
 

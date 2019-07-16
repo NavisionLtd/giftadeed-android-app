@@ -2,16 +2,8 @@ package giftadeed.kshantechsoft.com.giftadeed.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.location.Location;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
-import java.util.Locale;
-
-import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 
 /**
  * Created by I-Sys on 03-Apr-17.
@@ -28,7 +20,7 @@ public class SessionManager {
     public static final String USER_ID = "User_Id";
     public static final String USER_NAME = "name";
     public static final String KEY_SELECTED_LANGUAGE = "SelectedLanguage";
-    public static final String KEY_SELECTED_GROUPS = "SelectedGroups";
+    public static final String KEY_COUNTRY_CODE = "CountryCode";
     public static final String KEY_radius = "radius";
     public static final String DRAWER_STATUS = "Status";
     public static final String KEY_NOTIFICATION = "notify";
@@ -123,8 +115,10 @@ public class SessionManager {
         return collab;
     }
 
-    public void createResourceDetails(String callingfrom) {
+    public void createResourceDetails(String callingfrom, String resid, String resname) {
         editor.putString(RES_CALL_FROM, callingfrom);
+        editor.putString(RESOURCE_ID, resid);
+        editor.putString(RESOURCE_NAME, resname);
         editor.commit();
     }
 
@@ -222,4 +216,13 @@ public class SessionManager {
         return strGroupName;
     }
 
+    public void store_country_sos_code(String country_code) {
+        editor.putString(KEY_COUNTRY_CODE, country_code);
+        editor.commit();
+    }
+
+    public String getCountrySOSCode() {
+        String langugae = pref.getString(KEY_COUNTRY_CODE, "911");
+        return langugae;
+    }
 }

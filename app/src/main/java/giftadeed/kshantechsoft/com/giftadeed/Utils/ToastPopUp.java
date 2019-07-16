@@ -2,7 +2,7 @@ package giftadeed.kshantechsoft.com.giftadeed.Utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -11,15 +11,11 @@ public class ToastPopUp {
     public static Toast toast, mToast;
 
     public static void show(Context context, String msg) {
-
         try {
-
             if (toast != null)
                 toast.cancel();
             toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
-
             toast.setGravity(Gravity.CENTER, 0, 0);
-
             toast.show();
 
         } catch (Exception e) {

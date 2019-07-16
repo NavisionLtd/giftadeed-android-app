@@ -26,6 +26,12 @@ public class Notification {
     @SerializedName("Need_Name")
     @Expose
     private String needName;
+    @SerializedName("seen")
+    @Expose
+    private String seen;
+    @SerializedName("distance_in_kms")
+    @Expose
+    private String distanceInKms;
 
     public String getTagid() {
         return tagid;
@@ -81,5 +87,21 @@ public class Notification {
 
     public void setGeopoint(String geopoint) {
         this.geopoint = geopoint;
+    }
+
+    public String getSeen() {
+        return seen;
+    }
+
+    public void setSeen(String seen) {
+        this.seen = seen;
+    }
+
+    public String getDistanceInKms() {
+        return distanceInKms;
+    }
+
+    public void setDistanceInKms(String distanceInKms) {
+        this.distanceInKms = distanceInKms;
     }
 }

@@ -3,18 +3,18 @@ package giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,19 +34,14 @@ import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.DeedDetailsModel;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
@@ -69,7 +64,7 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
     RecyclerView recyclerView;
     View rootview;
     private RecyclerView.LayoutManager layoutManager;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     FragmentActivity myContext;
     Adapter_TopTenTagger adaptertoptentaggers;
     List<RESULT> lsttoptentagger = new ArrayList<RESULT>();
@@ -205,7 +200,7 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);

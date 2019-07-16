@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -371,7 +371,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -465,7 +465,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -533,7 +533,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -599,7 +599,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -773,6 +773,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         //call interface
         RemoveMemberFromChannel service = retrofit.create(RemoveMemberFromChannel.class);
         Log.d("JOBJ", "" + jsonOBJ);
+        Log.d("remove_sb_member_params", "" + urlOfChannel + ":" + model_obj);
         Call<ResponseBody> call = service.removeMembers(urlOfChannel, model_obj);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

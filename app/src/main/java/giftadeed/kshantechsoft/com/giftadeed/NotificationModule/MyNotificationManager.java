@@ -13,21 +13,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.text.Html;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DecimalFormat;
 
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 
 
 /**

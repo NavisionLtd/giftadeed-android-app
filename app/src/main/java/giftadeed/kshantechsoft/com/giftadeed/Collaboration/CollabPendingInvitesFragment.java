@@ -4,15 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,6 +13,16 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -220,34 +221,38 @@ public class CollabPendingInvitesFragment extends Fragment
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         colabArrayList.clear();
-                        for (int i = 0; i < res.getColab_requestlist().size(); i++) {
-                            Colabrequestlist colabrequestlist = new Colabrequestlist();
-                            colabrequestlist.setId(res.getColab_requestlist().get(i).getId());
-                            colabrequestlist.setId(res.getColab_requestlist().get(i).getCreator_id());
-                            colabrequestlist.setColabName(res.getColab_requestlist().get(i).getColabName());
-                            colabrequestlist.setColabDesc(res.getColab_requestlist().get(i).getColabDesc());
-                            colabrequestlist.setColabStartDate(res.getColab_requestlist().get(i).getColabStartDate());
-                            colabrequestlist.setInviteStatus(res.getColab_requestlist().get(i).getInviteStatus());
-                            colabArrayList.add(colabrequestlist);
-                        }
+                        if (res.getStatus() == 1) {
+                            for (int i = 0; i < res.getColab_requestlist().size(); i++) {
+                                Colabrequestlist colabrequestlist = new Colabrequestlist();
+                                colabrequestlist.setId(res.getColab_requestlist().get(i).getId());
+                                colabrequestlist.setId(res.getColab_requestlist().get(i).getCreator_id());
+                                colabrequestlist.setColabName(res.getColab_requestlist().get(i).getColabName());
+                                colabrequestlist.setColabDesc(res.getColab_requestlist().get(i).getColabDesc());
+                                colabrequestlist.setColabStartDate(res.getColab_requestlist().get(i).getColabStartDate());
+                                colabrequestlist.setInviteStatus(res.getColab_requestlist().get(i).getInviteStatus());
+                                colabArrayList.add(colabrequestlist);
+                            }
 
-                        if (colabArrayList.size() <= 0) {
+                            if (colabArrayList.size() <= 0) {
 //            swipeRefreshLayout.setRefreshing(false);
-                            noPendingInvites.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.GONE);
-                        } else {
+                                noPendingInvites.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
 //            swipeRefreshLayout.setRefreshing(false);
-                            noPendingInvites.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                            collabListAdapter = new CollabInvitesAdapter(CollabPendingInvitesFragment.this, strUser_ID, colabArrayList, myContext);
-                            recyclerView.setAdapter(collabListAdapter);
+                                noPendingInvites.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                collabListAdapter = new CollabInvitesAdapter(CollabPendingInvitesFragment.this, strUser_ID, colabArrayList, myContext);
+                                recyclerView.setAdapter(collabListAdapter);
+                            }
+                        } else if (res.getStatus() == 0) {
+                            Toast.makeText(getContext(), res.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {

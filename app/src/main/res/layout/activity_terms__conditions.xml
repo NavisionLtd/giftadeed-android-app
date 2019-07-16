@@ -14,12 +14,12 @@
         android:orientation="vertical"
         >
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarwelcomepage"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -43,10 +43,10 @@
                 android:gravity="center"
                 android:layout_gravity="center|center_horizontal"
                 android:textColor="#fff"/>
-            </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar>
 
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:layout_width="match_parent"

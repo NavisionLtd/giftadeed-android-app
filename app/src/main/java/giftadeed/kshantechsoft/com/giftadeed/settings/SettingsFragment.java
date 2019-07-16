@@ -4,14 +4,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +24,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
@@ -59,6 +62,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
     DiscreteSeekBar distanceSeekBar;
     double radius;
     TextView txtdist;
+    ImageView heart;
     LinearLayout radiusLayout, groupListLayout, catListLayout;
     String strUser_ID;
     SessionManager sessionManager;
@@ -141,6 +145,13 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
         } else {
             txtdist.setText("" + sessionManager.getradius() + " Metres");
         }
+
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animate(v);
+            }
+        });
 
         etSelectLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,6 +279,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
     }
 
     public void init() {
+        heart = (ImageView) rootview.findViewById(R.id.animated_heart);
         etSelectLanguage = (EditText) rootview.findViewById(R.id.et_select_language);
         btnSaveSettings = (Button) rootview.findViewById(R.id.btn_save_settings);
         groupRecyclerView = (RecyclerView) rootview.findViewById(R.id.notification_recycler_grouplist);
@@ -284,6 +296,18 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
         catRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getContext());
         catRecyclerView.setLayoutManager(layoutManager1);
+    }
+
+    public void animate(View view) {
+        ImageView v = (ImageView) view;
+        Drawable d = v.getDrawable();
+        if (d instanceof AnimatedVectorDrawable) {
+            AnimatedVectorDrawable avd = (AnimatedVectorDrawable) d;
+            avd.start();
+        } else if (d instanceof AnimatedVectorDrawableCompat) {
+            AnimatedVectorDrawableCompat avd = (AnimatedVectorDrawableCompat) d;
+            avd.start();
+        }
     }
 
     public void updateLanguage(String language) {

@@ -5,9 +5,11 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.multidex.MultiDex;
+
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.multidex.MultiDex;
 
 import com.squareup.okhttp.OkHttpClient;
 
@@ -146,6 +148,7 @@ public class Foreground extends Application implements Application.ActivityLifec
         HashMap<String, String> user = sessionManager.getUserDetails();
         user_id = user.get(sessionManager.USER_ID);
         Log.d("userid", "" + user_id);
+
         if (check != null)
             handler.removeCallbacks(check);
 

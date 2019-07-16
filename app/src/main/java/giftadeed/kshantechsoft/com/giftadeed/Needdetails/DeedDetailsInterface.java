@@ -16,5 +16,4 @@ public interface DeedDetailsInterface {
     @FormUrlEncoded
     @POST(path)
     Call<DeedDetailsModel> fetchData(@Field("userId") String User_ID,@Field("deedId") String deedId);
-
 }

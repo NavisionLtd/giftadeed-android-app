@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,21 +9,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:layout_weight="0">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_settings"
                 android:layout_width="match_parent"
                 android:theme="@style/Toolbar"
                 android:layout_height="?attr/actionBarSize">
 
-            </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -74,13 +74,13 @@
                         android:layout_marginLeft="26.5dp"
                         android:orientation="horizontal">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
                             android:layout_weight="1">
 
-                            <android.support.design.widget.TextInputEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/edit_text_nickname"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -89,14 +89,14 @@
                                 android:hint="Nickname"
                                 android:imeOptions="actionDone"
                                 android:inputType="text"
-                                android:textSize="15sp"/>
+                                android:textSize="15dp"/>
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <Button
                             android:id="@+id/button_save_nickname"
                             android:text="EDIT"
-                            android:textSize="13sp"
+                            android:textSize="13dp"
                             android:textColor="#774df2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -126,10 +126,10 @@
                         android:layout_marginRight="16dp"
                         android:text="Group channel notifications"
                         android:textColor="#1b1d1d"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:textStyle="bold"/>
 
-                    <android.support.v7.widget.SwitchCompat
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switch_notifications"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -164,9 +164,9 @@
                             android:gravity="center_vertical"
                             android:text="Show previews"
                             android:textColor="#1b1d1d"
-                            android:textSize="15sp"/>
+                            android:textSize="15dp"/>
 
-                        <android.support.v7.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switch_notifications_show_previews"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -200,9 +200,9 @@
                             android:gravity="center_vertical"
                             android:text="Do not disturb"
                             android:textColor="#1b1d1d"
-                            android:textSize="15sp"/>
+                            android:textSize="15dp"/>
 
-                        <android.support.v7.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switch_notifications_do_not_disturb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
                                 android:layout_weight="1"
                                 android:text="From"
                                 android:textColor="#1b1d1d"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                             <TextView
                                 android:id="@+id/text_view_notifications_do_not_disturb_from"
@@ -248,7 +248,7 @@
                                 android:layout_weight="0"
                                 android:text=""
                                 android:textColor="#757b7b"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                         </LinearLayout>
 
@@ -273,7 +273,7 @@
                                 android:layout_weight="1"
                                 android:text="To"
                                 android:textColor="#1b1d1d"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                             <TextView
                                 android:id="@+id/text_view_notifications_do_not_disturb_to"
@@ -282,7 +282,7 @@
                                 android:layout_weight="0"
                                 android:text=""
                                 android:textColor="#757b7b"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                         </LinearLayout>
 
@@ -307,7 +307,7 @@
                         android:gravity="center_vertical"
                         android:text="Group channel distinct"
                         android:textColor="#1b1d1d"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:textStyle="bold"/>
 
                 </LinearLayout>
@@ -331,9 +331,9 @@
                         android:gravity="center_vertical"
                         android:text="Make channel distinct"
                         android:textColor="#1b1d1d"
-                        android:textSize="15sp"/>
+                        android:textSize="15dp"/>
 
-                    <android.support.v7.widget.AppCompatCheckBox
+                    <androidx.appcompat.widget.AppCompatCheckBox
                         android:id="@+id/checkbox_make_group_channel_distinct"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -367,7 +367,7 @@
                         android:gravity="center_vertical"
                         android:text="Blocked members list"
                         android:textColor="#1b1d1d"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:textStyle="bold"/>
 
                     <ImageView
@@ -391,4 +391,4 @@
 
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

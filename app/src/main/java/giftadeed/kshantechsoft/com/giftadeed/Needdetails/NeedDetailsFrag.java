@@ -9,19 +9,17 @@ import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -40,7 +38,6 @@ import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.FirstLogin.First_Login;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupDetailsFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Notifications.Notificationfrag;
@@ -62,7 +59,9 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -101,7 +100,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     ListView listviewcomments;
     LinearLayout locationTypeLayout, subTypeLayout, fromGroupLayout, lastEndorseLayout;
     CircleImageView imgcharacter;
-    TextView details_locationicon;
+    LinearLayout details_locationicon;
     String strImagepath = "";
     ImageView img, imgback, img_endorse, img_endorse_over;
     TextView txtheading, txtsubheading, txtaddress, txtdistance, txtDate, txt_name, txt_des, txtneeddetailsendorse, txtFromGroupName,
@@ -112,7 +111,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     Button giftnow, btnReportUser, btnReportDeed;
     EditText edComment;
     ScrollView detailspagemainscroll;
-    int str_isreported, is_endorse, dist;
+    int str_isreported, is_endorse, requiredDistEndorse;
     String str_address, str_tagid, str_geopoint, str_taggedPhotoPath, str_description, str_catType, str_iconPath, str_characterPath, str_fname, str_lname,
             str_privacy, str_userID, str_needName, str_totalTaggedCreditPoints, str_totalFulfilledCreditPoints, str_title, str_date,
             str_subtypes, str_permanent, str_distance, tab, str_container, str_Views, str_endorse, str_validity, str_mappingId, strdeedowner_id, strGroup_id, strGroup_name,
@@ -273,8 +272,8 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             if (is_endorse == 1) {
                                 Toast.makeText(getContext(), "You have already endorsed", Toast.LENGTH_SHORT).show();
                             } else {
-                                if (ft_distance > dist) {
-                                    Toast.makeText(getContext(), "You need to be within " + dist + " feet area of the needy person", Toast.LENGTH_SHORT).show();
+                                if (ft_distance > requiredDistEndorse) {
+                                    Toast.makeText(getContext(), "You need to be within " + requiredDistEndorse + " feet area of the needy person", Toast.LENGTH_SHORT).show();
                                 } else {
                                     isDeedDeleted("endorse");
                                 }
@@ -394,7 +393,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -403,7 +402,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         // dist = 100;
                         //-------------change for doing endorse distace dynamically-----------------------
                         try {
-                            dist = Integer.parseInt(deedDetailsModel.getDeedDetails().get(0).getEndorseDist().toString());
+                            requiredDistEndorse = Integer.parseInt(deedDetailsModel.getDeedDetails().get(0).getEndorseDist().toString());
                         } catch (Exception e) {
 
                         }
@@ -638,7 +637,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -721,7 +720,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -801,7 +800,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -816,12 +815,12 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             bundle.putString("tab", tab);
                             TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                             mainHomeFragment.setArguments(bundle);
-                            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                            FragmentTransaction fragmentTransaction =
                                     getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                             fragmentTransaction.commit();
                         } else {
-                            Toast.makeText(getContext(), "Sorry something went wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.server_response_error), Toast.LENGTH_SHORT).show();
                             mDialog.dismiss();
                         }
                     }
@@ -883,7 +882,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -967,7 +966,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -1040,7 +1039,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 bundle.putString("mappingId", str_mappingId);
                                 TagaNeed mainHomeFragment = new TagaNeed();
                                 mainHomeFragment.setArguments(bundle);
-                                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                FragmentTransaction fragmentTransaction =
                                         getActivity().getSupportFragmentManager().beginTransaction();
                                 fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                                 fragmentTransaction.commit();
@@ -1081,7 +1080,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             bundle.putString("tab", tab);
                             TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                             mainHomeFragment.setArguments(bundle);
-                            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                            FragmentTransaction fragmentTransaction =
                                     getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                             fragmentTransaction.commit();
@@ -1256,7 +1255,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         bundle.putString("tab", tab);
                         TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                         mainHomeFragment.setArguments(bundle);
-                        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        FragmentTransaction fragmentTransaction =
                                 getActivity().getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                         fragmentTransaction.commit();
@@ -1282,7 +1281,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         dialog.setCancelable(false);
         dialog.show();
         ImageView img = (ImageView) dialog.findViewById(R.id.img_gif);
-        Glide.with(this)
+        Glide.with(getActivity())
                 .load(R.drawable.thumbs_up)
                 .into(img);
         final Handler handler = new Handler();
@@ -1308,15 +1307,14 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         dialog.setCancelable(true);
         dialog.show();
         imageView = (ImageView) dialog.findViewById(R.id.image_endorsed);
-        Glide.with(this)
-                .load(R.drawable.verified)
+        Glide.with(getActivity())
+                .load(R.drawable.ic_endorsed_stamp)
                 .into(imageView);
         // load the animation
         animFadein = AnimationUtils.loadAnimation(getContext(),
                 R.anim.zoom_in);
         // set animation listener
         animFadein.setAnimationListener(this);
-        imageView.setVisibility(View.VISIBLE);
         // start the animation
         imageView.startAnimation(animFadein);
         mp.start();

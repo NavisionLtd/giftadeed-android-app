@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="@string/select_language"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <RadioGroup
         android:id="@+id/rg_language_group"

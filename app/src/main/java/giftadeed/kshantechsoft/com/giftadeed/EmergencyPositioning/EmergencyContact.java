@@ -8,8 +8,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -184,8 +184,8 @@ public class EmergencyContact extends AppCompatActivity implements View.OnClickL
                     });
                 } else {
                     et_contact_1.setFocusable(true);
-                    et_contact_1.setError("Please select your emergency contact");
-                    ToastPopUp.displayToast(EmergencyContact.this, "Please select your emergency contact");
+                    et_contact_1.setError(getResources().getString(R.string.select_contact));
+                    ToastPopUp.displayToast(EmergencyContact.this, getResources().getString(R.string.select_contact));
                 }
             }
         });

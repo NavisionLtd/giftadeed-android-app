@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -1085,7 +1085,7 @@ public class SignUp extends AppCompatActivity {
             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
 
         } else if (strCountry.length() < 1) {
-            ToastPopUp.displayToast(SignUp.this, "Select your country");
+            ToastPopUp.displayToast(SignUp.this, getResources().getString(R.string.select_country));
         }
 //        else if (!(chkboxagree.isChecked())) {
 //            ToastPopUp.displayToast(SignUp.this, "Please accept the Terms and Conditions.");

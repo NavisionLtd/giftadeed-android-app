@@ -1,6 +1,7 @@
 package giftadeed.kshantechsoft.com.giftadeed.Filter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,13 +53,14 @@ public class CategoriesAdaptor extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view=inflater.inflate(R.layout.select_category_item,null);
-        TextView storename= (TextView) view.findViewById(R.id.category_name);
-        ImageView cat_img=view.findViewById(R.id.categoryimg);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.select_category_item, null);
+        TextView storename = (TextView) view.findViewById(R.id.category_name);
+        ImageView cat_img = view.findViewById(R.id.categoryimg);
         notifyDataSetChanged();
         storename.setText(categories.get(i).getNeedName());
-        Picasso.with(context).load(WebServices.MAIN_SUB_URL+categories.get(i).getCharacterPath()).into(cat_img);
+        Log.d("cat_names", "" + categories.get(i).getNeedName());
+        Picasso.with(context).load(WebServices.MAIN_SUB_URL + categories.get(i).getCharacterPath()).into(cat_img);
         return view;
     }
 
@@ -68,13 +70,9 @@ public class CategoriesAdaptor extends BaseAdapter {
         categories.clear();
         if (charText.length() == 0) {
             categories.addAll(arraylist);
-        }
-        else
-        {
-            for (Needtype wp : arraylist)
-            {
-                if (wp.getNeedName().toLowerCase(Locale.getDefault()).contains(charText))
-                {
+        } else {
+            for (Needtype wp : arraylist) {
+                if (wp.getNeedName().toLowerCase(Locale.getDefault()).contains(charText)) {
                     categories.add(wp);
                 }
             }

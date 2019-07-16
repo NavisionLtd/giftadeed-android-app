@@ -2,9 +2,11 @@ package giftadeed.kshantechsoft.com.giftadeed.Tagcounter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,15 +32,10 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.Dashboard.Dashboard;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.DeedDetailsModel;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.EndorsedeedInterface;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.StatusModel;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -48,16 +45,13 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-import static giftadeed.kshantechsoft.com.giftadeed.R.id.img_endorse;
-import static giftadeed.kshantechsoft.com.giftadeed.R.id.txtneeddetailsendorse;
-
 ////////////////////////////////////////////////////////////////////
 //                                                               //
 //     Shows tag counts done for that day                       //
 /////////////////////////////////////////////////////////////////
 public class Tagcounter extends Fragment implements GoogleApiClient.OnConnectionFailedListener{
 
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     View rootview;
     SessionManager sessionManager;
     SimpleArcDialog mDialog;
@@ -160,7 +154,7 @@ public class Tagcounter extends Fragment implements GoogleApiClient.OnConnection
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);

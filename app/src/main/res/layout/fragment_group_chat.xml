@@ -20,10 +20,10 @@
             android:id="@+id/button_group_chat_upload"
             app:srcCompat="@drawable/ic_attach"
             android:background="?attr/selectableItemBackground"
-            android:layout_width="@dimen/btn_grp_chat"
-            android:layout_height="@dimen/btn_grp_chat"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
              android:scaleType="fitCenter"
-            android:paddingLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:contentDescription="Upload file"
             android:layout_gravity="center"/>
 
@@ -34,6 +34,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:textSize="16dp"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -42,8 +43,8 @@
         <Button
             android:id="@+id/button_group_chat_send"
             android:text="SEND"
-            android:textSize="14dp"
-            android:textColor="@drawable/selector_btn_send"
+            android:textSize="16dp"
+            android:textColor="@color/colorPrimary"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:layout_width="64dp"
@@ -64,16 +65,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_group_chat"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:paddingBottom="4dp"
             android:clipToPadding="false"
-            android:scrollbars="vertical">
-
-        </android.support.v7.widget.RecyclerView>
+            android:scrollbars="vertical" />
 
         <LinearLayout
             android:id="@+id/layout_group_chat_current_event"

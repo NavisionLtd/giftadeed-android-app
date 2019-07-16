@@ -12,10 +12,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,16 +27,13 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSDetailsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
-import giftadeed.kshantechsoft.com.giftadeed.Landing.MainActivity;
+import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
@@ -48,24 +46,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
     private static final String TAG = "MyFirebaseMsgService";
     SessionManager sessionManager;
     String strUserId = null;
-    String id = "", type = "", groupids = "";
-    //location
-    //   private static final String TAG = "BOOMBOOMTESTGPS";
-    private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1000;
-    private static final float LOCATION_DISTANCE = 10f;
-
+    String notificationTitle, notificationMessage, latlong, user_one, id = "", notificationType = "", groupids = "", catids = "";
     private GoogleApiClient mGoogleApiClient;
     public static Location mLocation;
     public static Location updated_loc;
     String str_geo_point;
-    public String title;
-    public String message;
     DatabaseAccess databaseAccess;
     ArrayList<GroupPOJO> savedGroupList;
     int checkedGroups;
-    int selectedCheckedCount;
-    int selectedCategoryOn;
+    int selectedGrpCheckedCount;
+    int selectedCatCheckedCount;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -111,17 +101,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
             //getting the json data
             JSONObject data = json.getJSONObject("data");
             //parsing json data
-            title = data.getString("title");
-            message = data.getString("message");
-            String imageUrl = data.getString("latlong");
-            String user_one = data.getString("user");
+            notificationTitle = data.getString("title");
+            notificationMessage = data.getString("message");
+            latlong = data.getString("latlong");
+            user_one = data.getString("user");
             id = data.getString("id");
-            type = data.getString("type");
+            notificationType = data.getString("type");   // Type of Notification : 0 - others, 1 - sos, 2 - resource, 3 - deeds
             groupids = data.getString("grp_ids");
-            selectedCheckedCount = databaseAccess.getSelectedCheckedCount(groupids);
-            selectedCategoryOn = databaseAccess.getSelectedCatCheckedCount(title);
-            Log.d("db_res_notification", "savedGroupList : " + savedGroupList.size() + ", checkedGroups : " + checkedGroups + ", selectedCheckedCount : " + selectedCheckedCount);
-            System.out.print("#######" + imageUrl);
+            catids = data.getString("category_ids");   // single category_ids in case of tag deed AND comma separated category_ids in case of create resource
+            Log.d("notif_received_values", "" + data.toString());
+            selectedGrpCheckedCount = databaseAccess.getSelectedGrpCheckedCount(groupids);
+            selectedCatCheckedCount = databaseAccess.getSelectedCatCheckedCount(catids);
+            Log.d("db_res_notification", "savedGroupList : " + savedGroupList.size() + ", checkedGroups : " + checkedGroups + ", selectedGrpCheckedCount : " + selectedGrpCheckedCount + ", selectedCatCheckedCount : " + selectedCatCheckedCount);
             //creating MyNotificationManager object
             //creating an intent for the notification
             sessionManager = new SessionManager(getApplicationContext());
@@ -139,11 +130,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                     MyNotificationManager mNotificationManager = new MyNotificationManager(getApplicationContext());
                     Intent intent;
                     if (strUserId == null) {
-                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
                         //pass value
                         intent.putExtra("tag_id", "1001");
                     } else {
-                        if (type.equals("1")) {
+                        if (notificationType.equals("1")) {
                             // move to sos details
                             intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
                             intent.putExtra("sos_id", id);
@@ -155,11 +146,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                         }
                     }
                     if (Notification_status.equals("ON")) {
-                        mNotificationManager.showSmallNotification(title, message, intent);
+                        mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
                     } else if (Notification_status.equals("OFF")) {
 
                     } else {
-                        mNotificationManager.showSmallNotification(title, message, intent);
+                        mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
                     }
                 }
             } else {
@@ -167,11 +158,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                     MyNotificationManager mNotificationManager = new MyNotificationManager(getApplicationContext());
                     Intent intent;
                     if (strUserId == null) {
-                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
                         //pass value
                         intent.putExtra("tag_id", "1001");
                     } else {
-                        if (type.equals("1")) {
+                        if (notificationType.equals("1")) {
                             // move to sos details
                             intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
                             intent.putExtra("sos_id", id);
@@ -182,7 +173,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                             intent.putExtra("tag_id", "1001");
                         }
                     }
-                    mNotificationManager.showSmallNotification(title, message, intent);
+                    mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
                 }
             }
             //creating an intent for the notification
@@ -198,7 +189,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
             updated_loc = mLocation;
             // code for showing notification
 //--------------taking tag location---------------------
-            str_geo_point = imageUrl;
+            str_geo_point = latlong;
             //------------------------------------------------------
         } catch (JSONException e) {
             Log.e(TAG, "Json Exception: " + e.getMessage());
@@ -286,17 +277,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                                 Notification_status = Notification_status_map.get(sessionManager.KEY_NOTIFICATION);
 
                                 if (strUserId == null) {
-                                    if (type.equals("1")) {
+                                    if (notificationType.equals("1")) {
                                         // move to sos details
                                         intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
                                         intent.putExtra("sos_id", id);
                                     } else {
-                                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         //pass value
                                         intent.putExtra("tag_id", "1001");
                                     }
                                 } else {
-                                    if (type.equals("1")) {
+                                    if (notificationType.equals("1")) {
                                         // move to sos details
                                         intent = new Intent(getApplicationContext(), SOSDetailsActivity.class);
                                         intent.putExtra("sos_id", id);
@@ -307,33 +298,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                                 }
 
                                 if (Notification_status.equals("ON")) {
-//                                if (selectedCategoryOn > 0) { // check for notification category setting is ON
-                                    if (groupids.equals("")) {
-                                        if (savedGroupList.size() == 0) {
-                                            //tag audience : Individual user
-                                            mNotificationManager.showSmallNotification(title, message, intent);
-                                        } else {
-                                            if (checkedGroups > 0) {
-                                                //tag audience : All groups
-                                                mNotificationManager.showSmallNotification(title, message, intent);
-                                            }
-                                        }
-                                    } else {
-                                        if (selectedCheckedCount > 0) {
-                                            //tag audience : selected groups
-                                            mNotificationManager.showSmallNotification(title, message, intent);
-                                        } else {
+                                    if (selectedCatCheckedCount > 0) { // check for notification category setting is ON
+                                        if (groupids.equals("")) {
                                             if (savedGroupList.size() == 0) {
                                                 //tag audience : Individual user
-                                                mNotificationManager.showSmallNotification(title, message, intent);
+                                                mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
+                                            } else {
+                                                if (checkedGroups > 0) {
+                                                    //tag audience : All groups
+                                                    mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
+                                                }
+                                            }
+                                        } else {
+                                            if (selectedGrpCheckedCount > 0) {
+                                                //tag audience : selected groups
+                                                mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
+                                            } else {
+                                                if (savedGroupList.size() == 0) {
+                                                    //tag audience : Individual user
+                                                    mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
+                                                }
                                             }
                                         }
                                     }
-//                                }
                                 } else if (Notification_status.equals("OFF")) {
 
                                 } else {
-                                    mNotificationManager.showSmallNotification(title, message, intent);
+                                    mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
                                 }
                             }
                         }

@@ -19,19 +19,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,8 +48,21 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -109,7 +117,6 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.MobileModel;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
@@ -133,7 +140,10 @@ import static android.app.Activity.RESULT_OK;
 ////////////////////////////////////////////////////////
 
 public class TagaNeed extends Fragment implements Animation.AnimationListener, GoogleApiClient.OnConnectionFailedListener {
-    String flag = "1";
+    EditText ed;
+    TextView tv;
+    List<EditText> allEds = new ArrayList<EditText>();
+    List<TextView> allTvs = new ArrayList<TextView>();
     int spinnerPosition = 0;
     Spinner spinnerType;
     private ArrayList<GroupPOJO> groupArrayList;
@@ -141,13 +151,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     ArrayList<TaggedDeedsPojo> taggeddeeds = new ArrayList<TaggedDeedsPojo>();
     public static ArrayList<String> selectedUserGroups = new ArrayList<String>();
     public static ArrayList<String> selectedUserGrpNames = new ArrayList<String>();
-    String formattedSubTypePref = "", formattedUserOrgs = ""; // for removing brackets [ and ]
+    String formattedSubTypePref = "", formattedUserGroups = ""; // for removing brackets [ and ]
     String checkedOtherOrg = "N", checkedIndi = "N";
     LinearLayout selectedPrefLayout, permanentLayout, addressLayout;
     private String paddress = "N";
     private Switch locationSwitch;
     public static final int RequestPermissionCode = 1;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     FragmentActivity myContext;
     String lat, longi;
     View rootview;
@@ -155,15 +165,15 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     ImageView gieftneedimg, imgcategory, imgshare, imgchar;
     Button btnCamera, btnGallery, btnPost, dialogbtnconfirm, dialogbtncancel, btnOk, btnShare;
     TextView dialogtext, txtDescription, txtvalidity, txtdialogcreditpoints, txttotalpoints, txt2, txtneedname;
-    EditText edselectGroup, edselectcategory, selectedPref, edselectAudiance, edselectlocation, edDescription, edshortdescription;
+    EditText edSelectFromGroup, edselectcategory, selectedPref, edselectAudiance, edselectlocation, edDescription;
     String latitude_source, longitude_source;
     String selectedFromGroupId = "", selectedFromGroupName, strNeedmapping_ID, strNeed_Name, strCharacter_Path, strImagenamereturned, strUser_ID, strCreditpoints, strTotalpoints;
-    LinearLayout layout_container, layout_audiance, selectGroupLayout;
+    LinearLayout layout_container, layout_audiance, fromGroupLinearLayout;
     CheckBox Checkbox_container;
     Bitmap bitmap;
     String image;
     ScrollView deeddetails_scrollview;
-    String strCategory, strlocation, strShortDescription, strFullDescription;
+    String strCategory, strlocation, strFullDescription;
     SessionManager sessionManager;
     private static int RESULT_LOAD_IMG = 11;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -184,13 +194,11 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     DiscreteSeekBar seekbarValidity;
     private AlertDialog alertDialogForgot, alertDialogreturn;
     String str_tagid, str_geopoint, str_characterPath, str_fname, str_lname, str_privacy, str_needName, str_totalTaggedCreditPoints,
-            str_FromGroup, str_totalFulfilledCreditPoints, str_title, str_date, str_distance, str_needid, str_tab, strcontainer = "0", str_validity = "3",
-            strCategory_click = "Clicked", strGroup_click = "Clicked", strSubCategory_click = "Clicked", strAudiance_click = "Clicked", callingFrom = "screenload";
+            str_FromGroup, str_totalFulfilledCreditPoints, str_title, str_date, str_distance, str_needid, str_tab, strcontainer = "0",
+            str_validity = "3", userGroupsCallingFrom = "TagDeedScreenload", categoryCallingFrom = "TagDeedScreenload";
     private GoogleApiClient mGoogleApiClient;
     DisplayMetrics metrics;
     int deviceWidth, deviceHeight;
-    ImageView imageView, imageViewClose;
-    Animation animFadein;
 
     public static TagaNeed newInstance(int sectionNumber) {
         TagaNeed fragment = new TagaNeed();
@@ -249,9 +257,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             value = bundle.getString("tab");
             fragmentpage = bundle.getString("page");
             if (fragmentpage.equals("detailspage")) {
-                strCategory_click = "nonClicked";
-                strSubCategory_click = "nonClicked";
-                strAudiance_click = "nonClicked";
                 TaggedneedsActivity.updateTitle(getResources().getString(R.string.edit_deed));
                 strlocation = this.getArguments().getString("str_address");
                 str_tagid = this.getArguments().getString("str_tagid");
@@ -293,22 +298,35 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 layout_audiance.setVisibility(View.GONE);
 
                 if (formattedSubTypePref.length() > 0) {
+                    selectedPrefLayout.setVisibility(View.VISIBLE);
                     selectedPref.setText(formattedSubTypePref);
                 }
                 if (paddress.equals("Y")) {
                     locationSwitch.setChecked(true);
                     paddress = "Y";
                 }
-                flag = "1";
-                if (str_FromGroup != null) {
-                    selectGroupLayout.setVisibility(View.VISIBLE);
-                    edselectGroup.setText(str_FromGroup);
-                    edselectGroup.setEnabled(false);
+                /*if (str_FromGroup != null) {
+                    fromGroupLinearLayout.setVisibility(View.VISIBLE);
+                    edSelectFromGroup.setText(str_FromGroup);
+                    edSelectFromGroup.setEnabled(false);
                     getCategory(selectedFromGroupId);
+                    userGroupsCallingFrom = "EditDeedScreenload";
+                } else {*/
+
+                // From group not allowed to edit because anyone can edit deed
+                fromGroupLinearLayout.setVisibility(View.GONE);
+                getCategory("");
+                categoryCallingFrom = "EditDeedScreenload";
+//                }
+
+                if (strcontainer.equals("1")) {
+                    layout_container.setVisibility(View.VISIBLE);
+                    Checkbox_container.setChecked(true);
                 } else {
-                    selectGroupLayout.setVisibility(View.GONE);
-                    getCategory("");
+                    layout_container.setVisibility(View.VISIBLE);
+                    Checkbox_container.setChecked(false);
                 }
+
                 String strImagepath = WebServices.MAIN_SUB_URL + strImagenamereturned;
                 if (strImagepath.length() > 57) {
                     Picasso.with(getContext()).load(strImagepath).placeholder(R.drawable.imgbackground).into(gieftneedimg);
@@ -343,88 +361,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             e.printStackTrace();
         }
 
-        selectedPref.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                strCategory = edselectcategory.getText().toString();
-                if (strCategory.length() < 1) {
-                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_category));
-                } else {
-                    strSubCategory_click = "Clicked";
-                    if (subcategories.size() > 0) {
-                        showSubCatDialog();
-                    } else {
-                        getSubCategory("no");
-                    }
-                }
-            }
-        });
-
-        edDescription.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                int len = edDescription.getText().length();
-                deeddetails_scrollview.fullScroll(View.FOCUS_DOWN);
-                if (len > 499) {
-                    Toast.makeText(getContext(), getResources().getString(R.string.length_msg), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                int i = 3;
-                bundle.putString("tab", str_tab);
-                bundle.putString("str_address", strlocation);
-                bundle.putString("str_tagid", str_tagid);
-                bundle.putString("str_geopoint", str_geopoint);
-                bundle.putString("str_taggedPhotoPath", strImagenamereturned);
-                bundle.putString("str_description", strFullDescription);
-                bundle.putString("str_characterPath", str_characterPath);
-                bundle.putString("str_fname", str_fname);
-                bundle.putString("str_lname", str_lname);
-                bundle.putString("str_privacy", str_privacy);
-                bundle.putString("str_userID", strUser_ID);
-                bundle.putString("str_needName", str_needName);
-                bundle.putString("str_totalTaggedCreditPoints", str_totalTaggedCreditPoints);
-                bundle.putString("str_totalFulfilledCreditPoints", str_totalFulfilledCreditPoints);
-                // bundle.putString("tab", tab);
-                bundle.putString("str_title", str_title);
-                bundle.putString("str_date", str_date);
-                bundle.putString("str_distance", str_distance);
-                NeedDetailsFrag mainHomeFragment = new NeedDetailsFrag();
-                mainHomeFragment.setArguments(bundle);
-                fragmgr.beginTransaction().replace(R.id.content_frame, mainHomeFragment).commit();
-                // }
-            }
-        });
-
-        btnPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Log.d("Geopoints", str_Geopint);
-                //gifDialog() ;
-                if (!(Validation.isOnline(getActivity()))) {
-                    ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-                } else if (fragmentpage.equals("detailspage")) {
-                    editdeedValidations();
-                } else {
-//                    btnPost.setEnabled(false);
-                    checkvalidations();
-                }
-            }
-        });
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -456,7 +392,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     Bugreport bg = new Bugreport();
                     bg.sendbug(writer.toString());
                 }
-
             }
         });
 
@@ -471,14 +406,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             }
         });
 
-        edselectGroup.setOnClickListener(new View.OnClickListener() {
+        edSelectFromGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                strGroup_click = "Clicked";
                 if (!(Validation.isOnline(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
-                    callingFrom = "group";
+                    userGroupsCallingFrom = "SelectFromGroupClick";
                     getUserGroups(strUser_ID);
                 }
             }
@@ -487,30 +421,64 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         edselectcategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectGroupLayout.getVisibility() == View.VISIBLE) {
-                    if (edselectGroup.getText().length() < 1) {
+                if (fromGroupLinearLayout.getVisibility() == View.VISIBLE) {
+                    if (edSelectFromGroup.getText().length() < 1) {
                         ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
                     } else {
-                        strCategory_click = "Clicked";
-                        flag = "1";
+                        categoryCallingFrom = "SelectCategoryClick";
                         getCategory(selectedFromGroupId);
                     }
                 } else {
-                    strCategory_click = "Clicked";
-                    flag = "1";
+                    categoryCallingFrom = "SelectCategoryClick";
                     getCategory("");
                 }
+            }
+        });
+
+        selectedPref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                strCategory = edselectcategory.getText().toString();
+                if (strCategory.length() < 1) {
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_category));
+                } else {
+                    if (subcategories.size() > 0) {
+                        showSubCatDialog();
+                    } else {
+                        getSubCategory("no");
+                    }
+                }
+            }
+        });
+
+        edDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int len = edDescription.getText().length();
+                deeddetails_scrollview.fullScroll(View.FOCUS_DOWN);
+                if (len > 499) {
+                    Toast.makeText(getContext(), getResources().getString(R.string.length_msg), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
         edselectAudiance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                strAudiance_click = "Clicked";
                 if (!(Validation.isOnline(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
-                    callingFrom = "audiance";
+                    userGroupsCallingFrom = "SelectAudienceGroupClick";
                     getUserGroups(strUser_ID);
                 }
             }
@@ -531,6 +499,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         } else {
             seekbarValidity.setProgress(4);
         }
+
         seekbarValidity.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
@@ -549,6 +518,53 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
             }
         });
+
+        btnPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Log.d("Geopoints", str_Geopint);
+                //gifDialog() ;
+                if (!(Validation.isOnline(getActivity()))) {
+                    ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+                } else if (fragmentpage.equals("detailspage")) {
+                    editdeedValidations();
+                } else {
+//                    btnPost.setEnabled(false);
+                    checkvalidations();
+                }
+            }
+        });
+
+        TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                int i = 3;
+                bundle.putString("tab", str_tab);
+                bundle.putString("str_address", strlocation);
+                bundle.putString("str_tagid", str_tagid);
+                bundle.putString("str_geopoint", str_geopoint);
+                bundle.putString("str_taggedPhotoPath", strImagenamereturned);
+                bundle.putString("str_description", strFullDescription);
+                bundle.putString("str_characterPath", str_characterPath);
+                bundle.putString("str_fname", str_fname);
+                bundle.putString("str_lname", str_lname);
+                bundle.putString("str_privacy", str_privacy);
+                bundle.putString("str_userID", strUser_ID);
+                bundle.putString("str_needName", str_needName);
+                bundle.putString("str_totalTaggedCreditPoints", str_totalTaggedCreditPoints);
+                bundle.putString("str_totalFulfilledCreditPoints", str_totalFulfilledCreditPoints);
+                // bundle.putString("tab", tab);
+                bundle.putString("str_title", str_title);
+                bundle.putString("str_date", str_date);
+                bundle.putString("str_distance", str_distance);
+                NeedDetailsFrag mainHomeFragment = new NeedDetailsFrag();
+                mainHomeFragment.setArguments(bundle);
+                fragmgr.beginTransaction().replace(R.id.content_frame, mainHomeFragment).commit();
+                // }
+            }
+        });
+
         rootview.getRootView().setFocusableInTouchMode(true);
         rootview.getRootView().requestFocus();
         rootview.getRootView().setOnKeyListener(new View.OnKeyListener() {
@@ -560,7 +576,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     bundle.putString("tab", value);
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();
@@ -591,9 +607,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         // txtSelectLocation = (TextView) rootview.findViewById(R.id.txttaganeedlocation);
         deeddetails_scrollview = rootview.findViewById(R.id.deeddetails_scrollview);
         edDescription = (EditText) rootview.findViewById(R.id.edtaganeedDescription);
-        edshortdescription = (EditText) rootview.findViewById(R.id.edtaganeedshortDescription);
-        edselectGroup = (EditText) rootview.findViewById(R.id.edtaganeedgroup);
-        selectGroupLayout = (LinearLayout) rootview.findViewById(R.id.select_group_tagadeed_layout);
+        edSelectFromGroup = (EditText) rootview.findViewById(R.id.edtaganeedgroup);
+        fromGroupLinearLayout = (LinearLayout) rootview.findViewById(R.id.select_group_tagadeed_layout);
         edselectcategory = (EditText) rootview.findViewById(R.id.edtaganeedcategory);
         edselectAudiance = (EditText) rootview.findViewById(R.id.select_audience);
         edselectlocation = (EditText) rootview.findViewById(R.id.edtaganeedlocation);
@@ -613,10 +628,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         edselectlocation.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         edselectcategory.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         edDescription.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
-        edshortdescription.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
     }
 
-    //--------------------------getting user groups from server------------------------------------------
+    //--------------------------getting user groups from server-----------From group and Audience-------------
     public void getUserGroups(String user_id) {
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
@@ -655,7 +669,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -677,23 +691,23 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             Bugreport bg = new Bugreport();
                             bg.sendbug(writer.toString());
                         }
-                        if (callingFrom.equals("screenload")) {
+                        if (userGroupsCallingFrom.equals("TagDeedScreenload")) {
                             if (groupArrayList.size() > 0) {
-                                selectGroupLayout.setVisibility(View.VISIBLE);
-                                if (groupArrayList.size() == 1) {
-                                    edselectGroup.setText(groupArrayList.get(0).getGroup_name());
-                                    selectedFromGroupId = groupArrayList.get(0).getGroup_id();
-                                    selectedFromGroupName = groupArrayList.get(0).getGroup_name();
-                                    edselectGroup.setEnabled(false);
-                                    edselectGroup.clearFocus();
-                                } else {
-                                    edselectGroup.setEnabled(true);
-                                    edselectGroup.clearFocus();
-                                }
+                                fromGroupLinearLayout.setVisibility(View.VISIBLE);
+                                edSelectFromGroup.setText(groupArrayList.get(0).getGroup_name());
+                                selectedFromGroupId = groupArrayList.get(0).getGroup_id();
+                                selectedFromGroupName = groupArrayList.get(0).getGroup_name();
+                                edSelectFromGroup.setEnabled(true);
+                                edSelectFromGroup.clearFocus();
+                                getCategory(selectedFromGroupId);
+                                categoryCallingFrom = "TagDeedScreenload";
                             } else {
-                                selectGroupLayout.setVisibility(View.GONE);
+                                fromGroupLinearLayout.setVisibility(View.GONE);
                             }
-                        } else if (callingFrom.equals("group")) {
+                            edselectAudiance.setText("All Groups");
+                            checkedOtherOrg = "Y";
+                        } else if (userGroupsCallingFrom.equals("SelectFromGroupClick")) {
+                            // calling from From Group
                             final Dialog dialog = new Dialog(getContext());
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -707,14 +721,14 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             grouplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    edselectGroup.setText(groupArrayList.get(position).getGroup_name());
+                                    edSelectFromGroup.setText(groupArrayList.get(position).getGroup_name());
                                     selectedFromGroupId = groupArrayList.get(position).getGroup_id();
                                     selectedFromGroupName = groupArrayList.get(position).getGroup_name();
                                     dialog.dismiss();
-                                    categories = new ArrayList<Needtype>();
-                                    edselectcategory.setText("");
-                                    edselectcategory.clearFocus();
-                                    imgcategory.setImageDrawable(null);
+                                    getCategory(selectedFromGroupId);
+                                    categoryCallingFrom = "TagDeedScreenload";
+                                    edselectAudiance.setText("All Groups");
+                                    checkedOtherOrg = "Y";
                                 }
                             });
 
@@ -725,7 +739,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                 }
                             });
                             dialog.show();
-                        } else {
+                        } else if (userGroupsCallingFrom.equals("SelectAudienceGroupClick")) {
+                            // calling from Audience
                             final Dialog dialog = new Dialog(getContext());
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -874,7 +889,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 simpleArcDialog.dismiss();
                 CategoryType categoryType = response.body();
                 Log.d("response_categories", "" + response.body());
-                if (strCategory_click.equals("nonClicked")) {
+                if (categoryCallingFrom.equals("EditDeedScreenload")) {
                     for (int i = 0; i < categoryType.getNeedtype().size(); i++) {
                         if (strNeedmapping_ID.equals(categoryType.getNeedtype().get(i).getNeedMappingID().toString())) {
                             spinnerPosition = i;
@@ -882,6 +897,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             str_needid = categoryType.getNeedtype().get(i).getNeedMappingID().toString();
                             strCharacter_Path = categoryType.getNeedtype().get(i).getCharacterPath();
                             String path = WebServices.MAIN_SUB_URL + strCharacter_Path;
+                            Log.d("path", path);
                             Picasso.with(getContext()).load(path).resize(50, 50).into(imgcategory);
                             strNeedmapping_ID = str_needid;
                             strCategory = str_needName;
@@ -956,7 +972,25 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     }
                     Log.d("response_categories", "" + categories.size());
                     Log.d("response_custom_cat", "" + customCategories.size());
-                    showCatDialog();
+                    if (categoryCallingFrom.equals("TagDeedScreenload")) {
+                        edselectcategory.setText(categories.get(0).getNeedName());
+                        strNeedmapping_ID = categories.get(0).getNeedMappingID();
+                        strCharacter_Path = categories.get(0).getCharacterPath();
+                        String path = WebServices.MAIN_SUB_URL + strCharacter_Path;
+                        Picasso.with(getContext()).load(path).resize(50, 50).into(imgcategory);
+                        if (strNeedmapping_ID.equals("1") || strNeedmapping_ID.equals("21")) {
+                            layout_container.setVisibility(View.VISIBLE);
+                            Checkbox_container.setChecked(false);
+                        } else {
+                            layout_container.setVisibility(View.GONE);
+                        }
+
+                        getSubCategory("yes");
+                        edselectAudiance.setText("All Groups");
+                        checkedOtherOrg = "Y";
+                    } else {
+                        showCatDialog();
+                    }
                 }
             }
 
@@ -969,7 +1003,17 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     }
 
     public void showCatDialog() {
-        if (flag.equals("1")) {
+        if (categoryCallingFrom.equals("SuggestSubTypeClick")) {
+            ArrayAdapter<Needtype> adapter = new ArrayAdapter<Needtype>(getContext(), android.R.layout.simple_spinner_item, categories);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerType.setAdapter(adapter);
+            for (int i = 0; i < categories.size(); i++) {
+                if (strNeedmapping_ID.equals(categories.get(i).getNeedMappingID())) {
+                    spinnerPosition = i;
+                }
+            }
+            spinnerType.setSelection(spinnerPosition);
+        } else {
             final Dialog dialog = new Dialog(getContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
@@ -1015,10 +1059,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             selectedPref.clearFocus();
 
                             //Reset select audience
-                            edselectAudiance.setEnabled(true);
+                            /*edselectAudiance.setEnabled(true);
                             groupArrayList = new ArrayList<>();
                             edselectAudiance.setText("");
-                            edselectAudiance.clearFocus();
+                            edselectAudiance.clearFocus();*/
+
+                            edselectAudiance.setText("All Groups");
+                            checkedOtherOrg = "Y";
 
                             //call getsubcategory to check subcategories available for selected main categories
                             getSubCategory("yes");
@@ -1089,16 +1136,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             });
             simpleArcDialog.dismiss();
             dialog.show();
-        } else {
-            ArrayAdapter<Needtype> adapter = new ArrayAdapter<Needtype>(getContext(), android.R.layout.simple_spinner_item, categories);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerType.setAdapter(adapter);
-            for (int i = 0; i < categories.size(); i++) {
-                if (strNeedmapping_ID.equals(categories.get(i).getNeedMappingID())) {
-                    spinnerPosition = i;
-                }
-            }
-            spinnerType.setSelection(spinnerPosition);
         }
     }
 
@@ -1115,42 +1152,39 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SubCategoryInterface service = retrofit.create(SubCategoryInterface.class);
+        Log.d("type_id", "" + strNeedmapping_ID);
         Call<List<SubCategories>> call = service.sendData(strNeedmapping_ID);
         call.enqueue(new Callback<List<SubCategories>>() {
             @Override
             public void onResponse(Response<List<SubCategories>> response, Retrofit retrofit) {
                 simpleArcDialog.dismiss();
                 List<SubCategories> subCategoryType = response.body();
-                if (strSubCategory_click.equals("nonClicked")) {
-                    /*for (int i = 0; i < subCategoryType.getSubTypeName().size(); i++) {
-                        if (strNeedmapping_ID.equals(subCategoryType.getSubNeedtype().get(i).getSubTypeId())) {
-                            edselectcategory.setText(subCategoryType.getSubNeedtype().get(i).getSubTypeName());
-                            Log.d("selected_subtype", subCategoryType.getSubNeedtype().get(i).getSubTypeName());
-                            str_needid = subCategoryType.getSubNeedtype().get(i).getSubTypeId();
-                            strNeedmapping_ID = str_needid;
-                            strCategory = str_needName;
-                            mDialog.dismiss();
+                subcategories.clear();
+                try {
+                    for (int i = 0; i < subCategoryType.size(); i++) {
+                        SubCategories subCat = new SubCategories();
+                        subCat.setSubCatId(subCategoryType.get(i).getSubCatId());
+                        subCat.setSubCatName(subCategoryType.get(i).getSubCatName());
+                        if (i == 0) {
+                            subCat.setQty("1");
+                        } else {
+                            subCat.setQty("0");
                         }
-                    }*/
+                        subcategories.add(subCat);
+                    }
+                } catch (Exception e) {
+
+                }
+
+                if (callingFromCat.equals("yes")) {
+                    //dont show subcat dialog
+                    subTypePref = new ArrayList<String>();
+                    subTypePref.add(subcategories.get(0).getSubCatName() + ":" + subcategories.get(0).getQty());
+                    formattedSubTypePref = subTypePref.toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                    selectedPrefLayout.setVisibility(View.VISIBLE);
+                    selectedPref.setText(formattedSubTypePref);
                 } else {
-                    subcategories.clear();
-                    try {
-                        for (int i = 0; i < subCategoryType.size(); i++) {
-                            SubCategories subCat = new SubCategories();
-                            subCat.setSubCatId(subCategoryType.get(i).getSubCatId());
-                            subCat.setSubCatName(subCategoryType.get(i).getSubCatName());
-                            subCat.setQty(0);
-                            subcategories.add(subCat);
-                        }
-                    } catch (Exception e) {
-
-                    }
-
-                    if (callingFromCat.equals("yes")) {
-                        //dont show subcat dialog
-                    } else {
-                        showSubCatDialog();
-                    }
+                    showSubCatDialog();
                 }
             }
 
@@ -1164,6 +1198,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     }
 
     public void showSubCatDialog() {
+        allEds = new ArrayList<EditText>();
+        allTvs = new ArrayList<TextView>();
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -1174,16 +1210,58 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         TextView tvMsg = (TextView) dialog.findViewById(R.id.txt_msg);
         Button ok = (Button) dialog.findViewById(R.id.sub_category_ok);
         Button cancel = (Button) dialog.findViewById(R.id.sub_category_cancel);
-        Button btnSuggestSubType = (Button) dialog.findViewById(R.id.suggest_sub_type);
+        TextView suggestSubType = (TextView) dialog.findViewById(R.id.suggest_sub_type);
+        LinearLayout layout_edittext = (LinearLayout) dialog.findViewById(R.id.text_editText_layout);
+        TableLayout tableLayout = (TableLayout) dialog.findViewById(R.id.tableLayout1);
         Log.d("subcatlist_size", "" + subcategories.size());
         if (subcategories.size() > 0) {
             tvMsg.setText("Select preferences for number of people");
-            subcategorylist.setVisibility(View.VISIBLE);
+            subcategorylist.setVisibility(View.GONE);
             ok.setVisibility(View.VISIBLE);
-            cancel.setVisibility(View.GONE);
-            subcategorylist.setAdapter(new SubCatAdapter(subcategories, getContext()));
+            cancel.setVisibility(View.VISIBLE);
+//            subcategorylist.setAdapter(new SubCatAdapter(subcategories, getContext()));
+
+            for (int i = subcategories.size() - 1; i >= 0; i--) {
+                // we have to use reverve loop here because table rows created from bottom to top layer
+                TableRow row = new TableRow(getActivity());
+                TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT);
+                params.setMargins(10, 10, 10, 0);
+                row.setLayoutParams(params);
+                ed = new EditText(getActivity());
+                tv = new TextView(getActivity());
+                allEds.add(ed);
+                allTvs.add(tv);
+
+                // Dynamically created TextView properties
+                tv.setLayoutParams(params);
+                tv.setTextColor(getResources().getColor(R.color.black));
+                tv.setPadding(10, 0, 10, 0);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                tv.setId(i);
+                tv.setText(subcategories.get(i).getSubCatName());
+
+                // Dynamically created EditText properties
+                ed.setBackground(getResources().getDrawable(R.drawable.textbox_transparent));
+                ed.setTextColor(getResources().getColor(R.color.black));
+                ed.setSelectAllOnFocus(true);
+                ed.setInputType(InputType.TYPE_CLASS_NUMBER);
+                ed.setLayoutParams(params);
+                ed.setPadding(10, 0, 10, 0);
+                ed.setHeight(60);
+                ed.setWidth(130);
+                ed.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
+                ed.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                ed.setId(i);
+                ed.setGravity(Gravity.CENTER);
+                ed.setText(subcategories.get(i).getQty());
+
+                // add created TextView snd EditText to table row
+                row.addView(tv);
+                row.addView(ed);
+                tableLayout.addView(row, 0);
+            }
         } else {
-            tvMsg.setText("No subtypes found");
+            tvMsg.setText("No preferences found");
             ok.setVisibility(View.GONE);
             cancel.setVisibility(View.VISIBLE);
             subcategorylist.setVisibility(View.GONE);
@@ -1192,15 +1270,29 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String[] strings = new String[allEds.size()];
+                Log.d("allEds_size", "" + allEds.size() + "," + strings.length);
+                int j = 0;
+                for (int i = allEds.size() - 1; i >= 0; i--) {
+                    if (allEds.get(i).getText().toString().equals("")) {
+                        strings[i] = "0";
+                    } else {
+                        strings[i] = allEds.get(i).getText().toString();
+                    }
+                    subcategories.get(j).setQty(strings[i]);
+                    Log.d("all_ed_values", "" + strings[i]);
+                    j++;
+                }
                 subTypePref = new ArrayList<String>();
                 for (int i = 0; i < subcategories.size(); i++) {
-                    if (subcategories.get(i).getQty() > 0) {
+                    if (Integer.parseInt(subcategories.get(i).getQty()) > 0) {
                         subTypePref.add(subcategories.get(i).getSubCatName() + ":" + subcategories.get(i).getQty()); // add position of the row
                     }
                 }
                 dialog.dismiss();
                 if (subcategories.size() > 0) {
                     formattedSubTypePref = subTypePref.toString().replaceAll("\\[", "").replaceAll("\\]", "");
+                    selectedPrefLayout.setVisibility(View.VISIBLE);
                     selectedPref.setText(formattedSubTypePref);
                 }
             }
@@ -1211,7 +1303,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 dialog.dismiss();
             }
         });
-        btnSuggestSubType.setOnClickListener(new View.OnClickListener() {
+        suggestSubType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(getContext());
@@ -1234,8 +1326,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     }
                     spinnerType.setSelection(spinnerPosition);
                 } else {
-                    flag = "0";
-                    strCategory_click = "Clicked";
+                    categoryCallingFrom = "SuggestSubTypeClick";
                     getCategory("");
                 }
                 spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1332,10 +1423,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         } else {
             strlocation = edselectlocation.getText().toString();
         }
-        strShortDescription = edselectcategory.getText().toString().trim();
         strFullDescription = edDescription.getText().toString().trim();
 
-        if ((selectGroupLayout.getVisibility() == View.VISIBLE) && (edselectGroup.getText().length() < 1)) {
+        if ((fromGroupLinearLayout.getVisibility() == View.VISIBLE) && (edSelectFromGroup.getText().length() < 1)) {
             ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
             btnPost.setEnabled(true);
         } else if (strCategory.length() < 1) {
@@ -1366,10 +1456,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     public void editdeedValidations() {
         strCategory = edselectcategory.getText().toString();
         strlocation = edselectlocation.getText().toString();
-        strShortDescription = edselectcategory.getText().toString().trim();
         strFullDescription = edDescription.getText().toString().trim();
 
-        if ((selectGroupLayout.getVisibility() == View.VISIBLE) && (edselectGroup.getText().length() < 1)) {
+        if ((fromGroupLinearLayout.getVisibility() == View.VISIBLE) && (edSelectFromGroup.getText().length() < 1)) {
             ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
             btnPost.setEnabled(true);
         } else if (strCategory.length() < 1) {
@@ -1430,9 +1519,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (fragmentpage.equals("detailspage")) {
-                                editTadg(str_tagid, strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, str_needName, strFullDescription, strlocation, strcontainer, str_validity, formattedSubTypePref, paddress);
+                                editTadg(str_tagid, strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strCategory, strFullDescription, strlocation, strcontainer, str_validity, formattedSubTypePref, paddress);
                             } else {
-                                formattedUserOrgs = selectedUserGroups.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
+                                formattedUserGroups = selectedUserGroups.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                                 if (fragmentpage.equals("map_permanent_dialog")) {
                                     paddress = "Y";
                                     strlocation = bundle.getString("permanent_address");
@@ -1440,9 +1529,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                 }
                                 if (checkedOtherOrg.equals("Y")) {
                                     // if all groups is selected then send blank user selected groups
-                                    sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strShortDescription, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, "");
+                                    sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strCategory, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, "");
                                 } else {
-                                    sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strShortDescription, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, formattedUserOrgs.trim());
+                                    sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strCategory, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, formattedUserGroups.trim());
                                 }
                             }
                             Log.d("photopath", strImagenamereturned);
@@ -1477,7 +1566,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
     //---------------------sending tag data to server-----------------------------------------------
     public void sendaTag(String user_id, String NeedMapping_ID, String geopoints, String Imagename, String title, String description, String locat, String container, String validity, String paddress, String subTypePref, String checkedOtherOrg, String checkedIndi, String userOrgs) {
-        //sendaTag(strUser_ID, strNeedmapping_ID, strGeopoints, strImagenamereturned, strShortDescription, strlocation, strFullDescription);
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -1488,6 +1576,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         TagAneedInterface service = retrofit.create(TagAneedInterface.class);
+        Log.d("tag_input", user_id + ":" + NeedMapping_ID + ":" + geopoints + ":" + Imagename + ":" + title + ":" + description + ":" + locat + ":" + container + ":" + validity + ":" + paddress + ":" + subTypePref + ":" + checkedOtherOrg + ":" + checkedIndi + ":" + userOrgs + ":" + selectedFromGroupId);
         Call<MobileModel> call = service.sendData(user_id, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, paddress, subTypePref, checkedOtherOrg, checkedIndi, userOrgs, selectedFromGroupId);
         call.enqueue(new Callback<MobileModel>() {
             @Override
@@ -1514,7 +1603,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -1523,7 +1612,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         MobileModel mobilemodel = response.body();
                         String successStatus = mobilemodel.getCheckstatus().get(0).getStatus().toString();
                         if (successStatus.equals("1")) {
-                            edshortdescription.setText("");
                             edselectcategory.setText("");
                             edDescription.setText("");
                             edselectlocation.setText(adress_show);
@@ -1582,8 +1670,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditdeedInterface service = retrofit.create(EditdeedInterface.class);
-        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, str_subtypes, str_permanent);
         Log.d("edit_deed_params", "" + user_id + "," + deedId + "," + NeedMapping_ID + "," + geopoints + "," + Imagename + "," + title + "," + description + "," + locat + "," + container + "," + validity + "," + str_subtypes + "," + str_permanent);
+        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, str_subtypes, str_permanent);
         call.enqueue(new Callback<StatusModel>() {
             @Override
             public void onResponse(Response<StatusModel> response, Retrofit retrofit) {
@@ -1608,7 +1696,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -1815,54 +1903,47 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         });
     }
 
-    //-----------------get address-----------------
+    //-----------------get address----------------
     public void getAddress(final String latitude, final String longitude) {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServices.GET_ADDRESS,
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        //Disimissing the progress dialog
-                        simpleArcDialog.dismiss();
-                        //Showing toast message of the response
-                        // Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
-                        // strImagenamereturned = s;
-                        // sendaTag(strUser_ID, strNeedmapping_ID, str_Geopint, strImagenamereturned, strShortDescription, strFullDescription, strlocation);
-                        edselectlocation.setText(s);
-                        Log.d("address", s);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        GetAddressInterface service = retrofit.create(GetAddressInterface.class);
+        Call<GetAddressResponse> call = service.sendData(latitude, longitude);
+        call.enqueue(new Callback<GetAddressResponse>() {
+            @Override
+            public void onResponse(Response<GetAddressResponse> response, Retrofit retrofit) {
+                simpleArcDialog.dismiss();
+                Log.d("response_address", "" + response.body());
+                try {
+                    GetAddressResponse getAddressResponse = response.body();
+                    if (getAddressResponse.getStatus() == 1) {
+                        edselectlocation.setText(getAddressResponse.getAddress());
+                        Log.d("address", "" + getAddressResponse.getAddress());
                         str_geopoint = latitude + "," + longitude;
                         Log.d("Geopoints", str_geopoint);
+                    } else if (getAddressResponse.getStatus() == 0) {
+                        Toast.makeText(getContext(), getAddressResponse.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                        edselectlocation.setText("");
                     }
-                },
-                new com.android.volley.Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        ToastPopUp.show(myContext, getString(R.string.server_response_error));
-                        simpleArcDialog.dismiss();
-
-                        //Showing toast
-                        //Toast.makeText(getActivity(), error.getMessage().toString(), Toast.LENGTH_LONG).show();
-
-
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new Hashtable<String, String>();
-                params.put("latitude", latitude);
-                params.put("longitude", longitude);
-                return params;
+                } catch (Exception e) {
+                    Log.d("responsegroup", "" + e.getMessage());
+                }
             }
-        };
 
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-
-        //Adding request to the queue
-        requestQueue.add(stringRequest);
+            @Override
+            public void onFailure(Throwable t) {
+                simpleArcDialog.dismiss();
+                Log.d("response_address", "" + t.getMessage());
+                ToastPopUp.show(myContext, getString(R.string.server_response_error));
+            }
+        });
     }
 
     /**
@@ -1898,9 +1979,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
             } else {
                 if (fragmentpage.equals("detailspage")) {
-                    editTadg(str_tagid, strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, str_needName, strFullDescription, strlocation, strcontainer, str_validity, formattedSubTypePref, paddress);
+                    editTadg(str_tagid, strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strCategory, strFullDescription, strlocation, strcontainer, str_validity, formattedSubTypePref, paddress);
                 } else {
-                    formattedUserOrgs = selectedUserGroups.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
+                    formattedUserGroups = selectedUserGroups.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                     if (fragmentpage.equals("map_permanent_dialog")) {
                         paddress = "Y";
                         Bundle bundle = this.getArguments();
@@ -1909,9 +1990,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     }
                     if (checkedOtherOrg.equals("Y")) {
                         // if all groups is selected then send blank user selected groups
-                        sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strShortDescription, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, "");
+                        sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strCategory, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, "");
                     } else {
-                        sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strShortDescription, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, formattedUserOrgs.trim());
+                        sendaTag(strUser_ID, strNeedmapping_ID, str_geopoint, strImagenamereturned, strCategory, strFullDescription, strlocation, strcontainer, str_validity, paddress, formattedSubTypePref, checkedOtherOrg, checkedIndi, formattedUserGroups.trim());
                     }
                 }
             }
@@ -2079,7 +2160,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
         dialog.show();
         ImageView img = (ImageView) dialog.findViewById(R.id.img_gif);
-        Glide.with(this)
+        Glide.with(getActivity())
                 .load(R.drawable.thumbs_up)
                 .into(img);
 
@@ -2135,7 +2216,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                     //updateUI(false);
                                 }
                             });
-                    int i = new DBGAD(getContext()).delete_row_message();
+
                     sessionManager.set_notification_status("ON");
                     Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                     loginintent.putExtra("message", "Charity");
@@ -2274,7 +2355,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         bundle.putString("tab", value);
                         TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                         mainHomeFragment.setArguments(bundle);
-                        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        FragmentTransaction fragmentTransaction =
                                 getActivity().getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                         fragmentTransaction.commit();

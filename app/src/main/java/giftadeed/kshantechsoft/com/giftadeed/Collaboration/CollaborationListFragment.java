@@ -4,15 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +14,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -38,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Group.CreateGroupFragment;
 import giftadeed.kshantechsoft.com.giftadeed.Group.RecyclerTouchListener;
 import giftadeed.kshantechsoft.com.giftadeed.Group.RecyclerViewClickListener;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
@@ -155,7 +156,7 @@ public class CollaborationListFragment extends Fragment
                 FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
                 Log.d("infoclb", "" + colabArrayList.get(position).getId() + colabArrayList.get(position).getColabName());
-                sessionManager.createColabDetails("", colabArrayList.get(position).getId(), colabArrayList.get(position).getColabName(),"","","");
+                sessionManager.createColabDetails("", colabArrayList.get(position).getId(), colabArrayList.get(position).getColabName(), "", "", "");
                 CollabDetailsFragment fragment = new CollabDetailsFragment();
                 newfrag.beginTransaction().replace(R.id.content_frame, fragment).commit();
             }
@@ -225,33 +226,37 @@ public class CollaborationListFragment extends Fragment
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         colabArrayList.clear();
-                        for (int i = 0; i < res.getColablist().size(); i++) {
-                            Colablist colablist = new Colablist();
-                            colablist.setId(res.getColablist().get(i).getId());
-                            colablist.setColabName(res.getColablist().get(i).getColabName());
-                            colablist.setUserRole(res.getColablist().get(i).getUserRole());
-                            colabArrayList.add(colablist);
-                        }
+                        if (res.getStatus() == 1) {
+                            for (int i = 0; i < res.getColablist().size(); i++) {
+                                Colablist colablist = new Colablist();
+                                colablist.setId(res.getColablist().get(i).getId());
+                                colablist.setColabName(res.getColablist().get(i).getColabName());
+                                colablist.setUserRole(res.getColablist().get(i).getUserRole());
+                                colabArrayList.add(colablist);
+                            }
 
-                        if (colabArrayList.size() <= 0) {
+                            if (colabArrayList.size() <= 0) {
 //            swipeRefreshLayout.setRefreshing(false);
-                            noColabText.setVisibility(View.VISIBLE);
-                            btnCreateColab.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.GONE);
-                        } else {
+                                noColabText.setVisibility(View.VISIBLE);
+                                btnCreateColab.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
 //            swipeRefreshLayout.setRefreshing(false);
-                            noColabText.setVisibility(View.GONE);
-                            btnCreateColab.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                            collabListAdapter = new CollabListAdapter(colabArrayList, myContext);
-                            recyclerView.setAdapter(collabListAdapter);
+                                noColabText.setVisibility(View.GONE);
+                                btnCreateColab.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                collabListAdapter = new CollabListAdapter(colabArrayList, myContext);
+                                recyclerView.setAdapter(collabListAdapter);
+                            }
+                        } else if (res.getStatus() == 0) {
+                            Toast.makeText(getContext(), res.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -284,7 +289,7 @@ public class CollaborationListFragment extends Fragment
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();

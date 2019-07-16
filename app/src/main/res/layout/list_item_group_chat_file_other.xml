@@ -24,7 +24,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="0dp"
         android:gravity="center"
-        android:textSize="14sp" />
+        android:textSize="14dp" />
 
     <ImageView
         android:id="@+id/image_group_chat_profile"
@@ -40,7 +40,7 @@
     <TextView
         android:text="Daniel Silberschatz"
         android:id="@+id/text_group_chat_nickname"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/image_group_chat_profile"

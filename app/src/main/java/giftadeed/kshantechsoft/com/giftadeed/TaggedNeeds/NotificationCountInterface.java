@@ -12,7 +12,6 @@ import retrofit.http.POST;
  */
 
 public interface NotificationCountInterface {
-
     String path= WebServices.notificationcount;
     @FormUrlEncoded
     @POST(path)

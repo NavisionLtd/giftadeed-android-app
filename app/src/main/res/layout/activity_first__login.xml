@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_first__login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -50,11 +51,12 @@
             android:paddingRight="15dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputlayoutfirstlogincountry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                app:hintTextAppearance="@style/TextLabel"
                 android:textColorHint="#fff">
 
                 <EditText
@@ -73,13 +75,14 @@
 
                     android:textColorHint="#FFFFFF"
                     android:textSize="@dimen/finaltextfont" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputlayoutfirstloginstate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                app:hintTextAppearance="@style/TextLabel"
                 android:textColorHint="#fff">
 
                 <EditText
@@ -97,13 +100,14 @@
                     android:textColor="#FFFFFF"
                     android:textColorHint="#FFFFFF"
                     android:textSize="@dimen/finaltextfont" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputlayoutfirstlogincity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                app:hintTextAppearance="@style/TextLabel"
                 android:textColorHint="#fff">
 
                 <EditText
@@ -121,13 +125,14 @@
                     android:textColor="#FFFFFF"
                     android:textColorHint="#FFFFFF"
                     android:textSize="@dimen/finaltextfont" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txtinputlayoutfirstloginemail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                app:hintTextAppearance="@style/TextLabel"
                 android:textColorHint="#fff">
 
                 <EditText
@@ -142,7 +147,7 @@
                     android:textColorHighlight="#eeec2b09"
                     android:textColorHint="#FFFFFF"
                     android:textSize="@dimen/finaltextfont" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 

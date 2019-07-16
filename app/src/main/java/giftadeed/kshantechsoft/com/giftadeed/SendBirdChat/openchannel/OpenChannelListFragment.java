@@ -2,16 +2,19 @@ package giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.openchannel;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sendbird.android.OpenChannel;
 import com.sendbird.android.OpenChannelListQuery;
 import com.sendbird.android.SendBirdException;
@@ -26,7 +29,7 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 public class OpenChannelListFragment extends Fragment {
     public static final String EXTRA_OPEN_CHANNEL_URL = "OPEN_CHANNEL_URL";
     private static final String LOG_TAG = OpenChannelListFragment.class.getSimpleName();
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     private static final int CHANNEL_LIST_LIMIT = 1;
     private static final String CONNECTION_HANDLER_ID = "CONNECTION_HANDLER_OPEN_CHANNEL_LIST";
     private RecyclerView mRecyclerView;

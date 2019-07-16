@@ -30,9 +30,9 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
     private Session session;
 
     //Information to send email
-    private String email;
-    private String subject;
-    private String message;
+    private String email = "";
+    private String subject = "";
+    private String message = "";
 
     //Progressdialog to show while sending email
     private ProgressDialog progressDialog;

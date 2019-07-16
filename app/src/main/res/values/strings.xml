@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 30 May</string>
+    <string name="app_name">GAD P2 Test 9 July</string>
 
     <!--Login page-->
     <string name="login_terms">Terms and Conditions</string>
@@ -37,13 +37,19 @@
 
     <!--Toast messages-->
     <string name="network_validation">OOPS! No INTERNET. Please check your network connection</string>
-    <string name="server_response_error">Something went wrong. Please try later</string>
+    <string name="server_response_error">SORRY! Something went wrong. Please try later</string>
     <string name="contact_saved">Contact saved</string>
     <string name="setting_saved">Settings saved</string>
     <string name="block_toast">You have been blocked</string>
     <string name="group_deleted">Group deleted successfully</string>
-    <string name="collab_deleted">Collaboration deleted successfully</string>
+    <string name="profile_updated">Profile updated successfully</string>
+    <string name="collab_deleted">Collaboration deleted successfully</string>colab_created_msg
+    <string name="contacts_saved">Contacts saved</string>
     <string name="error">Error</string>
+    <string name="updation_failed">Updation failed</string>
+    <string name="blank_contact_number">Contact number doesn\'t exist!</string>
+    <string name="address_toast">Address should contain alphabet</string>
+    <string name="select_contact">Please select your emergency contact</string>
     <string name="accepted">Accepted</string>
     <string name="exit_group_msg">You successfully exited from group</string>
     <string name="group_created_msg">Group created successfully</string>
@@ -53,6 +59,10 @@
     <string name="collab_edited">Collaboration edited successfully</string>
     <string name="member_removed">Member removed successfully</string>
     <string name="member_added">Member added successfully</string>
+    <string name="password_toast">Password should contain at least one number, one special character and one alphabet</string>
+    <string name="password_toast_1">Password should contain at least one alphabet</string>
+    <string name="password_toast_2">Password should contain at least one special character</string>
+    <string name="password_toast_3">Password should contain at least one number</string>
     <string name="no_data_found">No data found</string>
     <string name="admin_assigned">Admin assigned successfully</string>
     <string name="admin_dismissed">Admin dismissed successfully</string>
@@ -82,7 +92,7 @@
     <string name="drawer_inspire">Inspire Community</string>
     <string name="drawer_tag_deed">Tag A Deed</string>
     <string name="drawer_resources">Resources</string>
-    <string name="drawer_about_app">About App</string>
+    <string name="drawer_about_app">Dashboard</string>
     <string name="drawer_notification">Notifications</string>
     <string name="drawer_settings">Settings</string>
     <string name="drawer_emergency_contacts">Emergency Contacts</string>
@@ -103,6 +113,7 @@
     <string name="dash4">Your percentage of successful tags is</string>
     <string name="dash5">Your Gift a Deed score is</string>
     <string name="my_fulfil_tags_heading">My Fulfilled Tags</string>
+    <string name="fulfil_tags_heading">Fulfilled Tags</string>
     <string name="top_ten_heading">Top 10 Taggers</string>
     <string name="top_ten_fulfill_heading">Top 10 Tag Fulfillers</string>
     <string name="tag_counter_heading">Tag Counter</string>
@@ -113,7 +124,7 @@
     <string name="cookies_heading">Cookies Policy</string>
     <string name="end_user_heading">End-user Agreement</string>
     <string name="dis_heading">Disclaimer</string>
-    <string name="help_heading">FAQ</string>
+    <string name="help_heading">FAQs</string>
     <string name="contact_us_heading">Contact Us</string>
 
     <!--App update-->
@@ -168,6 +179,7 @@
     <string name="no_pending_invites">No pending invites</string>
     <string name="collab_details">Collab Details</string>
     <string name="search_group">Search group *</string>
+    <string name="select_grp_creators">Select group creators</string>
 
     <!--My profile-->
     <string name="my_profile">My Profile</string>
@@ -199,7 +211,7 @@
     <string name="description">Story of need</string>
     <string name="post">Post</string>
     <string name="container_available">Container Available</string>
-    <string name="container_note">* Whether that needy person has a food plate/water container to recive the donated food/water?</string>
+    <string name="container_note">* Whether that needy person has a food plate/water container to receive the donated food/water?</string>
 
     <!--Deed details-->
     <string name="deed_details_heading">Deed Details</string>
@@ -368,7 +380,7 @@
     <string name="take_photo">Take photo</string>
     <string name="select_from_gallery">Select from Gallery</string>
     <string name="select_from_avatars">Select from Avatars</string>
-    <string name="suggest_sub_type">Suggest Sub-Type</string>
+    <string name="suggest_sub_type">No preference found ? Click here to suggest</string>
     <string name="enter_suggession">Enter suggestion</string>
     <string name="subtype_already_exist">Sub-type already exist</string>
     <string name="subtype_success">Sub-type submitted successfully</string>

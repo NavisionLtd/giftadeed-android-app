@@ -43,7 +43,7 @@
             android:text="Call"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                     android:gravity="center"
                     android:text="Please select 3 emergency contact numbers"
                     android:textColor="@color/grey"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -90,7 +90,7 @@
                             android:gravity="center"
                             android:text="Contact to CALL in emergency situation"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16dp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -110,7 +110,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/grey"
                                 android:textColorHint="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
 
                             <ImageView
                                 android:id="@+id/clear_1"
@@ -128,7 +128,7 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginBottom="10dp"
                             android:textColor="@color/colorHint"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:visibility="gone" />
                     </LinearLayout>
 
@@ -148,7 +148,7 @@
                             android:gravity="center"
                             android:text="Contacts to send SMS in emergency situation"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp" />
+                            android:textSize="16dp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -168,7 +168,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/grey"
                                 android:textColorHint="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
 
                             <ImageView
                                 android:id="@+id/clear_2"
@@ -186,7 +186,7 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginBottom="10dp"
                             android:textColor="@color/colorHint"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:visibility="gone" />
 
                         <LinearLayout
@@ -207,7 +207,7 @@
                                 android:singleLine="true"
                                 android:textColor="@color/grey"
                                 android:textColorHint="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
 
                             <ImageView
                                 android:id="@+id/clear_3"
@@ -225,7 +225,7 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginBottom="10dp"
                             android:textColor="@color/colorHint"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>

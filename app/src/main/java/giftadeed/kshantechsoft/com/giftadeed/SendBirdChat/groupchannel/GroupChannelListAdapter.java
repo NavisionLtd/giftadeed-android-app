@@ -2,7 +2,7 @@ package giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
@@ -260,13 +260,13 @@ class GroupChannelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (channel.getName().contains("- CLB")) {
                 Glide.with(context)
                         .asBitmap()
-                        .load(R.drawable.agreement_icon)
+                        .load(R.drawable.ic_circular_collaboration)
                         .apply(myOptions)
                         .into(coverImage);
             } else {
                 Glide.with(context)
                         .asBitmap()
-                        .load(R.drawable.group_icon)
+                        .load(R.drawable.ic_circular_group)
                         .apply(myOptions)
                         .into(coverImage);
             }

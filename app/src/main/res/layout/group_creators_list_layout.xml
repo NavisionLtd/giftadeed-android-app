@@ -25,23 +25,23 @@
         android:inputType="text"
         android:singleLine="true"
         android:textColor="@color/colorPrimary"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/creatorlist_swipe_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_search_group"
         android:layout_above="@+id/btn_invite">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview_group_creators"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:clickable="true"
             android:visibility="gone" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/btn_invite"

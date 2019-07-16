@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="60dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="60dp"
             android:fillViewport="true">
 
             <LinearLayout
@@ -36,12 +37,13 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1.8"
-                        android:textColorHint="@color/grey">
+                        android:textColorHint="@color/grey"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/tv_select_group"
@@ -56,8 +58,8 @@
                             android:hint="@string/select_res_group"
                             android:longClickable="false"
                             android:textColor="@color/grey"
-                            android:textSize="16sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
                         android:layout_width="0dp"
@@ -74,12 +76,13 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1.8"
-                        android:textColorHint="@color/grey">
+                        android:textColorHint="@color/grey"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/resource_select_cat"
@@ -94,8 +97,8 @@
                             android:hint="@string/res_cat"
                             android:longClickable="false"
                             android:textColor="@color/grey"
-                            android:textSize="16sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
                         android:id="@+id/resource_selected_cat_image"
@@ -114,12 +117,13 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1.8"
-                        android:textColorHint="@color/grey">
+                        android:textColorHint="@color/grey"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/tv_select_sub_categories"
@@ -134,8 +138,8 @@
                             android:hint="@string/res_subcat"
                             android:longClickable="false"
                             android:textColor="@color/grey"
-                            android:textSize="16sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageView
                         android:layout_width="0dp"
@@ -157,13 +161,14 @@
                         android:layout_marginLeft="5dp"
                         android:src="@drawable/current_locn" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/resource_location_inputlayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:hint="@string/select_location"
-                        android:textColorHint="@color/grey">
+                        android:textColorHint="@color/grey"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/resource_location"
@@ -174,36 +179,53 @@
                             android:backgroundTint="@color/grey"
                             android:editable="false"
                             android:focusable="false"
-                            android:textColor="@color/grey" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:textColor="@color/grey"
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/editText_resource_name"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
-                    android:hint="@string/res_name"
-                    android:inputType="text"
-                    android:maxLength="100"
-                    android:singleLine="true"
-                    android:textColor="@color/grey"
-                    android:textSize="16sp" />
+                    android:textColorHint="@color/grey"
+                    app:hintTextAppearance="@style/TextLabel">
 
-                <EditText
-                    android:id="@+id/editText_resource_desc"
+                    <EditText
+                        android:id="@+id/editText_resource_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/grey"
+                        android:hint="@string/res_name"
+                        android:inputType="text"
+                        android:maxLength="100"
+                        android:singleLine="true"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
-                    android:hint="@string/res_desc"
-                    android:inputType="textMultiLine"
-                    android:maxLength="200"
-                    android:textColor="@color/grey"
-                    android:textSize="16sp" />
+                    android:textColorHint="@color/grey"
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <EditText
+                        android:id="@+id/editText_resource_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/grey"
+                        android:hint="@string/res_desc"
+                        android:inputType="textMultiLine"
+                        android:maxLength="200"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:id="@+id/select_resource_visibility"
@@ -213,11 +235,12 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:textColorHint="@color/grey">
+                        android:textColorHint="@color/grey"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/select_resource_audience"
@@ -232,8 +255,8 @@
                             android:hint="@string/res_audi"
                             android:longClickable="false"
                             android:textColor="@color/grey"
-                            android:textSize="16sp" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
@@ -247,9 +270,9 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/button_background"
-            android:text="@string/create_res"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
     </RelativeLayout>
 </FrameLayout>

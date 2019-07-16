@@ -1,8 +1,10 @@
 package giftadeed.kshantechsoft.com.giftadeed.PrivacyPolicy;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +13,16 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import giftadeed.kshantechsoft.com.giftadeed.Dashboard.Dashboard;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 ////////////////////////////////////////////////////////////////////
 //                                                               //
 //     Shows privacy policies of app                                  //
 /////////////////////////////////////////////////////////////////
 public class PrivacyPolicy extends Fragment {
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     View rootview;
     WebView txtAgreementDetails;
 

@@ -4,12 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
+
+
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -63,7 +71,7 @@ import retrofit.Retrofit;
 //                                                               //
 //     Shows list of tags in your area                          //
 /////////////////////////////////////////////////////////////////
-public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
+public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
     View rootview;
     RecyclerView recyclerView;
     List<RowData> item_list;
@@ -71,7 +79,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
     String strUser_ID;
     NeedListAdapter needListAdapter;
     SessionManager sessionManager;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     FragmentActivity myContext;
     String filter_category = Validation.FILTER_CATEGORY;
     String filter_groups = Validation.FILTER_GROUP_IDS;
@@ -193,7 +201,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -396,7 +404,7 @@ public class Tab2 extends android.support.v4.app.Fragment implements SwipeRefres
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");

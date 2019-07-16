@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardlaout"
         android:layout_width="match_parent"
         android:layout_height="130dp"
@@ -60,5 +60,5 @@
                 android:textSize="@dimen/gridmenu_textsize"
                 android:textStyle="bold" />
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

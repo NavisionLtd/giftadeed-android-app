@@ -88,6 +88,9 @@ public class Taggedlist {
     @SerializedName("from_group")
     @Expose
     private String fromGroupID;
+    @SerializedName("user_group_names")
+    @Expose
+    private String userGroupNames;
 
     public Taggedlist(String taggedTitle, String address, String fullFilledPhotoPath, String charpath, String fullFilledDatetime, String fullFilledPoints, String status,String views,String endorse,String permanent) {
         this.taggedTitle = taggedTitle;
@@ -337,5 +340,13 @@ public class Taggedlist {
 
     public void setFromGroupID(String fromGroupID) {
         this.fromGroupID = fromGroupID;
+    }
+
+    public String getUserGroupNames() {
+        return userGroupNames;
+    }
+
+    public void setUserGroupNames(String userGroupNames) {
+        this.userGroupNames = userGroupNames;
     }
 }

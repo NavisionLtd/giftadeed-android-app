@@ -1,12 +1,10 @@
 package giftadeed.kshantechsoft.com.giftadeed.Group;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import giftadeed.kshantechsoft.com.giftadeed.Collaboration.CollaborationListFragment;
-import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 
 /**
  * Created by I-Sys on 30-Nov-16.

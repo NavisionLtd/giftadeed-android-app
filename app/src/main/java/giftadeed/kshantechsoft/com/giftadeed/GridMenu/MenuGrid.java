@@ -2,11 +2,13 @@ package giftadeed.kshantechsoft.com.giftadeed.GridMenu;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +47,7 @@ import giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Condition;
 //     Shows menu on clicking about app from drawer              //
 /////////////////////////////////////////////////////////////////
 public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     SessionManager sharedPreferences;
     String strUserId, strUserName;
     static String NotificationCountnum;
@@ -69,7 +71,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
 
     public String[] texts = {"MY TAGS", "MY FULFILLED TAGS",
             "TOP 10 TAGGERS", "TOP 10 TAG FULFILLERS", "TAG COUNTER", "DASHBOARD", "ABOUT US", "TERMS AND CONDITIONS",
-            "PRIVACY POLICY", "COOKIES POLICY", "END-USER AGREEMENT", "DISCLAIMER", "FAQ", "CONTACT US"};
+            "PRIVACY POLICY", "COOKIES POLICY", "END-USER AGREEMENT", "DISCLAIMER", "FAQs", "CONTACT US"};
 
     public static MenuGrid newInstance(String sectionNumber) {
         NotificationCountnum = sectionNumber;
@@ -138,7 +140,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
         /**
          Simple GridLayoutManager that spans two columns
          **/
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
 
         final ArrayList<DataModel> androidversions = new ArrayList<>();
@@ -336,7 +338,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
                                                 //updateUI(false);
                                             }
                                         });
-                                int i = new DBGAD(getContext()).delete_row_message();
+
                                 sharedPreferences.set_notification_status("OFF");
                                 Intent loginintent = new Intent(getActivity(), SendBirdLoginActivity.class);
                                 loginintent.putExtra("message", "Charity");
@@ -379,7 +381,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();

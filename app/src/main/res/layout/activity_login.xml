@@ -50,7 +50,7 @@
                         android:text="SOS"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16dp" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -88,12 +88,13 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputlayoutemail"
                     android:layout_width="@dimen/logineditemailwd"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:textColorHint="#fff">
+                    android:textColorHint="#fff"
+                    app:hintTextAppearance="@style/TextLabel">
 
                     <EditText
                         android:id="@+id/loginemail"
@@ -106,15 +107,16 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#FFFFFF"
                         android:textSize="@dimen/finaltextfont" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputlayoutpassword"
                     android:layout_width="@dimen/logineditemailwd"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColorHint="#fff"
                     app:passwordToggleEnabled="true"
+                    app:hintTextAppearance="@style/TextLabel"
                     app:passwordToggleTint="@color/white">
 
                     <EditText
@@ -130,7 +132,7 @@
                         android:textColorHint="#FFFFFF"
                         android:textCursorDrawable="@drawable/cursorcolor"
                         android:textSize="@dimen/finaltextfont" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -176,8 +178,8 @@
                     android:id="@+id/signuptxt"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_marginLeft="3dp"
+                    android:gravity="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/finaltextfont"
                     android:textStyle="bold" />
@@ -331,7 +333,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="15dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -345,7 +347,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="15sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/txtagreeT_C_and"
@@ -353,7 +355,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:textColor="@color/white"
-                        android:textSize="15sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/txtagreePolicy_1"
@@ -361,7 +363,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="15sp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -413,6 +415,6 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="15dp" />
     </LinearLayout>
 </RelativeLayout>

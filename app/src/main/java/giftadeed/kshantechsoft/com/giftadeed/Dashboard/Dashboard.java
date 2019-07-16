@@ -2,9 +2,11 @@ package giftadeed.kshantechsoft.com.giftadeed.Dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +55,7 @@ import retrofit.Retrofit;
 /////////////////////////////////////////////////////////////////
 
 public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     View rootview;
     TextView txtdashboard_date, txtnumberoftags, txtnumberoffulfilments, txtsuccessfulpercent, txtdeedsscore,
             txtlsatdeed, txttotaltags, txttotalfulfills, txttagpercent, txttotalscore;
@@ -150,7 +152,7 @@ public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionF
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");

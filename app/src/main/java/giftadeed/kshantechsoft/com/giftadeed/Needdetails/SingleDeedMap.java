@@ -7,8 +7,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -35,7 +37,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 import static android.view.View.GONE;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -47,7 +48,7 @@ public class SingleDeedMap extends Fragment implements OnMapReadyCallback,
         , GoogleMap.OnMapLongClickListener {
     private GoogleMap mMap;
     View rootview;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     private double longitude;
     private double latitude;
     GPSTracker gpsTracker;

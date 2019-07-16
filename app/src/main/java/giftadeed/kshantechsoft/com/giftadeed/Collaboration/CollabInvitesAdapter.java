@@ -2,8 +2,8 @@ package giftadeed.kshantechsoft.com.giftadeed.Collaboration;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -165,14 +165,13 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(context).delete_row_message();
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(context, LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
                         context.startActivity(loginintent);
                     } else {
                         if (collabResponseStatus.getStatus() == 1) {
-                            Toast.makeText(context, "Status changed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, collabResponseStatus.getSuccessMsg(), Toast.LENGTH_SHORT).show();
 
                             ((CollabPendingInvitesFragment) fragment).getPendingInviteList();
 
@@ -189,7 +188,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                                 }
                             }
                         } else if (collabResponseStatus.getStatus() == 0) {
-                            Toast.makeText(context, context.getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, collabResponseStatus.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {

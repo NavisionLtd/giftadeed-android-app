@@ -48,7 +48,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/main_cat"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:visibility="gone" />
 
         <ListView
@@ -69,7 +69,7 @@
             android:layout_below="@+id/category_list"
             android:text="@string/group_cat"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:visibility="gone" />
 
         <ListView
@@ -92,5 +92,5 @@
             android:text="Cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
     </RelativeLayout>

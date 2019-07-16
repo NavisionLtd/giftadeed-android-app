@@ -48,7 +48,7 @@
             android:text="@string/dialog_ok"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
         <Button
             android:id="@+id/multi_category_cancel"
@@ -60,6 +60,6 @@
             android:text="@string/dialog_cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
     </LinearLayout>
 </LinearLayout>

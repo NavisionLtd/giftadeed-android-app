@@ -1,15 +1,15 @@
 package giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.openchannel;
 
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.sendbird.android.OpenChannel;
 import com.sendbird.android.SendBirdException;
 

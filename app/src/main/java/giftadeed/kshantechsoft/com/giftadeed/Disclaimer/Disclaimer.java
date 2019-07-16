@@ -1,8 +1,10 @@
 package giftadeed.kshantechsoft.com.giftadeed.Disclaimer;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,31 +16,22 @@ import android.webkit.WebView;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 
 ////////////////////////////////////////////////////////////////////
-//                                                               //
 //     Shows disclaimer of app                                  //
 /////////////////////////////////////////////////////////////////
 public class Disclaimer extends Fragment {
-
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     View rootview;
     WebView txtAgreementDetails;
     public static Disclaimer newInstance(int sectionNumber) {
         Disclaimer fragment = new Disclaimer();
-
         return fragment;
     }
-
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -59,10 +52,8 @@ public class Disclaimer extends Fragment {
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
-
         txtAgreementDetails= (WebView)rootview. findViewById(R.id.txtdisclaimer);
         txtAgreementDetails.loadUrl("file:///android_asset/Disclaimer.html");
-
         WebSettings settings = txtAgreementDetails.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);
@@ -103,7 +94,6 @@ public class Disclaimer extends Fragment {
 
     @Override
     public void onResume() {
-
         super.onResume();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getView().setFocusableInTouchMode(true);
@@ -123,5 +113,4 @@ public class Disclaimer extends Fragment {
             }
         });
     }
-
 }

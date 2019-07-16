@@ -1,6 +1,5 @@
 package giftadeed.kshantechsoft.com.giftadeed.Collaboration;
 
-import giftadeed.kshantechsoft.com.giftadeed.Group.Memberlist;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
 import retrofit.http.Field;

@@ -34,14 +34,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/res_added_by"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/tv_res_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -57,14 +57,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/res_name_1"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/tv_res_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,14 +81,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/description_1"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/tv_qty_per_person"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -105,14 +105,14 @@
                         android:layout_height="wrap_content"
                         android:text="Resource category : "
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/tv_res_cat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -130,14 +130,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/res_cat_1"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/tv_res_subcat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <TextView
@@ -147,7 +147,7 @@
                     android:layout_marginTop="10dp"
                     android:text="@string/res_location"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -177,7 +177,7 @@
                             android:layout_marginLeft="3dp"
                             android:layout_weight="0.8"
                             android:text=""
-                            android:textSize="14sp" />
+                            android:textSize="14dp" />
 
                         <ImageView
                             android:id="@+id/res_details_location_icon"
@@ -201,14 +201,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/res_created_on"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/tv_res_created"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

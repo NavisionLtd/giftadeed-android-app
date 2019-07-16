@@ -10,7 +10,7 @@ public class SubCategories {
     @SerializedName("sub_type_name")
     @Expose
     private String subCatName;
-    private Integer qty;
+    private String qty;
     private Boolean isChecked;
 
     public String getSubCatId() {
@@ -29,11 +29,11 @@ public class SubCategories {
         this.subCatName = subCatName;
     }
 
-    public Integer getQty() {
+    public String getQty() {
         return qty;
     }
 
-    public void setQty(Integer qty) {
+    public void setQty(String qty) {
         this.qty = qty;
     }
 

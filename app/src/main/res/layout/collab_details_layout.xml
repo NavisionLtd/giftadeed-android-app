@@ -13,7 +13,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_collab_desc"
@@ -23,7 +23,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:textColor="@color/grey"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_collab_group_name"
@@ -33,7 +33,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:textColor="@color/grey"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/tv_collab_start_date"
@@ -44,7 +44,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/grey"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <View
         android:layout_width="match_parent"
@@ -90,7 +90,7 @@
         android:visibility="gone"
         android:text="@string/no_members" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/collab_member_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

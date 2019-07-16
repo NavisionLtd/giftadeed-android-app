@@ -19,7 +19,7 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:textColor="@color/grey"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <LinearLayout
         android:id="@+id/count_layout"
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
+            android:textSize="16dp"
             android:text="@string/active_tags" />
 
         <TextView
@@ -54,9 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:textSize="15dp"
         android:text="@string/no_records_found" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/group_activetags_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

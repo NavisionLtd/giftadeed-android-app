@@ -24,7 +24,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="12dp"
         android:gravity="center"
-        android:textSize="14sp" />
+        android:textSize="14dp" />
 
     <LinearLayout
         android:id="@+id/layout_group_chat_file_message"

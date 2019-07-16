@@ -8,8 +8,10 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
@@ -42,6 +44,7 @@ public class SplashActivity extends AppCompatActivity {
     SessionManager sessionManager;
     String strUserId = null, message, address_show;
     String currentVersion = "", newVersion;
+    private static int SPLASH_TIME_OUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,38 +130,35 @@ public class SplashActivity extends AppCompatActivity {
     public void proceedToApp() {
         address_show = new GetingAddress(SplashActivity.this).getCompleteAddressString(new GPSTracker(SplashActivity.this).getLatitude(), new GPSTracker(SplashActivity.this).getLatitude());
         Log.d("address", address_show);
-        Thread timerThread = new Thread() {
+        new Handler().postDelayed(new Runnable() {
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+            @Override
             public void run() {
-                try {
-                    sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (!isBackPressed) {
-                        sessionManager = new SessionManager(getApplicationContext());
-                        HashMap<String, String> user = sessionManager.getUserDetails();
-                        strUserId = user.get(sessionManager.USER_ID);
-                        // Log.d("useridshared",strUserId);
-                        if (strUserId == null) {
-                            /*Intent i = new Intent(SplashActivity.this, MainActivity.class);
-                            startActivity(i);*/
-
-                            //messagecharity = "Charity";
-                            Intent log = new Intent(getApplicationContext(), LoginActivity.class);
-                            log.putExtra("message", "Charity");
-                            startActivity(log);
-                        } else {
-                            message = "Charity";
-                            Intent in = new Intent(SplashActivity.this, TaggedneedsActivity.class);
-                            in.putExtra("message", message);
-                            startActivity(in);
-                        }
+                // This method will be executed once the timer is over
+                // Start your app main activity
+                if (!isBackPressed) {
+                    sessionManager = new SessionManager(getApplicationContext());
+                    HashMap<String, String> user = sessionManager.getUserDetails();
+                    strUserId = user.get(sessionManager.USER_ID);
+                    if (strUserId == null) {
+                        //messagecharity = "Charity";
+                        Intent log = new Intent(getApplicationContext(), LoginActivity.class);
+                        log.putExtra("message", "Charity");
+                        startActivity(log);
+                    } else {
+                        message = "Charity";
+                        Intent in = new Intent(SplashActivity.this, TaggedneedsActivity.class);
+                        in.putExtra("message", message);
+                        startActivity(in);
                     }
                 }
+                // close this activity
+                finish();
             }
-        };
-        //   }
-        timerThread.start();
+        }, SPLASH_TIME_OUT);
     }
 
     class GetVersionCode extends AsyncTask<Void, String, String> {

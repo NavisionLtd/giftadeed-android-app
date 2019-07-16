@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@color/colorAccent"
-        android:gravity="center">
-    </LinearLayout>
+        android:gravity="center" />
 
     <ImageView
         android:layout_width="@dimen/gridmenuimg_height"
@@ -42,21 +41,21 @@
                 android:textAllCaps="false"
                 android:textSize="@dimen/finalheaderfont" />
 
-            <TextView
+           <!-- <TextView
                 android:id="@+id/txtfilterradius"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/distance"
-                android:textSize="@dimen/finaltextfont" />
+                android:textSize="@dimen/finaltextfont" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:orientation="horizontal"
                 android:weightSum="2">
 
                 <LinearLayout
@@ -64,29 +63,29 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                   <!-- <TextView
-                        android:id="@+id/txtfilterrminadius"
+                    <TextView
+                        android:id="@+id/txtfilterradius"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
-                        android:text="1KM(S)" />-->
+                        android:text="@string/distance"
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:gravity="right"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="right">
 
                     <TextView
                         android:id="@+id/txtfilterrmaxadius"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
-                        android:gravity="right"
                         android:layout_marginRight="10dp"
-                        android:text="10KM(S)" />
+                        android:gravity="right"
+                        android:text="10KM(S)"
+                        android:textSize="10dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -95,23 +94,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:dsb_indicatorColor="@color/colorAccent"
-                app:dsb_max="10"
                 app:dsb_indicatorElevation="0dp"
+                app:dsb_max="10"
                 app:dsb_progressColor="@color/colorAccent" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/txtdistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/time" />
+                android:text="@string/time"
+                android:textSize="15dp" />-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:orientation="horizontal"
                 android:weightSum="2">
 
                 <LinearLayout
@@ -119,29 +120,29 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <!--<TextView
-                        android:id="@+id/txtfiltermintime"
+                    <TextView
+                        android:id="@+id/txtdistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="10dp"
-                        android:text="1 Day" />-->
+                        android:text="@string/time"
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:gravity="right"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="right">
 
                     <TextView
                         android:id="@+id/txtfilterrmaxtime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:textSize="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="7 Day(S)" />
+                        android:gravity="right"
+                        android:text="7 Day(S)"
+                        android:textSize="10dp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -151,33 +152,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 app:dsb_indicatorColor="@color/colorAccent"
-                app:dsb_max="7"
                 app:dsb_indicatorElevation="0dp"
+                app:dsb_max="7"
                 app:dsb_progressColor="@color/colorAccent" />
 
-
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filterdcategorylength"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textColorHint="#000">
+                android:textColorHint="@color/grey"
+                app:hintTextAppearance="@style/TextLabel">
 
                 <EditText
-
                     android:id="@+id/ednotificationfiltercategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
-                    android:backgroundTint="#000"
+                    android:layout_marginRight="20dp"
+                    android:backgroundTint="@color/grey"
+                    android:textColor="@color/grey"
                     android:drawableRight="@android:drawable/arrow_down_float"
                     android:editable="false"
                     android:focusable="false"
-                    android:hint="@string/select_category" />
-            </android.support.design.widget.TextInputLayout>
-
+                    android:hint="@string/select_category"
+                    android:textSize="16dp" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <Button
@@ -186,6 +187,7 @@
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp"
             android:background="@color/colorAccent"
             android:text="@string/search"
@@ -193,5 +195,4 @@
             android:textColor="@color/white"
             android:textSize="@dimen/finalheaderfont" />
     </LinearLayout>
-
 </LinearLayout>

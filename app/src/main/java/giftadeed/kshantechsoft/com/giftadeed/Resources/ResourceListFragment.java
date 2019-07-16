@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -147,7 +148,7 @@ public class ResourceListFragment extends Fragment
             @Override
             public void onClick(View view) {
                 CreateResourceFragment createResourceFragment = new CreateResourceFragment();
-                sessionManager.createResourceDetails("create");
+                sessionManager.createResourceDetails("create","","");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();
             }
         });
@@ -190,7 +191,7 @@ public class ResourceListFragment extends Fragment
         switch (id) {
             case R.id.action_create_resource:
                 CreateResourceFragment createGroupFragment = new CreateResourceFragment();
-                sessionManager.createResourceDetails("create");
+                sessionManager.createResourceDetails("create","","");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
                 return true;
             default:
@@ -247,7 +248,7 @@ public class ResourceListFragment extends Fragment
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -311,7 +312,7 @@ public class ResourceListFragment extends Fragment
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();

@@ -92,7 +92,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_weight="0.5"
                             android:textColor="@color/grey"
-                            android:textSize="18sp" />
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/txtneeddetailsdate"
@@ -136,7 +136,7 @@
                                 android:id="@+id/tv_sub_types"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="15sp" />
+                                android:textSize="15dp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -253,6 +253,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/details_locationicon"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_marginBottom="3dp"
@@ -270,25 +271,31 @@
                                      android:layout_weight="0.5"
                                      android:src="@drawable/map_icon" />-->
 
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="3dp"
+                                    android:gravity="center"
+                                    android:src="@drawable/ic_get_direction"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="14dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="3dp"
+                                    android:gravity="center"
+                                    android:text="Get Directions"
+                                    android:textColor="@color/colorAccent"
+                                    android:textSize="14dp" />
+
                                 <TextView
                                     android:id="@+id/txtneeddetailsdistance"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="0.5"
+                                    android:layout_height="wrap_content"
                                     android:gravity="center"
                                     android:textColor="@color/colorAccent"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/details_locationicon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="Get Directions"
-                                    android:textColor="@color/colorPrimary"
-                                    android:textSize="14sp" />
-
+                                    android:textSize="14dp" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -318,7 +325,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/transparent_layout_background">
 
-                        <android.support.v4.widget.NestedScrollView
+                        <androidx.core.widget.NestedScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="fill_vertical"
@@ -339,7 +346,7 @@
                                 android:scrollbars="vertical"
                                 android:text=""
                                 android:textSize="@dimen/finaltextfont" />
-                        </android.support.v4.widget.NestedScrollView>
+                        </androidx.core.widget.NestedScrollView>
                     </LinearLayout>
 
                     <LinearLayout
@@ -462,8 +469,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:visibility="gone"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -497,6 +504,7 @@
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
                             android:text="@string/comment"
+                            android:textSize="16dp"
                             android:textStyle="bold" />
 
                         <LinearLayout
@@ -546,7 +554,7 @@
                                 android:text="@string/post"
                                 android:textAllCaps="false"
                                 android:textColor="@color/white"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
                         </LinearLayout>
 
                         <TextView

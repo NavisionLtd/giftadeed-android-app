@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fillViewport="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/layout_top"
@@ -37,10 +37,10 @@
             android:layout_marginTop="10dp"
             android:text="@string/main_cat"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:visibility="visible" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_category_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,10 +58,10 @@
             android:layout_marginTop="5dp"
             android:text="@string/group_cat"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:visibility="gone" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/res_custom_category_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/res_custom_category_list"
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
             <Button
@@ -86,7 +86,7 @@
                 android:text="@string/dialog_ok"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <Button
                 android:id="@+id/main_category_cancel"
@@ -96,10 +96,10 @@
                 android:layout_weight="0.5"
                 android:background="@color/colorAccent"
                 android:text="@string/dialog_cancel"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

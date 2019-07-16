@@ -14,6 +14,12 @@ public class CollabPOJO {
     @SerializedName("status")
     @Expose
     private Integer status;
+    @SerializedName("success_message")
+    @Expose
+    private String successMsg;
+    @SerializedName("error_message")
+    @Expose
+    private String errorMsg;
     @SerializedName("users_collaboration_list")
     @Expose
     public List<Colablist> colablist = null;
@@ -84,5 +90,21 @@ public class CollabPOJO {
 
     public void setGroupCreatorsList(List<Creatorslist> groupCreatorsList) {
         this.groupCreatorsList = groupCreatorsList;
+    }
+
+    public String getSuccessMsg() {
+        return successMsg;
+    }
+
+    public void setSuccessMsg(String successMsg) {
+        this.successMsg = successMsg;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 }

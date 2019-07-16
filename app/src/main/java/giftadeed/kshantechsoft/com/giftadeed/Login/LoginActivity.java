@@ -9,22 +9,12 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -41,6 +31,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -52,14 +48,19 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.linkedin.platform.APIHelper;
@@ -83,9 +84,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.EmergencyContact;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSOptionActivity;
 import giftadeed.kshantechsoft.com.giftadeed.FirstLogin.First_Login;
 import giftadeed.kshantechsoft.com.giftadeed.Needdetails.StatusModel;
@@ -123,7 +122,7 @@ import static giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails.context;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private TextView txtagreet_C, txtagreePolicy;
     ImageView fbbtn, linkedinbtn, googlebtn;
-    TextView notregistered,signup, forgot, loginheading, txtloginTermsandcondn, txtagree1, txtTermsAnd, txtSelectLanguage;
+    TextView notregistered, signup, forgot, loginheading, txtloginTermsandcondn, txtagree1, txtTermsAnd, txtSelectLanguage;
     private CheckBox chkbx;
     Button btnLogin, dialogconfirm, dialogcancel;
     TextInputLayout txtInpLoiginid, txtInpPasswrd;
@@ -150,6 +149,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     Configuration config;
     String storedLanguage;
     DatabaseAccess databaseAccess;
+    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +171,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
@@ -203,15 +206,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         btnSos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(LoginActivity.this, SOSOptionActivity.class);
-                sharedPreferences.store_sos_option1_clicked("no");
-                sharedPreferences.store_sos_option2_clicked("no");
-                sharedPreferences.store_sos_option3_clicked("no");
-                i.putExtra("callingfrom", "login");
-                startActivity(i);
+                if (checkPermission()) {
+                    // All Permissions Granted
+                    Intent i = new Intent(LoginActivity.this, SOSOptionActivity.class);
+                    sharedPreferences.store_sos_option1_clicked("no");
+                    sharedPreferences.store_sos_option2_clicked("no");
+                    sharedPreferences.store_sos_option3_clicked("no");
+                    i.putExtra("callingfrom", "login");
+                    startActivity(i);
 
                 /*Intent i = new Intent(LoginActivity.this, FadeInActivity.class);
                 startActivity(i);*/
+                } else {
+                    requestPermission();
+                    Toast.makeText(LoginActivity.this, "Please allow app permissions", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -360,21 +369,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                strEmail = email.getText().toString();
-                strPassword = password.getText().toString();
-                if (Validation.isStringNullOrBlank(email.getText().toString())) {
-                    ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
-                    email.requestFocus();
-                } else if (!(Validation.isValidEmailAddress(email.getText().toString().trim()))) {
-                    ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
-                    email.setText("");
-                    email.requestFocus();
-                } else if (Validation.isStringNullOrBlank(password.getText().toString())) {
-                    ToastPopUp.show(context, getString(R.string.enter_password));
-                    password.requestFocus();
-                    //password.requestFocus();
+                if (checkPermission()) {
+                    // All Permissions Granted
+                    strEmail = email.getText().toString();
+                    strPassword = password.getText().toString();
+                    if (Validation.isStringNullOrBlank(email.getText().toString())) {
+                        ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
+                        email.requestFocus();
+                    } else if (!(Validation.isValidEmailAddress(email.getText().toString().trim()))) {
+                        ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
+                        email.setText("");
+                        email.requestFocus();
+                    } else if (Validation.isStringNullOrBlank(password.getText().toString())) {
+                        ToastPopUp.show(context, getString(R.string.enter_password));
+                        password.requestFocus();
+                        //password.requestFocus();
+                    } else {
+                        login();
+                    }
                 } else {
-                    login();
+                    requestPermission();
+                    Toast.makeText(LoginActivity.this, "Please allow app permissions", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -431,8 +446,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         Log.e("town", "" + town);
                                         // do some stuff....
                                     }
-                                    //JSONObject hometown = arr.getJSONObject();
-
                                 } catch (Exception e) {
 
                                 }
@@ -504,8 +517,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         txtagree1 = findViewById(R.id.txtagreeagree_1);
         txtTermsAnd = findViewById(R.id.txtagreeT_C_and);
         txtSelectLanguage = findViewById(R.id.select_language_text);
-        //  fb_login = (TextView) findViewById(R.id.txtfb_login);
-        // txtlinkedIn_login = (TextView) findViewById(R.id.txtlinkedIn_login);
         txtsaperator = (TextView) findViewById(R.id.txtsaperator);
         fbbtn = (ImageView) findViewById(R.id.fb_btn);
         linkedinbtn = (ImageView) findViewById(R.id.linkedin_btn);
@@ -520,8 +531,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         password.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         txtInpLoiginid.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
         txtInpPasswrd.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
-//        fb_login.setTypeface(new FontDetails(SendBirdLoginActivity.this).fontStandardForPage);
-        //    txtlinkedIn_login.setTypeface(new FontDetails(SendBirdLoginActivity.this).fontStandardForPage);
         txtsaperator.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
     }
 
@@ -548,7 +557,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     //----------------------forgot password dialog--------------------------------------------------
     public void forgotpassworddialog() {
-
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         LayoutInflater li = LayoutInflater.from(this);
         final View confirmDialog = li.inflate(R.layout.activity_forgot, null);
@@ -708,7 +716,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
 
         LoginInterface service = retrofit.create(LoginInterface.class);
-        System.out.println("email:" + stremailaddress + strPassword);
+        Log.d("login_inputs", stremailaddress + "," + strPassword + "," + strDeviceid);
         Call<MobileModel> call = service.sendData(stremailaddress, strPassword, strDeviceid);
         call.enqueue(new Callback<MobileModel>() {
             @Override
@@ -718,7 +726,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     MobileModel result = new MobileModel();
                     String successstatus = response.body().getCheckstatus().get(0).getStatus();
                     // String msg = response.body().getCheckstatus().get(0).getMsg();
-                    System.out.println("successstatus" + successstatus);
+                    Log.d("successstatus", "" + successstatus);
                     // System.out.println("strMerchant_id" + strMerchant_id);
                     if (successstatus.equals("1")) {
                         String strMerchant_id = response.body().getCheckstatus().get(0).getUserID();
@@ -939,14 +947,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int FourthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
         int FifthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), READ_CONTACTS);
-//        int SixthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), SEND_SMS);
 
         return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 ThirdPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 FourthPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
-//                SixthPermissionResult == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -960,10 +966,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            int statusCode = result.getStatus().getStatusCode();
-            Log.d("statusCode", String.valueOf(statusCode));
-            handleSignInResult(result);
+//            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+//            int statusCode = result.getStatus().getStatusCode();
+//            Log.d("statusCode", String.valueOf(statusCode));
+
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
         }
     }
 
@@ -1044,9 +1054,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         Bugreport bg = new Bugreport();
                         bg.sendbug(writer.toString());
                     }
-                    /// String strFname = response.body().getCheckstatus().get(0).getFname();
-                    // String strLname = response.body().getCheckstatus().get(0).getLname();
-                    //String strFullName = strFname + " " + strLname;
                 }
 
                 @Override
@@ -1127,9 +1134,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Bugreport bg = new Bugreport();
                     bg.sendbug(writer.toString());
                 }
-                /// String strFname = response.body().getCheckstatus().get(0).getFname();
-                // String strLname = response.body().getCheckstatus().get(0).getLname();
-                //String strFullName = strFname + " " + strLname;
             }
 
             @Override
@@ -1148,11 +1152,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //-----------------------Back button press------------------------------------------------------
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
-        /*Intent intent = new Intent(SendBirdLoginActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);*/
-
         AlertDialog.Builder alert = new AlertDialog.Builder(LoginActivity.this);
         LayoutInflater li = LayoutInflater.from(LoginActivity.this);
         View confirmDialog = li.inflate(R.layout.giftneeddialog, null);
@@ -1171,15 +1170,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         dialogconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(SendBirdLoginActivity.this, SplashActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
                 alertDialogForgot.dismiss();
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-
-                //  Activity. SendBirdLoginActivity.finishAffinity()
                 finish();
             }
         });
@@ -1205,7 +1200,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Log.d("opr", opr.toString());
             Log.d("cached", "Got cached sign-in");
             GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
+//            handleSignInResult(result);
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -1215,7 +1210,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
                     // hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
+//                    handleSignInResult(googleSignInResult);
                 }
             });
         }
@@ -1231,15 +1226,61 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        //updateUI(false);
+    //added on 14 june 2019 by Bhakti
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            // Signed in successfully, show authenticated UI.
+            if (account != null) {
+                String personName = account.getDisplayName();
+                Log.e("Google_details", "display name: " + personName);
+                String first_name = account.getGivenName();
+                String last_name = account.getFamilyName();
+                String personEmail = account.getEmail();
+                try {
+                    Log.e("Google_details", "Name: " + first_name + " last name:" + last_name + ", email: " + personEmail);
+                    if (first_name.equals("null")) {
+                        mDialog.dismiss();
+                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        // Toast.makeText(SendBirdLoginActivity.this,"")
+                                        //updateUI(false);
+                                        signIn();
+                                    }
+                                });
+                        // mDialog.dismiss();
+                        // Toast.makeText(SendBirdLoginActivity.this, "Retry login", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //  linkedInLigin(first_name, last_name, email, "gp");
+                        linkedInLigin(first_name, last_name, personEmail, "gp");
                     }
-                });
+                } catch (Exception e) {
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                            new ResultCallback<Status>() {
+                                @Override
+                                public void onResult(Status status) {
+                                    // Toast.makeText(SendBirdLoginActivity.this,"")
+                                    //updateUI(false);
+                                    signIn();
+                                }
+                            });
+                    StringWriter writer = new StringWriter();
+                    e.printStackTrace(new PrintWriter(writer));
+                    Bugreport bg = new Bugreport();
+                    bg.sendbug(writer.toString());
+                }
+            }
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("Google_details", "signInResult:failed code=" + e.getStatusCode());
+        }
     }
+
 
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d("Google_details", "handleSignInResult:" + result.isSuccess());

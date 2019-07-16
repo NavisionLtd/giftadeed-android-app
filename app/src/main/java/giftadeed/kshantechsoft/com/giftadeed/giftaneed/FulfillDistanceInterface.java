@@ -12,7 +12,6 @@ import retrofit.http.POST;
  */
 
 public interface FulfillDistanceInterface {
-
     String path= WebServices.fulfildistance;
     @FormUrlEncoded
     @POST(path)

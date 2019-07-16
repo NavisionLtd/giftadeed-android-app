@@ -25,5 +25,5 @@ public interface RemoveMemberFromChannel {
             "Api-Token: " + apitoken
     })
     @PUT(pathUrl + "{channel_url}/leave")
-    Call<ResponseBody> removeMembers(@Path("channel_url") String userId, @Body RemoveUserFromClub object);
+    Call<ResponseBody> removeMembers(@Path("channel_url") String channelUrl, @Body RemoveUserFromClub object);
 }

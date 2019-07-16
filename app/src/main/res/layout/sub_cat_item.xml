@@ -18,7 +18,7 @@
             android:layout_weight="0.5"
             android:text="Veg"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -30,23 +30,26 @@
                 android:id="@+id/iv_minus"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_minus" />
+                android:src="@drawable/substract" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_sub_cat_qty"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="0"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:background="@drawable/textbox_transparent"
+                android:focusable="true"
+                android:inputType="number"
+                android:maxLength="5"
+                android:text="1"
+                android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <ImageView
                 android:id="@+id/iv_plus"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_plus" />
+                android:src="@drawable/add" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -156,7 +157,7 @@ public class GroupsListFragment extends Fragment
         btnCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.support.v4.app.FragmentManager newfrag;
+                FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
                 CreateGroupFragment createGroupFragment = new CreateGroupFragment();
                 sessionManager.createGroupDetails("create", "", "", "", "");
@@ -168,7 +169,7 @@ public class GroupsListFragment extends Fragment
                 recyclerView, new RecyclerViewClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                android.support.v4.app.FragmentManager newfrag;
+                FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
                 Log.d("infogrp", "" + groupArrayList.get(position).getGroup_id() + groupArrayList.get(position).getGroup_name());
                 sessionManager.createGroupDetails("", groupArrayList.get(position).getGroup_id(), groupArrayList.get(position).getGroup_name(), groupArrayList.get(position).getGroup_desc(), groupArrayList.get(position).getGroup_image());
@@ -242,7 +243,7 @@ public class GroupsListFragment extends Fragment
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -329,7 +330,7 @@ public class GroupsListFragment extends Fragment
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();

@@ -1,210 +1,221 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    tools:context="giftadeed.kshantechsoft.com.giftadeed.giftaneed.GiftANeedFrag">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/ButtonLayout"
-        android:layout_width="fill_parent"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:baselineAligned="false">
+        android:layout_marginBottom="60dp"
+        android:scrollbars="vertical">
 
-        <ScrollView
-            android:id="@+id/scrollgiftneed"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:fillViewport="true">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/btnsubmitgift"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/colorAccent"
-                    android:text="@string/submit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/finalheaderfont" />
+            <LinearLayout
+                android:id="@+id/gift_first_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:gravity="center">
 
-                    <LinearLayout
+                    <ImageView
+                        android:id="@+id/giftneedimg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="20dp"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="@dimen/uploadimg"
-                                android:layout_height="@dimen/uploadimg"
-                                android:layout_gravity="center"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:id="@+id/giftneedimg"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/imgbackground"
-                                    android:src="@drawable/uploadimage_icon" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center">
-
-                                <TextView
-                                    android:id="@+id/txtgiftaneeduploadpic"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="5dp"
-                                    android:gravity="center"
-                                    android:text="@string/upload_picture"
-                                    android:textSize="@dimen/finaltextfont" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center"
-                                android:orientation="horizontal">
-
-                                <Button
-                                    android:id="@+id/giftcamera"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="20dp"
-                                    android:background="@color/colorPrimary"
-                                    android:drawableLeft="@drawable/cam"
-                                    android:drawablePadding="10dp"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="11dp"
-                                    android:text="@string/snap"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/finaltextfont" />
-
-                                <Button
-                                    android:id="@+id/giftgallary"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="20dp"
-                                    android:background="@color/colorPrimary"
-                                    android:drawableLeft="@drawable/btn_image"
-                                    android:drawablePadding="10dp"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="11dp"
-                                    android:text="@string/browse"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/finaltextfont" />
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="20dp"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="16dp"
-                                    android:text="@string/is_this_deed"
-                                    android:textColor="@color/black"
-                                    android:textSize="16sp" />
-
-                                <android.support.v7.widget.SwitchCompat
-                                    android:id="@+id/switch_fulfil"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:layout_marginLeft="10dp"
-                                    app:showText="false"/>
-
-                                <TextView
-                                    android:id="@+id/switch_text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:textColor="@color/black"
-                                    android:textSize="16sp"
-                                    android:text="@string/exit_yes"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp">
-
-                                <TextView
-                                    android:id="@+id/txtgiftaneed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="16dp"
-                                    android:text="@string/tell_people"
-                                    android:textColor="@color/black"
-                                    android:textSize="16sp" />
-                            </LinearLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:id="@+id/inputlayoutpassword"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="20dp"
-                                android:hint="@string/start_writing"
-                                android:textColorHint="#000000">
-
-                                <EditText
-                                    android:id="@+id/edgiftaneedsomething"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginLeft="16dp"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_marginBottom="20dp"
-                                    android:backgroundTint="#000"
-                                    android:focusable="true"
-                                    android:focusableInTouchMode="true"
-                                    android:inputType="text|textFilter"
-                                    android:maxLength="50"/>
-                            </android.support.design.widget.TextInputLayout>
-                        </LinearLayout>
-                    </LinearLayout>
+                        android:src="@drawable/imagedefault" />
                 </LinearLayout>
-            </RelativeLayout>
-        </ScrollView>
-    </RelativeLayout>
-</FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/giftcamera"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_button_background"
+                        android:drawableLeft="@drawable/cam_1"
+                        android:drawablePadding="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="11dp"
+                        android:text="@string/take_picture"
+                        android:textAllCaps="false"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+
+                    <Button
+                        android:id="@+id/giftgallary"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_button_background"
+                        android:drawableLeft="@drawable/gallery_1"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="11dp"
+                        android:text="@string/browse"
+                        android:textAllCaps="false"
+                        android:textColor="@color/grey"
+                        android:textSize="16dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gift_second_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/gift_first_linear"
+                android:layout_marginLeft="10dp"
+                android:weightSum="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:text="@string/is_this_deed"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_fulfil"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:checked="true"
+                    app:showText="false" />
+
+                <TextView
+                    android:id="@+id/switch_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="0.1"
+                    android:text="@string/exit_yes"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gift_people_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/gift_second_linear"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/people_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:text="People benefited?"
+                    android:textColor="@color/black"
+                    android:textColorHint="#000000"
+                    android:textSize="16dp" />
+
+                <ImageView
+                    android:id="@+id/info_benefited_help"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_information" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/image_minus"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/substract" />
+
+                    <EditText
+                        android:id="@+id/no_of_fulfilled"
+                        android:layout_width="60dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/textbox_transparent"
+                        android:focusable="true"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:text="1"
+                        android:selectAllOnFocus="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <ImageView
+                        android:id="@+id/image_plus"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/add" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/gift_people_count"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/speakers" />
+
+                <EditText
+                    android:id="@+id/edgiftaneedsomething"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="@string/tell_people"
+                    android:inputType="text|textFilter"
+                    android:maxLength="50"
+                    android:textSize="16dp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnsubmitgift"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent"
+        android:focusable="true"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/finalheaderfont" />
+</RelativeLayout>

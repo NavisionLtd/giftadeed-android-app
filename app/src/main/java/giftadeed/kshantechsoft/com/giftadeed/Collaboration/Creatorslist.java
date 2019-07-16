@@ -16,6 +16,9 @@ public class Creatorslist {
     @SerializedName("last_name")
     @Expose
     private String lastName;
+    @SerializedName("invited_already")
+    @Expose
+    private String invitedAlready;
     private boolean isSelected;
 
     public String getUserId() {
@@ -48,6 +51,14 @@ public class Creatorslist {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getInvitedAlready() {
+        return invitedAlready;
+    }
+
+    public void setInvitedAlready(String invitedAlready) {
+        this.invitedAlready = invitedAlready;
     }
 
     public boolean isSelected() {

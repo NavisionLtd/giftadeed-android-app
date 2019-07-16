@@ -12,14 +12,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,6 +32,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.leo.simplearcloader.SimpleArcDialog;
 
 import java.util.HashMap;
@@ -55,7 +59,7 @@ public class TaggedneedsFrag extends Fragment {
     SessionManager sessionManager;
     String strUserId;
     SimpleArcDialog mDialog;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     String selectedLangugae;
     Locale locale;
     Configuration config;
@@ -154,7 +158,7 @@ public class TaggedneedsFrag extends Fragment {
                 bundle.putString("page", "taggedneedspage");
                 TagaNeed mainHomeFragment = new TagaNeed();
                 mainHomeFragment.setArguments(bundle);
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                FragmentTransaction fragmentTransaction =
                         getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, mainHomeFragment).addToBackStack(null);
                 fragmentTransaction.commit();
@@ -169,7 +173,7 @@ public class TaggedneedsFrag extends Fragment {
                 bundle.putString("tab", selected_tab);
                 FilterFrag mainHomeFragment = new FilterFrag();
                 mainHomeFragment.setArguments(bundle);
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                FragmentTransaction fragmentTransaction =
                         getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                 fragmentTransaction.commit();

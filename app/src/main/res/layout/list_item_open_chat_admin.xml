@@ -17,7 +17,7 @@
         android:layout_marginBottom="8dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="14sp" />
+        android:textSize="14dp" />
 
     <TextView
         android:text="User has enterered the chat"

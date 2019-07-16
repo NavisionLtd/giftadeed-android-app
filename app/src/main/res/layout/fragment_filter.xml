@@ -50,13 +50,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:textSize="15dp"
                 android:text="10 km" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filterdcategorylength"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                app:hintTextAppearance="@style/TextLabel"
                 android:textColorHint="@color/grey">
 
                 <EditText
@@ -70,14 +72,16 @@
                     android:drawableRight="@android:drawable/arrow_down_float"
                     android:editable="false"
                     android:focusable="false"
+                    android:textSize="15dp"
                     android:hint="@string/select_category"
                     android:textColor="@color/grey" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/filtergrouplayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:hintTextAppearance="@style/TextLabel"
                 android:layout_below="@+id/filterdcategorylength"
                 android:layout_marginTop="10dp"
                 android:textColorHint="@color/grey">
@@ -91,12 +95,13 @@
                     android:layout_marginRight="20dp"
                     android:backgroundTint="@color/grey"
                     android:visibility="gone"
+                    android:textSize="15dp"
                     android:drawableRight="@android:drawable/arrow_down_float"
                     android:editable="false"
                     android:focusable="false"
                     android:hint="@string/filter_group"
                     android:textColor="@color/grey" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <Button

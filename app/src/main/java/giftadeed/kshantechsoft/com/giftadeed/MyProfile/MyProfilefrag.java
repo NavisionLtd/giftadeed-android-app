@@ -10,15 +10,21 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CircularBorderDrawable;
-import android.support.design.widget.TextInputLayout;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.material.textfield.TextInputLayout;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.DrawerLayout;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.core.content.FileProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,7 +40,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -52,8 +57,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,7 +64,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.leo.simplearcloader.ArcConfiguration;
@@ -134,9 +136,9 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     View rootview;
     CircleImageView profilePic;
     Button changeProfilePic;
-    static android.support.v4.app.Fragment fragment;
+    static Fragment fragment;
     // FragmentManager fragmentManager;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     FragmentActivity myContext;
     String strProfilrName, strCreditpoints, strUserId, strfname, stremail, strmobile, strgender, strprivacy;
     String strCountry, contryid, strState, stateid, strCity, cityid;
@@ -237,7 +239,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         if (path.length() > 0) {
                             Glide.with(getContext()).load(path).into(profilePic);
                         } else {
-                            Glide.with(getContext()).load(R.drawable.profimg).into(profilePic);
+                            Glide.with(getContext()).load(R.drawable.ic_default_profile_pic).into(profilePic);
                         }
                     }
                 }
@@ -551,7 +553,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         edAddress.setText("");
                     } else if (!(strAddress.matches(".*[a-zA-Z]+.*"))) {
 
-                        ToastPopUp.displayToast(getContext(), "Address should contain alphabet");
+                        ToastPopUp.displayToast(getContext(), getResources().getString(R.string.address_toast));
                         edAddress.setText("");
                     }
                 }
@@ -665,14 +667,14 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
                         edpassword.setText("");
                     } else if (!(strPassword.matches(".*[a-zA-Z]+.*"))) {
-                        ToastPopUp.displayToast(getActivity(), "Password should contain atleast one alphabet");
+                        ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast_1));
                         edpassword.setText("");
                     } else if (!(strPassword.matches(".*[!@#$%^&*()]+.*"))) {
-                        ToastPopUp.displayToast(getActivity(), "Password should contain atleast one special character");
+                        ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast_2));
                         edpassword.setText("");
 
                     } else if (!(strPassword.matches(".*[0-9]+.*"))) {
-                        ToastPopUp.displayToast(getActivity(), "Password should contain atleast one number");
+                        ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast_3));
                         edpassword.setText("");
                     }
                 }
@@ -752,7 +754,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();
@@ -999,7 +1001,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -1720,7 +1722,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -1731,7 +1733,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         if (successstatus.equals("1")) {
                             strmobile = "";
                             String strFullName = fname + " " + lname;
-                            ToastPopUp.displayToast(getActivity(), "Profile updated successfully");
+                            ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.profile_updated));
                             sessionManager.createUserCredentialSession(strUserId, strFullName, privacy);
                             HashMap<String, String> user = sessionManager.getUserDetails();
                             strUserId = user.get(sessionManager.USER_ID);
@@ -1769,7 +1771,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                                 fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).addToBackStack(null).commit();
                             }
                         } else {
-                            ToastPopUp.displayToast(getActivity(), "Updation failed");
+                            ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.updation_failed));
                         }
                     }
                     mDialog.dismiss();
@@ -1962,14 +1964,14 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     edAddress.setText("");
                 } else if (!(strAddress.matches(".*[a-zA-Z]+.*"))) {
 
-                    ToastPopUp.displayToast(getContext(), "Address should contain alphabet");
+                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.address_toast));
                     edAddress.setText("");
                 } else if (strCountry.length() < 1) {
-                    ToastPopUp.displayToast(getActivity(), "Select your country");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_country));
                 } else if (strState.length() < 1) {
-                    ToastPopUp.displayToast(getActivity(), "Select your state");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_state));
                 } else if (strCity.length() < 1) {
-                    ToastPopUp.displayToast(getActivity(), "Select your city");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_city));
                 } else if (edpassword.getVisibility() == View.VISIBLE) {
                     if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
@@ -1978,14 +1980,14 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         edpassword.setText("");
                     } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
 
-                        ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                        ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                         edpassword.setText("");
                     } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
-                        ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                        ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                         edpassword.setText("");
 
                     } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
-                        ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                        ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                         edpassword.setText("");
                     } else {
                         if (!(Validation.isOnline(getActivity()))) {
@@ -2004,11 +2006,11 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     }
                 }
             } else if (strCountry.length() < 1) {
-                ToastPopUp.displayToast(getActivity(), "Select your country");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_country));
             } else if (strState.length() < 1) {
-                ToastPopUp.displayToast(getActivity(), "Select your state");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_state));
             } else if (strCity.length() < 1) {
-                ToastPopUp.displayToast(getActivity(), "Select your city");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_city));
             } else if (edpassword.getVisibility() == View.VISIBLE) {
                 if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
@@ -2017,14 +2019,14 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     edpassword.setText("");
                 } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
 
-                    ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
                 } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
-                    ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
 
                 } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
-                    ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
                 } else {
                     if (!(Validation.isOnline(getActivity()))) {
@@ -2063,7 +2065,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 edAddress.setText("");
             } else if (!(strAddress.matches(".*[a-zA-Z]+.*"))) {
 
-                ToastPopUp.displayToast(getContext(), "Address should contain alphabet");
+                ToastPopUp.displayToast(getContext(), getResources().getString(R.string.address_toast));
                 edAddress.setText("");
             } else if ((edFname.getText().toString().length() < 3) || (edFname.getText().toString().length() > 15)) {
                 edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -2074,11 +2076,11 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
 
             } else if (strCountry.length() < 1) {
-                ToastPopUp.displayToast(getActivity(), "Select your country");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_country));
             } else if (strState.length() < 1) {
-                ToastPopUp.displayToast(getActivity(), "Select your state");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_state));
             } else if (strCity.length() < 1) {
-                ToastPopUp.displayToast(getActivity(), "Select your city");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_city));
             } else if (edpassword.getVisibility() == View.VISIBLE) {
                 if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
@@ -2087,14 +2089,14 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     edpassword.setText("");
                 } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
 
-                    ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
                 } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
-                    ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
 
                 } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
-                    ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                    ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
                 } else {
                     if (!(Validation.isOnline(getActivity()))) {
@@ -2113,11 +2115,11 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 }
             }
         } else if (strCountry.length() < 1) {
-            ToastPopUp.displayToast(getActivity(), "Select your country");
+            ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_country));
         } else if (strState.length() < 1) {
-            ToastPopUp.displayToast(getActivity(), "Select your state");
+            ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_state));
         } else if (strCity.length() < 1) {
-            ToastPopUp.displayToast(getActivity(), "Select your city");
+            ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_city));
         } else if (edpassword.getVisibility() == View.VISIBLE) {
             if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                 ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
@@ -2126,14 +2128,14 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 edpassword.setText("");
             } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
 
-                ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                 edpassword.setText("");
             } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
-                ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                 edpassword.setText("");
 
             } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
-                ToastPopUp.displayToast(getActivity(), "Password should contain at least one number, one special character and one alphabet");
+                ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                 edpassword.setText("");
             } else {
                 if (!(Validation.isOnline(getActivity()))) {
@@ -2170,7 +2172,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();

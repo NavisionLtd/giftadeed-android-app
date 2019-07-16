@@ -89,7 +89,7 @@
                                 android:text="@string/take_picture"
                                 android:textAllCaps="false"
                                 android:textColor="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
 
                             <Button
                                 android:id="@+id/btngiftaneedgallary"
@@ -104,7 +104,7 @@
                                 android:text="@string/browse"
                                 android:textAllCaps="false"
                                 android:textColor="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -139,12 +139,13 @@
                             android:visibility="gone"
                             android:weightSum="2">
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/taganeedgrouplength"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:layout_weight="1.8"
+                                app:hintTextAppearance="@style/TextLabel"
                                 android:textColorHint="@color/grey">
 
                                 <EditText
@@ -160,8 +161,8 @@
                                     android:hint="@string/select_res_group"
                                     android:longClickable="false"
                                     android:textColor="@color/grey"
-                                    android:textSize="16sp" />
-                            </android.support.design.widget.TextInputLayout>
+                                    android:textSize="16dp" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageView
                                 android:layout_width="0dp"
@@ -177,12 +178,13 @@
                             android:orientation="horizontal"
                             android:weightSum="2">
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/taganeedcategorylength"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
                                 android:layout_weight="1.8"
+                                app:hintTextAppearance="@style/TextLabel"
                                 android:textColorHint="@color/grey">
 
                                 <EditText
@@ -197,8 +199,8 @@
                                     android:hint="@string/select_category"
                                     android:longClickable="false"
                                     android:textColor="@color/grey"
-                                    android:textSize="16sp" />
-                            </android.support.design.widget.TextInputLayout>
+                                    android:textSize="16dp" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageView
                                 android:id="@+id/imgselectcategoryimg"
@@ -217,10 +219,11 @@
                             android:orientation="horizontal"
                             android:weightSum="2">
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.8"
+                                app:hintTextAppearance="@style/TextLabel"
                                 android:textColorHint="@color/grey">
 
                                 <EditText
@@ -236,8 +239,8 @@
                                     android:hint="@string/select_pref"
                                     android:longClickable="false"
                                     android:textColor="@color/grey"
-                                    android:textSize="16sp" />
-                            </android.support.design.widget.TextInputLayout>
+                                    android:textSize="16dp" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageView
                                 android:layout_width="0dp"
@@ -268,7 +271,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/container_available"
                                 android:textColor="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -300,12 +303,13 @@
                                 android:paddingTop="27dp"
                                 android:src="@drawable/current_locn" />
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/inputlayouttagneedlocation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="15dp"
                                 android:layout_marginRight="10dp"
+                                app:hintTextAppearance="@style/TextLabel"
                                 android:textColorHint="@color/grey">
 
                                 <EditText
@@ -319,8 +323,8 @@
                                     android:focusable="false"
                                     android:hint="@string/select_location"
                                     android:textColor="@color/grey"
-                                    android:textSize="16sp" />
-                            </android.support.design.widget.TextInputLayout>
+                                    android:textSize="16dp" />
+                            </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -338,7 +342,7 @@
                                 android:layout_weight="0.8"
                                 android:text="@string/permanent_location"
                                 android:textColor="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
 
                             <Switch
                                 android:id="@+id/switch_location"
@@ -368,7 +372,7 @@
                                 android:gravity="left"
                                 android:text="@string/deed_validity_heading"
                                 android:textColor="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
 
                             <TextView
                                 android:id="@+id/txtvalidity"
@@ -380,7 +384,7 @@
                                 android:gravity="center"
                                 android:text="3hr(s)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
                         </LinearLayout>
 
                         <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -405,11 +409,12 @@
                             android:orientation="horizontal"
                             android:weightSum="2">
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:layout_weight="1.8"
+                                app:hintTextAppearance="@style/TextLabel"
                                 android:textColorHint="@color/grey">
 
                                 <EditText
@@ -424,8 +429,8 @@
                                     android:hint="@string/select_audiance"
                                     android:longClickable="false"
                                     android:textColor="@color/grey"
-                                    android:textSize="16sp" />
-                            </android.support.design.widget.TextInputLayout>
+                                    android:textSize="16dp" />
+                            </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageView
                                 android:layout_width="0dp"
@@ -433,39 +438,6 @@
                                 android:layout_gravity="center"
                                 android:layout_weight="0.2" />
                         </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/txttaganeedshortdescription"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="5dp"
-                            android:text="Short description"
-                            android:textSize="20dp"
-                            android:visibility="gone" />
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/inputlayouttagneedshortdiscription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginRight="10dp"
-                            android:textColorHint="@color/grey"
-                            android:visibility="gone">
-
-                            <EditText
-                                android:id="@+id/edtaganeedshortDescription"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="10dp"
-                                android:backgroundTint="@color/grey"
-                                android:hint="Start writing here... "
-                                android:maxLength="35"
-                                android:singleLine="true"
-                                android:visibility="gone" />
-                        </android.support.design.widget.TextInputLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -480,10 +452,10 @@
                                 android:layout_marginTop="10dp"
                                 android:text="@string/description"
                                 android:textColor="@color/grey"
-                                android:textSize="16sp" />
+                                android:textSize="16dp" />
                         </LinearLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputlayouttagneeddescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -498,13 +470,13 @@
                                 android:layout_marginRight="10dp"
                                 android:layout_marginBottom="50dp"
                                 android:backgroundTint="@color/grey"
-                                android:hint=""
+                                android:text="A person is needy"
                                 android:inputType="textMultiLine|textFilter"
                                 android:maxLength="501"
                                 android:scrollbars="vertical"
                                 android:textColor="@color/grey"
-                                android:textSize="16sp" />
-                        </android.support.design.widget.TextInputLayout>
+                                android:textSize="16dp" />
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -522,6 +494,6 @@
             android:text="@string/post"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
     </RelativeLayout>
 </FrameLayout>

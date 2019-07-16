@@ -2,18 +2,21 @@ package giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
@@ -23,8 +26,15 @@ import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class SOSEmergencyNumbers extends AppCompatActivity {
     private static final int PICK_CONTACT = 1000;
+    public static final int RequestPermissionCode = 1;
     int flag = 0;
     EditText et_contact_1, et_contact_2;
     ImageView contactBook1, contactBook2;
@@ -62,18 +72,30 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
         contactBook1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, PICK_CONTACT);
-                flag = 1;
+                if (checkPermission()) {
+                    // All Permissions Granted
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(intent, PICK_CONTACT);
+                    flag = 1;
+                } else {
+                    requestPermission();
+                    Toast.makeText(SOSEmergencyNumbers.this, "Please allow app permissions", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         contactBook2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, PICK_CONTACT);
-                flag = 2;
+                if (checkPermission()) {
+                    // All Permissions Granted
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(intent, PICK_CONTACT);
+                    flag = 2;
+                } else {
+                    requestPermission();
+                    Toast.makeText(SOSEmergencyNumbers.this, "Please allow app permissions", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -82,10 +104,10 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
             public void onClick(View v) {
                 if ((et_contact_1.getText().length() > 0) || (et_contact_2.getText().length() > 0)) {
                     databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString());
-                    ToastPopUp.displayToast(SOSEmergencyNumbers.this, "Contacts saved");
+                    ToastPopUp.displayToast(SOSEmergencyNumbers.this, getResources().getString(R.string.contact_saved));
                 } else if ((et_contact_1.getText().length() == 0) && (et_contact_2.getText().length() == 0)) {
                     databaseAccess.updateContact("1", "", "");
-                    ToastPopUp.displayToast(SOSEmergencyNumbers.this, "Contacts saved");
+                    ToastPopUp.displayToast(SOSEmergencyNumbers.this, getResources().getString(R.string.contact_saved));
                 }
                 if (callingfrom.equals("login")) {
                     SOSEmergencyNumbers.this.finish();
@@ -158,7 +180,7 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
                                 et_contact_2.setText(contactNumber);
                             }
                         } else {
-                            ToastPopUp.displayToast(SOSEmergencyNumbers.this, "Blank contact number");
+                            ToastPopUp.displayToast(SOSEmergencyNumbers.this, getResources().getString(R.string.blank_contact_number));
                         }
                     }
                 }
@@ -178,5 +200,34 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
             Intent i = new Intent(getBaseContext(), TaggedneedsActivity.class);
             startActivity(i);
         }
+    }
+
+    //-------------------requests all permissions-------------------------------------------------------
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(SOSEmergencyNumbers.this, new String[]
+                {
+                        CAMERA,
+                        READ_EXTERNAL_STORAGE,
+                        WRITE_EXTERNAL_STORAGE,
+                        ACCESS_FINE_LOCATION,
+                        READ_CONTACTS
+                }, RequestPermissionCode);
+    }
+
+    //---------------------------------check permissions method-------------------------------------
+    public boolean checkPermission() {
+        int FirstPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        int SecondPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
+        int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+        int FourthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+        int FifthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), READ_CONTACTS);
+//        int SixthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), SEND_SMS);
+
+        return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                ThirdPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                FourthPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
+//                SixthPermissionResult == PackageManager.PERMISSION_GRANTED;
     }
 }

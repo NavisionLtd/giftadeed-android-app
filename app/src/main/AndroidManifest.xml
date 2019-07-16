@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="giftadeed.kshantechsoft.com.giftadeed">
 
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -14,7 +21,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <supports-screens
@@ -27,22 +33,34 @@
 
     <application
         android:name=".ActiveUser.GiftAdeed"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:resizeableActivity="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:allowBackup">
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -59,11 +77,6 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_key" />
-
         <activity
             android:name=".TaggedNeeds.TaggedneedsActivity"
             android:configChanges="orientation"
@@ -105,18 +118,7 @@
         <activity
             android:name=".Animation.FadeInActivity"
             android:configChanges="orientation"
-            android:theme="@style/Theme.Transparent"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".DownloadMarkersIcons.DownloadMarkersIcons"
-            android:configChanges="orientation"
-            android:hardwareAccelerated="false"
-            android:screenOrientation="portrait">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".Signup.SignUp"
             android:configChanges="orientation"
@@ -145,13 +147,13 @@
         <activity android:name=".PrivacyPolicy.Privacy_policy" />
         <activity
             android:name=".EmergencyPositioning.EmergencyStageTwo"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".EmergencyPositioning.SOSDetailsActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".MyProfile.ShowImageActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".EmergencyPositioning.GetAddressIntentService"
@@ -199,4 +201,5 @@
         <activity android:name=".SendBirdChat.utils.Activity_Audio" />
         <activity android:name=".SendBirdChat.utils.VideoPlayer" />
     </application>
+
 </manifest>

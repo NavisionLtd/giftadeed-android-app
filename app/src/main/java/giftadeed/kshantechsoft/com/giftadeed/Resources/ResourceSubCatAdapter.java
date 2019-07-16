@@ -1,12 +1,12 @@
 package giftadeed.kshantechsoft.com.giftadeed.Resources;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -14,37 +14,29 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 
 public class ResourceSubCatAdapter extends RecyclerView.Adapter<ResourceSubCatAdapter.ViewHolder> {
     ArrayList<MultiSubCategories> list = new ArrayList<>();
-    Context context;
 
-    public ResourceSubCatAdapter(ArrayList<MultiSubCategories> subcategories, Context context) {
-        this.list = subcategories;
-        this.context = context;
+    public ResourceSubCatAdapter(ArrayList<MultiSubCategories> subcategories) {
+        this.list = new ArrayList<>(subcategories);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.resource_sub_cat_item, parent, false);
-        return new ResourceSubCatAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ResourceSubCatAdapter.ViewHolder holder, final int position) {
-        holder.mCheckedTextView.setText(String.valueOf(list.get(position).getNeedname()) + " : " +String.valueOf(list.get(position).getSubCatName()));
-
-        if (list.get(position).getChecked()) {
-            holder.mCheckedTextView.setChecked(true);
-        } else {
-            holder.mCheckedTextView.setChecked(false);
-        }
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        holder.bindData(list.get(position));
+        //in some cases, it will prevent unwanted situations
+        holder.mCheckedTextView.setOnCheckedChangeListener(null);
+        //if true, your checkbox will be selected, else unselected
+        holder.mCheckedTextView.setChecked(list.get(position).getChecked());
 
         holder.mCheckedTextView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                if (checked) {
-                    list.get(position).setChecked(true);
-                } else {
-                    list.get(position).setChecked(false);
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                list.get(holder.getAdapterPosition()).setChecked(isChecked);
             }
         });
     }
@@ -57,12 +49,16 @@ public class ResourceSubCatAdapter extends RecyclerView.Adapter<ResourceSubCatAd
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        CheckBox mCheckedTextView;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private CheckBox mCheckedTextView;
 
         public ViewHolder(View view) {
             super(view);
             mCheckedTextView = (CheckBox) itemView.findViewById(R.id.chk_subcatname);
+        }
+
+        public void bindData(MultiSubCategories subcat) {
+            mCheckedTextView.setText(String.valueOf(subcat.getNeedname()) + " : " + String.valueOf(subcat.getSubCatName()));
         }
     }
 }

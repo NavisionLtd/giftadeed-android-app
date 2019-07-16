@@ -49,12 +49,12 @@
             android:inputType="text"
             android:singleLine="true"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:visibility="gone" />
 
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/manage_swipe_refresh_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -66,5 +66,5 @@
             android:layout_marginTop="10dp"
             android:clickable="true"
             android:visibility="gone" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

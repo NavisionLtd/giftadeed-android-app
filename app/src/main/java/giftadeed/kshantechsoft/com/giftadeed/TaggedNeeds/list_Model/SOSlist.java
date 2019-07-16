@@ -12,6 +12,9 @@ public class SOSlist {
     @SerializedName("geopoints")
     @Expose
     private String geopoints;
+    @SerializedName("address")
+    @Expose
+    private String address;
 
     public String getId() {
         return id;
@@ -27,5 +30,13 @@ public class SOSlist {
 
     public void setGeopoints(String geopoints) {
         this.geopoints = geopoints;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -12,8 +12,8 @@ import retrofit.http.POST;
  */
 
 public interface AllNotificationInterface {
-    String path= WebServices.Allnotificationcount;
+    String path= WebServices.Allnotifications;
     @FormUrlEncoded
     @POST(path)
-    Call<AllNotificationModel> fetchData(@Field("userId") String User_ID);
+    Call<AllNotificationModel> fetchData(@Field("userId") String User_ID, @Field("geopoints") String geopoints);
 }

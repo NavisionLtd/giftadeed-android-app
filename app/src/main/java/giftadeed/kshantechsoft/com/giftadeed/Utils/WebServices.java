@@ -60,6 +60,7 @@ public class WebServices {
     public static final String myFullfillTagsURL = SUB_URL + "MyfullFillTags.php";
     public static final String fulfildistance = SUB_URL + "distancefetch.php";
     public static final String GET_ADDRESS = MAIN_SUB_URL + "Testaddress.php";
+    public static final String GET_COUNTRY_SOS_NUMBER = SUB_URL + "country_emergency_number.php";
     public static final String deeddetails = SUB_URL + "deed_details.php";
     public static final String endorsedeed = SUB_URL + "endorse_deed.php";
     public static final String commentdeed = SUB_URL + "post_comment.php";
@@ -72,7 +73,7 @@ public class WebServices {
     public static final String deeddeleted = SUB_URL + "is_deleted.php";
     public static final String advisoryurl = SUB_URL + "advisory_board.php";
     public static final String notificationcount = SUB_URL + "notification_count.php";
-    public static final String Allnotificationcount = SUB_URL + "app_notify.php";
+    public static final String Allnotifications = SUB_URL + "app_notify.php";
     public static final String Resend_link = SUB_URL + "resend_link.php";
     public static final String Active_User = SUB_URL + "active_user.php";
     public static final String Check_Deed = SUB_URL + "check_deed.php";

@@ -35,7 +35,7 @@
             android:gravity="center"
             android:text="Location not detected. Get current location?"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="16dp" />
     </LinearLayout>
 
 

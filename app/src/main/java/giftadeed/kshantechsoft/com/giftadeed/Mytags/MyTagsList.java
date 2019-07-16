@@ -3,12 +3,15 @@ package giftadeed.kshantechsoft.com.giftadeed.Mytags;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -68,7 +71,7 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
     TextView txtmytags;
     View rootview;
     private RecyclerView.LayoutManager layoutManager;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     FragmentActivity myContext;
     SessionManager sessionManager;
     String strUSERID;
@@ -195,7 +198,7 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
 
                         }
                         sessionManager.createUserCredentialSession(null, null, null);
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -243,7 +246,7 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
 
                                     TagaNeed mainHomeFragment = new TagaNeed();
                                     mainHomeFragment.setArguments(bundle);
-                                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                    FragmentTransaction fragmentTransaction =
                                             getActivity().getSupportFragmentManager().beginTransaction();
                                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                                     fragmentTransaction.commit();

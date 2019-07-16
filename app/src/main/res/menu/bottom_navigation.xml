@@ -13,7 +13,7 @@
     <item
         android:id="@+id/navigation_fullfill"
         android:icon="@drawable/fulfill_a_deed_map_icon"
-        android:title="@string/my_fulfil_tags_heading" />
+        android:title="@string/fulfil_tags_heading" />
 
     <item
         android:id="@+id/navigation_sos"

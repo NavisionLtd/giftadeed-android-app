@@ -1,7 +1,6 @@
 package giftadeed.kshantechsoft.com.giftadeed.Collaboration;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,22 +8,23 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static giftadeed.kshantechsoft.com.giftadeed.Collaboration.AddCollabMemberFragment.selectedCreatorIds;
-
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
+
+import static giftadeed.kshantechsoft.com.giftadeed.Collaboration.AddCollabMemberFragment.selectedCreatorIds;
 
 public class CollabAddMemberAdapter extends RecyclerView.Adapter<CollabAddMemberAdapter.ViewHolder> {
     ArrayList<Creatorslist> creatorlist = new ArrayList<>();
     private ArrayList<Creatorslist> arraylist;
-    Context context;
+    Context myContext;
 
     public CollabAddMemberAdapter(ArrayList<Creatorslist> list, Context context) {
         this.creatorlist = list;
-        this.context = context;
+        this.myContext = context;
         this.arraylist = new ArrayList<Creatorslist>();
         this.arraylist.addAll(list);
     }
@@ -36,27 +36,35 @@ public class CollabAddMemberAdapter extends RecyclerView.Adapter<CollabAddMember
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.cName.setText(creatorlist.get(position).getFirstName() + " " + creatorlist.get(position).getLastName());
-        holder.cGroups.setText(creatorlist.get(position).getGroupNames());
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.bindData(creatorlist.get(position));
+        //in some cases, it will prevent unwanted situations
+        holder.chkCreator.setOnCheckedChangeListener(null);
+        //if true, your checkbox will be selected, else unselected
+//        holder.chkCreator.setChecked(creatorlist.get(position).isSelected());
 
-        if (creatorlist.get(position).isSelected()) {
-            holder.chkCreator.setChecked(true);
+        if (creatorlist.get(position).getInvitedAlready().equals("YES")) {
+            //if true, your checkbox will be selected, else unselected
+            holder.chkCreator.setChecked(creatorlist.get(position).isSelected());
+            holder.chkCreator.setEnabled(false);
+            holder.cName.setTextColor(myContext.getResources().getColor(R.color.grey));
+            holder.tvAlreadyInvited.setVisibility(View.VISIBLE);
         } else {
-            holder.chkCreator.setChecked(false);
+            //if true, your checkbox will be selected, else unselected
+            holder.chkCreator.setChecked(creatorlist.get(position).isSelected());
+            holder.chkCreator.setEnabled(true);
+            holder.cName.setTextColor(myContext.getResources().getColor(R.color.colorPrimary));
+            holder.tvAlreadyInvited.setVisibility(View.GONE);
         }
 
         holder.chkCreator.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                creatorlist.get(holder.getAdapterPosition()).setSelected(isChecked);
                 if (isChecked) {
                     selectedCreatorIds.add(creatorlist.get(position).getUserId());
-                    creatorlist.get(position).setSelected(true);
-//                    ToastPopUp.displayToast(context, "Added " + creatorlist.get(position).getUserId());
                 } else {
                     selectedCreatorIds.remove(creatorlist.get(position).getUserId());
-                    creatorlist.get(position).setSelected(true);
-//                    ToastPopUp.displayToast(context, "Removed " + creatorlist.get(position).getUserId());
                 }
             }
         });
@@ -67,15 +75,21 @@ public class CollabAddMemberAdapter extends RecyclerView.Adapter<CollabAddMember
         return creatorlist.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView cName, cGroups;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView cName, cGroups, tvAlreadyInvited;
         CheckBox chkCreator;
 
         public ViewHolder(View view) {
             super(view);
+            tvAlreadyInvited = (TextView) view.findViewById(R.id.tv_already_invited);
             cName = (TextView) view.findViewById(R.id.tv_creator_name);
             cGroups = (TextView) view.findViewById(R.id.tv_creator_groups);
             chkCreator = (CheckBox) view.findViewById(R.id.chk_creator);
+        }
+
+        public void bindData(Creatorslist creatorslist) {
+            cName.setText(creatorslist.getFirstName() + " " + creatorslist.getLastName());
+            cGroups.setText(creatorslist.getGroupNames());
         }
     }
 

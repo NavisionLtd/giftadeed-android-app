@@ -4,8 +4,8 @@
     android:layout_height="86.5dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
-    android:paddingLeft="14dp"
-    android:paddingRight="14dp">
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
 
     <!--<com.stfalcon.multiimageview.MultiImageView
         android:id="@+id/image_group_channel_list_cover"
@@ -16,8 +16,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_group_channel_list_cover"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop" />
 
@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/image_group_channel_list_cover"
         android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@id/image_group_channel_list_cover"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -41,7 +42,7 @@
             android:maxLines="1"
             android:text="Anna Bluiasdfasdfasdfasdfasdfasdfasdfasdfafm"
             android:textColor="#000000"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/text_group_channel_list_member_count"
@@ -55,7 +56,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:text="3"
-            android:textSize="12sp" />
+            android:textSize="12dp" />
 
     </LinearLayout>
 
@@ -72,19 +73,18 @@
             android:id="@+id/container_group_channel_list_typing_indicator"
             layout="@layout/layout_typing_indicator"
             android:layout_width="32dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="4dp" />
+            android:layout_gravity="center"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/text_group_channel_list_message"
             android:layout_width="223dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="2dp"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@string/welcomechatmessage"
             android:textColor="#8e8e8e"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
     </LinearLayout>
 
@@ -99,7 +99,7 @@
         android:maxLines="1"
         android:text=""
         android:visibility="gone"
-        android:textSize="11.5sp" />
+        android:textSize="11.5dp" />
 
     <TextView
         android:id="@+id/text_group_channel_list_unread_count"

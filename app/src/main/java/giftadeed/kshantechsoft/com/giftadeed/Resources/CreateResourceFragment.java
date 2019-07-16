@@ -4,14 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,12 +25,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
@@ -55,10 +51,9 @@ import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
@@ -71,14 +66,14 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryInterface;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryType;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CustomNeedtype;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GetAddressInterface;
+import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GetAddressResponse;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.Needtype;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.SuggestSubType;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.SuggestType;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -110,7 +105,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     Button btnCreateResource;
     SessionManager sessionManager;
     String strUser_ID;
-    String receivedGid = "", receivedRid = "", callingFrom = "";
+    String receivedGid = "", receivedRid = "", receivedRname = "", callingFrom = "", str_rescat_id = "", str_rescat = "", str_ressubcat_id = "", str_ressubcat = "", str_resdesc = "",
+            str_address = "", str_rescreatorid = "", resAllGrp = "", resAudGrpIds = "", resAudGrpNames = "";
     private ArrayList<Needtype> categories = new ArrayList<Needtype>();
     private ArrayList<CustomNeedtype> customCategories = new ArrayList<>();
     private ArrayList<MultiSubCategories> subcategories = new ArrayList<MultiSubCategories>();
@@ -118,9 +114,11 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     ImageView catImage;
     String latitude_source, longitude_source;
     public String str_Geopint, lat, longi, itemname, itemid;
-    String checkedOtherGrp = "N";
+    String checkedAllGrps = "N";
     private GoogleApiClient mGoogleApiClient;
-    String calling = "screenload";
+    String screenload = "yes";
+    private List<String> resultResCatId;
+    private List<String> resultResSubCatId;
 
     public static CreateResourceFragment newInstance(int sectionNumber) {
         CreateResourceFragment fragment = new CreateResourceFragment();
@@ -147,8 +145,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
-        TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(true);
-        TaggedneedsActivity.back.setVisibility(View.GONE);
+        TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
+        TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
@@ -160,19 +158,58 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         HashMap<String, String> resource = sessionManager.getSelectedResourceDetails();
         callingFrom = resource.get(sessionManager.RES_CALL_FROM);
         receivedRid = resource.get(sessionManager.RESOURCE_ID);
+        receivedRname = resource.get(sessionManager.RESOURCE_NAME);
         lat = String.valueOf(new GPSTracker(myContext).latitude);
         longi = String.valueOf(new GPSTracker(myContext).longitude);
-        getAddress(lat, longi);
-
+        resultResCatId = new ArrayList<>();
+        resultResSubCatId = new ArrayList<>();
+        Bundle bundle = this.getArguments();
         if (callingFrom.equals("create")) {
             //from create menu
             TaggedneedsActivity.updateTitle(getResources().getString(R.string.create_res));
             getOwnedGroupList(strUser_ID);
+            getAddress(lat, longi);
         } else {
             //from edit menu
-//            groupName.setText(receivedGname);
-//            groupDesc.setText(receivedGdesc);
             TaggedneedsActivity.updateTitle(getResources().getString(R.string.edit_resource));
+            str_rescat_id = this.getArguments().getString("str_rescat_id");
+            str_rescat = this.getArguments().getString("str_rescat");
+            str_ressubcat_id = this.getArguments().getString("str_ressubcat_id");
+            str_ressubcat = this.getArguments().getString("str_ressubcat");
+            str_resdesc = this.getArguments().getString("str_resdesc");
+            str_Geopint = this.getArguments().getString("str_geopoint");
+            str_address = this.getArguments().getString("str_address");
+            strGroupmapping_ID = this.getArguments().getString("str_grpid");
+            strGroupmapping_Name = this.getArguments().getString("str_grpname");
+            str_rescreatorid = this.getArguments().getString("str_rescreatorid");
+            resAllGrp = this.getArguments().getString("resAllGrp");
+            resAudGrpIds = this.getArguments().getString("resAudGrpIds");
+            resAudGrpNames = this.getArguments().getString("resAudGrpNames");
+            if (str_rescat_id.endsWith(",")) {
+                str_rescat_id = str_rescat_id.substring(0, str_rescat_id.length() - 1);
+            }
+            if (str_rescat.endsWith(",")) {
+                str_rescat = str_rescat.substring(0, str_rescat.length() - 1);
+            }
+            if (str_ressubcat_id.endsWith(",")) {
+                str_ressubcat_id = str_ressubcat_id.substring(0, str_ressubcat_id.length() - 1);
+            }
+            if (str_ressubcat.endsWith(",")) {
+                str_ressubcat = str_ressubcat.substring(0, str_ressubcat.length() - 1);
+            }
+            resultResCatId = Arrays.asList(str_rescat_id.split("\\s*,\\s*"));
+            resultResSubCatId = Arrays.asList(str_ressubcat_id.split("\\s*,\\s*"));
+            selectGroup.setText(strGroupmapping_Name);
+            resourceCat.setText(str_rescat);
+            resourceSubCat.setText(str_ressubcat);
+            resourceName.setText(receivedRname);
+            resourceDesc.setText(str_resdesc);
+            resourceLocation.setText(str_address);
+            if (resAllGrp.equals("Y")) {
+                edselectAudiance.setText(getResources().getString(R.string.all_groups));
+            } else {
+                edselectAudiance.setText(resAudGrpNames);
+            }
         }
 
         selectGroup.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +218,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 if (!(Validation.isOnline(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
-                    calling = "group";
+                    screenload = "no";
                     getOwnedGroupList(strUser_ID);
                 }
             }
@@ -205,13 +242,25 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         resourceSubCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String strCategory = resourceCat.getText().toString();
-                if (formattedTypeIds.length() < 1) {
+                if (resourceCat.getText().length() < 1) {
                     ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_category));
                 } else {
-                    if (subcategories.size() > 0) {
-                        showSubCatDialog();
+                    if (callingFrom.equals("create")) {
+                        if (subcategories.size() > 0) {
+                            showSubCatDialog();
+                        } else {
+                            if (!(Validation.isOnline(getActivity()))) {
+                                ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+                            } else {
+                                getSubCategory("no");
+                            }
+                        }
                     } else {
+                        typePrefId = new ArrayList<String>();
+                        typePref = new ArrayList<String>();
+                        for (int i = 0; i < resultResCatId.size(); i++) {
+                            typePrefId.add(resultResCatId.get(i)); // add position of the row
+                        }
                         if (!(Validation.isOnline(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
@@ -264,13 +313,51 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     if (!(Validation.isOnline(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
-                        if (checkedOtherGrp.equals("Y")) {
-                            // if all groups is selected then send blank user selected groups
-                            createResource(strUser_ID, strGroupmapping_ID, resourceName.getText().toString(), resourceDesc.getText().toString(), formattedSubTypeIds, str_Geopint, resourceLocation.getText().toString(), "", checkedOtherGrp);
+                        if (checkedAllGrps.equals("Y")) {
+                            if (callingFrom.equals("create")) {
+                                // if all groups is selected then send blank user selected groups
+                                createResource(strUser_ID, strGroupmapping_ID, resourceName.getText().toString(), resourceDesc.getText().toString(), formattedSubTypeIds, str_Geopint, resourceLocation.getText().toString(), "", checkedAllGrps);
+                            } else {
+                                // call update resource api
+                            }
                         } else {
-                            createResource(strUser_ID, strGroupmapping_ID, resourceName.getText().toString(), resourceDesc.getText().toString(), formattedSubTypeIds, str_Geopint, resourceLocation.getText().toString(), formattedUserGroups, checkedOtherGrp);
+                            if (customTypePrefId.size() > 0) {
+                                if (callingFrom.equals("create")) {
+                                    createResource(strUser_ID, strGroupmapping_ID, resourceName.getText().toString(), resourceDesc.getText().toString(), formattedSubTypeIds, str_Geopint, resourceLocation.getText().toString(), strGroupmapping_ID, checkedAllGrps);
+                                } else {
+                                    // call update resource api
+                                }
+                            } else {
+                                if (callingFrom.equals("create")) {
+                                    createResource(strUser_ID, strGroupmapping_ID, resourceName.getText().toString(), resourceDesc.getText().toString(), formattedSubTypeIds, str_Geopint, resourceLocation.getText().toString(), formattedUserGroups, checkedAllGrps);
+                                } else {
+                                    // call update resource api
+                                }
+                            }
                         }
                     }
+                }
+            }
+        });
+
+        TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (callingFrom.equals("create")) {
+                    // move to resource list
+                    fragmgr = getFragmentManager();
+                    fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance()).commit();
+                } else {
+                    // move to resource details
+                    Bundle bundle = new Bundle();
+                    bundle.putString("str_resid", receivedRid);
+                    bundle.putString("callingFrom", callingFrom);
+                    ResourceDetailsFrag resourceDetailsFrag = new ResourceDetailsFrag();
+                    resourceDetailsFrag.setArguments(bundle);
+                    FragmentTransaction fragmentTransaction =
+                            getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.content_frame, resourceDetailsFrag);
+                    fragmentTransaction.commit();
                 }
             }
         });
@@ -332,7 +419,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -350,7 +437,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         } catch (Exception e) {
 
                         }
-                        if (calling.equals("screenload")) {
+                        if (screenload.equals("yes")) {
                             if (groupArrayList.size() == 1) {
                                 if (groupArrayList.get(0).getGroup_name().length() > 30) {
                                     selectGroup.setText(groupArrayList.get(0).getGroup_name().substring(0, 29) + "...");
@@ -365,7 +452,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                 selectGroup.setEnabled(true);
                                 selectGroup.clearFocus();
                             }
-                        } else if (calling.equals("group")) {
+                        } else {
                             final Dialog dialog = new Dialog(getContext());
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -394,23 +481,24 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
 //                                    bg.sendbug(writer.toString());
                                     }
 
-                                    // reset categories
-                                    categories = new ArrayList<Needtype>();
-                                    resourceCat.setText("");
-                                    resourceCat.clearFocus();
+                                    if (callingFrom.equals("create")) {
+                                        // reset categories
+                                        categories = new ArrayList<Needtype>();
+                                        resourceCat.setText("");
+                                        resourceCat.clearFocus();
 
-                                    // reset sub-categories
-                                    subcategories = new ArrayList<MultiSubCategories>();
-                                    resSubCatLayout.setVisibility(View.VISIBLE);
-                                    resourceSubCat.setText("");
-                                    resourceSubCat.clearFocus();
+                                        // reset sub-categories
+                                        subcategories = new ArrayList<MultiSubCategories>();
+                                        resSubCatLayout.setVisibility(View.VISIBLE);
+                                        resourceSubCat.setText("");
+                                        resourceSubCat.clearFocus();
 
-                                    // reset audience
-                                    groupArrayList = new ArrayList<GroupPOJO>();
-                                    edselectAudiance.setEnabled(true);
-                                    edselectAudiance.setText("");
-                                    edselectAudiance.clearFocus();
-
+                                        // reset audience
+                                        groupArrayList = new ArrayList<GroupPOJO>();
+                                        edselectAudiance.setEnabled(true);
+                                        edselectAudiance.setText("");
+                                        edselectAudiance.clearFocus();
+                                    }
                                     dialog.dismiss();
                                 }
                             });
@@ -441,7 +529,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         });
     }
 
-    //--------------------------getting categories from server------------------------------------------
+    //--------------------------getting categories from server--------------------------
     public void getCategory(String groupid) {
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
@@ -491,6 +579,22 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 }
                 Log.d("response_categories", "" + categories.size());
                 Log.d("response_custom_cat", "" + customCategories.size());
+
+                for (int i = 0; i < resultResCatId.size(); i++) {
+                    for (int j = 0; j < categories.size(); j++) {
+                        if (resultResCatId.get(i).equals(categories.get(j).getNeedMappingID())) {
+                            categories.get(j).setChecked(true);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < resultResCatId.size(); i++) {
+                    for (int j = 0; j < customCategories.size(); j++) {
+                        if (resultResCatId.get(i).equals(customCategories.get(j).getNeedMappingID())) {
+                            customCategories.get(j).setChecked(true);
+                        }
+                    }
+                }
                 showCatDialog();
             }
 
@@ -518,8 +622,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         TextView tvheading2 = (TextView) dialog.findViewById(R.id.res_custom_cat_heading);
         final RecyclerView custom_categorylist = (RecyclerView) dialog.findViewById(R.id.res_custom_category_list);
         LinearLayoutManager layoutManager, layoutManager1;
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        layoutManager1 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        layoutManager1 = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         categorylist.addItemDecoration(new DividerItemDecoration(categorylist.getContext(), DividerItemDecoration.VERTICAL));
         categorylist.setLayoutManager(layoutManager);
         custom_categorylist.addItemDecoration(new DividerItemDecoration(custom_categorylist.getContext(), DividerItemDecoration.VERTICAL));
@@ -531,8 +635,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
             tvheading1.setVisibility(View.VISIBLE);
             categorylist.setVisibility(View.VISIBLE);
             btnok.setVisibility(View.VISIBLE);
-            cancel.setVisibility(View.GONE);
-            categorylist.setAdapter(new ResourceMultiCatAdapter(categories, getContext()));
+            cancel.setVisibility(View.VISIBLE);
+            categorylist.setAdapter(new ResourceMultiCatAdapter(categories));
         } else {
             tvheading1.setVisibility(View.GONE);
             btnok.setVisibility(View.GONE);
@@ -542,7 +646,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         if (customCategories.size() > 0) {
             tvheading2.setVisibility(View.VISIBLE);
             custom_categorylist.setVisibility(View.VISIBLE);
-            custom_categorylist.setAdapter(new ResourceMultiCustomCatAdapter(customCategories, getContext()));
+            custom_categorylist.setAdapter(new ResourceMultiCustomCatAdapter(customCategories));
         } else {
             tvheading2.setVisibility(View.GONE);
             custom_categorylist.setVisibility(View.GONE);
@@ -588,19 +692,34 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     }
                 }
 
-                if (customTypePrefId.size() > 0) {
-                    //if user select custom category then audience will be his from group only. Audience click will be disabled
-                    edselectAudiance.setText(strGroupmapping_Name);
-                    edselectAudiance.setEnabled(false);
+                if (callingFrom.equals("create")) {
+                    if (customTypePrefId.size() > 0) {
+                        //if user select custom category then audience will be his from group only. Audience click will be disabled
+                        edselectAudiance.setText(strGroupmapping_Name);
+                        edselectAudiance.setEnabled(false);
 //                    resSubCatLayout.setVisibility(View.GONE);
-                } else {
-                    //Reset select audience
+                    } else {
+                        //Reset select audience
 //                    resSubCatLayout.setVisibility(View.VISIBLE);
-                    edselectAudiance.setEnabled(true);
-                    groupArrayList = new ArrayList<>();
-                    edselectAudiance.setText("");
-                    edselectAudiance.clearFocus();
+                        edselectAudiance.setEnabled(true);
+                        groupArrayList = new ArrayList<>();
+                        edselectAudiance.setText("");
+                        edselectAudiance.clearFocus();
+                    }
+                } else {
+                    for (int i = 0; i < typePrefId.size(); i++) {
+                        for (int j = 0; j < resultResSubCatId.size(); j++) {
+                            if (typePrefId.get(i).equals(resultResSubCatId.get(j))) {
+                                resourceSubCat.setText(str_ressubcat);
+                                break;
+                            } else {
+                                resourceSubCat.setText("");
+                                resourceSubCat.clearFocus();
+                            }
+                        }
+                    }
                 }
+
                 if ((typePrefId.size() > 0) || (customTypePrefId.size() > 0)) {
                     //call getsubcategory to check subcategories available for selected main categories
                     getSubCategory("yes");
@@ -618,6 +737,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
 
     //--------------------------getting sub categories from server------------------------------------------
     public void getSubCategory(final String callingFromCat) {
+        formattedTypeIds = typePrefId.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
@@ -649,6 +769,15 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 } catch (Exception e) {
 
                 }
+
+                for (int i = 0; i < resultResSubCatId.size(); i++) {
+                    for (int j = 0; j < subcategories.size(); j++) {
+                        if (resultResSubCatId.get(i).equals(subcategories.get(j).getSubCatId())) {
+                            subcategories.get(j).setChecked(true);
+                        }
+                    }
+                }
+
                 if (callingFromCat.equals("yes")) {
                     //dont show subcat dialog
                 } else {
@@ -674,20 +803,20 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         final RecyclerView subcategorylist = (RecyclerView) dialog.findViewById(R.id.sub_category_list);
         subcategorylist.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManager;
-        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         subcategorylist.addItemDecoration(new DividerItemDecoration(subcategorylist.getContext(), DividerItemDecoration.VERTICAL));
         subcategorylist.setLayoutManager(layoutManager);
         TextView tvMsg = (TextView) dialog.findViewById(R.id.txt_msg);
         Button ok = (Button) dialog.findViewById(R.id.sub_category_ok);
         Button cancel = (Button) dialog.findViewById(R.id.sub_category_cancel);
-        Button btnSuggestSubType = (Button) dialog.findViewById(R.id.suggest_sub_type);
+        TextView suggestSubType = (TextView) dialog.findViewById(R.id.suggest_sub_type);
         Log.d("subcatlist_size", "" + subcategories.size());
         if (subcategories.size() > 0) {
             tvMsg.setText("Select preferences for number of people");
             subcategorylist.setVisibility(View.VISIBLE);
             ok.setVisibility(View.VISIBLE);
-            cancel.setVisibility(View.GONE);
-            subcategorylist.setAdapter(new ResourceSubCatAdapter(subcategories, getContext()));
+            cancel.setVisibility(View.VISIBLE);
+            subcategorylist.setAdapter(new ResourceSubCatAdapter(subcategories));
         } else {
             tvMsg.setText("No subtypes found");
             ok.setVisibility(View.GONE);
@@ -726,7 +855,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 dialog.dismiss();
             }
         });
-        btnSuggestSubType.setOnClickListener(new View.OnClickListener() {
+        suggestSubType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(getContext());
@@ -877,7 +1006,6 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         data);
                 // TODO: Handle the error.
                 Log.e("Tag", status.getStatusMessage());
-
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
@@ -886,40 +1014,45 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
 
     //-----------------get address-----------------
     public void getAddress(final String latitude, final String longitude) {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServices.GET_ADDRESS,
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        simpleArcDialog.dismiss();
-                        resourceLocation.setText(s);
-                        Log.d("address", s);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        GetAddressInterface service = retrofit.create(GetAddressInterface.class);
+        Call<GetAddressResponse> call = service.sendData(latitude, longitude);
+        call.enqueue(new Callback<GetAddressResponse>() {
+            @Override
+            public void onResponse(Response<GetAddressResponse> response, Retrofit retrofit) {
+                simpleArcDialog.dismiss();
+                Log.d("response_address", "" + response.body());
+                try {
+                    GetAddressResponse getAddressResponse = response.body();
+                    if (getAddressResponse.getStatus() == 1) {
+                        resourceLocation.setText(getAddressResponse.getAddress());
+                        Log.d("address", "" + getAddressResponse.getAddress());
                         str_Geopint = latitude + "," + longitude;
                         Log.d("Geopoints", str_Geopint);
+                    } else if (getAddressResponse.getStatus() == 0) {
+                        Toast.makeText(getContext(), getAddressResponse.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                        resourceLocation.setText("");
                     }
-                },
-                new com.android.volley.Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        ToastPopUp.show(myContext, getString(R.string.server_response_error));
-                        simpleArcDialog.dismiss();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new Hashtable<String, String>();
-                params.put("latitude", latitude);
-                params.put("longitude", longitude);
-                return params;
+                } catch (Exception e) {
+                    Log.d("responsegroup", "" + e.getMessage());
+                }
             }
-        };
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        //Adding request to the queue
-        requestQueue.add(stringRequest);
+
+            @Override
+            public void onFailure(Throwable t) {
+                simpleArcDialog.dismiss();
+                Log.d("response_address", "" + t.getMessage());
+                ToastPopUp.show(myContext, getString(R.string.server_response_error));
+            }
+        });
     }
 
     //--------------------------getting user groups from server------------------------------------------
@@ -961,7 +1094,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -975,6 +1108,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                 groupPOJO.setGroup_id(groupPOJOS.get(i).getGroup_id());
                                 groupPOJO.setGroup_name(groupPOJOS.get(i).getGroup_name());
                                 groupPOJO.setGroup_image(groupPOJOS.get(i).getGroup_image());
+                                groupPOJO.setChecked(false);
                                 groupArrayList.add(groupPOJO);
                             }
                         } catch (Exception e) {
@@ -1004,17 +1138,24 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                             userorglist.setVisibility(View.GONE);
                         }
 
-                        if (checkedOtherGrp.equals("Y")) {
-                            chkOtherOrg.setChecked(true);
+                        if (callingFrom.equals("create")) {
+                            if (checkedAllGrps.equals("Y")) {
+                                chkOtherOrg.setChecked(true);
+                            }
+                        } else {
+                            if (resAllGrp.equals("Y")) {
+                                chkOtherOrg.setChecked(true);
+                                checkedAllGrps = "Y";
+                            }
                         }
 
                         chkOtherOrg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                                 if (chkOtherOrg.isChecked()) {
-                                    checkedOtherGrp = "Y";
+                                    checkedAllGrps = "Y";
                                 } else {
-                                    checkedOtherGrp = "N";
+                                    checkedAllGrps = "N";
                                 }
                             }
                         });
@@ -1023,37 +1164,44 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                             @Override
                             public void onClick(View view) {
 //                            Toast.makeText(getContext(), String.valueOf(selectedUserGroups), Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                                if (selectedGrpNames.size() > 0) {
-                                    if (selectedGrpNames.get(0).length() > 15) {
-                                        String txt = selectedGrpNames.get(0).substring(0, 14) + "... ";
-                                        int count = selectedGrpNames.size();
-                                        if (checkedOtherGrp.equals("Y")) {
-                                            count++;
-                                        }
-                                        if (count > 1) {
-                                            edselectAudiance.setText(txt + " + " + String.valueOf(count - 1) + " more");
-                                        } else {
-                                            edselectAudiance.setText(txt);
-                                        }
-                                    } else {
-                                        String txt = selectedGrpNames.get(0);
-                                        int count = selectedGrpNames.size();
-                                        if (checkedOtherGrp.equals("Y")) {
-                                            count++;
-                                        }
-                                        if (count > 1) {
-                                            edselectAudiance.setText(txt + " + " + String.valueOf(count - 1) + " more");
-                                        } else {
-                                            edselectAudiance.setText(txt);
-                                        }
-                                    }
+                                if ((selectedGrpNames.size() == 0) && (checkedAllGrps.equals("N"))) {
+                                    ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_audiance));
                                 } else {
-                                    if (checkedOtherGrp.equals("Y")) {
-                                        edselectAudiance.setText(chkOtherOrg.getText());
+                                    dialog.dismiss();
+                                    if (selectedGrpNames.size() > 0) {
+                                        if (selectedGrpNames.get(0).length() > 15) {
+                                            String txt = selectedGrpNames.get(0).substring(0, 14) + "... ";
+                                            int count = selectedGrpNames.size();
+                                            if (checkedAllGrps.equals("Y")) {
+                                                count++;
+                                            }
+                                            if (count > 1) {
+                                                edselectAudiance.setText(txt + " + " + String.valueOf(count - 1) + " more");
+                                            } else {
+                                                edselectAudiance.setText(txt);
+                                            }
+                                        } else {
+                                            String txt = selectedGrpNames.get(0);
+                                            int count = selectedGrpNames.size();
+                                            if (checkedAllGrps.equals("Y")) {
+                                                count++;
+                                            }
+                                            if (count > 1) {
+                                                edselectAudiance.setText(txt + " + " + String.valueOf(count - 1) + " more");
+                                            } else {
+                                                edselectAudiance.setText(txt);
+                                            }
+                                        }
                                     } else {
-                                        edselectAudiance.setText("");
-                                        edselectAudiance.clearFocus();
+                                        if (checkedAllGrps.equals("Y")) {
+                                            edselectAudiance.setText(chkOtherOrg.getText());
+                                        } else {
+                                            if (resAllGrp.equals("Y")) {
+                                                callingFrom = "create";
+                                            }
+                                            edselectAudiance.setText("");
+                                            edselectAudiance.clearFocus();
+                                        }
                                     }
                                 }
                             }
@@ -1127,7 +1275,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -1171,15 +1319,24 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                    Bundle bundle = new Bundle();
-                    int i = 3;
-                    bundle.putString("tab", "tab1");
-                    TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
-                    mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
-                            getActivity().getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
-                    fragmentTransaction.commit();
+
+                    if (callingFrom.equals("create")) {
+                        // move to resource list
+                        fragmgr = getFragmentManager();
+                        fragmgr.beginTransaction().replace(R.id.content_frame, ResourceListFragment.newInstance()).commit();
+                    } else {
+                        // move to resource details
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str_resid", receivedRid);
+                        bundle.putString("callingFrom", callingFrom);
+                        ResourceDetailsFrag resourceDetailsFrag = new ResourceDetailsFrag();
+                        resourceDetailsFrag.setArguments(bundle);
+                        FragmentTransaction fragmentTransaction =
+                                getActivity().getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.content_frame, resourceDetailsFrag);
+                        fragmentTransaction.commit();
+                    }
+
                     return true;
                 }
                 return false;

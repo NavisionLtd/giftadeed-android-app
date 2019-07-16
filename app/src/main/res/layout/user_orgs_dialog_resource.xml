@@ -31,7 +31,7 @@
         android:text="@string/your_groups"
         android:layout_marginLeft="10dp"
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="15dp"
         android:textStyle="bold" />
 
     <ListView
@@ -55,7 +55,7 @@
         android:layout_marginLeft="10dp"
         android:text="@string/all_groups"
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="15dp"
         android:textStyle="bold" />
 
     <View
@@ -79,7 +79,7 @@
             android:text="@string/dialog_ok"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
         <Button
             android:id="@+id/user_org_cancel_1"
@@ -91,6 +91,6 @@
             android:text="@string/dialog_cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
     </LinearLayout>
 </LinearLayout>

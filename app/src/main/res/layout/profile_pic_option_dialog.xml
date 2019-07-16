@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="@string/take_photo"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <View
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:gravity="center"
         android:text="@string/select_from_gallery"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <View
         android:layout_width="match_parent"
@@ -42,5 +42,5 @@
         android:gravity="center"
         android:text="@string/select_from_avatars"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 </LinearLayout>

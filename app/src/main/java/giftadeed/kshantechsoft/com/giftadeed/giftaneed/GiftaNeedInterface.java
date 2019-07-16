@@ -16,5 +16,6 @@ public interface GiftaNeedInterface {
     @FormUrlEncoded
     @POST(path)
     Call<MobileModel> sendData(@Field("User_ID") String uid, @Field("Tagged_ID") String taggedgid, @Field("Fulfilled_Photo_Path") String photopath,
-                               @Field("Description") String description, @Field("is_partial") String is_partial, @Field("need") String need);
+                               @Field("Description") String description, @Field("is_partial") String is_partial, @Field("need") String need,
+                               @Field("fulfilled_count") String fullfilled_count);
 }

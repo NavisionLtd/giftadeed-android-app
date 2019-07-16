@@ -114,7 +114,7 @@ public class DatabaseAccess {
 
     // Getting contacts Count
     public int getContactsCount() {
-        String countQuery = "SELECT  * FROM contact_details";
+        String countQuery = "SELECT * FROM contact_details";
         Cursor cursor = database.rawQuery(countQuery, null);
         int count = cursor.getCount();
         cursor.close();
@@ -131,7 +131,7 @@ public class DatabaseAccess {
         return count;
     }
 
-    public int getSelectedCheckedCount(String ids) {
+    public int getSelectedGrpCheckedCount(String ids) {
         String countQuery = "SELECT * FROM group_details WHERE group_id IN (" + ids + ") AND group_checked = 'true'";
         Cursor cursor = database.rawQuery(countQuery, null);
         int count = cursor.getCount();
@@ -216,9 +216,8 @@ public class DatabaseAccess {
         return count;
     }
 
-    public int getSelectedCatCheckedCount(String cat_type) {
-        String countQuery = "SELECT * FROM category_details WHERE category_name = " + "'" + cat_type + "'" + " AND category_checked = 'true'";
-        Log.d("cat_query", countQuery);
+    public int getSelectedCatCheckedCount(String ids) {
+        String countQuery = "SELECT * FROM category_details WHERE category_id IN (" + ids + ") AND category_checked = 'true'";
         Cursor cursor = database.rawQuery(countQuery, null);
         int count = cursor.getCount();
         cursor.close();

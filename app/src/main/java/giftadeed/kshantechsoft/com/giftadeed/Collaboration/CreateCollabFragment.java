@@ -5,11 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -259,19 +260,19 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        int generatedCollabId = collabResponseStatus.getCollabid();
-                        String channelName = "";
-                        // Sendbird create channel. Concat with GRP for Group and CLB for Collaboration
-                        channelName = collabname + " - CLB" + generatedCollabId;
-                        Log.d("channel_name", channelName);
                         if (collabResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.colab_created_msg), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), collabResponseStatus.getSuccessMsg(), Toast.LENGTH_SHORT).show();
+                            int generatedCollabId = collabResponseStatus.getCollabid();
+                            String channelName = "";
+                            // Sendbird create channel. Concat with GRP for Group and CLB for Collaboration
+                            channelName = collabname + " - CLB" + generatedCollabId;
+                            Log.d("channel_name", channelName);
                             //group chat
                             mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
                             if (strUser_ID != null && channelName != null) {
@@ -286,7 +287,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                             groupCollabFrag.setArguments(bundle);
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (collabResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), collabResponseStatus.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
@@ -342,7 +343,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -475,7 +476,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -483,7 +484,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                     } else {
                         Log.d("edit_collab_status", collabResponseStatus.getStatus().toString());
                         if (collabResponseStatus.getStatus() == 1) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.collab_edited), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), collabResponseStatus.getSuccessMsg(), Toast.LENGTH_SHORT).show();
 
                             // update sendbird also
                             String channelName = "";
@@ -499,7 +500,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                             groupCollabFrag.setArguments(bundle);
                             fragmgr.beginTransaction().replace(R.id.content_frame, groupCollabFrag).commit();
                         } else if (collabResponseStatus.getStatus() == 0) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), collabResponseStatus.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {

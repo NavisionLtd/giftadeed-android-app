@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -177,7 +179,7 @@ public class FilterFrag extends Fragment {
                 bundle.putString("tab", value);
                 TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                 mainHomeFragment.setArguments(bundle);
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                FragmentTransaction fragmentTransaction =
                         getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                 fragmentTransaction.commit();
@@ -198,7 +200,7 @@ public class FilterFrag extends Fragment {
                     bundle.putString("tab", value);
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();
@@ -392,7 +394,7 @@ public class FilterFrag extends Fragment {
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -420,8 +422,10 @@ public class FilterFrag extends Fragment {
                                 if (Validation.FILTER_GROUP_IDS.equals("All")) {
 //                                    edselectAudiance.setText(Validation.FILTER_GROUP_IDS);
                                     edselectAudiance.setText("All");
+                                    checkedAllGroups = "Y";
                                 } else {
                                     edselectAudiance.setText(Validation.FILTER_GROUP_NAMES);
+                                    checkedAllGroups = "N";
                                     Log.d("selected_filter_grpids", "" + Validation.FILTER_GROUP_IDS);
                                 }
                             } else {
@@ -496,7 +500,7 @@ public class FilterFrag extends Fragment {
                                         }
                                     } else {
                                         if (checkedAllGroups.equals("Y")) {
-                                            edselectAudiance.setText(chkAllGrp.getText());
+                                            edselectAudiance.setText("All");
                                         } else {
                                             edselectAudiance.setText("");
                                             edselectAudiance.clearFocus();
@@ -549,7 +553,7 @@ public class FilterFrag extends Fragment {
                     bundle.putString("tab", value);
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();

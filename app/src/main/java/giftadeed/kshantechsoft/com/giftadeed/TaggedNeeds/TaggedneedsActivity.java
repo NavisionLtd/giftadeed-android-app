@@ -6,16 +6,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -35,6 +37,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -76,6 +79,7 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PushUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.GetingAddress;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
@@ -94,11 +98,12 @@ import retrofit.Retrofit;
 public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
         NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
     String selectedLangugae;
+    DatabaseAccess databaseAccess;
     Locale locale;
     Configuration config;
     static Fragment frag;
     String path = "";
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     public static TextView headingtext, editprofile, saveprofile;
     CircleImageView profilePic;
     public static ImageView imgHamburger, imgappbarcamera, imgfilter, imgappbarsetting, back, imgShare;
@@ -128,6 +133,8 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         setContentView(R.layout.activity_taggedneeds);
         myContext = TaggedneedsActivity.this;
         init();
+        databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+        databaseAccess.open();
         sharedPreferences = new SessionManager(getApplicationContext());
         selectedLangugae = sharedPreferences.getLanguage();
         setSupportActionBar(toolbar);
@@ -199,7 +206,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                         if (path.length() > 0) {
                             Glide.with(getApplicationContext()).load(path).into(profilePic);
                         } else {
-                            Glide.with(getApplicationContext()).load(R.drawable.profimg).into(profilePic);
+                            Glide.with(getApplicationContext()).load(R.drawable.ic_default_profile_pic).into(profilePic);
                         }
                     }
                 }
@@ -311,8 +318,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         } else if (id == R.id.emergency_contacts) {
             selectfragment(12);
         } else if (id == R.id.logout) {
-            /*Intent needdtls = new Intent(TaggedneedsActivity.this, NeedDetailsActivity.class);
-            startActivity(needdtls);*/
             FacebookSdk.sdkInitialize(getApplicationContext());
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             LayoutInflater li = LayoutInflater.from(this);
@@ -320,21 +325,16 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
             dialogconfirm = (Button) confirmDialog.findViewById(R.id.btn_submit_mobileno);
             dialogcancel = (Button) confirmDialog.findViewById(R.id.btn_Cancel_mobileno);
             dialogtext = (TextView) confirmDialog.findViewById(R.id.txtgiftneeddialog);
-
             dialogtext.setText(getResources().getString(R.string.logout_msg));
-            //-------------Adding our dialog box to the view of alert dialog
             alert.setView(confirmDialog);
             alert.setCancelable(false);
-            //----------------Creating an alert dialog
             alertDialogForgot = alert.create();
             alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
             alertDialogForgot.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            //----------------Displaying the alert dialog
             alertDialogForgot.show();
             dialogconfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //alertDialogForgot.dismiss();
                     LoginManager.getInstance().logOut();
                     if (mGoogleApiClient.isConnected()) {
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -347,6 +347,13 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                     }
                     sharedPreferences.createUserCredentialSession(null, null, null);
                     DisconnectSendbirdCall();
+                    sharedPreferences.set_notification_status("ON");
+                    Log.d("LocalDbGroupSize_before", "" + databaseAccess.getAllGroups().size());
+                    databaseAccess.deleteAllGroups();
+                    Log.d("LocalDbGroupSize_after", "" + databaseAccess.getAllGroups().size());
+                    Log.d("LocalDbCategoriesBefore", "" + databaseAccess.getAllCategories().size());
+                    databaseAccess.deleteAllCategory();
+                    Log.d("LocalDbCategoriesAfter", "" + databaseAccess.getAllCategories().size());
                     Intent loginintent = new Intent(TaggedneedsActivity.this, LoginActivity.class);
                     loginintent.putExtra("message", "Charity");
                     startActivity(loginintent);
@@ -395,7 +402,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 break;
             case 8:
 //                fragmgr.beginTransaction().replace(R.id.content_frame, AboutApp.newInstance(i)).addToBackStack(null).commit();
-                android.support.v4.app.FragmentTransaction transaction = fragmgr.beginTransaction();
+                FragmentTransaction transaction = fragmgr.beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_right, R.anim.slide_left);
                 transaction.replace(R.id.content_frame, MenuGrid.newInstance("0"));
                 transaction.addToBackStack(null);
@@ -624,7 +631,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getApplicationContext()).delete_row_message();
                         sharedPreferences.set_notification_status("ON");
                         Intent loginintent = new Intent(getApplicationContext(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");

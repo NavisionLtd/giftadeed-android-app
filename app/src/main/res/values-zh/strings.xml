@@ -1,12 +1,13 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 30 May</string>
+    <string name="app_name">GAD P2 Test 9 July</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
     <string name="login_privacy">隐私政策</string>
     <string name="login_string">登录</string>
     <string name="email_string">电子邮件</string>
+    <string name="not_registered">還沒有註冊？</string>
     <string name="password_string">密码</string>
     <string name="signup">尚未注册? 注册</string>
     <string name="forgot">忘记密码？</string>
@@ -41,7 +42,7 @@
     <string name="drawer_tag_deed">标记契约</string>
     <string name="drawer_inspire">啟發社區</string>
     <string name="drawer_resources">资源</string>
-    <string name="drawer_about_app">关于App</string>
+    <string name="drawer_about_app">儀表板</string>
     <string name="drawer_notification">通知</string>
     <string name="drawer_settings">设置</string>
     <string name="drawer_emergency_contacts">緊急聯繫人</string>
@@ -62,6 +63,7 @@
     <string name="my_tags_heading">我的標籤</string>
     <string name="list_of_mytags">我的標籤列表</string>
     <string name="my_fulfil_tags_heading">我完成的標籤</string>
+    <string name="fulfil_tags_heading">Fulfilled Tags</string>
     <string name="top_ten_heading">十大標籤</string>
     <string name="top_ten_fulfill_heading">十大標籤Fulfillers</string>
     <string name="tag_counter_heading">標籤計數器</string>
@@ -72,7 +74,7 @@
     <string name="cookies_heading">Cookies政策</string>
     <string name="end_user_heading">最終用戶協議</string>
     <string name="dis_heading">放棄</string>
-    <string name="help_heading">FAQ</string>
+    <string name="help_heading">FAQs</string>
     <string name="contact_us_heading">聯繫我們</string>
 
     <!--App update-->
@@ -88,15 +90,26 @@
     <string name="contact_saved">聯繫已保存</string>
     <string name="setting_saved">設置已保存</string>
     <string name="block_toast">你被封鎖了</string>
+    <string name="contacts_saved">聯繫人已保存</string>
+    <string name="collab_deleted">協作已成功刪除</string>
+    <string name="profile_updated">資料更新成功</string>
+    <string name="updation_failed">更新失敗</string>
+    <string name="blank_contact_number">聯繫電話號碼不存在</string>
+    <string name="address_toast">地址應包含字母表</string>
+    <string name="select_contact">請選擇您的緊急聯繫人</string>
+    <string name="password_toast">密碼應包含至少一個數字，一個特殊字符和一個字母</string>
+    <string name="password_toast_1">密碼應至少包含一個字母</string>
+    <string name="password_toast_2">密碼應至少包含一個特殊字符</string>
+    <string name="password_toast_3">密碼至少應包含一個數字</string>
     <string name="group_deleted">組已成功刪除</string>
     <string name="error">錯誤</string>
-    <string name="accepted">Accepted</string>
+    <string name="accepted">公認</string>
     <string name="exit_group_msg">您已成功退出群組</string>
     <string name="group_created_msg">組成功創建</string>
-    <string name="colab_created_msg">Collaboration created successfully</string>
+    <string name="colab_created_msg">協作創建成功</string>
     <string name="you_havnt_change">你沒有改變團體信息</string>
     <string name="group_edited">組編輯成功</string>
-    <string name="collab_edited">Collaboration edited successfully</string>
+    <string name="collab_edited">協作編輯成功</string>
     <string name="member_removed">會員已成功刪除</string>
     <string name="member_added">會員成功添加</string>
     <string name="no_data_found">沒有找到數據</string>
@@ -119,6 +132,7 @@
     <string name="already_deed">這個契約已經有人報導了</string>
     <string name="sos_location_error">位置不能為空。 請到位置</string>
     <string name="sos_success">緊急創建成功</string>
+    <string name="invite_sent">邀請已發送</string>
 
     <!--Bottom navigation-->
     <string name="map_home">家</string>
@@ -137,6 +151,7 @@
     <string name="group_name">团队名字 *</string>
     <string name="group_desc">小组介绍</string>
     <string name="save">保存</string>
+    <string name="invite_creators">邀請群組創作者</string>
     <string name="take_picture">拍照片</string>
     <string name="browse">浏览</string>
     <string name="add_member">添加成员</string>
@@ -154,15 +169,17 @@
     <string name="dismiss_admin">作為管理員解僱</string>
 
     <!--Collab-->
-    <string name="collab_name">Collaboration Name *</string>
-    <string name="collab_desc">Collaboration Description *</string>
-    <string name="edit_collab">Edit Collaboration</string>
-    <string name="delete_collab">Delete Collab</string>
-    <string name="exit_collab">Exit Collab</string>
-    <string name="collab_info">Collab Info</string>
-    <string name="no_colab_found">No collaborations found. Do you want to create one?</string>
-    <string name="no_pending_invites">No pending invites</string>
-    <string name="collab_details">Collab Details</string>
+    <string name="collab_name">協作名稱 *</string>
+    <string name="collab_desc">協作說明 *</string>
+    <string name="edit_collab">編輯協作</string>
+    <string name="delete_collab">刪除協作</string>
+    <string name="exit_collab">退出協作</string>
+    <string name="collab_info">協作信息</string>
+    <string name="no_colab_found">沒有找到合作。你想創造一個嗎？</string>
+    <string name="no_pending_invites">沒有待處理的邀請</string>
+    <string name="collab_details">協作細節</string>
+    <string name="select_grp_creators">選擇組創建者</string>
+    <string name="search_group">搜索組 *</string>
 
     <!--My profile-->
     <string name="my_profile">我的简历</string>
@@ -188,7 +205,7 @@
     <string name="select_pref">選擇首選項</string>
     <string name="select_location">选择位置</string>
     <string name="permanent_location">永久的位置</string>
-    <string name="remove_location">Remove Location</string>
+    <string name="remove_location">刪除位置</string>
     <string name="deed_validity_heading">契约有效期（1至48小时）</string>
     <string name="select_audiance">选择受众</string>
     <string name="description">需要的故事</string>
@@ -249,6 +266,9 @@
     <string name="report_deed_msg">你真的想報告契約嗎？</string>
     <string name="remove_sos_msg">你真的想刪除這個SOS嗎？</string>
     <string name="delete_grp_msg">你真的想刪除這個群組嗎？</string>
+    <string name="remove_collab_member_dialog">從協作中刪除此成員？</string>
+    <string name="exit_clb_msg">你真的想退出這次合作嗎？</string>
+    <string name="delete_clb_msg">你真的想刪除這個合作嗎？</string>
     <string name="exit_grp_msg">你真的想退出這個群體嗎？</string>
     <string name="delete_resource_msg">你真的想刪除這個資源嗎？</string>
     <string name="logout_msg">你真的想退出嗎？</string>
@@ -338,16 +358,16 @@
     <string name="select_from_avatars">從頭像中選擇</string>
     <string name="no_records_found">没有找到记录</string>
     <string name="list_of_people">需要帮助的人员名单</string>
-    <string name="reg_completion_link">A registration completion link has been sent to </string>
-    <string name="reg_completion_link_1">. You can set your password using that link.</string>
-    <string name="reg_completion_link_2">Please check your promotions, social, spam or junk mails folders. Depending on your email preference settings, email from admin@giftadeed.com may end up in different folders.</string>
+    <string name="reg_completion_link">已發送註冊完成鏈接 </string>
+    <string name="reg_completion_link_1">. 您可以使用該鏈接設置密碼.</string>
+    <string name="reg_completion_link_2">請檢查您的促銷，社交，垃圾郵件或垃圾郵件文件夾。根據您的電子郵件首選項設置，來自admin@giftadeed.com的電子郵件可能最終位於不同的文件夾中</string>
     <string name="you_earned">你赚取了:</string>
     <string name="your_points">你的总积分:</string>
     <string name="tagged_deeds_for_day">标记的行为 &amp; 实现了一天的行动</string>
     <string name="todays_deeds">今天的标记事迹</string>
     <string name="todays_fulfilled_deeds">今天的履行行动</string>
-    <string name="filter">过滤</string>
-    <string name="filters">Filters</string>
+    <string name="filter">過濾</string>
+    <string name="filters">過濾器</string>
     <string name="filter_group">按組過濾</string>
     <string name="start_writing">开始在这里写... </string>
     <string name="apply_filters">应用过滤器</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -41,7 +42,7 @@
                 android:gravity="center"
                 android:text="@string/sos_heading"
                 android:textColor="@color/grey"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,16 +59,17 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
                         android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
                         android:src="@drawable/current_locn" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/current_location_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:textColorHint="@color/grey">
+                        android:textColorHint="@color/grey"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/et_current_location"
@@ -76,13 +78,13 @@
                             android:layout_marginTop="2dp"
                             android:layout_marginRight="10dp"
                             android:backgroundTint="@color/grey"
-                            android:textColor="@color/grey"
-                            android:hint="@string/current_location"
-                            android:textColorHint="@color/grey"
-                            android:textSize="16sp"
                             android:editable="false"
-                            android:focusable="false" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:focusable="false"
+                            android:hint="@string/current_location"
+                            android:textColor="@color/grey"
+                            android:textColorHint="@color/grey"
+                            android:textSize="16dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <TextView
@@ -93,7 +95,7 @@
                     android:layout_marginRight="15dp"
                     android:text="@string/refresh_current_location"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -101,14 +103,14 @@
                     android:layout_margin="10dp"
                     android:text="@string/nature_emer"
                     android:textColor="@color/grey"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/my_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_marginLeft="10dp"
+                    android:scrollbars="none" />
 
                 <Button
                     android:id="@+id/btn_open_camera"
@@ -124,14 +126,14 @@
                     android:text="@string/take_picture"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/finaltextfont" />
+                    android:textSize="16dp" />
 
                 <ImageView
                     android:id="@+id/captured_photo"
                     android:layout_width="fill_parent"
                     android:layout_height="250dp"
-                    android:src="@drawable/default_group_icon"
                     android:scaleType="centerInside"
+                    android:src="@drawable/default_group_icon"
                     android:visibility="gone" />
 
                 <Button
@@ -144,7 +146,7 @@
                     android:text="@string/send"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

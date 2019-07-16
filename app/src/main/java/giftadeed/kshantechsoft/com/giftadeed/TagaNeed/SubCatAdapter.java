@@ -1,19 +1,25 @@
 package giftadeed.kshantechsoft.com.giftadeed.TagaNeed;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import giftadeed.kshantechsoft.com.giftadeed.R;
 
 public class SubCatAdapter extends BaseAdapter {
     ArrayList<SubCategories> list = new ArrayList<>();
     Context context;
-    int qty;
+//    int qty = 0;
 
     public SubCatAdapter(ArrayList<SubCategories> subcategories, Context context) {
         this.list = subcategories;
@@ -42,31 +48,50 @@ public class SubCatAdapter extends BaseAdapter {
         TextView subCatname = (TextView) view.findViewById(R.id.sub_cat_name);
         ImageView imgPlus = (ImageView) view.findViewById(R.id.iv_plus);
         ImageView imgMinus = (ImageView) view.findViewById(R.id.iv_minus);
-        final TextView subCatQty = (TextView) view.findViewById(R.id.tv_sub_cat_qty);
+        final EditText subCatQty = (EditText) view.findViewById(R.id.tv_sub_cat_qty);
         subCatname.setText(list.get(i).getSubCatName());
-        subCatQty.setText(""+list.get(i).getQty());
+        subCatQty.setText("" + list.get(i).getQty());
 
         imgPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                qty = Integer.parseInt(subCatQty.getText().toString());
-                if (qty >= 0) {
+               /* qty = Integer.parseInt(subCatQty.getText().toString());
+                if ((qty >= 0) && (qty != 99999)) {
                     qty = qty + 1;
                     subCatQty.setText("" + qty);
                     list.get(i).setQty(qty);
-                }
+                }*/
             }
         });
 
         imgMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                qty = Integer.parseInt(subCatQty.getText().toString());
+                /*qty = Integer.parseInt(subCatQty.getText().toString());
                 if (qty > 0) {
                     qty = qty - 1;
                     subCatQty.setText("" + qty);
                     list.get(i).setQty(qty);
-                }
+                }*/
+            }
+        });
+
+        subCatQty.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("text_watcher", "before");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                qty = Integer.parseInt(subCatQty.getText().toString());
+//                list.get(i).setQty(qty);
+                Log.d("text_watcher", "ontextchange");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d("text_watcher", "after");
             }
         });
 

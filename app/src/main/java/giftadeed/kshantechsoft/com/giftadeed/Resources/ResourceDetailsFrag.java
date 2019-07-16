@@ -6,12 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -27,6 +21,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
@@ -39,7 +41,6 @@ import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
@@ -71,11 +72,13 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     private AlertDialog alertDialog;
     ImageView resLocation;
     TextView txtgroupname, txtaddress, txtresname, txtDate, txttypes, txtSubtypes, txt_qty_perperson;
-    String str_ResCreatorId, strUser_ID, str_resid, callingFrom, str_geopoint;
+    String str_ResCreatorId, strUser_ID, str_resid, callingFrom, str_geopoint, str_groupId, str_groupName, str_resName, str_address,
+            str_resDesc, resAllGrpSelected, resAudienceGrpIds, resAudienceGrpNames;
     static FragmentManager fragmgr;
     SessionManager sessionManager;
     SimpleArcDialog mDialog;
     private GoogleApiClient mGoogleApiClient;
+    StringBuffer sb, rescatId, rescat, ressubcatId, ressubcat;
 
     public static ResourceDetailsFrag newInstance(int sectionNumber) {
         ResourceDetailsFrag fragment = new ResourceDetailsFrag();
@@ -163,17 +166,17 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ResourceDetailsInterface service = retrofit.create(ResourceDetailsInterface.class);
-        Call<List<ResourcePOJO>> call = service.fetchData(strUser_ID, str_resid);
-        call.enqueue(new Callback<List<ResourcePOJO>>() {
+        Call<ResourcePOJO> call = service.fetchData(strUser_ID, str_resid);
+        call.enqueue(new Callback<ResourcePOJO>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Response<List<ResourcePOJO>> response, Retrofit retrofit) {
+            public void onResponse(Response<ResourcePOJO> response, Retrofit retrofit) {
                 Log.d("response_resdetails", "" + response.body());
                 try {
-                    List<ResourcePOJO> resourcePOJO = response.body();
+                    ResourcePOJO resourcePOJO = response.body();
                     int isblock = 0;
                     try {
-                        isblock = resourcePOJO.get(0).getIsBlocked();
+                        isblock = resourcePOJO.getIsBlocked();
                     } catch (Exception e) {
                         isblock = 0;
                     }
@@ -190,39 +193,55 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         mDialog.dismiss();
-                        txtgroupname.setText(resourcePOJO.get(0).getGroup_name());
-                        str_ResCreatorId = resourcePOJO.get(0).getCreatorId();
-                        txtresname.setText(resourcePOJO.get(0).getResName());
-                        if (resourcePOJO.get(0).getDescription().length() > 0) {
-                            qtyLayout.setVisibility(View.VISIBLE);
-                            txt_qty_perperson.setText(resourcePOJO.get(0).getDescription());
-                        } else {
-                            qtyLayout.setVisibility(View.GONE);
-                        }
+                        if (resourcePOJO.getStatus() == 1) {
+                            for (int i = 0; i < resourcePOJO.getResDetailsPojos().size(); i++) {
+                                str_groupId = resourcePOJO.getResDetailsPojos().get(0).getGroup_id();
+                                str_groupName = resourcePOJO.getResDetailsPojos().get(0).getGroup_name();
+                                txtgroupname.setText("" + str_groupName);
+                                str_ResCreatorId = resourcePOJO.getResDetailsPojos().get(0).getCreatorId();
+                                Log.d("res_creator", "" + str_ResCreatorId);
+                                str_resName = resourcePOJO.getResDetailsPojos().get(0).getResName();
+                                txtresname.setText("" + str_resName);
+                                str_resDesc = resourcePOJO.getResDetailsPojos().get(0).getDescription();
+                                if (resourcePOJO.getResDetailsPojos().get(0).getDescription().length() > 0) {
+                                    qtyLayout.setVisibility(View.VISIBLE);
+                                    txt_qty_perperson.setText(resourcePOJO.getResDetailsPojos().get(0).getDescription());
+                                } else {
+                                    qtyLayout.setVisibility(View.GONE);
+                                }
 
-                        StringBuffer sb = new StringBuffer("");
-                        for (int i = 0; i < resourcePOJO.get(0).getSubTypes().size(); i++) {
-                            sb.append(resourcePOJO.get(0).getSubTypes().get(i).getNeedname() + " : " + resourcePOJO.get(0).getSubTypes().get(i).getSubTypeName() + "\n");
+                                sb = new StringBuffer("");
+                                rescat = new StringBuffer("");
+                                rescatId = new StringBuffer("");
+                                ressubcat = new StringBuffer("");
+                                ressubcatId = new StringBuffer("");
+                                for (int j = 0; j < resourcePOJO.getResDetailsPojos().get(0).getSubTypes().size(); j++) {
+                                    sb.append(resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getNeedname() + " : " +
+                                            resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getSubTypeName() + "\n");
+                                    rescatId.append(resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getNeedId() + ",");
+                                    rescat.append(resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getNeedname() + ",");
+                                    ressubcatId.append(resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getSubTypeId() + ",");
+                                    ressubcat.append(resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getSubTypeName() + ",");
+                                }
+                                txtSubtypes.setText(sb);
+                                str_geopoint = resourcePOJO.getResDetailsPojos().get(0).getGeopoint();
+                                str_address = resourcePOJO.getResDetailsPojos().get(0).getAddress();
+                                txtaddress.setText(resourcePOJO.getResDetailsPojos().get(0).getAddress());
+                                resAllGrpSelected = resourcePOJO.getResDetailsPojos().get(0).getResource_audience_all_groups();
+                                resAudienceGrpIds = resourcePOJO.getResDetailsPojos().get(0).getResource_audience_group_ids();
+                                resAudienceGrpNames = resourcePOJO.getResDetailsPojos().get(0).getResource_audience_group_names();
+                                txtDate.setText(resourcePOJO.getResDetailsPojos().get(0).getCreated_at());
+                            }
+                        } else if (resourcePOJO.getStatus() == 0) {
+                            Toast.makeText(getContext(), resourcePOJO.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
-                        txtSubtypes.setText(sb);
-
-//                        txttypes.setText(resourcePOJO.get(0).getNeed_name());
-//                        if (resourcePOJO.get(0).getSub_category().length() > 0) {
-//                            subTypeLayout.setVisibility(View.VISIBLE);
-//                            txtSubtypes.setText(resourcePOJO.get(0).getSub_category());
-//                        } else {
-//                            subTypeLayout.setVisibility(View.GONE);
-//                        }
-                        str_geopoint = resourcePOJO.get(0).getGeopoint();
-                        txtaddress.setText(resourcePOJO.get(0).getAddress());
-                        txtDate.setText(resourcePOJO.get(0).getCreated_at());
                     }
                 } catch (Exception e) {
                     Log.d("response_resdetails", "" + e.getMessage());
@@ -277,7 +296,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -339,13 +358,35 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         int id = item.getItemId();
         switch (id) {
             case R.id.action_edit_resource:
-                /*if (!(Validation.isNetworkAvailable(myContext))) {
+                if (!(Validation.isNetworkAvailable(myContext))) {
                     ToastPopUp.show(myContext, getString(R.string.network_validation));
                 } else {
-                    CreateResourceFragment createResourceFragment = new CreateResourceFragment();
+                    /*CreateResourceFragment createResourceFragment = new CreateResourceFragment();
                     sessionManager.createResourceDetails("");
-                    fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();
-                }*/
+                    fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();*/
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("str_rescat_id", rescatId.toString());
+                    bundle.putString("str_rescat", rescat.toString());
+                    bundle.putString("str_ressubcat_id", ressubcatId.toString());
+                    bundle.putString("str_ressubcat", ressubcat.toString());
+                    bundle.putString("str_resdesc", str_resDesc);
+                    bundle.putString("str_geopoint", str_geopoint);
+                    bundle.putString("str_address", str_address);
+                    bundle.putString("str_grpid", str_groupId);
+                    bundle.putString("str_grpname", str_groupName);
+                    bundle.putString("str_rescreatorid", str_ResCreatorId);
+                    bundle.putString("resAllGrp", resAllGrpSelected);
+                    bundle.putString("resAudGrpIds", resAudienceGrpIds);
+                    bundle.putString("resAudGrpNames", resAudienceGrpNames);
+                    CreateResourceFragment createResourceFragment = new CreateResourceFragment();
+                    createResourceFragment.setArguments(bundle);
+                    FragmentTransaction fragmentTransaction =
+                            getActivity().getSupportFragmentManager().beginTransaction();
+                    sessionManager.createResourceDetails("editRes", str_resid, str_resName);
+                    fragmentTransaction.replace(R.id.content_frame, createResourceFragment);
+                    fragmentTransaction.commit();
+                }
                 return true;
 
             case R.id.action_delete_resource:

@@ -6,7 +6,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class FulfilDistance {
-
     @SerializedName("distancevalue")
     @Expose
     private List<Distancevalue> distancevalue = null;
@@ -18,5 +17,4 @@ public class FulfilDistance {
     public void setDistancevalue(List<Distancevalue> distancevalue) {
         this.distancevalue = distancevalue;
     }
-
 }

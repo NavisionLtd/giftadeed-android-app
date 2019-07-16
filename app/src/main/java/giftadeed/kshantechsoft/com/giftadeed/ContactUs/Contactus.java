@@ -4,12 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,9 +14,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -39,15 +39,11 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.Dashboard.Dashboard;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.DeedDetailsModel;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.EndorsedeedInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Needdetails.StatusModel;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
@@ -64,9 +60,9 @@ import retrofit.Retrofit;
 //      Contacting to admin                                    //
 /////////////////////////////////////////////////////////////////
 
-public class Contactus extends Fragment implements GoogleApiClient.OnConnectionFailedListener{
+public class Contactus extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     View rootview;
     TextView txtadminemail;
     EditText edContactUsMessage;
@@ -74,9 +70,9 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
     SessionManager sessionManager;
     SimpleArcDialog mDialog;
     private GoogleApiClient mGoogleApiClient;
+
     public static Contactus newInstance(int sectionNumber) {
         Contactus fragment = new Contactus();
-
         return fragment;
     }
 
@@ -84,7 +80,6 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -123,7 +118,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
             public void onClick(View view) {
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "admin@navisionltd.com"));
-                     intent.putExtra(Intent.EXTRA_SUBJECT, "Contacting Gift-a-Deed");
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Contacting Gift-a-Deed");
                     // intent.putExtra(Intent.EXTRA_TEXT, "your_text");
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
@@ -131,7 +126,6 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                 }
             }
         });
-
 
 
         edContactUsMessage.addTextChangedListener(new TextWatcher() {
@@ -142,7 +136,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(edContactUsMessage.getText().toString().length()> 499) {
+                if (edContactUsMessage.getText().toString().length() > 499) {
                     //Show toast here
                     Toast.makeText(getContext(), "Length cannot be greater than 500 characters", Toast.LENGTH_SHORT).show();
                 }
@@ -157,8 +151,8 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
         btnContactUsMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int len=edContactUsMessage.getText().toString().length();
-                Log.d("count",String.valueOf(len));
+                int len = edContactUsMessage.getText().toString().length();
+                Log.d("count", String.valueOf(len));
                 if (edContactUsMessage.getText().toString().trim().length() >= 1) {
                     contactUs();
                 } else {
@@ -195,7 +189,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         ContactusInterface servvice = retrofit.create(ContactusInterface.class);
-        Call<StatusModel> call = servvice.fetchData(user_id,message );
+        Call<StatusModel> call = servvice.fetchData(user_id, message);
         call.enqueue(new Callback<StatusModel>() {
             @Override
             public void onResponse(Response<StatusModel> response, Retrofit retrofit) {
@@ -212,7 +206,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null,null);
+                        sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
 
@@ -223,7 +217,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -232,19 +226,18 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                     } else {
 
 
+                        StatusModel statusModel = response.body();
+                        int strStatus = statusModel.getStatus();
+                        if (strStatus == 1) {
+                            mDialog.dismiss();
+                            edContactUsMessage.setText("");
+                            Toast.makeText(getContext(), "Message send successfully", Toast.LENGTH_SHORT).show();
 
-                    StatusModel statusModel = response.body();
-                    int strStatus = statusModel.getStatus();
-                    if (strStatus == 1) {
-                        mDialog.dismiss();
-                        edContactUsMessage.setText("");
-                        Toast.makeText(getContext(), "Message send successfully", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(getContext(), "Message sending failed", Toast.LENGTH_SHORT).show();
-                        mDialog.dismiss();
+                        } else {
+                            Toast.makeText(getContext(), "Message sending failed", Toast.LENGTH_SHORT).show();
+                            mDialog.dismiss();
+                        }
                     }
-                }
                 } catch (Exception e) {
                     StringWriter writer = new StringWriter();
                     e.printStackTrace(new PrintWriter(writer));

@@ -53,24 +53,4 @@ public class CategoryAdapter extends BaseAdapter {
         notifyDataSetChanged();
         return view;
     }
-
-
-    /*public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        categories.clear();
-        if (charText.length() == 0) {
-            categories.addAll(arraylist);
-        }
-        else
-        {
-            for (Needtype wp : arraylist)
-            {
-                if (wp.getNeedName().toLowerCase(Locale.getDefault()).contains(charText))
-                {
-                    categories.add(wp);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }*/
 }

@@ -3,14 +3,15 @@ package giftadeed.kshantechsoft.com.giftadeed.MyFullFillTag;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,19 +31,12 @@ import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Mytags.AdapterMyTags;
-import giftadeed.kshantechsoft.com.giftadeed.Mytags.ModelMytaglist;
-import giftadeed.kshantechsoft.com.giftadeed.Mytags.MyTagsList;
-import giftadeed.kshantechsoft.com.giftadeed.Needdetails.DeedDetailsModel;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
@@ -70,7 +64,7 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
     RelativeLayout relativeNoResultFound;
     View rootview;
     private RecyclerView.LayoutManager layoutManager;
-    static android.support.v4.app.FragmentManager fragmgr;
+    static FragmentManager fragmgr;
     FragmentActivity myContext;
     SessionManager sessionManager;
     String strUSERID;
@@ -149,7 +143,7 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
                     bundle.putString("tab", "tab1");
                     TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                     mainHomeFragment.setArguments(bundle);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                     fragmentTransaction.commit();
@@ -199,7 +193,7 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -285,7 +279,7 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
                         bundle.putString("tab", "tab1");
                         TaggedneedsFrag mainHomeFragment = new TaggedneedsFrag();
                         mainHomeFragment.setArguments(bundle);
-                        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        FragmentTransaction fragmentTransaction =
                                 getActivity().getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.content_frame, mainHomeFragment);
                         fragmentTransaction.commit();

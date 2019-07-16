@@ -11,9 +11,12 @@ public class CollabResponseStatus {
     @SerializedName("status")
     @Expose
     private Integer status;
-    @SerializedName("validation_message")
+    @SerializedName("success_message")
     @Expose
-    private String validationMsg;
+    private String successMsg;
+    @SerializedName("error_message")
+    @Expose
+    private String errorMsg;
     @SerializedName("collaboration_id")
     @Expose
     private Integer collabid;
@@ -42,11 +45,19 @@ public class CollabResponseStatus {
         this.collabid = collabid;
     }
 
-    public String getValidationMsg() {
-        return validationMsg;
+    public String getSuccessMsg() {
+        return successMsg;
     }
 
-    public void setValidationMsg(String validationMsg) {
-        this.validationMsg = validationMsg;
+    public void setSuccessMsg(String successMsg) {
+        this.successMsg = successMsg;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 }

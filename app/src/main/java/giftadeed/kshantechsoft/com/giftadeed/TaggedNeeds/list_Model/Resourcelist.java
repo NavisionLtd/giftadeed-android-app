@@ -12,6 +12,9 @@ public class Resourcelist {
     @SerializedName("geopoint")
     @Expose
     private String geopoints;
+    @SerializedName("address")
+    @Expose
+    private String address;
     @SerializedName("resource_name")
     @Expose
     private String resname;
@@ -39,6 +42,14 @@ public class Resourcelist {
 
     public void setGeopoints(String geopoints) {
         this.geopoints = geopoints;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getResname() {

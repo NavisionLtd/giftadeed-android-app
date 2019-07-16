@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
 
         card_view:cardCornerRadius="5dp"
-        card_view:cardElevation="5sp"
+        card_view:cardElevation="5dp"
 
         card_view:cardPreventCornerOverlap="true"
         card_view:cardUseCompatPadding="true"
@@ -106,8 +106,7 @@
     </android.support.v7.widget.CardView>
 </RelativeLayout>-->
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:Card_view="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
     android:layout_width="match_parent"
@@ -122,8 +121,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
@@ -147,9 +146,9 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="2"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <LinearLayout
@@ -226,11 +225,13 @@
 
                 </LinearLayout>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="2dp"
                 android:background="#c8334455" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -251,21 +252,17 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:gravity="center"
-                        android:layout_gravity="center"
                         android:orientation="vertical">
-
-
-
 
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:layout_marginTop="5dp"
-                            >
+                            android:layout_marginTop="5dp">
 
                             <ImageView
                                 android:id="@+id/txtg"
@@ -280,15 +277,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="5dp"
-                                android:textColor="#000"
                                 android:text="1000"
-                                />
+                                android:textColor="#000"
+                                android:textSize="@dimen/finaltextfont" />
 
                             <ImageView
                                 android:layout_width="@dimen/list_icon_size"
                                 android:layout_height="@dimen/list_icon_size"
-                                android:layout_marginLeft="15dp"
                                 android:layout_gravity="center"
+                                android:layout_marginLeft="15dp"
                                 android:src="@drawable/iconview" />
 
                             <TextView
@@ -298,7 +295,8 @@
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="5dp"
                                 android:text="3000"
-                                android:textColor="#000" />
+                                android:textColor="#000"
+                                android:textSize="@dimen/finaltextfont" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -314,8 +312,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:gravity="center"
                         android:layout_marginRight="5dp"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <ImageView
@@ -394,5 +392,5 @@
         </LinearLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>
 

@@ -6,14 +6,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -64,7 +64,6 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.DeleteChannelGroup;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.RemoveMemberFromChannel;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.RemoveUserFromClub;
-import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChannelListFragment;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.NeedListAdapter;
@@ -82,8 +81,6 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChatFragment.EXTRA_CHANNEL_URL;
 
 public class GroupDetailsFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     View rootview;
@@ -221,7 +218,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -495,7 +492,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -588,7 +585,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -667,7 +664,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -844,6 +841,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
         //call interface
         RemoveMemberFromChannel service = retrofit.create(RemoveMemberFromChannel.class);
         Log.d("JOBJ", "" + jsonOBJ);
+        Log.d("remove_sb_member_params", "" + urlOfChannel + ":" + model_obj);
         Call<ResponseBody> call = service.removeMembers(urlOfChannel, model_obj);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

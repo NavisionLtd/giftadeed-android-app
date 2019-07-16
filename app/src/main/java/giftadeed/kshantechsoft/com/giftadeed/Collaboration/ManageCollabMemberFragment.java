@@ -6,13 +6,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AlertDialog;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -310,7 +312,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
                                         //updateUI(false);
                                     }
                                 });
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -350,7 +352,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
                                 editsearch.setText("");
                                 getMemberList(receivedCid);
                             } else if (collabResponseStatus.getStatus() == 0) {
-                                Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),  collabResponseStatus.getErrorMsg(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -402,7 +404,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        int i = new DBGAD(getContext()).delete_row_message();
+
                         sessionManager.set_notification_status("ON");
 
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -417,32 +419,36 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        int size = collabPOJO.getMemlist().size();
-                        if (size > 0) {
-                            for (int i = 0; i < size; i++) {
-                                CollabMember member = new CollabMember();
-                                member.setMemberid(collabPOJO.getMemlist().get(i).getMemberid());
-                                member.setFirstName(collabPOJO.getMemlist().get(i).getFirstName());
-                                member.setLastName(collabPOJO.getMemlist().get(i).getLastName());
-                                member.setGroupName(collabPOJO.getMemlist().get(i).getGroupName());
-                                member.setUserRole(collabPOJO.getMemlist().get(i).getUserRole());
-                                collabMemberList.add(member);
-                            }
+                        if (collabPOJO.getStatus() == 1) {
+                            int size = collabPOJO.getMemlist().size();
+                            if (size > 0) {
+                                for (int i = 0; i < size; i++) {
+                                    CollabMember member = new CollabMember();
+                                    member.setMemberid(collabPOJO.getMemlist().get(i).getMemberid());
+                                    member.setFirstName(collabPOJO.getMemlist().get(i).getFirstName());
+                                    member.setLastName(collabPOJO.getMemlist().get(i).getLastName());
+                                    member.setGroupName(collabPOJO.getMemlist().get(i).getGroupName());
+                                    member.setUserRole(collabPOJO.getMemlist().get(i).getUserRole());
+                                    collabMemberList.add(member);
+                                }
 
-                            if (collabMemberList.size() > 0) {
-                                memberCount.setVisibility(View.VISIBLE);
-                                memberCount.setText("" + size);
-                                noCollabMember.setText(getResources().getString(R.string.total_members));
-                                editsearch.setVisibility(View.VISIBLE);
-                                listView.setVisibility(View.VISIBLE);
-                                adapter = new FilterCollabMemberAdapter(myContext, collabMemberList, userRole);
-                                listView.setAdapter(adapter);
-                            } else {
-                                listView.setVisibility(View.GONE);
-                                memberCount.setVisibility(View.GONE);
-                                editsearch.setVisibility(View.GONE);
-                                noCollabMember.setText(getResources().getString(R.string.no_members));
+                                if (collabMemberList.size() > 0) {
+                                    memberCount.setVisibility(View.VISIBLE);
+                                    memberCount.setText("" + size);
+                                    noCollabMember.setText(getResources().getString(R.string.total_members));
+                                    editsearch.setVisibility(View.VISIBLE);
+                                    listView.setVisibility(View.VISIBLE);
+                                    adapter = new FilterCollabMemberAdapter(myContext, collabMemberList, userRole);
+                                    listView.setAdapter(adapter);
+                                } else {
+                                    listView.setVisibility(View.GONE);
+                                    memberCount.setVisibility(View.GONE);
+                                    editsearch.setVisibility(View.GONE);
+                                    noCollabMember.setText(getResources().getString(R.string.no_members));
+                                }
                             }
+                        } else if (collabPOJO.getStatus() == 0) {
+                            Toast.makeText(getContext(), collabPOJO.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (Exception e) {
