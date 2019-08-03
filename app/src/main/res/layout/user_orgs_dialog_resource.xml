@@ -34,11 +34,18 @@
         android:textSize="15dp"
         android:textStyle="bold" />
 
-    <ListView
+   <!-- <ListView
         android:id="@+id/user_orgs_list_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:scrollbars="none" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_orgs_list_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:scrollbars="none" />
 
     <View

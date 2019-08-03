@@ -12,10 +12,10 @@
             android:id="@+id/btn_delete_sos"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
-            android:layout_alignParentBottom="true"
             android:background="@drawable/button_background"
             android:text="@string/del_sos"
             android:textAllCaps="false"
@@ -25,8 +25,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_marginBottom="50dp"
             android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical"
             android:scrollbars="vertical">
 
@@ -43,7 +43,7 @@
                     android:layout_height="250dp"
                     android:layout_margin="10dp"
                     android:scaleType="centerInside"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/sos_creator_layout"
@@ -93,38 +93,63 @@
                         android:textSize="14dp" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/sos_location_1"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16dp" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginRight="10dp"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="1">
 
-                        <ImageView
-                            android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.1"
-                            android:src="@drawable/locationmarker" />
+                            android:text="@string/sos_location_1"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16dp" />
 
                         <TextView
                             android:id="@+id/txt_sos_address"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="3dp"
+                            android:layout_height="match_parent"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/sos_details_locationicon"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
-                            android:text=""
+                            android:layout_marginBottom="3dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_get_direction"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="14dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="3dp"
+                            android:gravity="center"
+                            android:text="Get Directions"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="14dp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -132,8 +157,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginBottom="20dp"
                     android:orientation="horizontal">
 
                     <TextView

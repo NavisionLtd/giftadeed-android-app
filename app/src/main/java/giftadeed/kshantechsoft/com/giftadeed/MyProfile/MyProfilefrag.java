@@ -3,28 +3,15 @@ package giftadeed.kshantechsoft.com.giftadeed.MyProfile;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.material.textfield.TextInputLayout;
-
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.content.FileProvider;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -47,6 +34,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -58,6 +53,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,6 +64,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
+import com.sendbird.android.User;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.io.File;
@@ -89,6 +88,9 @@ import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.BuildConfig;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.main.ConnectionManager;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
+import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PushUtils;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.CityAdapter;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.CityModel;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.CitySignup;
@@ -104,10 +106,10 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.StateModel;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.StateSignup;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.Utility;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
@@ -238,6 +240,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         }
                         if (path.length() > 0) {
                             Glide.with(getContext()).load(path).into(profilePic);
+                            sessionManager.store_profile_image_path(path);
                         } else {
                             Glide.with(getContext()).load(R.drawable.ic_default_profile_pic).into(profilePic);
                         }
@@ -663,20 +666,22 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 if (!hasFocus) {
                     if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
-                    } else if (strPassword.length() < 8 || strPassword.length() > 20) {
+                    } else if (strPassword.length() < 6 || strPassword.length() > 20) {
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
                         edpassword.setText("");
-                    } else if (!(strPassword.matches(".*[a-zA-Z]+.*"))) {
+                    }
+
+                    // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
+                    /*else if (!(strPassword.matches(".*[a-zA-Z]+.*"))) {
                         ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast_1));
                         edpassword.setText("");
                     } else if (!(strPassword.matches(".*[!@#$%^&*()]+.*"))) {
                         ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast_2));
                         edpassword.setText("");
-
                     } else if (!(strPassword.matches(".*[0-9]+.*"))) {
                         ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast_3));
                         edpassword.setText("");
-                    }
+                    }*/
                 }
             }
         });
@@ -763,23 +768,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 return false;
             }
         });
-
-
-        /*rootview.getRootView().setFocusableInTouchMode(true);
-        rootview.getRootView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                int i = 1;
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    fragmgr = getFragmentManager();
-                    // fragmentManager.beginTransaction().replace( R.id.Myprofile_frame,TaggedneedsFrag.newInstance(i)).commit();
-                    fragmgr.beginTransaction().replace(R.id.content_main, TaggedneedsFrag.newInstance(i)).commit();
-                    return true;
-                }
-                return false;
-            }
-        });*/
-        //android.support.v4.app.FragmentManager fragManager = myContext.getSupportFragmentManager();
         return rootview;
     }
 
@@ -1713,8 +1701,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-
-
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
@@ -1722,9 +1708,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                                         //updateUI(false);
                                     }
                                 });
-
                         sessionManager.set_notification_status("ON");
-
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
@@ -1735,6 +1719,16 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                             String strFullName = fname + " " + lname;
                             ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.profile_updated));
                             sessionManager.createUserCredentialSession(strUserId, strFullName, privacy);
+
+                            // update user full name in SendBird
+                            DisconnectSendbirdCall();
+                            String image_path = sessionManager.getProfileImagePath();
+                            if (image_path != null) {
+                                loginWithSendbirdchat(strUserId, strFullName, image_path);
+                            } else {
+                                loginWithSendbirdchat(strUserId, strFullName, "");
+                            }
+
                             HashMap<String, String> user = sessionManager.getUserDetails();
                             strUserId = user.get(sessionManager.USER_ID);
                             strProfilrName = user.get(sessionManager.USER_NAME);
@@ -1764,7 +1758,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                                 startActivity(loginintent);
                             } else {
                                 //edPhone.requestFocus();
-
                                 int i = 1;
                                 fragmgr = getFragmentManager();
                                 // fragmentManager.beginTransaction().replace( R.id.Myprofile_frame,TaggedneedsFrag.newInstance(i)).commit();
@@ -1865,6 +1858,39 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     });*/
         } else {
             //display an error if no file is selected
+        }
+    }
+
+    private void updateCurrentUserInfo(final String userNickname, String photoPath) {
+        Log.d("PHOTOSNADBIRD", "uner method :  " + photoPath);
+        if (photoPath.equalsIgnoreCase("")) {
+            SendBird.updateCurrentUserInfo(userNickname, Utility.avatorDefaultIcon, new SendBird.UserInfoUpdateHandler() {
+                @Override
+                public void onUpdated(SendBirdException e) {
+                    if (e != null) {
+                        // Error!
+                        Log.d("SB_update_error", "" + e.getCode() + ":" + e.getMessage());
+                        return;
+                    }
+                    Log.d("TAG", "NickName189" + userNickname);
+                    PreferenceUtils.setNickname(getContext(), userNickname);
+                }
+            });
+        } else {
+            SendBird.updateCurrentUserInfo(userNickname, photoPath, new SendBird.UserInfoUpdateHandler() {
+                @Override
+                public void onUpdated(SendBirdException e) {
+                    if (e != null) {
+                        // Error!
+                        Log.d("SB_update_error", "" + e.getCode() + ":" + e.getMessage());
+                        // Show update failed snackbar
+//                        ToastPopUp.displayToast(TaggedneedsActivity.this, "Update user nickname failed");
+                        return;
+                    }
+                    Log.d("TAG", "NickName189" + userNickname);
+                    PreferenceUtils.setNickname(getContext(), userNickname);
+                }
+            });
         }
     }
 
@@ -1975,11 +2001,13 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 } else if (edpassword.getVisibility() == View.VISIBLE) {
                     if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
-                    } else if (strnewPassword.length() < 8 || strnewPassword.length() > 20) {
+                    } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
                         edpassword.setText("");
-                    } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
+                    }
 
+                    // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
+                    /*else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
                         ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                         edpassword.setText("");
                     } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
@@ -1989,7 +2017,8 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
                         ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                         edpassword.setText("");
-                    } else {
+                    } */
+                    else {
                         if (!(Validation.isOnline(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
@@ -2014,11 +2043,13 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             } else if (edpassword.getVisibility() == View.VISIBLE) {
                 if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
-                } else if (strnewPassword.length() < 8 || strnewPassword.length() > 20) {
+                } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
                     edpassword.setText("");
-                } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
+                }
 
+                // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
+                /*else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
                     ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
                 } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
@@ -2028,7 +2059,9 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
                     ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
-                } else {
+                } */
+
+                else {
                     if (!(Validation.isOnline(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
@@ -2084,11 +2117,13 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             } else if (edpassword.getVisibility() == View.VISIBLE) {
                 if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
-                } else if (strnewPassword.length() < 8 || strnewPassword.length() > 20) {
+                } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
                     edpassword.setText("");
-                } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
+                }
 
+                // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
+                /*else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
                     ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
                 } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
@@ -2098,7 +2133,9 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
                     ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                     edpassword.setText("");
-                } else {
+                }*/
+
+                else {
                     if (!(Validation.isOnline(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
@@ -2123,11 +2160,13 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         } else if (edpassword.getVisibility() == View.VISIBLE) {
             if (Validation.isStringNullOrBlank(edpassword.getText().toString())) {
                 ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
-            } else if (strnewPassword.length() < 8 || strnewPassword.length() > 20) {
+            } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                 ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
                 edpassword.setText("");
-            } else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
+            }
 
+            // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
+            /*else if (!(strnewPassword.matches(".*[a-zA-Z]+.*"))) {
                 ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                 edpassword.setText("");
             } else if (!(strnewPassword.matches(".*[!@#$%^&*()]+.*"))) {
@@ -2137,7 +2176,9 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             } else if (!(strnewPassword.matches(".*[0-9]+.*"))) {
                 ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.password_toast));
                 edpassword.setText("");
-            } else {
+            }*/
+
+            else {
                 if (!(Validation.isOnline(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
@@ -2186,5 +2227,87 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiClient.connect();
+    }
+
+    public void loginWithSendbirdchat(String strUserId, String strUserName, String strPhotoPath) {
+        if (strUserId != null && strUserName != null) {
+            strUserId = strUserId.replaceAll("\\s", "");
+            // String userNickname = mUserNicknameEditText.getText().toString();
+            PreferenceUtils.setUserId(getContext(), strUserId);
+            PreferenceUtils.setNickname(getContext(), strUserName);
+            connectToSendBird(strUserId, strUserName, strPhotoPath);
+        } else {
+//            Toast.makeText(getContext(), "UnAuthorized Access", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Attempts to connect a user to SendBird.
+     *
+     * @param userId       The unique ID of the user.
+     * @param userNickname The user's nickname, which will be displayed in chats.
+     */
+    private void connectToSendBird(final String userId, final String userNickname, final String strPhotoUrl) {
+        // Show the loading indicator
+        // showProgressBar(true);
+        // mConnectButton.setEnabled(false);
+        ConnectionManager.login(userId, new SendBird.ConnectHandler() {
+            @Override
+            public void onConnected(User user, SendBirdException e) {
+                // Callback received; hide the progress bar.
+                if (e != null) {
+                    // Error!
+                    Log.d("sendbird connect error", "" + e.getCode() + ": " + e.getMessage());
+                    /*Toast.makeText(
+                            getContext(), "" + e.getCode() + ": " + e.getMessage(),
+                            Toast.LENGTH_SHORT)
+                            .show();*/
+
+                    // Show login failure snackbar
+//                    ToastPopUp.displayToast(getContext(),"Login to SendBird failed");
+                    //     mConnectButton.setEnabled(true);
+                    PreferenceUtils.setConnected(getContext(), false);
+                    return;
+                }
+                Log.d("PHOTOSNADBIRD", "vv  " + user.getProfileUrl());
+                PreferenceUtils.setUserId(getContext(), user.getUserId());
+                PreferenceUtils.setNickname(getContext(), user.getNickname());
+                PreferenceUtils.setProfileUrl(getContext(), user.getProfileUrl());
+                PreferenceUtils.setConnected(getContext(), true);
+                PreferenceUtils.setGroupChannelDistinct(getContext(), false);   //set the group chat false to allow create many group by single users
+                // Update the user's nickname
+                updateCurrentUserInfo(userNickname, strPhotoUrl);
+                updateCurrentUserPushToken();
+            }
+        });
+    }
+
+    /**
+     * Update the user's push token.
+     */
+    private void updateCurrentUserPushToken() {
+        PushUtils.registerPushTokenForCurrentUser(getContext(), null);
+    }
+
+    public void DisconnectSendbirdCall() {
+        SendBird.unregisterPushTokenAllForCurrentUser(new SendBird.UnregisterPushTokenHandler() {
+            @Override
+            public void onUnregistered(SendBirdException e) {
+                if (e != null) {
+                    // Error!
+                    e.printStackTrace();
+                    // Don't return because we still need to disconnect.
+                } else {
+//                    Toast.makeText(MainActivity.this, "All push tokens unregistered.", Toast.LENGTH_SHORT).show();
+                    ConnectionManager.logout(new SendBird.DisconnectHandler() {
+                        @Override
+                        public void onDisconnected() {
+                            PreferenceUtils.setConnected(getContext(), false);
+                            //  finish();
+                        }
+                    });
+                }
+            }
+        });
     }
 }

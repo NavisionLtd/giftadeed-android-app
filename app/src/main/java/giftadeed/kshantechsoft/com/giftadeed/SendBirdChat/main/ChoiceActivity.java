@@ -99,7 +99,7 @@ public class ChoiceActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_main:
-                Intent intent = new Intent(ChoiceActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(ChoiceActivity.this, SendBirdSettingsActivity.class);
                 startActivity(intent);
                 return true;
         }

@@ -9,8 +9,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -132,9 +134,8 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     static FragmentManager fragmgr;
     private static int RESULT_LOAD_IMG = 1;
     public static final int MEDIA_TYPE_IMAGE = 1;
-    String imgDecodableString;
     private Uri fileUri;
-    Bitmap bitmap;
+    private Bitmap capturedBitmap, rotatedBitmap;
     String image, strImagenamereturned;
     SimpleArcDialog simpleArcDialog;
     SessionManager sessionManager;
@@ -451,48 +452,22 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         if (requestCode == REQUEST_CAMERA) {
             if (resultCode == RESULT_OK) {
                 File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
-                //bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 1000, 700);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     try {
-                        bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
+                        capturedBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                    capturedBitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-                //Toast.makeText(UploadImage.this, "camera" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                strimagePath = file.getAbsolutePath();
-                gieftneedimg.setImageBitmap(bitmap);
-                gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
+                int bitmap_file_size = capturedBitmap.getByteCount();
+                Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
+                rotateImage(setReducedImageSize());
             }
         }
-
- /*       if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-
-            // downsizing image as it throws OutOfMemory Exception for larger
-            // images
-            options.inSampleSize = 8;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(fileUri),null,options);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }else {
-
-                bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
-            }
-            //bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
-
-            gieftneedimg.setImageBitmap(bitmap);
-            gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
-            getActivity();
-        }*/
 
         if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
             // Get the Image from data
@@ -504,17 +479,77 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             // Move to first row
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            imgDecodableString = cursor.getString(columnIndex);
+            strimagePath = cursor.getString(columnIndex);
             cursor.close();
-            bitmap = BitmapFactory.decodeFile(imgDecodableString);
-            // Set the Image in ImageView after decoding the String
-            gieftneedimg.setImageBitmap(bitmap);
-            gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
-            // getActivity().getSupportFragmentManager().executePendingTransactions();
+            capturedBitmap = decodeSampledBitmapFromFile(strimagePath, 512, 512);
+            int bitmap_file_size = capturedBitmap.getByteCount();
+            Log.d("gallery_photo_size", "bitmap_size : " + bitmap_file_size);
+            rotateImage(setReducedImageSize());
         }
-        // myContext = (FragmentActivity) Activity;
     }
 
+    private Bitmap setReducedImageSize() {
+        int targetIVwidth = gieftneedimg.getWidth();
+        int targetIVheight = gieftneedimg.getHeight();
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(strimagePath, bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth / targetIVwidth, cameraImageHeight / targetIVheight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(strimagePath, bmOptions);
+    }
+
+    private void rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(strimagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            default:
+        }
+        rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        gieftneedimg.setImageBitmap(rotatedBitmap);
+    }
+
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) { // BEST QUALITY MATCH
+        //First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        // Calculate inSampleSize, Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        int inSampleSize = 1;
+        if (height > reqHeight) {
+            inSampleSize = Math.round((float) height / (float) reqHeight);
+        }
+        int expectedWidth = width / inSampleSize;
+
+        if (expectedWidth > reqWidth) {
+            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
+            inSampleSize = Math.round((float) width / (float) reqWidth);
+        }
+        options.inSampleSize = inSampleSize;
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(path, options);
+    }
 
     //---------------------------nougat updated code
 
@@ -530,7 +565,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         } else {
             return null;
         }
-        // mCurrentPhotoPath = file.getAbsolutePath();
+        strimagePath = mediaFile.getAbsolutePath();
         return mediaFile;
         // Save a file: path for use with ACTION_VIEW intents
         //"file:" + image.getAbsolutePath();
@@ -601,14 +636,14 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         if (!(Validation.isOnline(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
-            if (bitmap == null) {
+            if (rotatedBitmap == null) {
                 //Toast.makeText(getContext(), "You have not selected any image", Toast.LENGTH_SHORT).show();
                 // Log.d("image",image);
                 fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);
                 //sendaTag(strUser_ID, strNeedmapping_ID, str_Geopint, strImagenamereturned, strShortDescription, strFullDescription, strlocation);
             } else {
 
-                image = getStringImage(bitmap);
+                image = getStringImage(rotatedBitmap);
                 sendImageToServer();
 
                 //Toast.makeText(getContext(), "Your bitmap is not empty", Toast.LENGTH_SHORT).show();

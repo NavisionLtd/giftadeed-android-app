@@ -46,7 +46,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.View
             Picasso.with(context).load(strImagepath).memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).placeholder(R.drawable.group_default_icon).into(holder.groupImage);
         } else {
             holder.groupImage.setImageResource(R.drawable.group_default_icon);
-            holder.groupImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.groupImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
 //        holder.groupActiveTags.setText(list.get(position).getGroup_tags());
     }

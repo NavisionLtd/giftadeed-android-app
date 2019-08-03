@@ -52,8 +52,37 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="220dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/captured_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/imagedefault" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_open_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="10dp"
+                    android:background="@drawable/white_button_background"
+                    android:drawableLeft="@drawable/cam_1"
+                    android:drawablePadding="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="11dp"
+                    android:text="@string/take_picture"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -112,29 +141,12 @@
                     android:layout_marginLeft="10dp"
                     android:scrollbars="none" />
 
-                <Button
-                    android:id="@+id/btn_open_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@color/grey"
-                    android:drawableStart="@drawable/cam"
-                    android:drawableLeft="@drawable/cam"
-                    android:drawablePadding="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="11dp"
-                    android:text="@string/take_picture"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="16dp" />
-
-                <ImageView
+                <!--<ImageView
                     android:id="@+id/captured_photo"
-                    android:layout_width="fill_parent"
-                    android:layout_height="250dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="280dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/default_group_icon"
-                    android:visibility="gone" />
+                    android:visibility="gone" />-->
 
                 <Button
                     android:id="@+id/btn_sos_send_details"

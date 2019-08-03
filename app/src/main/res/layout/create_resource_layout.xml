@@ -46,7 +46,7 @@
                         app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
-                            android:id="@+id/tv_select_group"
+                            android:id="@+id/tv_select_from_group"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
@@ -260,6 +260,24 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
+
+        <!--<br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/button_create_resource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_background"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="4dp" />-->
 
         <Button
             android:id="@+id/button_create_resource"

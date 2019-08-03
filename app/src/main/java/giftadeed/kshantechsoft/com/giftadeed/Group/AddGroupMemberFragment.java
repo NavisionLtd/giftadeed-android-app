@@ -190,6 +190,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         client.setWriteTimeout(1, TimeUnit.HOURS);
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
+        mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SearchMemberInterface service = retrofit.create(SearchMemberInterface.class);
@@ -290,6 +291,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         client.setWriteTimeout(1, TimeUnit.HOURS);
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
+        mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         AddMemberInterface service = retrofit.create(AddMemberInterface.class);

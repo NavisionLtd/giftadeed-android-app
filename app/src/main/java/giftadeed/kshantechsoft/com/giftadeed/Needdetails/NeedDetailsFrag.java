@@ -154,7 +154,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         fragmgr = getFragmentManager();
         init();
         img.setImageResource(R.drawable.imagedefault);
-        img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        img.setScaleType(ImageView.ScaleType.FIT_CENTER);
         mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
 
         //detailsofgieft.loadDataWithBaseURL(null, getString(R.string.faq), "text/html", "utf-8", "");
@@ -195,7 +195,6 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                 }
             }
         });
-
 
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,6 +284,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                 }
             }
         });
+
         edComment.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -534,10 +534,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
                                 if (strImagepath.length() > 57) {
                                     Picasso.with(myContext).load(strImagepath).placeholder(R.drawable.imagedefault).into(img);
-                                    img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                    img.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                 } else {
                                     img.setImageResource(R.drawable.imagedefault);
-                                    img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                    img.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                 }
                             } catch (Exception e) {
                                 mDialog.dismiss();

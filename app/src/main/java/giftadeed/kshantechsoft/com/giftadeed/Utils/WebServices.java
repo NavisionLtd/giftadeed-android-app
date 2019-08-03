@@ -113,6 +113,7 @@ public class WebServices {
 
     //Resource api
     public static final String Add_Resource = SUB_URL + "add_resource.php";
+    public static final String Update_Resource = SUB_URL + "update_resource.php";
     public static final String User_Resource = SUB_URL + "user_resource.php";
     public static final String Resource_Details = SUB_URL + "resource_details.php";
     public static final String Delete_Resource = SUB_URL + "del_resource.php";

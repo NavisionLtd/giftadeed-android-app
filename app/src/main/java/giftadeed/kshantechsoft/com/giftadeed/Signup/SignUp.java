@@ -101,7 +101,7 @@ public class SignUp extends AppCompatActivity {
         //strDeviceid = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         fragmgr = getSupportFragmentManager();
 
-        //------------changed for firebase notificatio
+        //------------changed for firebase notification
         String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
 //        Log.d("deviceid", strDeviceid);
         //getcountry();

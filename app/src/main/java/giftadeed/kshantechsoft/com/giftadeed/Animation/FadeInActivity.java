@@ -2,8 +2,6 @@ package giftadeed.kshantechsoft.com.giftadeed.Animation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,6 +9,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 
 import giftadeed.kshantechsoft.com.giftadeed.R;
@@ -19,6 +20,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 public class FadeInActivity extends AppCompatActivity implements Animation.AnimationListener {
     private TextView txt2, txtcreditpoints, txttotalpoints, txtneedname;
     private ImageView imageView, imageViewClose;
+    private LottieAnimationView lottieAnimationView;
     private Button btnShare;
     private Animation animFadein;
     private String reason = "", needtype = "", credits_points = "", total_points = "";
@@ -29,6 +31,7 @@ public class FadeInActivity extends AppCompatActivity implements Animation.Anima
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reward_dialog);
         imageView = (ImageView) findViewById(R.id.image_reward);
+        lottieAnimationView = (LottieAnimationView) findViewById(R.id.image_reward1);
         imageViewClose = (ImageView) findViewById(R.id.ic_close);
         txt2 = (TextView) findViewById(R.id.text2);
         txtcreditpoints = (TextView) findViewById(R.id.text_deed_points);
@@ -41,22 +44,28 @@ public class FadeInActivity extends AppCompatActivity implements Animation.Anima
         credits_points = getIntent().getStringExtra("credit_points");
         total_points = getIntent().getStringExtra("total_points");
 
-        if (reason.equals("by tagging")) {
-            Glide.with(this)
-                    .load(R.drawable.tag_reward)
-                    .into(imageView);
-        } else {
-            Glide.with(this)
-                    .load(R.drawable.gift_reward)
-                    .into(imageView);
-        }
         // load the animation
         animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.zoom_out);
         // set animation listener
         animFadein.setAnimationListener(this);
-        // start the animation
-        imageView.startAnimation(animFadein);
+
+        if (reason.equals("by tagging")) {
+            imageView.setVisibility(View.VISIBLE);
+            lottieAnimationView.setVisibility(View.GONE);
+            Glide.with(this)
+                    .load(R.drawable.tag_reward)
+                    .into(imageView);
+            // start the animation
+            imageView.startAnimation(animFadein);
+        } else {
+            /*Glide.with(this)
+                    .load(R.drawable.gift_reward)
+                    .into(imageView);*/
+            lottieAnimationView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.GONE);
+        }
+
         txt2.setText(reason);
         txtneedname.setText(needtype);
         txtcreditpoints.setText(credits_points);

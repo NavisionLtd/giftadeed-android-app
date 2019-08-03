@@ -72,7 +72,6 @@ class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     interface OnItemClickListener {
         void onUserMessageItemClick(UserMessage message);
-
         void onFileMessageItemClick(FileMessage message);
     }
 

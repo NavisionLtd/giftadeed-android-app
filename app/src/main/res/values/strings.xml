@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 9 July</string>
+    <string name="app_name">GAD P2 Test 02 August</string>
 
     <!--Login page-->
     <string name="login_terms">Terms and Conditions</string>
@@ -13,6 +13,7 @@
     <string name="forgot">Forgot Password?</string>
     <string name="txtseperator">OR LOGIN WITH</string>
     <string name="txtagree1">By logging in, you agree to our </string>
+    <string name="txtsignagree">By signing up, you agree to our </string>
     <string name="terms_and">and</string>
     <string name="select_language">Select language</string>
     <string name="registered_email">Enter registered email</string>
@@ -100,7 +101,7 @@
 
     <!--Grid menu and details-->
     <string name="my_tags">MY TAGS</string>
-    <string name="noti_history">Notification History</string>
+    <string name="noti_history">Deed Updates</string>
     <string name="my_tags_heading">My Tags</string>
     <string name="list_of_your">List of your tagged</string>
     <string name="list_of_mytags">List of my tags</string>
@@ -185,7 +186,7 @@
     <string name="my_profile">My Profile</string>
     <string name="edit_profile">Edit</string>
     <string name="my_credits">My Credits - </string>
-    <string name="change_pass">Change Password</string>
+    <string name="change_pass">Password</string>
     <string name="change_pic">Change Picture</string>
     <string name="state">State</string>
     <string name="city">City</string>
@@ -208,7 +209,8 @@
     <string name="remove_location">Remove Location</string>
     <string name="deed_validity_heading">Deed Validity (1 to 48 Hours)</string>
     <string name="select_audiance">Select audience</string>
-    <string name="description">Story of need</string>
+    <string name="tag_description">Story of need</string>
+    <string name="description">Story of need :</string>
     <string name="post">Post</string>
     <string name="container_available">Container Available</string>
     <string name="container_note">* Whether that needy person has a food plate/water container to receive the donated food/water?</string>
@@ -217,8 +219,8 @@
     <string name="deed_details_heading">Deed Details</string>
     <string name="str_location">Location : </string>
     <string name="no_needy">No needy people around you</string>
-    <string name="people_looking_1"> Person is looking for your help </string>
-    <string name="people_looking_2"> People are looking for your help </string>
+    <string name="people_looking_1">Deed found near you</string>
+    <string name="people_looking_2">Deeds found near you</string>
     <string name="pref_1"> Preferences for person / people : </string>
     <string name="deed_location">Deed Location : </string>
     <string name="deed_details">Deed Details : </string>
@@ -348,7 +350,7 @@
     <string name="Enter_emailaddress">Enter email address</string>
     <string name="Enter_Mobileno">Enter mobile number</string>
     <string name="Password_blank">Password cannot be blank</string>
-    <string name="Password_length">Password length should be between 8-20 characters</string>
+    <string name="Password_length">Password length should be between 6-20 characters</string>
     <string name="resenttxt"><u>Resend Email</u></string>
     <string name="facebook_app_id">1250339181777732</string>
     <string name="fb_login_protocol_scheme">fb1250339181777732</string>

@@ -19,6 +19,7 @@ public class SessionManager {
     public static final String IS_LOGIN = "IsLoggedIn";
     public static final String USER_ID = "User_Id";
     public static final String USER_NAME = "name";
+    public static final String USER_PROFILE_IMAGE = "profile_image";
     public static final String KEY_SELECTED_LANGUAGE = "SelectedLanguage";
     public static final String KEY_COUNTRY_CODE = "CountryCode";
     public static final String KEY_radius = "radius";
@@ -73,6 +74,16 @@ public class SessionManager {
         // user.put(KEY_User, pref.getString(KEY_User, null));
         // return user
         return user;
+    }
+
+    public void store_profile_image_path(String path) {
+        editor.putString(USER_PROFILE_IMAGE, path);
+        editor.commit();
+    }
+
+    public String getProfileImagePath() {
+        String path = pref.getString(USER_PROFILE_IMAGE, null);
+        return path;
     }
 
     public void createGroupDetails(String callingfrom, String gid, String gname, String gdesc, String gimage) {

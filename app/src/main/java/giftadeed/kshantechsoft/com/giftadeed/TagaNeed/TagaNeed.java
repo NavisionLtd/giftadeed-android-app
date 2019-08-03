@@ -9,14 +9,15 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
@@ -70,7 +71,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
@@ -162,7 +162,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     String lat, longi;
     View rootview;
     String itemname, itemid;
-    ImageView gieftneedimg, imgcategory, imgshare, imgchar;
+    ImageView tagneedimg, imgcategory, imgshare, imgchar;
     Button btnCamera, btnGallery, btnPost, dialogbtnconfirm, dialogbtncancel, btnOk, btnShare;
     TextView dialogtext, txtDescription, txtvalidity, txtdialogcreditpoints, txttotalpoints, txt2, txtneedname;
     EditText edSelectFromGroup, edselectcategory, selectedPref, edselectAudiance, edselectlocation, edDescription;
@@ -170,14 +170,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     String selectedFromGroupId = "", selectedFromGroupName, strNeedmapping_ID, strNeed_Name, strCharacter_Path, strImagenamereturned, strUser_ID, strCreditpoints, strTotalpoints;
     LinearLayout layout_container, layout_audiance, fromGroupLinearLayout;
     CheckBox Checkbox_container;
-    Bitmap bitmap;
+    private Bitmap capturedBitmap, rotatedBitmap;
     String image;
     ScrollView deeddetails_scrollview;
     String strCategory, strlocation, strFullDescription;
     SessionManager sessionManager;
     private static int RESULT_LOAD_IMG = 11;
     public static final int MEDIA_TYPE_IMAGE = 1;
-    String imgDecodableString;
     private Uri fileUri;
     private static final String IMAGE_DIRECTORY_NAME = "GiftaDeed";
     private ArrayList<Needtype> categories;
@@ -329,8 +328,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
                 String strImagepath = WebServices.MAIN_SUB_URL + strImagenamereturned;
                 if (strImagepath.length() > 57) {
-                    Picasso.with(getContext()).load(strImagepath).placeholder(R.drawable.imgbackground).into(gieftneedimg);
-                    gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
+                    Picasso.with(getContext()).load(strImagepath).placeholder(R.drawable.imgbackground).into(tagneedimg);
+                    tagneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
                     String[] words = strImagenamereturned.split("/");
                     strImagenamereturned = words[2].replace(".png", "");
                     Log.d("editimgpath", strImagenamereturned);
@@ -612,7 +611,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         edselectcategory = (EditText) rootview.findViewById(R.id.edtaganeedcategory);
         edselectAudiance = (EditText) rootview.findViewById(R.id.select_audience);
         edselectlocation = (EditText) rootview.findViewById(R.id.edtaganeedlocation);
-        gieftneedimg = (ImageView) rootview.findViewById(R.id.giftneedimg);
+        tagneedimg = (ImageView) rootview.findViewById(R.id.tagneedimg);
         imgcategory = (ImageView) rootview.findViewById(R.id.imgselectcategoryimg);
         layout_container = rootview.findViewById(R.id.layout_container);
         btnCamera.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
@@ -873,8 +872,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     public void getCategory(String selectedgroupid) {
         categories = new ArrayList<>();
         customCategories = new ArrayList<>();
-        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
-        simpleArcDialog.show();
+//        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
+//        simpleArcDialog.show();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -886,7 +885,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         call.enqueue(new Callback<CategoryType>() {
             @Override
             public void onResponse(Response<CategoryType> response, Retrofit retrofit) {
-                simpleArcDialog.dismiss();
+//                simpleArcDialog.dismiss();
                 CategoryType categoryType = response.body();
                 Log.d("response_categories", "" + response.body());
                 if (categoryCallingFrom.equals("EditDeedScreenload")) {
@@ -996,7 +995,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
             @Override
             public void onFailure(Throwable t) {
-                simpleArcDialog.dismiss();
+//                simpleArcDialog.dismiss();
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
         });
@@ -1134,7 +1133,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     dialog.dismiss();
                 }
             });
-            simpleArcDialog.dismiss();
             dialog.show();
         }
     }
@@ -1146,9 +1144,9 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
-        simpleArcDialog.show();
-        simpleArcDialog.setCancelable(false);
+//        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
+//        simpleArcDialog.show();
+//        simpleArcDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SubCategoryInterface service = retrofit.create(SubCategoryInterface.class);
@@ -1157,7 +1155,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         call.enqueue(new Callback<List<SubCategories>>() {
             @Override
             public void onResponse(Response<List<SubCategories>> response, Retrofit retrofit) {
-                simpleArcDialog.dismiss();
+//                simpleArcDialog.dismiss();
                 List<SubCategories> subCategoryType = response.body();
                 subcategories.clear();
                 try {
@@ -1190,7 +1188,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
             @Override
             public void onFailure(Throwable t) {
-                simpleArcDialog.dismiss();
+//                simpleArcDialog.dismiss();
                 Log.d("subtype_error", t.getMessage());
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
@@ -1615,10 +1613,11 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             edselectcategory.setText("");
                             edDescription.setText("");
                             edselectlocation.setText(adress_show);
-                            gieftneedimg.setImageResource(R.drawable.pictu);
-                            gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
+                            tagneedimg.setImageResource(R.drawable.pictu);
+                            tagneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
                             imgcategory.setImageResource(android.R.color.transparent);
-                            bitmap = null;
+                            capturedBitmap = null;
+                            rotatedBitmap = null;
                             image = null;
                             int i = 7;
                             // ToastPopUp.displayToast(getContext(), "Your tag was successful");
@@ -1632,7 +1631,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             Intent intent = new Intent(getContext(), FadeInActivity.class);
                             intent.putExtra("credit_points", strCreditpoints);
                             intent.putExtra("total_points", strTotalpoints);
-                            intent.putExtra("need_name", strNeed_Name);
+                            intent.putExtra("need_name", strCategory);
                             intent.putExtra("reason", "by tagging");
                             startActivity(intent);
                         } else {
@@ -1806,18 +1805,16 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 options.inSampleSize = 8;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     try {
-                        bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
+                        capturedBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                    capturedBitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-                strimagePath = file.getAbsolutePath();
-                int bitmap_file_size = bitmap.getByteCount();
+                int bitmap_file_size = capturedBitmap.getByteCount();
                 Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
-                gieftneedimg.setImageBitmap(bitmap);
-                gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
+                rotateImage(setReducedImageSize());
             }
         }
 
@@ -1831,76 +1828,51 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             // Move to first row
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            imgDecodableString = cursor.getString(columnIndex);
+            strimagePath = cursor.getString(columnIndex);
             cursor.close();
-            bitmap = decodeSampledBitmapFromFile(imgDecodableString, 512, 512);
-            // bitmap = BitmapFactory.decodeFile(imgDecodableString);
-            // Set the Image in ImageView after decoding the String
-
-            int bitmap_file_size = bitmap.getByteCount();
+            capturedBitmap = decodeSampledBitmapFromFile(strimagePath, 512, 512);
+            int bitmap_file_size = capturedBitmap.getByteCount();
             Log.d("gallery_photo_size", "bitmap_size : " + bitmap_file_size);
-            gieftneedimg.setImageBitmap(bitmap);
-            gieftneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
+            rotateImage(setReducedImageSize());
         }
     }
 
-    //----------------------------------------
-    private void returnDialog(final String credits_points, final String total_points, String char_path, String needtype) {
-        AlertDialog.Builder alertdialog = new AlertDialog.Builder(getActivity());
-        LayoutInflater li = LayoutInflater.from(getActivity());
-        View confirmDialog = li.inflate(R.layout.gift_dialog, null);
+    private Bitmap setReducedImageSize() {
+        int targetIVwidth = tagneedimg.getWidth();
+        int targetIVheight = tagneedimg.getHeight();
 
-        btnOk = (Button) confirmDialog.findViewById(R.id.btndialogok);
-        txtdialogcreditpoints = (TextView) confirmDialog.findViewById(R.id.txtcredit_points);
-        txttotalpoints = (TextView) confirmDialog.findViewById(R.id.txttotal_points);
-        txtneedname = (TextView) confirmDialog.findViewById(R.id.typefulfill);
-        imgshare = (ImageView) confirmDialog.findViewById(R.id.imgdialogshare);
-        imgchar = (ImageView) confirmDialog.findViewById(R.id.imgdialogchar);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(strimagePath, bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
 
-        //-------------Adding dialog box to the view of alert dialog
-        alertdialog.setView(confirmDialog);
-        alertdialog.setCancelable(false);
+        int scaleFactor = Math.min(cameraImageWidth / targetIVwidth, cameraImageHeight / targetIVheight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(strimagePath, bmOptions);
+    }
 
-        //----------------Creating an alert dialog
-        alertDialogreturn = alertdialog.create();
-        //alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
-        // alertDialogForgot.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //----------------Displaying the alert dialog
-        alertDialogreturn.show();
-        Picasso.with(getContext()).load(char_path).resize(50, 50).into(imgchar);
-        txtneedname.setText(" " + getResources().getString(R.string.tag_success_msg1) + " " + needtype + " " + getResources().getString(R.string.tag_success_msg2));
-        txtdialogcreditpoints.setText(getResources().getString(R.string.tag_success_msg3) + " " + credits_points + " " + getResources().getString(R.string.tag_success_msg4));
-        txttotalpoints.setText(getResources().getString(R.string.tag_success_msg5) + " " + total_points);
-
-        final String url = "https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed";
-        final String here = "here.";
-        // Picasso.with(getContext()).load(char_path).resize(50, 50).into(imgchar);
-        imgshare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String android_shortlink = "http://tiny.cc/kwb33y";
-                String ios_shortlink = "http://tiny.cc/h4533y";
-                String website = "https://www.giftadeed.com/";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest points are " + total_points + " in the GiftADeed App.\n" +
-                        "You can earn your points by downloading the app from\n\n" +
-                        "Android : " + android_shortlink + "\n" +
-                        "iOS : " + ios_shortlink + "\n\n" +
-                        "Also, check the website at " + website);
-                startActivity(Intent.createChooser(share, "Share your points on:"));
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialogreturn.dismiss();
-                int i = 1;
-                fragmgr = getFragmentManager();
-                // fragmentManager.beginTransaction().replace( R.id.Myprofile_frame,TaggedneedsFrag.newInstance(i)).commit();
-                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(i)).commit();
-            }
-        });
+    private void rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(strimagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            default:
+        }
+        rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        tagneedimg.setImageBitmap(rotatedBitmap);
     }
 
     //-----------------get address----------------
@@ -1972,7 +1944,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
     //------------------------Checking image is available or not-----------------------------------------
     public void checkimage() {
-        if (bitmap == null) {
+        if (rotatedBitmap == null) {
             // Toast.makeText(getContext(), "You have not selected any image", Toast.LENGTH_SHORT).show();
             // Log.d("image",image);
             if (!(Validation.isOnline(getActivity()))) {
@@ -1997,7 +1969,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 }
             }
         } else {
-            image = getStringImage(bitmap);
+            image = getStringImage(rotatedBitmap);
             sendImageToServer();
             // Toast.makeText(getContext(), "Your bitmap is not empty", Toast.LENGTH_SHORT).show();
         }
@@ -2037,14 +2009,10 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }
-        // File file=new File(storageDir,imageFileName+".png");
         File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + imageFileName + ".jpg");
-        // mCurrentPhotoPath = file.getAbsolutePath();
+        strimagePath = mediaFile.getAbsolutePath();
         return mediaFile;
-        // Save a file: path for use with ACTION_VIEW intents
-        //"file:" + image.getAbsolutePath();
-        // return file;
     }
 
     private void submitdialog() {
@@ -2145,139 +2113,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-    }
-
-    //----------------------------------------GIF showing after tag
-    private void gifDialog(final String strImagepath) {
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.gif_dialog);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCancelable(false);
-
-        //gif.setImageResource(R.drawable.claping);
-        //  gif.setGifResource("asset:claping");
-
-        dialog.show();
-        ImageView img = (ImageView) dialog.findViewById(R.id.img_gif);
-        Glide.with(getActivity())
-                .load(R.drawable.thumbs_up)
-                .into(img);
-
-
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (dialog.isShowing()) {
-                    dialog.dismiss();
-                    returnDialog(strCreditpoints, strTotalpoints, strImagepath, strNeed_Name);
-                }
-            }
-        };
-        handler.postDelayed(runnable, 5000);
-    }
-
-    public void checkDeed() {
-        taggeddeeds = new ArrayList<>();
-        simpleArcDialog = new SimpleArcDialog(getContext());
-        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
-        simpleArcDialog.show();
-        OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(1, TimeUnit.HOURS);
-        client.setReadTimeout(1, TimeUnit.HOURS);
-        client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        TaggedDeedsInterface service = retrofit.create(TaggedDeedsInterface.class);
-        Log.d("input_params", strUser_ID + "," + str_geopoint + "," + strNeedmapping_ID);
-        Call<List<TaggedDeedsPojo>> call = service.sendData(strUser_ID, str_geopoint, strNeedmapping_ID);
-        call.enqueue(new Callback<List<TaggedDeedsPojo>>() {
-            @Override
-            public void onResponse(Response<List<TaggedDeedsPojo>> response, Retrofit retrofit) {
-                List<TaggedDeedsPojo> taggedDeedsPojoList = response.body();
-                Log.d("response_checkdeedlist", "" + response.body());
-                int isblock = 0;
-                try {
-                    isblock = taggedDeedsPojoList.get(0).getIsBlocked();
-                } catch (Exception e) {
-                    isblock = 0;
-                }
-                if (isblock == 1) {
-                    simpleArcDialog.dismiss();
-                    FacebookSdk.sdkInitialize(getActivity());
-                    Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                    sessionManager.createUserCredentialSession(null, null, null);
-                    LoginManager.getInstance().logOut();
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                            new ResultCallback<Status>() {
-                                @Override
-                                public void onResult(Status status) {
-                                    //updateUI(false);
-                                }
-                            });
-
-                    sessionManager.set_notification_status("ON");
-                    Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                    loginintent.putExtra("message", "Charity");
-                    startActivity(loginintent);
-                } else {
-                    simpleArcDialog.dismiss();
-                    taggeddeeds.clear();
-                    try {
-                        for (int i = 0; i < taggedDeedsPojoList.size(); i++) {
-                            TaggedDeedsPojo taggedDeedsPojo = new TaggedDeedsPojo();
-                            taggedDeedsPojo.setTagid(taggedDeedsPojoList.get(i).getTagid());
-                            taggedDeedsPojo.setNeedname(taggedDeedsPojoList.get(i).getNeedname());
-                            taggedDeedsPojo.setIconpath(taggedDeedsPojoList.get(i).getIconpath());
-                            taggeddeeds.add(taggedDeedsPojo);
-                        }
-                    } catch (Exception e) {
-                        StringWriter writer = new StringWriter();
-                        e.printStackTrace(new PrintWriter(writer));
-                        Bugreport bg = new Bugreport();
-                        bg.sendbug(writer.toString());
-                    }
-
-                    if (taggeddeeds.size() > 0) {
-                        final Dialog dialog = new Dialog(getContext());
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setCancelable(false);
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.setContentView(R.layout.already_deeds_dialog);
-                        final ListView already_deedslist = (ListView) dialog.findViewById(R.id.already_deeds_list);
-                        Button btnNewTag = (Button) dialog.findViewById(R.id.btn_new_tag);
-                        Button cancel = (Button) dialog.findViewById(R.id.btn_cancel_dialog);
-                        Log.d("taggeddeeds_size", "" + taggeddeeds.size());
-                        already_deedslist.setAdapter(new TaggedDeedsAdapter(taggeddeeds, getContext()));
-                        btnNewTag.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialog.dismiss();
-                                edselectcategory.setText("");
-                                edselectcategory.clearFocus();
-                            }
-                        });
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialog.dismiss();
-                                fragmgr = getFragmentManager();
-                                fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
-                            }
-                        });
-                        dialog.show();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                simpleArcDialog.dismiss();
-                Log.d("response_checkdeedlist", t.getMessage());
-                ToastPopUp.show(myContext, getString(R.string.server_response_error));
-            }
-        });
     }
 
     //from lat to address
@@ -2445,30 +2280,23 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-
             case RequestPermissionCode:
-
                 if (grantResults.length > 0) {
-
                     boolean CameraPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean ReadExternalStoragePermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                     boolean WriteExternalStoragePermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                     boolean InternetPermission = grantResults[3] == PackageManager.PERMISSION_GRANTED;
 
                     if (CameraPermission && WriteExternalStoragePermission && ReadExternalStoragePermission) {
-
                         //Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_LONG).show();
                     } else {
                         // Toast.makeText(getActivity(),"Permission Denied",Toast.LENGTH_LONG).show();
-
                     }
                 }
-
                 break;
 
             case STORAGE_PERMISSION_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     //Displaying a toast
                     Toast.makeText(getContext(), "Permission granted now you can read the storage", Toast.LENGTH_LONG).show();
                 } else {
@@ -2476,7 +2304,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     Toast.makeText(getContext(), "Oops you just denied the permission", Toast.LENGTH_LONG).show();
                 }
                 break;
-
         }
     }
 

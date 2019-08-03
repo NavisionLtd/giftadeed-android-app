@@ -97,10 +97,6 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EmergencyPositioning.EmergencyContact"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".EmergencyPositioning.SOSEmergencyNumbers"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
@@ -154,6 +150,9 @@
         <activity
             android:name=".MyProfile.ShowImageActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AppUpdate.AppUpdateActivity"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".EmergencyPositioning.GetAddressIntentService"
@@ -163,7 +162,7 @@
             android:name=".SendBirdChat.main.ChoiceActivity"
             android:label="@string/select_channel_type" />
         <activity
-            android:name=".SendBirdChat.main.SettingsActivity"
+            android:name=".SendBirdChat.main.SendBirdSettingsActivity"
             android:label="@string/settings" />
         <activity
             android:name=".SendBirdChat.main.BlockedMembersListActivity"

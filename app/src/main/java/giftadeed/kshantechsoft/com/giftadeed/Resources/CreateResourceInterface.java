@@ -18,6 +18,7 @@ public interface CreateResourceInterface {
     @FormUrlEncoded
     @POST(path)
     Call<GroupResponseStatus> sendData(@Field("user_id") String userid, @Field("group_id") String groupid, @Field("resource_name") String resourcename,
-                                       @Field("description") String desc, @Field("sub_type_pref") String subtype,
-                                       @Field("geopoint") String geopoint, @Field("address") String address,@Field("user_group_ids") String usergrpid,@Field("all_groups") String allgrps);
+                                       @Field("description") String desc, @Field("sub_type_pref") String subtype, @Field("geopoint") String geopoint,
+                                       @Field("address") String address, @Field("user_group_ids") String usergrpid, @Field("all_groups") String allgrps,
+                                       @Field("main_category_ids") String mainCatIds, @Field("group_category_ids") String grpCatIds);
 }

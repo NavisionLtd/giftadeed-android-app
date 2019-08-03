@@ -15,6 +15,12 @@ public class GroupResponseStatus {
     @SerializedName("status")
     @Expose
     private Integer status;
+    @SerializedName("success_message")
+    @Expose
+    private String successMsg;
+    @SerializedName("error_message")
+    @Expose
+    private String errorMsg;
     @SerializedName("group_id")
     @Expose
     private Integer groupid;
@@ -41,5 +47,21 @@ public class GroupResponseStatus {
 
     public void setGroupid(Integer groupid) {
         this.groupid = groupid;
+    }
+
+    public String getSuccessMsg() {
+        return successMsg;
+    }
+
+    public void setSuccessMsg(String successMsg) {
+        this.successMsg = successMsg;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 }

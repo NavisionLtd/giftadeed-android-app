@@ -113,8 +113,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
             selectedGrpCheckedCount = databaseAccess.getSelectedGrpCheckedCount(groupids);
             selectedCatCheckedCount = databaseAccess.getSelectedCatCheckedCount(catids);
             Log.d("db_res_notification", "savedGroupList : " + savedGroupList.size() + ", checkedGroups : " + checkedGroups + ", selectedGrpCheckedCount : " + selectedGrpCheckedCount + ", selectedCatCheckedCount : " + selectedCatCheckedCount);
-            //creating MyNotificationManager object
-            //creating an intent for the notification
             sessionManager = new SessionManager(getApplicationContext());
             HashMap<String, String> user = sessionManager.getUserDetails();
             strUserId = user.get(sessionManager.USER_ID);
@@ -320,6 +318,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                                                 }
                                             }
                                         }
+                                    } else if (notificationType.equals("1")) {
+                                        mNotificationManager.showSmallNotification(notificationTitle, notificationMessage, intent);
                                     }
                                 } else if (Notification_status.equals("OFF")) {
 

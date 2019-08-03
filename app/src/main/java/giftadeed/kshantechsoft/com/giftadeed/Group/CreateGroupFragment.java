@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -96,8 +98,8 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     public static final int MEDIA_TYPE_IMAGE = 1;
     int REQUEST_CAMERA = 0;
     private static int RESULT_LOAD_IMG = 11;
-    Bitmap bitmap;
-    String strimagePath, imgDecodableString, pathToSend = "", strUser_ID;
+    private Bitmap capturedBitmap, rotatedBitmap;
+    String strimagePath, pathToSend = "", strUser_ID;
     String receivedGid = "", receivedGname = "", receivedGdesc = "", receivedGimage = "", callingFrom = "";
     private GoogleApiClient mGoogleApiClient;
     private List<String> lstusers = new ArrayList<String>();
@@ -196,14 +198,14 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     } else {
                         if (callingFrom.equals("create")) {
                             //call api
-                            if (bitmap != null) {
-                                pathToSend = getStringImage(bitmap);
+                            if (rotatedBitmap != null) {
+                                pathToSend = getStringImage(rotatedBitmap);
                             }
                             createGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID);
                         } else {
                             // call edit group api
-                            if (bitmap != null) {
-                                pathToSend = getStringImage(bitmap);
+                            if (rotatedBitmap != null) {
+                                pathToSend = getStringImage(rotatedBitmap);
                                 editGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID, receivedGid);
                             } else {
                                 if (receivedGname.equals(groupName.getText().toString()) && receivedGdesc.equals(groupDesc.getText().toString())) {
@@ -443,6 +445,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         }
         File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + imageFileName + ".jpg");
+        strimagePath = mediaFile.getAbsolutePath();
         return mediaFile;
     }
 
@@ -489,15 +492,16 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                 options.inSampleSize = 8;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     try {
-                        bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
+                        capturedBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(filee), null, options);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                    capturedBitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-                strimagePath = file.getAbsolutePath();
-                imageView.setImageBitmap(bitmap);
+                int bitmap_file_size = capturedBitmap.getByteCount();
+                Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
+                rotateImage(setReducedImageSize());
             }
         }
 
@@ -508,11 +512,51 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            imgDecodableString = cursor.getString(columnIndex);
+            strimagePath = cursor.getString(columnIndex);
             cursor.close();
-            bitmap = decodeSampledBitmapFromFile(imgDecodableString, 512, 512);
-            imageView.setImageBitmap(bitmap);
+            capturedBitmap = decodeSampledBitmapFromFile(strimagePath, 512, 512);
+            int bitmap_file_size = capturedBitmap.getByteCount();
+            Log.d("gallery_photo_size", "bitmap_size : " + bitmap_file_size);
+            rotateImage(setReducedImageSize());
         }
+    }
+
+    private Bitmap setReducedImageSize() {
+        int targetIVwidth = imageView.getWidth();
+        int targetIVheight = imageView.getHeight();
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(strimagePath, bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth / targetIVwidth, cameraImageHeight / targetIVheight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(strimagePath, bmOptions);
+    }
+
+    private void rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(strimagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            default:
+        }
+        rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        imageView.setImageBitmap(rotatedBitmap);
     }
 
     public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) { // BEST QUALITY MATCH
@@ -583,7 +627,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     // Error.
                     return;
                 }
-                GroupChannel.createChannelWithUserIds(userIds, distinct, clubName, "", message, new GroupChannel.GroupChannelCreateHandler() {
+                GroupChannel.createChannelWithUserIds(userIds, distinct, clubName, "https://kshandemo.co.in/gad3p2/api/image/resource/resource_marker.png", message, new GroupChannel.GroupChannelCreateHandler() {
                     @Override
                     public void onResult(GroupChannel groupChannel, SendBirdException e) {
                         if (e != null) {

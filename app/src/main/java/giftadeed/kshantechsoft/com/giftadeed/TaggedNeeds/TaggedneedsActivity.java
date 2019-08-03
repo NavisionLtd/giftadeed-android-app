@@ -151,7 +151,14 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         HashMap<String, String> user = sharedPreferences.getUserDetails();
         strUserId = user.get(sharedPreferences.USER_ID);
         strUserName = user.get(sharedPreferences.USER_NAME);
-        loginWithSendbirdchat(strUserId, strUserName, "");
+
+        String image_path = sharedPreferences.getProfileImagePath();
+        if (image_path != null) {
+            loginWithSendbirdchat(strUserId, strUserName, image_path);
+        } else {
+            loginWithSendbirdchat(strUserId, strUserName, "");
+        }
+
         getChannelsDetails();
         sharedPreferences.set_drawer_status("close");
         if (!gps.isGPSEnabled) {
@@ -707,14 +714,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 if (e != null) {
                     // Error!
                     Log.d("sendbird connect error", "" + e.getCode() + ": " + e.getMessage());
-                    /*Toast.makeText(
-                            TaggedneedsActivity.this, "" + e.getCode() + ": " + e.getMessage(),
-                            Toast.LENGTH_SHORT)
-                            .show();*/
-
-                    // Show login failure snackbar
-//                    ToastPopUp.displayToast(TaggedneedsActivity.this,"Login to SendBird failed");
-                    //     mConnectButton.setEnabled(true);
                     PreferenceUtils.setConnected(TaggedneedsActivity.this, false);
                     return;
                 }
@@ -740,7 +739,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
 
     /**
      * Updates the user's nickname.
-     *
      * @param userNickname The new nickname of the user.
      */
     private void updateCurrentUserInfo(final String userNickname, String photoPath) {

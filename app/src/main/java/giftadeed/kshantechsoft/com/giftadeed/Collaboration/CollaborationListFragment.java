@@ -256,7 +256,13 @@ public class CollaborationListFragment extends Fragment
                                 recyclerView.setAdapter(collabListAdapter);
                             }
                         } else if (res.getStatus() == 0) {
-                            Toast.makeText(getContext(), res.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                            if (res.getColablist().size() == 0) {
+                                noColabText.setVisibility(View.VISIBLE);
+                                btnCreateColab.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(getContext(), res.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 } catch (Exception e) {

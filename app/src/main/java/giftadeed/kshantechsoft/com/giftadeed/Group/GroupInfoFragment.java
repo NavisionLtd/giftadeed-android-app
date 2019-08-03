@@ -212,7 +212,7 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                             Picasso.with(getContext()).load(strImagepath).placeholder(R.drawable.group_default_wallpaper).into(imageView);
                         } else {
                             imageView.setImageResource(R.drawable.group_default_wallpaper);
-                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         }
                     }
                 } catch (Exception e) {

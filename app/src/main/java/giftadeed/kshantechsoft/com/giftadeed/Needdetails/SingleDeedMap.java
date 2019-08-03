@@ -7,16 +7,16 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,7 +34,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSDetailsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.Resources.ResourceDetailsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 
@@ -98,19 +100,34 @@ public class SingleDeedMap extends Fragment implements OnMapReadyCallback,
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("str_address", str_address);
-                bundle.putString("str_tagid", str_tagid);
-                bundle.putString("str_geopoint", strgeopoints);
-                bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
-                bundle.putString("str_characterPath", str_characterPath);
-                bundle.putString("str_needName", strNeed_name);
-                bundle.putString("tab", "tab2");
-                bundle.putString("str_date", str_date);
-                bundle.putString("str_distance", str_distance);
-                NeedDetailsFrag fragInfo = new NeedDetailsFrag();
-                fragInfo.setArguments(bundle);
-                fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                if (tab.equals("from_sos")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("str_sosid", str_tagid);
+                    SOSDetailsFrag fragInfo = new SOSDetailsFrag();
+                    fragInfo.setArguments(bundle);
+                    fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                } else if (tab.equals("from_resource")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("str_resid", str_tagid);
+                    bundle.putString("callingFrom", "map");
+                    ResourceDetailsFrag fragInfo = new ResourceDetailsFrag();
+                    fragInfo.setArguments(bundle);
+                    fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("str_address", str_address);
+                    bundle.putString("str_tagid", str_tagid);
+                    bundle.putString("str_geopoint", strgeopoints);
+                    bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
+                    bundle.putString("str_characterPath", str_characterPath);
+                    bundle.putString("str_needName", strNeed_name);
+                    bundle.putString("tab", "tab2");
+                    bundle.putString("str_date", str_date);
+                    bundle.putString("str_distance", str_distance);
+                    NeedDetailsFrag fragInfo = new NeedDetailsFrag();
+                    fragInfo.setArguments(bundle);
+                    fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                }
             }
         });
 
@@ -234,19 +251,34 @@ public class SingleDeedMap extends Fragment implements OnMapReadyCallback,
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 //------------------back press of mobile------------------------------------------------------------
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("str_address", str_address);
-                    bundle.putString("str_tagid", str_tagid);
-                    bundle.putString("str_geopoint", strgeopoints);
-                    bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
-                    bundle.putString("str_characterPath", str_characterPath);
-                    bundle.putString("str_needName", strNeed_name);
-                    bundle.putString("tab", "tab2");
-                    bundle.putString("str_date", str_date);
-                    bundle.putString("str_distance", str_distance);
-                    NeedDetailsFrag fragInfo = new NeedDetailsFrag();
-                    fragInfo.setArguments(bundle);
-                    fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                    if (tab.equals("from_sos")) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str_sosid", str_tagid);
+                        SOSDetailsFrag fragInfo = new SOSDetailsFrag();
+                        fragInfo.setArguments(bundle);
+                        fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                    } else if (tab.equals("from_resource")) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str_resid", str_tagid);
+                        bundle.putString("callingFrom", "map");
+                        ResourceDetailsFrag fragInfo = new ResourceDetailsFrag();
+                        fragInfo.setArguments(bundle);
+                        fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                    } else {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("str_address", str_address);
+                        bundle.putString("str_tagid", str_tagid);
+                        bundle.putString("str_geopoint", strgeopoints);
+                        bundle.putString("str_taggedPhotoPath", str_taggedPhotoPath);
+                        bundle.putString("str_characterPath", str_characterPath);
+                        bundle.putString("str_needName", strNeed_name);
+                        bundle.putString("tab", "tab2");
+                        bundle.putString("str_date", str_date);
+                        bundle.putString("str_distance", str_distance);
+                        NeedDetailsFrag fragInfo = new NeedDetailsFrag();
+                        fragInfo.setArguments(bundle);
+                        fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+                    }
                     return true;
                 }
                 return false;

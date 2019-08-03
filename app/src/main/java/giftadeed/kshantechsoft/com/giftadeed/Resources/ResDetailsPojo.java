@@ -39,6 +39,15 @@ public class ResDetailsPojo {
     @SerializedName("resource_audience_group_names")
     @Expose
     private String resource_audience_group_names;
+    @SerializedName("resource_main_categories")
+    @Expose
+    private String resource_main_categories;
+    @SerializedName("resource_group_categories")
+    @Expose
+    private String resource_group_categories;
+    @SerializedName("resource_group_category_names")
+    @Expose
+    private String resource_group_category_names;
     @SerializedName("created_at")
     @Expose
     private String created_at;
@@ -137,5 +146,29 @@ public class ResDetailsPojo {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public String getResource_main_categories() {
+        return resource_main_categories;
+    }
+
+    public void setResource_main_categories(String resource_main_categories) {
+        this.resource_main_categories = resource_main_categories;
+    }
+
+    public String getResource_group_categories() {
+        return resource_group_categories;
+    }
+
+    public void setResource_group_categories(String resource_group_categories) {
+        this.resource_group_categories = resource_group_categories;
+    }
+
+    public String getResource_group_category_names() {
+        return resource_group_category_names;
+    }
+
+    public void setResource_group_category_names(String resource_group_category_names) {
+        this.resource_group_category_names = resource_group_category_names;
     }
 }

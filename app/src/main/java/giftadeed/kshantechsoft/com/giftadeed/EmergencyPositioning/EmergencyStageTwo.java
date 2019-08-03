@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -21,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -98,7 +102,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
     private Uri fileUri;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final String IMAGE_DIRECTORY_NAME = "GiftaDeed";
-    Bitmap bitmap;
+    Bitmap capturedBitmap, rotatedBitmap;
     String callingfrom, latitude, longitude;
     ArrayList<String> checkedList;
     String formattedChecked = "";
@@ -287,7 +291,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                             Log.d("sosid", "" + sosid);
                             Toast.makeText(EmergencyStageTwo.this, getResources().getString(R.string.sos_success), Toast.LENGTH_SHORT).show();
                             //firebase call for image store with sos id
-                            if (bitmap != null) {
+                            if (capturedBitmap != null) {
                                 uploadFile(sosid);
                             }
                             if (callingfrom.equals("login")) {
@@ -432,19 +436,57 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                 options.inSampleSize = 8;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     try {
-                        bitmap = BitmapFactory.decodeStream(EmergencyStageTwo.this.getContentResolver().openInputStream(fileUri), null, options);
+                        capturedBitmap = BitmapFactory.decodeStream(EmergencyStageTwo.this.getContentResolver().openInputStream(fileUri), null, options);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                    capturedBitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
-                strimagePath = file.getAbsolutePath();
-                imageCaptured.setVisibility(View.VISIBLE);
-                imageCaptured.setImageBitmap(bitmap);
-                imageCaptured.setScaleType(ImageView.ScaleType.FIT_XY);
+                int bitmap_file_size = capturedBitmap.getByteCount();
+                Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
+//                imageCaptured.setVisibility(View.VISIBLE);
+                rotateImage(setReducedImageSize());
             }
         }
+    }
+
+    private Bitmap setReducedImageSize() {
+        int targetIVwidth = imageCaptured.getWidth();
+        int targetIVheight = imageCaptured.getHeight();
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(strimagePath, bmOptions);
+        int cameraImageWidth = bmOptions.outWidth;
+        int cameraImageHeight = bmOptions.outHeight;
+
+        int scaleFactor = Math.min(cameraImageWidth / targetIVwidth, cameraImageHeight / targetIVheight);
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(strimagePath, bmOptions);
+    }
+
+    private void rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(strimagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            default:
+        }
+        rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        imageCaptured.setImageBitmap(rotatedBitmap);
     }
 
     public Uri getOutputMediaFileUri(int type) {
@@ -483,6 +525,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
         }
         File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + imageFileName + ".jpg");
+        strimagePath = mediaFile.getAbsolutePath();
         return mediaFile;
     }
 

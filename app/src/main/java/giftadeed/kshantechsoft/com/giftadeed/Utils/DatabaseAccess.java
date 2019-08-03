@@ -94,6 +94,9 @@ public class DatabaseAccess {
                 contact.setId(Integer.parseInt(cursor.getString(0)));
                 contact.setContact1(cursor.getString(1));
                 contact.setContact2(cursor.getString(2));
+                contact.setContactName1(cursor.getString(3));
+                contact.setContactName2(cursor.getString(4));
+                Log.d("db_values", cursor.getString(3) + "," + cursor.getString(4));
                 // Adding contact to list
                 contactList.add(contact);
             } while (cursor.moveToNext());
@@ -103,10 +106,13 @@ public class DatabaseAccess {
     }
 
     // code to update the single contact
-    public int updateContact(String id, String contact1, String contact2) {
+    public int updateContact(String id, String contact1, String contact2, String contactName1, String contactName2) {
         ContentValues values = new ContentValues();
         values.put("contact_1", contact1);
         values.put("contact_2", contact2);
+        values.put("contact_name_1", contactName1);
+        values.put("contact_name_2", contactName2);
+        Log.d("db_values_store", contactName1 + "," + contactName2);
         // updating row
         return database.update("contact_details", values, "id" + " = ?",
                 new String[]{id});

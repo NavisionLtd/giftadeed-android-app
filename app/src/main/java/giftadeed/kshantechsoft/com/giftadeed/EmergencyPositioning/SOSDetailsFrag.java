@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -51,6 +53,7 @@ import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
+import giftadeed.kshantechsoft.com.giftadeed.Needdetails.SingleDeedMap;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
@@ -72,13 +75,13 @@ import retrofit.Retrofit;
 
 public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     FragmentActivity myContext;
-    LinearLayout creatorlayout, emergencyLayout;
+    LinearLayout creatorlayout, locationIcon, emergencyLayout;
     View rootview;
     private AlertDialog alertDialog;
     ImageView sosImage;
     TextView txtsos_creater, txtaddress, txtemergency, txtDate;
     Button btnDeleteSOS;
-    String strUser_ID, tab;
+    String strUser_ID, str_geopoints = "";
     static FragmentManager fragmgr;
     SessionManager sessionManager;
     SimpleArcDialog mDialog;
@@ -159,6 +162,20 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                 }
             });
         }
+
+        locationIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("str_tagid", str_sosid);
+                bundle.putString("str_geopoint", str_geopoints);
+                bundle.putString("str_characterPath", "https://kshandemo.co.in/gad3p2/api/image/sos/sos_marker.png");
+                bundle.putString("tab", "from_sos");
+                SingleDeedMap fragInfo = new SingleDeedMap();
+                fragInfo.setArguments(bundle);
+                fragmgr.beginTransaction().replace(R.id.content_frame, fragInfo).commit();
+            }
+        });
 
         btnDeleteSOS.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,6 +263,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                             emergencyLayout.setVisibility(View.GONE);
                         }
                     }
+                    str_geopoints = emergencyInfoPOJOS.get(0).getGeopoints();
                     txtaddress.setText(emergencyInfoPOJOS.get(0).getAddress());
                     txtDate.setText(emergencyInfoPOJOS.get(0).getCdate());
                 } catch (Exception e) {
@@ -389,6 +407,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
         sosImage = (ImageView) rootview.findViewById(R.id.sos_image);
         txtsos_creater = (TextView) rootview.findViewById(R.id.tv_sos);
         txtemergency = (TextView) rootview.findViewById(R.id.tv_emergency);
+        locationIcon = (LinearLayout) rootview.findViewById(R.id.sos_details_locationicon);
         emergencyLayout = (LinearLayout) rootview.findViewById(R.id.sos_emergency_layout);
         creatorlayout = (LinearLayout) rootview.findViewById(R.id.sos_creator_layout);
         txtaddress = (TextView) rootview.findViewById(R.id.txt_sos_address);

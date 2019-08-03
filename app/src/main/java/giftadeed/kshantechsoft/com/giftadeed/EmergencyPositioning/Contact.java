@@ -2,7 +2,8 @@ package giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning;
 
 public class Contact {
     int id;
-    String contact1, contact2, contact3;
+    String contact1, contact2;
+    String contactName1, contactName2;
 
     public int getId() {
         return id;
@@ -28,11 +29,19 @@ public class Contact {
         this.contact2 = contact2;
     }
 
-    public String getContact3() {
-        return contact3;
+    public String getContactName1() {
+        return contactName1;
     }
 
-    public void setContact3(String contact3) {
-        this.contact3 = contact3;
+    public void setContactName1(String contactName1) {
+        this.contactName1 = contactName1;
+    }
+
+    public String getContactName2() {
+        return contactName2;
+    }
+
+    public void setContactName2(String contactName2) {
+        this.contactName2 = contactName2;
     }
 }

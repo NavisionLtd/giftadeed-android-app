@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,6 +20,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
@@ -37,6 +42,7 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
     public static final int RequestPermissionCode = 1;
     int flag = 0;
     EditText et_contact_1, et_contact_2;
+    TextInputLayout et_contact_1_layout, et_contact_2_layout;
     ImageView contactBook1, contactBook2;
     Button btnSaveNumbers;
     DatabaseAccess databaseAccess;
@@ -51,6 +57,8 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
         setContentView(R.layout.activity_emergency_numbers);
         et_contact_1 = (EditText) findViewById(R.id.first_contact);
         et_contact_2 = (EditText) findViewById(R.id.second_contact);
+        et_contact_1_layout = (TextInputLayout) findViewById(R.id.first_contact_textinput);
+        et_contact_2_layout = (TextInputLayout) findViewById(R.id.second_contact_textinput);
         contactBook1 = (ImageView) findViewById(R.id.contact_book_1);
         contactBook2 = (ImageView) findViewById(R.id.contact_book_2);
         btnSaveNumbers = (Button) findViewById(R.id.btn_save_numbers);
@@ -66,8 +74,58 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
             for (Contact contact : contactArrayList) {
                 et_contact_1.setText(contact.getContact1());
                 et_contact_2.setText(contact.getContact2());
+                Log.d("contact1_2", "" + contact.getContactName1() + "," + contact.getContactName2());
+                if (contact.getContactName1() == null) {
+                    et_contact_1_layout.setHint(getResources().getString(R.string.family_or_friend));
+                } else {
+                    et_contact_1_layout.setHint(contact.getContactName1());
+                }
+
+                if (contact.getContactName2() == null) {
+                    et_contact_2_layout.setHint(getResources().getString(R.string.family_or_friend));
+                } else {
+                    et_contact_2_layout.setHint(contact.getContactName2());
+                }
             }
         }
+
+        et_contact_1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (et_contact_1.getText().length() == 0) {
+                    et_contact_1_layout.setHint(getResources().getString(R.string.family_or_friend));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        et_contact_2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (et_contact_2.getText().length() == 0) {
+                    et_contact_2_layout.setHint(getResources().getString(R.string.family_or_friend));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         contactBook1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +161,12 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if ((et_contact_1.getText().length() > 0) || (et_contact_2.getText().length() > 0)) {
-                    databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString());
+                    Log.d("values", et_contact_1.getText().toString() + "," + et_contact_2.getText().toString() + "," + et_contact_1_layout.getHint().toString() + "," + et_contact_2_layout.getHint().toString());
+                    databaseAccess.updateContact("1", et_contact_1.getText().toString(), et_contact_2.getText().toString(), et_contact_1_layout.getHint().toString(), et_contact_2_layout.getHint().toString());
                     ToastPopUp.displayToast(SOSEmergencyNumbers.this, getResources().getString(R.string.contact_saved));
                 } else if ((et_contact_1.getText().length() == 0) && (et_contact_2.getText().length() == 0)) {
-                    databaseAccess.updateContact("1", "", "");
+                    Log.d("values", "All Blank");
+                    databaseAccess.updateContact("1", "", "", "", "");
                     ToastPopUp.displayToast(SOSEmergencyNumbers.this, getResources().getString(R.string.contact_saved));
                 }
                 if (callingfrom.equals("login")) {
@@ -121,34 +181,6 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
                 }
             }
         });
-
-        /*btnCallSos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String Latitude = String.valueOf(new GPSTracker(SOSEmergencyNumbers.this).getLatitude());
-                final String Longitude = String.valueOf(new GPSTracker(SOSEmergencyNumbers.this).getLongitude());
-                String msgNumber1 = et_contact_1.getText().toString();
-                String msgNumber2 = et_contact_2.getText().toString();
-                String message1 = "Your friend is in emergency situation \n";
-                String message2 = "http://maps.google.com/maps?saddr=" + Latitude + "," + Longitude;
-                Log.d("message_link", message1 + message2);
-                String numbers = "";
-                if (!TextUtils.isEmpty(msgNumber1) && !TextUtils.isEmpty(msgNumber2)) {
-                    numbers = msgNumber1 + ";" + msgNumber2;
-                } else if (!TextUtils.isEmpty(msgNumber1) && TextUtils.isEmpty(msgNumber2)) {
-                    numbers = msgNumber1;
-                } else if (TextUtils.isEmpty(msgNumber1) && !TextUtils.isEmpty(msgNumber2)) {
-                    numbers = msgNumber2;
-                }
-
-                if (numbers.length() > 0) {
-                    Uri uri = Uri.parse("smsto:" + numbers);
-                    Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-                    it.putExtra("sms_body", message1 + message2);
-                    startActivity(it);
-                }
-            }
-        });*/
     }
 
     @Override
@@ -171,13 +203,15 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
                             phones.moveToFirst();
                             contactNumber = phones.getString(phones.getColumnIndex("data1"));
                         }
-                        String contactNumberName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         // Todo something when contact number selected
                         if (contactNumber.length() > 0) {
                             if (flag == 1) {
                                 et_contact_1.setText(contactNumber);
+                                et_contact_1_layout.setHint(contactName);
                             } else if (flag == 2) {
                                 et_contact_2.setText(contactNumber);
+                                et_contact_2_layout.setHint(contactName);
                             }
                         } else {
                             ToastPopUp.displayToast(SOSEmergencyNumbers.this, getResources().getString(R.string.blank_contact_number));

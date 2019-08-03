@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_sos_alert"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/sos_alert_animation_view"
@@ -26,9 +26,9 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:lottie_autoPlay="true"
-            app:lottie_fileName="mix_pics_loading.json"
+            app:lottie_fileName="sos_alert.json"
             app:lottie_loop="true" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -112,9 +112,9 @@
 
             <ImageView
                 android:id="@+id/correct_sign_1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_btn_accept_filled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sos_call_purple"
                 android:visibility="gone" />
 
             <TextView
@@ -150,9 +150,9 @@
 
             <ImageView
                 android:id="@+id/correct_sign_2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_btn_accept_filled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sos_msg_purple"
                 android:visibility="gone" />
 
             <TextView
@@ -210,9 +210,9 @@
 
             <ImageView
                 android:id="@+id/correct_sign_3"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_btn_accept_filled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sos_location_purple"
                 android:visibility="gone" />
 
             <TextView

@@ -34,6 +34,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -76,7 +77,6 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
     Button btnInviteCreators;
     CollabAddMemberAdapter adapter;
     ArrayList<Creatorslist> groupCreatorsList;
-    private AlertDialog alertDialog;
     private GoogleApiClient mGoogleApiClient;
     SwipeRefreshLayout swipeRefreshLayout;
     public static ArrayList<String> selectedCreatorIds = new ArrayList<String>();
@@ -217,6 +217,9 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
+        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.show();
+        mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         InviteCreatorsInterface service = retrofit.create(InviteCreatorsInterface.class);
@@ -227,6 +230,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
             public void onResponse(Response<CollabResponseStatus> response, Retrofit retrofit) {
                 Log.d("response_invite", "" + response.body());
                 try {
+                    mDialog.dismiss();
                     CollabResponseStatus collabResponseStatus = response.body();
                     int isblock = 0;
                     try {
@@ -261,6 +265,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
                         }
                     }
                 } catch (Exception e) {
+                    mDialog.dismiss();
                     Log.d("response_invite", "" + e.getMessage());
                     StringWriter writer = new StringWriter();
                     e.printStackTrace(new PrintWriter(writer));
@@ -271,6 +276,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
 
             @Override
             public void onFailure(Throwable t) {
+                mDialog.dismiss();
                 Log.d("response_invite", "" + t.getMessage());
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
@@ -284,6 +290,9 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
+        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.show();
+        mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CreatorsListInterface service = retrofit.create(CreatorsListInterface.class);
@@ -292,6 +301,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
         call.enqueue(new Callback<CollabPOJO>() {
             @Override
             public void onResponse(Response<CollabPOJO> response, Retrofit retrofit) {
+                mDialog.dismiss();
                 swipeRefreshLayout.setRefreshing(false);
                 Log.d("response_memberlist", "" + response.body());
                 try {
@@ -356,6 +366,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
                         }
                     }
                 } catch (Exception e) {
+                    mDialog.dismiss();
                     Log.d("response_memberlist", "" + e.getMessage());
                     StringWriter writer = new StringWriter();
                     e.printStackTrace(new PrintWriter(writer));
@@ -366,6 +377,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
 
             @Override
             public void onFailure(Throwable t) {
+                mDialog.dismiss();
                 swipeRefreshLayout.setRefreshing(false);
                 Log.d("response_memberlist", "" + t.getMessage());
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));

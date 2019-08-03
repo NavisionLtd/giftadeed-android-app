@@ -2,7 +2,9 @@ package giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
@@ -35,6 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.ToDoubleBiFunction;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import giftadeed.kshantechsoft.com.giftadeed.R;
@@ -257,19 +260,29 @@ class GroupChannelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
-            if (channel.getName().contains("- CLB")) {
+            Log.d("channel_image_url", "" + channel.getCoverUrl());
+            // TODO: 01-Aug-19 Show group profile image in sendbird channel
+            /*if (channel.getCoverUrl().length() > 0) {
                 Glide.with(context)
                         .asBitmap()
-                        .load(R.drawable.ic_circular_collaboration)
+                        .load(channel.getCoverUrl())
                         .apply(myOptions)
                         .into(coverImage);
-            } else {
-                Glide.with(context)
-                        .asBitmap()
-                        .load(R.drawable.ic_circular_group)
-                        .apply(myOptions)
-                        .into(coverImage);
-            }
+            } else {*/
+                if (channel.getName().contains("- CLB")) {
+                    Glide.with(context)
+                            .asBitmap()
+                            .load(R.drawable.ic_circular_collaboration)
+                            .apply(myOptions)
+                            .into(coverImage);
+                } else {
+                    Glide.with(context)
+                            .asBitmap()
+                            .load(R.drawable.ic_circular_group)
+                            .apply(myOptions)
+                            .into(coverImage);
+                }
+//            }
 
 //            if (!mIsCacheLoading) {
 //                setChannelImage(context, channel, coverImage);

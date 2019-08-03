@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +48,6 @@ import giftadeed.kshantechsoft.com.giftadeed.Needdetails.SingleDeedMap;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -67,10 +65,9 @@ import retrofit.Retrofit;
 
 public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     FragmentActivity myContext;
-    LinearLayout qtyLayout, subTypeLayout;
+    LinearLayout resLocation, qtyLayout, subTypeLayout;
     View rootview;
     private AlertDialog alertDialog;
-    ImageView resLocation;
     TextView txtgroupname, txtaddress, txtresname, txtDate, txttypes, txtSubtypes, txt_qty_perperson;
     String str_ResCreatorId, strUser_ID, str_resid, callingFrom, str_geopoint, str_groupId, str_groupName, str_resName, str_address,
             str_resDesc, resAllGrpSelected, resAudienceGrpIds, resAudienceGrpNames;
@@ -79,6 +76,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     SimpleArcDialog mDialog;
     private GoogleApiClient mGoogleApiClient;
     StringBuffer sb, rescatId, rescat, ressubcatId, ressubcat;
+    private String resCustomCatId = "", resCustomCat = "";
 
     public static ResourceDetailsFrag newInstance(int sectionNumber) {
         ResourceDetailsFrag fragment = new ResourceDetailsFrag();
@@ -121,7 +119,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("str_resid", str_resid);
+                bundle.putString("str_tagid", str_resid);
                 bundle.putString("str_geopoint", str_geopoint);
                 bundle.putString("str_characterPath", "https://kshandemo.co.in/gad3p2/api/image/resource/resource_marker.png");
                 bundle.putString("tab", "from_resource");
@@ -217,6 +215,9 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                                     qtyLayout.setVisibility(View.GONE);
                                 }
 
+                                resCustomCat = resourcePOJO.getResDetailsPojos().get(0).getResource_group_category_names();
+                                resCustomCatId = resourcePOJO.getResDetailsPojos().get(0).getResource_group_categories();
+
                                 sb = new StringBuffer("");
                                 rescat = new StringBuffer("");
                                 rescatId = new StringBuffer("");
@@ -230,7 +231,11 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                                     ressubcatId.append(resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getSubTypeId() + ",");
                                     ressubcat.append(resourcePOJO.getResDetailsPojos().get(0).getSubTypes().get(j).getSubTypeName() + ",");
                                 }
+                                if (resCustomCat.length() > 0) {
+                                    sb.append(resCustomCat);
+                                }
                                 txtSubtypes.setText(sb);
+
                                 str_geopoint = resourcePOJO.getResDetailsPojos().get(0).getGeopoint();
                                 str_address = resourcePOJO.getResDetailsPojos().get(0).getAddress();
                                 txtaddress.setText(resourcePOJO.getResDetailsPojos().get(0).getAddress());
@@ -262,7 +267,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         });
     }
 
-    //---------------------resource delete only for resource creator-----------------------------------------------
+    //---------------------resource delete only for resource creator---------------------
     public void deleteResource() {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -361,13 +366,10 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                 if (!(Validation.isNetworkAvailable(myContext))) {
                     ToastPopUp.show(myContext, getString(R.string.network_validation));
                 } else {
-                    /*CreateResourceFragment createResourceFragment = new CreateResourceFragment();
-                    sessionManager.createResourceDetails("");
-                    fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();*/
-
                     Bundle bundle = new Bundle();
                     bundle.putString("str_rescat_id", rescatId.toString());
-                    bundle.putString("str_rescat", rescat.toString());
+                    bundle.putString("str_resCustomCatId", resCustomCatId);
+                    bundle.putString("str_rescat", rescat.toString() + resCustomCat);
                     bundle.putString("str_ressubcat_id", ressubcatId.toString());
                     bundle.putString("str_ressubcat", ressubcat.toString());
                     bundle.putString("str_resdesc", str_resDesc);
@@ -444,7 +446,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         txtresname = (TextView) rootview.findViewById(R.id.tv_res_name);
         txt_qty_perperson = (TextView) rootview.findViewById(R.id.tv_qty_per_person);
         txttypes = (TextView) rootview.findViewById(R.id.tv_res_cat);
-        resLocation = (ImageView) rootview.findViewById(R.id.res_details_location_icon);
+        resLocation = (LinearLayout) rootview.findViewById(R.id.res_details_location);
         subTypeLayout = (LinearLayout) rootview.findViewById(R.id.res_subtype_layout);
         qtyLayout = (LinearLayout) rootview.findViewById(R.id.res_qty_layout);
         txtSubtypes = (TextView) rootview.findViewById(R.id.tv_res_subcat);

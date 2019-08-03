@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 9 July</string>
+    <string name="app_name">GAD P2 Test 02 August</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
@@ -13,6 +13,7 @@
     <string name="forgot">忘记密码？</string>
     <string name="txtseperator">或登录</string>
     <string name="txtagree1">登录即表示您同意我们的意见</string>
+    <string name="txtsignagree">通過註冊，即表示您同意我們的意見 </string>
     <string name="terms_and">和</string>
     <string name="select_language">选择语言</string>
     <string name="registered_email">输入注册邮箱</string>
@@ -49,7 +50,7 @@
     <string name="drawer_logout">登出</string>
 
     <!--Grid menu and details-->
-    <string name="noti_history">通知歷史記錄</string>
+    <string name="noti_history">契約更新</string>
     <string name="list_of_myfulfilled_tags">我的已完成標籤列表</string>
     <string name="list_of_your">標記的列表</string>
     <string name="list_of_taggers">您所在城市的前10名標記列表</string>
@@ -191,7 +192,7 @@
     <string name="city">市</string>
     <string name="anonymous">匿名</string>
     <string name="public_1">上市</string>
-    <string name="change_pass">更改密码</string>
+    <string name="change_pass">密碼</string>
     <string name="my_credits">我的学分 - </string>
     <string name="male">男</string>
     <string name="female">女</string>
@@ -208,7 +209,8 @@
     <string name="remove_location">刪除位置</string>
     <string name="deed_validity_heading">契约有效期（1至48小时）</string>
     <string name="select_audiance">选择受众</string>
-    <string name="description">需要的故事</string>
+    <string name="tag_description">需要的故事</string>
+    <string name="description">需要的故事 :</string>
     <string name="post">岗位</string>
     <string name="container_available">可用的容器</string>
     <string name="container_note">* 這個有需要的人是否有食物盤/水容器來收回捐贈的食物/水？</string>
@@ -217,8 +219,8 @@
     <string name="deed_details_heading">契約細節</string>
     <string name="str_location">地點 : </string>
     <string name="no_needy">周圍沒有窮人</string>
-    <string name="people_looking_1"> 人正在尋找你的幫助 </string>
-    <string name="people_looking_2"> 人們正在尋求你的幫助 </string>
+    <string name="people_looking_1"> 契約發現在你附近 </string>
+    <string name="people_looking_2"> 在你附近找到了契約 </string>
     <string name="pref_1">人/人的偏好 : </string>
     <string name="deed_location">契約地點 : </string>
     <string name="get_directions">獲取路線</string>
@@ -348,7 +350,7 @@
     <string name="Enter_emailaddress">输入电邮地址</string>
     <string name="Enter_Mobileno">输入手机号码</string>
     <string name="Password_blank">密码不能为空</string>
-    <string name="Password_length">密码长度应在8-20个字符之间</string>
+    <string name="Password_length">密码长度应在6-20个字符之间</string>
     <string name="resenttxt"><u>重发电子邮件</u></string>
     <string name="facebook_app_id">1250339181777732</string>
     <string name="fb_login_protocol_scheme">fb1250339181777732</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-
             android:orientation="vertical">
 
             <LinearLayout
@@ -65,7 +64,6 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,8 +75,8 @@
                         android:id="@+id/txtinputlayoutsignupfname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:hintTextAppearance="@style/TextLabel"
-                        android:textColorHint="#fff">
+                        android:textColorHint="#fff"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/edfname"
@@ -95,8 +93,6 @@
                             android:textColorHint="#FFFFFF"
                             android:textSize="@dimen/finaltextfont" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -110,18 +106,16 @@
                         android:id="@+id/txtinputlayoutsignuplname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:hintTextAppearance="@style/TextLabel"
-                        android:textColorHint="#fff">
+                        android:textColorHint="#fff"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/edlname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-
                             android:backgroundTint="@color/colorAccent"
                             android:capitalize="sentences"
-
                             android:hint="@string/last_name"
                             android:inputType="textCapSentences|textFilter"
                             android:maxLength="20"
@@ -129,7 +123,6 @@
                             android:textColorHint="#FFFFFF"
                             android:textSize="@dimen/finaltextfont" />
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -142,8 +135,8 @@
                         android:id="@+id/txtinputlayoutsignupemail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:hintTextAppearance="@style/TextLabel"
-                        android:textColorHint="#fff">
+                        android:textColorHint="#fff"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/edemail"
@@ -193,14 +186,12 @@
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_marginTop="@dimen/signupmargin"
-
                      android:gravity="center">
 
                      <android.support.design.widget.TextInputLayout
                          android:id="@+id/txtinputlayoutsignupaddress"
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
-
                          android:textColorHint="#fff">
 
                          <EditText
@@ -229,8 +220,8 @@
                         android:id="@+id/txtinputlayoutsignupcountry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:hintTextAppearance="@style/TextLabel"
-                        android:textColorHint="#fff">
+                        android:textColorHint="#fff"
+                        app:hintTextAppearance="@style/TextLabel">
 
                         <EditText
                             android:id="@+id/ed_country"
@@ -280,9 +271,6 @@
                             android:textColorHint="#FFFFFF"
                             android:textSize="@dimen/finaltextfont" />
                     </android.support.design.widget.TextInputLayout>
-
-
-
                 </LinearLayout>-->
 
                 <!--<LinearLayout
@@ -297,7 +285,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-
                         android:textColorHint="#fff">
 
                         <EditText
@@ -305,7 +292,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-
                             android:backgroundTint="@color/colorAccent"
                             android:drawableRight="@android:drawable/arrow_down_float"
                             android:editable="false"
@@ -324,7 +310,6 @@
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
                      android:layout_marginTop="@dimen/signupmargin"
-
                      android:gravity="left"
                      android:orientation="horizontal">
 
@@ -387,7 +372,6 @@
                              android:layout_gravity="center"
                              android:backgroundTint="@color/colorAccent"
                              android:drawableRight="@drawable/pwd"
-
                              android:hint="Password"
                              android:inputType="textPassword"
                              android:longClickable="false"
@@ -408,7 +392,6 @@
                           android:id="@+id/txtinputlayoutsignupconfirmpassword"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-
                           android:textColorHint="#fff">
 
                           <EditText
@@ -430,19 +413,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:gravity="center"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/txtagreeagree"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
+                        android:text="@string/txtsignagree"
                         android:textColor="@color/white"
-                        android:text="@string/txtagree1"
                         android:textSize="15dp" />
 
                     <LinearLayout
@@ -466,9 +450,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginLeft="3dp"
                             android:gravity="center"
                             android:text="@string/terms_and"
-                            android:layout_marginLeft="3dp"
                             android:textColor="@color/white"
                             android:textSize="15dp" />
 
@@ -477,20 +461,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:gravity="center"
                             android:layout_marginLeft="3dp"
-                            android:textColor="@color/colorPrimary"
+                            android:gravity="center"
                             android:text="@string/login_privacy"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="15dp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:visibility="gone"
                     android:layout_gravity="center"
-                    android:orientation="horizontal">
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <CheckBox
                         android:id="@+id/chkagree"
@@ -507,23 +492,21 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text=" Accept "
-                        android:visibility="gone"
                         android:textColor="#fff"
-                        android:textSize="@dimen/finaltextfont" />
+                        android:textSize="@dimen/finaltextfont"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/txtTermsandcondn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/login_terms"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
+                        android:text="@string/login_terms"
                         android:textColor="@color/white"
                         android:textSize="@dimen/finaltextfont" />
                 </LinearLayout>
-
-
             </LinearLayout>
 
             <LinearLayout
@@ -550,13 +533,12 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-
                 <TextView
                     android:id="@+id/logintxt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="20dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
                     android:gravity="center"
                     android:text="@string/logintxt"
                     android:textColor="#FFFFFF"

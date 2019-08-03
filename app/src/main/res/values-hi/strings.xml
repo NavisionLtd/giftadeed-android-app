@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 9 July</string>
+    <string name="app_name">GAD P2 Test 02 August</string>
 
     <!--Login page-->
     <string name="login_terms">नियम और शर्तें</string>
@@ -14,6 +14,7 @@
     <string name="change_pic">चित्र बदलें</string>
     <string name="txtseperator">या इसके साथ लॉग इन करें</string>
     <string name="txtagree1">लॉग इन करके, आप हमारे लिए सहमत हैं </string>
+    <string name="txtsignagree">साइन अप करके, आप हमारे लिए सहमत हैं </string>
     <string name="terms_and">तथा</string>
     <string name="select_language">भाषा चुनिए</string>
     <string name="registered_email">पंजीकृत ईमेल दर्ज करें</string>
@@ -50,7 +51,7 @@
     <string name="drawer_logout">लॉग आउट</string>
 
     <!--Grid menu and details-->
-    <string name="noti_history">अधिसूचना इतिहास</string>
+    <string name="noti_history">डीड अपडेट्स</string>
     <string name="list_of_myfulfilled_tags">मेरे पूर्ण टैग की सूची</string>
     <string name="list_of_your">आपके द्वारा टैग की गई सूची</string>
     <string name="list_of_taggers">अपने शहर के सर्वोच्च 10 टैगर्स की सूची</string>
@@ -186,7 +187,7 @@
     <string name="my_profile">मेरी प्रोफाइल</string>
     <string name="edit_profile">संपादित करें</string>
     <string name="my_credits">मेरी साख - </string>
-    <string name="change_pass">पासवर्ड बदलें</string>
+    <string name="change_pass">पासवर्ड</string>
     <string name="state">राज्य</string>
     <string name="city">शहर</string>
     <string name="privacy">एकांत :</string>
@@ -208,7 +209,8 @@
     <string name="remove_location">स्थान निकालें</string>
     <string name="deed_validity_heading">कार्य वैधता (1 से 48 घंटे)</string>
     <string name="select_audiance">दर्शकों का चयन करें</string>
-    <string name="description">जरूरत की कहानी</string>
+    <string name="tag_description">जरूरत की कहानी</string>
+    <string name="description">जरूरत की कहानी :</string>
     <string name="post">पोस्ट </string>
     <string name="container_available">कंटेनर उपलब्ध है</string>
     <string name="container_note">* क्या उस जरूरतमंद व्यक्ति को दान किए गए भोजन / पानी को पिलाने के लिए भोजन की थाली / पानी का पात्र है?</string>
@@ -217,8 +219,8 @@
     <string name="deed_details_heading">डीड विवरण</string>
     <string name="str_location">स्थान : </string>
     <string name="no_needy">आपके आसपास कोई जरूरतमंद लोग नहीं</string>
-    <string name="people_looking_1"> व्यक्ति आपकी मदद के लिए देख रहा है </string>
-    <string name="people_looking_2"> लोग आपकी मदद के लिए देख रहे हैं </string>
+    <string name="people_looking_1"> डीड आपके नजदिक पाये गये </string>
+    <string name="people_looking_2"> डीड्स आपके नजदिक पाये गये </string>
     <string name="pref_1"> व्यक्ति के लिए प्राथमिकताएं : </string>
     <string name="deed_location">डीड लोकेशन : </string>
     <string name="tagged_by_group">समूह द्वारा टैग किया गया : </string>
@@ -349,7 +351,7 @@
     <string name="Enter_emailaddress">ईमेल पता दर्ज</string>
     <string name="Enter_Mobileno">मोबाइल नंबर दर्ज करें</string>
     <string name="Password_blank">पासवर्ड रिक्त नहीं हो सकता</string>
-    <string name="Password_length">पासवर्ड की लंबाई 8-20 अक्षरों के बीच होनी चाहिए</string>
+    <string name="Password_length">पासवर्ड की लंबाई 6-20 अक्षरों के बीच होनी चाहिए</string>
     <string name="resenttxt"><u>पुन: ईमेल भेजें</u></string>
     <string name="facebook_app_id">1250339181777732</string>
     <string name="fb_login_protocol_scheme">fb1250339181777732</string>
