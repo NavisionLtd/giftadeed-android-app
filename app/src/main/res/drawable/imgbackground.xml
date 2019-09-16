@@ -10,7 +10,7 @@
         android:width="@dimen/uploadimg"
         android:height="@dimen/uploadimg"/>
     <stroke
-        android:color="#66000000"
-        android:width="2px"></stroke>
+        android:color="@color/grey"
+        android:width="1px" />
 
 </shape>

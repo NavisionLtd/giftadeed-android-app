@@ -3,8 +3,6 @@ package giftadeed.kshantechsoft.com.giftadeed.FirstLogin;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +18,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
@@ -41,8 +42,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
-import giftadeed.kshantechsoft.com.giftadeed.Login.LinkedInLoginInterface;
-import giftadeed.kshantechsoft.com.giftadeed.Login.LinkedInLoginModel;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.CityAdapter;
@@ -53,7 +52,6 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.CountryModel;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.CountrySignup;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.EmailChechInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.MobileModel;
-import giftadeed.kshantechsoft.com.giftadeed.Signup.SignUp;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.SignupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.StateAdapter;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.StateModel;
@@ -752,12 +750,12 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
             } else if (strEmail.length() < 1) {
                 ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
                 edfirstlogin_email.requestFocus();
-            } else if (!(Validation.isValidEmailAddress(edfirstlogin_email.getText().toString().trim()))) {
+            }
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edfirstlogin_email.getText().toString().trim()).matches()) {
                 ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
                 edfirstlogin_email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 edfirstlogin_email.requestFocus();
                 edfirstlogin_email.selectAll();
-
             } else {
                 checkemail(0);
             }

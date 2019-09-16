@@ -9,7 +9,7 @@ public class Colabrequestlist {
     private String message;
     @SerializedName("collaboration_id")
     @Expose
-    private String id;
+    private String collabId;
     @SerializedName("creator_id")
     @Expose
     private String creator_id;
@@ -34,12 +34,12 @@ public class Colabrequestlist {
         this.message = message;
     }
 
-    public String getId() {
-        return id;
+    public String getCollabId() {
+        return collabId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCollabId(String collabId) {
+        this.collabId = collabId;
     }
 
     public String getCreator_id() {

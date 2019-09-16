@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -126,6 +127,8 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
             etSelectLanguage.setText("English");
         } else if (storedLanguage.equals("hi")) {
             etSelectLanguage.setText("Hindi");
+        } else if (storedLanguage.equals("pt")) {
+            etSelectLanguage.setText("Portuguese");
         }
         databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
@@ -161,6 +164,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                 final RadioButton rbChinese = (RadioButton) dialog.findViewById(R.id.rb_chinese);
                 final RadioButton rbEnglish = (RadioButton) dialog.findViewById(R.id.rb_english);
                 final RadioButton rbHindi = (RadioButton) dialog.findViewById(R.id.rb_hindi);
+                final RadioButton rbPortuguese = (RadioButton) dialog.findViewById(R.id.rb_portuguese);
                 RadioGroup rgLanguages = (RadioGroup) dialog.findViewById(R.id.rg_language_group);
                 if (storedLanguage.equals("zh")) {
                     rbChinese.setChecked(true);
@@ -168,6 +172,8 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                     rbEnglish.setChecked(true);
                 } else if (storedLanguage.equals("hi")) {
                     rbHindi.setChecked(true);
+                } else if (storedLanguage.equals("pt")) {
+                    rbPortuguese.setChecked(true);
                 }
                 rgLanguages.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
@@ -183,6 +189,10 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                         } else if (rbHindi.isChecked()) {
                             storedLanguage = "hi";
                             etSelectLanguage.setText("Hindi");
+                            dialog.dismiss();
+                        } else if (rbPortuguese.isChecked()) {
+                            storedLanguage = "pt";
+                            etSelectLanguage.setText("Portuguese");
                             dialog.dismiss();
                         }
                     }
@@ -267,6 +277,9 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                 } else if (storedLanguage.equals("hi")) {
                     sessionManager.store_language("hi");
                     updateLanguage("hi");
+                } else if (storedLanguage.equals("pt")) {
+                    sessionManager.store_language("pt");
+                    updateLanguage("pt");
                 }
 
                 Toast.makeText(getContext(), getResources().getString(R.string.setting_saved), Toast.LENGTH_SHORT).show();

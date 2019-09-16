@@ -3,15 +3,6 @@ package giftadeed.kshantechsoft.com.giftadeed.MyFullFillTag;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +11,15 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -41,7 +41,6 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -205,18 +204,23 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
                         int size = response.body().getTaggedlist().size();
                         for (int i = 0; i < size; i++) {
                             // Log.d("MyFullFilltag", "" + size);
-                            lstMyfullfillTags.add(new Taggedlist(result.getTaggedlist().get(i).getTaggedTitle(),
-                                    result.getTaggedlist().get(i).getAddress(),
+                            lstMyfullfillTags.add(new Taggedlist(
                                     result.getTaggedlist().get(i).getFullFilledPhotoPath(),
+                                    result.getTaggedlist().get(i).getAddress(),
+                                    result.getTaggedlist().get(i).getTaggedTitle(),
                                     result.getTaggedlist().get(i).getCharacterPath(),
-                                    result.getTaggedlist().get(i).getFullFilledDatetime(),
-                                    result.getTaggedlist().get(i).getFullFilledPoints(),
                                     "",
+                                    result.getTaggedlist().get(i).getTagStatus(),
                                     result.getTaggedlist().get(i).getViews(),
                                     result.getTaggedlist().get(i).getEndorse(),
-                                    "No"
+                                    "No",
+                                    result.getTaggedlist().get(i).getCategoryType(),
+                                    result.getTaggedlist().get(i).getFullFilledPhotoPath(),
+                                    result.getTaggedlist().get(i).getFullFilledDatetime(),
+                                    result.getTaggedlist().get(i).getFullFilledPoints()
                             ));
                         }
+
                         if (size == 0) {
                             recyclerView.setVisibility(View.GONE);
                             relativeNoResultFound.setVisibility(View.VISIBLE);
@@ -227,7 +231,6 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
                             recyclerView.setVisibility(View.VISIBLE);
                             adapter = new Adapter_MyFullFillTags(getActivity(), lstMyfullfillTags);
                             recyclerView.setAdapter(adapter);
-
                         }
                     }
                 } catch (Exception e) {

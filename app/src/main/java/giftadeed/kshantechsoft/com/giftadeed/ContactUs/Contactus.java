@@ -138,7 +138,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (edContactUsMessage.getText().toString().length() > 499) {
                     //Show toast here
-                    Toast.makeText(getContext(), "Length cannot be greater than 500 characters", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.length_msg), Toast.LENGTH_SHORT).show();
                 }
             }
 

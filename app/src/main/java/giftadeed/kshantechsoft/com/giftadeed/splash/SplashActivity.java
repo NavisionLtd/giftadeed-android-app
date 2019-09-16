@@ -205,7 +205,7 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String onlineVersion) {
             super.onPostExecute(onlineVersion);
-            if (onlineVersion != null && !onlineVersion.isEmpty()) {
+            /*if (onlineVersion != null && !onlineVersion.isEmpty()) {
                 if (Float.valueOf(currentVersion) < Float.valueOf(onlineVersion)) {
                     //show update dialog
                     showForceUpdateDialog();
@@ -215,7 +215,8 @@ public class SplashActivity extends AppCompatActivity {
 //            Intent log = new Intent(getApplicationContext(), FadeInActivity.class);
 //            startActivity(log);
                 }
-            }
+            }*/
+            proceedToApp();
             Log.d("appinfodetails", "Current version " + currentVersion + "playstore version " + onlineVersion);
         }
     }

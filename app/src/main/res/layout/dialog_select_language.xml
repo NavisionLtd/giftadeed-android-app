@@ -37,5 +37,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hindi" />
+
+        <RadioButton
+            android:id="@+id/rb_portuguese"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Portuguese" />
     </RadioGroup>
 </LinearLayout>

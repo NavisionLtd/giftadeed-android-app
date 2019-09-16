@@ -103,8 +103,7 @@ public class FilterFrag extends Fragment {
         // Inflate the layout for this fragment
         rootview = inflater.inflate(R.layout.fragment_filter, container, false);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.filters));
-        TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(true);
-        TaggedneedsActivity.back.setVisibility(View.GONE);
+        TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
         TaggedneedsActivity.imgappbarsetting.setVisibility(View.GONE);
         TaggedneedsActivity.imgfilter.setVisibility(View.GONE);
@@ -112,6 +111,7 @@ public class FilterFrag extends Fragment {
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
+        TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         sessionManager = new SessionManager(getContext());
         HashMap<String, String> user = sessionManager.getUserDetails();

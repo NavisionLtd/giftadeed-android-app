@@ -232,6 +232,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 final RadioButton rbChinese = (RadioButton) dialog.findViewById(R.id.rb_chinese);
                 final RadioButton rbEnglish = (RadioButton) dialog.findViewById(R.id.rb_english);
                 final RadioButton rbHindi = (RadioButton) dialog.findViewById(R.id.rb_hindi);
+                final RadioButton rbPortuguese = (RadioButton) dialog.findViewById(R.id.rb_portuguese);
                 RadioGroup rgLanguages = (RadioGroup) dialog.findViewById(R.id.rg_language_group);
                 storedLanguage = sharedPreferences.getLanguage();
                 if (storedLanguage.equals("zh")) {
@@ -240,6 +241,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     rbEnglish.setChecked(true);
                 } else if (storedLanguage.equals("hi")) {
                     rbHindi.setChecked(true);
+                } else if (storedLanguage.equals("pt")) {
+                    rbPortuguese.setChecked(true);
                 }
                 rgLanguages.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
@@ -255,6 +258,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         } else if (rbHindi.isChecked()) {
                             sharedPreferences.store_language("hi");
                             updateLanguage("hi");
+                            dialog.dismiss();
+                        } else if (rbPortuguese.isChecked()) {
+                            sharedPreferences.store_language("pt");
+                            updateLanguage("pt");
                             dialog.dismiss();
                         }
                     }
@@ -277,8 +284,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (!(Validation.isOnline(LoginActivity.this))) {
                     ToastPopUp.displayToast(LoginActivity.this, getResources().getString(R.string.network_validation));
                 } else if (Validation.isStringNullOrBlank(email.getText().toString())) {
-
-                } else if (!(Validation.isValidEmailAddress(email.getText().toString().trim()))) {
 
                 } else {
                     //  password.setFocusableInTouchMode(true);
@@ -314,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     } else if (Validation.isStringNullOrBlank(email.getText().toString())) {
                         ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
                         email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    } else if (!(Validation.isValidEmailAddress(email.getText().toString().trim()))) {
+                    } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText().toString().trim()).matches()) {
                         ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
                         email.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         email.setText("");
@@ -376,7 +381,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     if (Validation.isStringNullOrBlank(email.getText().toString())) {
                         ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
                         email.requestFocus();
-                    } else if (!(Validation.isValidEmailAddress(email.getText().toString().trim()))) {
+                    } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.getText().toString().trim()).matches()) {
                         ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
                         email.setText("");
                         email.requestFocus();
@@ -581,7 +586,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 }
                 if (!Validation.isStringNullOrBlank(edforgotpassEmail.getText().toString())) {
-                    if (!(Validation.isValidEmailAddress(edforgotpassEmail.getText().toString().trim()))) {
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edforgotpassEmail.getText().toString().trim()).matches()) {
                         ToastPopUp.show(LoginActivity.this, getString(R.string.Enter_validemailaddress));
                         edforgotpassEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         edforgotpassEmail.setText("");
@@ -628,7 +633,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     System.out.println("successstatus" + successstatus);
                     if (successstatus.equals("1")) {
                         // status 1 : success
-                        ToastPopUp.show(LoginActivity.this, "We just emailed you a recovery link. Please check your email and click the link.\n\n" + getResources().getString(R.string.reg_completion_link_2));
+                        ToastPopUp.show(LoginActivity.this, getResources().getString(R.string.reg_completion_link_3) + "\n\n" + getResources().getString(R.string.reg_completion_link_2));
                         alertDialogForgot.dismiss();
                         mDialog.dismiss();
                     } else if (successstatus.equals("2")) {
@@ -694,7 +699,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 ToastPopUp.show(LoginActivity.this, getString(R.string.server_response_error));
                 mDialog.dismiss();
             }
-
         });
     }
 
@@ -758,7 +762,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Intent i = new Intent(getBaseContext(), TaggedneedsActivity.class);
                             i.putExtra("message", message);
                             startActivity(i);
-                            //----------------------set up notification status to ON-----------------------
+                            //-----------------------set up notification status to ON-----------------------
                             sharedPreferences.set_notification_status("ON");
                         }
                     } else if (successstatus.equals("0")) {

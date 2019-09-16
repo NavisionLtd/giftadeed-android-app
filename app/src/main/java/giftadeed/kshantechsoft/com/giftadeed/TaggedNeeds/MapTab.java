@@ -244,15 +244,25 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         latitude_gps = new GPSTracker(myContext).getLatitude();
         longitude_gps = new GPSTracker(myContext).getLongitude();
-        LatLng sydney = new LatLng(latitude_gps, longitude_gps);
+        LatLng latLng = new LatLng(latitude_gps, longitude_gps);
         googleMap.getUiSettings().setCompassEnabled(true);
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
 //        mGoogleMap.setMyLocationEnabled(true);
-        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("My location"));
+        mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("My location"));
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(sydney)// Sets the center of the map to Mountain View
+                .target(latLng)// Sets the center of the map to Mountain View
                 .zoom(17)                   // Sets the zoom
                 .tilt(0)                   // Sets the tilt of the camera to 30 degrees
                 .build();

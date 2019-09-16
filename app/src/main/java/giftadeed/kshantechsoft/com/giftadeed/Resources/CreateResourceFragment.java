@@ -340,7 +340,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 } else if (resourceName.getText().length() == 0) {
                     resourceName.requestFocus();
                     resourceName.setFocusable(true);
-                    resourceName.setError("Resource name required");
+                    resourceName.setError(getResources().getString(R.string.res_name_req));
                 } else if (edselectAudiance.getText().length() == 0) {
                     ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_audiance));
                 } else {
@@ -874,13 +874,13 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         TextView suggestSubType = (TextView) dialog.findViewById(R.id.suggest_sub_type);
         Log.d("subcatlist_size", "" + subcategories.size());
         if (subcategories.size() > 0) {
-            tvMsg.setText("Select preferences for number of people");
+            tvMsg.setText(getResources().getString(R.string.select_pref_for_people));
             subcategorylist.setVisibility(View.VISIBLE);
             ok.setVisibility(View.VISIBLE);
             cancel.setVisibility(View.VISIBLE);
             subcategorylist.setAdapter(new ResourceSubCatAdapter(subcategories));
         } else {
-            tvMsg.setText("No subtypes found");
+            tvMsg.setText(getResources().getString(R.string.no_pref_found));
             ok.setVisibility(View.GONE);
             cancel.setVisibility(View.VISIBLE);
             subcategorylist.setVisibility(View.GONE);
@@ -1360,12 +1360,10 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
-//                            btnCreateResource.doneLoadingAnimation(getResources().getColor(R.color.colorPrimary), BitmapFactory.decodeResource(getContext().getResources(),
-//                                    R.drawable.thumb_icon_over));
                             Toast.makeText(getContext(), groupResponseStatus.getSuccessMsg(), Toast.LENGTH_SHORT).show();
                             // move to mapview
-//                            fragmgr = getFragmentManager();
-//                            fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
+                            fragmgr = getFragmentManager();
+                            fragmgr.beginTransaction().replace(R.id.content_frame, TaggedneedsFrag.newInstance(1)).commit();
                         } else if (groupResponseStatus.getStatus() == 0) {
                             Toast.makeText(getContext(), groupResponseStatus.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }

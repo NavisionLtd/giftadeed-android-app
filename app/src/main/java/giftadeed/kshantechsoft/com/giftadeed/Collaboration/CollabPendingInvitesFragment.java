@@ -45,7 +45,6 @@ import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -231,8 +230,8 @@ public class CollabPendingInvitesFragment extends Fragment
                         if (res.getStatus() == 1) {
                             for (int i = 0; i < res.getColab_requestlist().size(); i++) {
                                 Colabrequestlist colabrequestlist = new Colabrequestlist();
-                                colabrequestlist.setId(res.getColab_requestlist().get(i).getId());
-                                colabrequestlist.setId(res.getColab_requestlist().get(i).getCreator_id());
+                                colabrequestlist.setCollabId(res.getColab_requestlist().get(i).getCollabId());
+                                colabrequestlist.setCreator_id(res.getColab_requestlist().get(i).getCreator_id());
                                 colabrequestlist.setColabName(res.getColab_requestlist().get(i).getColabName());
                                 colabrequestlist.setColabDesc(res.getColab_requestlist().get(i).getColabDesc());
                                 colabrequestlist.setColabStartDate(res.getColab_requestlist().get(i).getColabStartDate());
@@ -241,18 +240,19 @@ public class CollabPendingInvitesFragment extends Fragment
                             }
 
                             if (colabArrayList.size() <= 0) {
-//            swipeRefreshLayout.setRefreshing(false);
                                 noPendingInvites.setVisibility(View.VISIBLE);
                                 recyclerView.setVisibility(View.GONE);
                             } else {
-//            swipeRefreshLayout.setRefreshing(false);
                                 noPendingInvites.setVisibility(View.GONE);
                                 recyclerView.setVisibility(View.VISIBLE);
                                 collabListAdapter = new CollabInvitesAdapter(CollabPendingInvitesFragment.this, strUser_ID, colabArrayList, myContext);
                                 recyclerView.setAdapter(collabListAdapter);
                             }
                         } else if (res.getStatus() == 0) {
-                            Toast.makeText(getContext(), res.getErrorMsg(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), res.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                            noPendingInvites.setVisibility(View.VISIBLE);
+                            noPendingInvites.setText("" + res.getErrorMsg());
+                            recyclerView.setVisibility(View.GONE);
                         }
                     }
                 } catch (Exception e) {

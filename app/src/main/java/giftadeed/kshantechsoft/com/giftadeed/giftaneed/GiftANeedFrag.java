@@ -51,6 +51,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -76,10 +77,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
@@ -119,7 +122,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     View rootview;
     public static final int RequestPermissionCode = 1;
     int requiredDistFulfill;
-    int feet_distance;
+    File mediaFile;
     int value = 1;
     Button btncamera, btngallary, btnsubmit, dialogbtnconfirm, dialogbtncancel, btnOk;
     ImageView gieftneedimg;
@@ -136,7 +139,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     public static final int MEDIA_TYPE_IMAGE = 1;
     private Uri fileUri;
     private Bitmap capturedBitmap, rotatedBitmap;
-    String image, strImagenamereturned;
+    String imageToSend, strImagenamereturned;
     SimpleArcDialog simpleArcDialog;
     SessionManager sessionManager;
     public static final int STORAGE_PERMISSION_CODE = 23;
@@ -149,6 +152,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             str_title, str_date, str_distance, strAboutgift, strNoOfPeople, strUser_ID, strCreditpoints, strTotalpoints, tab;
     private static final String IMAGE_DIRECTORY_NAME = "GiftaDeed";
     private AlertDialog alertDialogForgot, alertDialogreturn;
+    double current_latitude, current_longitude;
 
     public static GiftANeedFrag newInstance() {
         GiftANeedFrag fragment = new GiftANeedFrag();
@@ -209,6 +213,9 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         simpleArcDialog = new SimpleArcDialog(getContext());
         getFeetDistance();
 
+        current_latitude = new GPSTracker(myContext).getLatitude();
+        current_longitude  = new GPSTracker(myContext).getLongitude();
+
         edstartwriting.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -223,9 +230,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.length() >= 49) {
-
-                    ToastPopUp.show(getContext(), "Length cannot be greater than 50 characters");
-
+                    ToastPopUp.show(getContext(), getString(R.string.length_msg_3));
                 }
             }
         });
@@ -315,9 +320,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 dialog.setCancelable(false);
                 final TextView txtHelpInfo = (TextView) dialog.findViewById(R.id.txt_help_info);
                 final ImageView btnInfoCancel = (ImageView) dialog.findViewById(R.id.iv_help_info_close);
-
-                txtHelpInfo.setText("Please mention the number of people benefited by fulfillment of this deed");
-
+                txtHelpInfo.setText(getResources().getString(R.string.mention_people_benifited));
                 btnInfoCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -524,6 +527,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         }
         rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         gieftneedimg.setImageBitmap(rotatedBitmap);
+        imageToSend = getStringImage(rotatedBitmap);
     }
 
     public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) { // BEST QUALITY MATCH
@@ -554,22 +558,15 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     //---------------------------nougat updated code
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "GAD_" + timeStamp;
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
-        // File file=new File(storageDir,imageFileName+".png");
-        File mediaFile;
-        if (MEDIA_TYPE_IMAGE == 1) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator + imageFileName + ".jpg");
-        } else {
-            return null;
+        if (!mediaStorageDir.exists()) {
+            mediaStorageDir.mkdirs();
         }
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + imageFileName + ".jpg");
         strimagePath = mediaFile.getAbsolutePath();
         return mediaFile;
-        // Save a file: path for use with ACTION_VIEW intents
-        //"file:" + image.getAbsolutePath();
-        // return file;
     }
 
     public Uri getOutputMediaFileUri(int type) {
@@ -637,17 +634,9 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             if (rotatedBitmap == null) {
-                //Toast.makeText(getContext(), "You have not selected any image", Toast.LENGTH_SHORT).show();
-                // Log.d("image",image);
                 fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);
-                //sendaTag(strUser_ID, strNeedmapping_ID, str_Geopint, strImagenamereturned, strShortDescription, strFullDescription, strlocation);
             } else {
-
-                image = getStringImage(rotatedBitmap);
                 sendImageToServer();
-
-                //Toast.makeText(getContext(), "Your bitmap is not empty", Toast.LENGTH_SHORT).show();
-
             }
         }
 
@@ -655,74 +644,68 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
     //---------------------------sending image to server--------------------------------------------
     public void sendImageToServer() {
-        //final Bitmap photo = ((BitmapDrawable)gieftneedimg.getDrawable()).getBitmap();
-       /* mDialog.setConfiguration(new ArcConfiguration(getContext()));
-        mDialog.show();
-        mDialog.setCancelable(false);*/
+        simpleArcDialog = new SimpleArcDialog(getContext());
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setText("Uploading image...");
+        simpleArcDialog.setConfiguration(configuration);
+        simpleArcDialog.show();
+        simpleArcDialog.setCancelable(false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServices.UPLOAD_GIFT_URL,
-
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
-                        try {
-                            //Disimissing the progress dialog
-                            // mDialog.dismiss();
-                            //Showing toast message of the response
-                            // Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
-                            if (!(Validation.isOnline(getActivity()))) {
-                                ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-                            } else {
-                                strImagenamereturned = s;
-                                fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);
-                            }
-                            //sendaTag(strUser_ID, strNeedmapping_ID, str_Geopint, strImagenamereturned, strShortDescription, strFullDescription, strlocation);
-                            // Log.d("photopath", strImagenamereturned);
-                        } catch (Exception e) {
-                            StringWriter writer = new StringWriter();
-                            e.printStackTrace(new PrintWriter(writer));
-                            Bugreport bg = new Bugreport();
-                            bg.sendbug(writer.toString());
+                        simpleArcDialog.dismiss();
+                        strImagenamereturned = s;
+                        Calendar c = Calendar.getInstance();
+                        c.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                        String currentDateTimeString = df.format(c.getTime());
+                        Log.d("upload_image_api", "Response received time : " + currentDateTimeString);
+                        Log.d("upload_image_api", "Response string : " + s);
+
+                        if (!(Validation.isOnline(getActivity()))) {
+                            ToastPopUp.show(getActivity(), getString(R.string.network_validation));
+                        } else {
+                            fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);
                         }
                     }
                 },
                 new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // mDialog.dismiss();
-
-                        //Showing toast
-                        //Toast.makeText(getActivity(), error.getMessage().toString(), Toast.LENGTH_LONG).show();
-
-
+                        simpleArcDialog.dismiss();
+                        ToastPopUp.show(myContext, getString(R.string.server_response_error));
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                //Converting Bitmap to String
-                // String image = getStringImage(bitmap);
-                //Creating parameters
                 Map<String, String> params = new Hashtable<String, String>();
-                //Adding parameters
-                params.put("image", image);
+                params.put("image", imageToSend);
                 params.put("name", "name");
-                //returning parameters
+                Calendar c = Calendar.getInstance();
+                c.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                String currentDateTimeString = df.format(c.getTime());
+                Log.d("upload_image_api", "Parameters request time : " + currentDateTimeString);
                 return params;
             }
         };
 
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,  // 20 seconds
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //Creating a Request Queue
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
         //Adding request to the queue
         requestQueue.add(stringRequest);
-
-
     }
 
     //--------------------getting string from bitmap------------------------------------------------
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
@@ -742,12 +725,12 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             noOfPeople.requestFocus();
             noOfPeople.setFocusable(true);
             btnsubmit.setEnabled(true);
-            noOfPeople.setError("Enter valid number");
+            noOfPeople.setError(getResources().getString(R.string.valid_number));
         } else if (value < 1) {
             noOfPeople.requestFocus();
             noOfPeople.setFocusable(true);
             btnsubmit.setEnabled(true);
-            noOfPeople.setError("Enter valid number");
+            noOfPeople.setError(getResources().getString(R.string.valid_number));
         } else if (strAboutgift.length() < 1) {
             ToastPopUp.displayToast(getContext(), getResources().getString(R.string.tell_people));
             edstartwriting.setText("");
@@ -793,9 +776,8 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                 if (!(Validation.isNetworkAvailable(myContext))) {
                     Toast.makeText(myContext, getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
                 } else {
-                    double current_latitude = new GPSTracker(myContext).getLatitude();
-                    // ----------------------Getting longitude of the current location-------------
-                    double current_longitude = new GPSTracker(myContext).getLongitude();
+//                    double current_latitude = new GPSTracker(myContext).getLatitude();
+//                    double current_longitude = new GPSTracker(myContext).getLongitude();
                     Location myLocation = new Location("My Location");
                     myLocation.setLatitude(current_latitude);
                     myLocation.setLongitude(current_longitude);
@@ -813,9 +795,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         float ft_distance = dist1 * 3280.8f;
 
                         if (ft_distance < requiredDistFulfill) {
-                            simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
-                            simpleArcDialog.show();
-                            simpleArcDialog.setCancelable(false);
                             isDeedDeleted();
                         } else {
                             //Toast.makeText(myContext, "You are not in the 10 feet area of needy persons", Toast.LENGTH_SHORT).show();
@@ -876,13 +855,14 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-       /* mDialog.setConfiguration(new ArcConfiguration(getContext()));
-        mDialog.show();
-        mDialog.setCancelable(false);*/
-
+        simpleArcDialog = new SimpleArcDialog(getContext());
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setText("Fulfilling deed...");
+        simpleArcDialog.setConfiguration(configuration);
+        simpleArcDialog.show();
+        simpleArcDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
-
         GiftaNeedInterface service = retrofit.create(GiftaNeedInterface.class);
         Call<MobileModel> call = service.sendData(strUser_id, strTag_ID, strfulfilphotopath, strDescr, ispartial, need, strNoOfPeople);
         Log.d("fulfill_input", strNoOfPeople);
@@ -921,7 +901,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                             String strImagepath = str_characterPath;
                             strCreditpoints = model.getCheckstatus().get(0).getCreditsEarned().toString();
                             strTotalpoints = model.getCheckstatus().get(0).getTotalCredits().toString();
-                            //------------------showing gif image
                             Intent intent = new Intent(getContext(), FadeInActivity.class);
                             intent.putExtra("credit_points", strCreditpoints);
                             intent.putExtra("total_points", strTotalpoints);
@@ -1199,7 +1178,12 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
     //--------------------check deed is already deleted or not------------------------------------------
     public void isDeedDeleted() {
+        simpleArcDialog = new SimpleArcDialog(getContext());
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setText("Checking deed availability...");
+        simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
+        simpleArcDialog.setCancelable(false);
         sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetails();
         String user_id = user.get(sessionManager.USER_ID);
@@ -1220,9 +1204,8 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     DeeddeletedModel statusModel = response.body();
                     int strstatus = statusModel.getIsDeleted();
                     if (strstatus == 0) {
-                        //isDeedDeleted("giftnow");
+                        simpleArcDialog.dismiss();
                         checkimage();
-
                     } else {
                         Toast.makeText(getContext(), getResources().getString(R.string.already_deed), Toast.LENGTH_SHORT).show();
                         simpleArcDialog.dismiss();

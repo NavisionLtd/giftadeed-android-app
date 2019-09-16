@@ -191,7 +191,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.length() > 139) {
-                    Toast.makeText(getContext(), "Length cannot be greater than 140 characters", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.length_msg_2), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -550,7 +550,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             try {
                                 mDialog.dismiss();
                                 if (str_catType.equals("C")) {
-                                    strImagepath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + str_iconPath;
+                                    strImagepath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + str_characterPath;
                                 } else {
                                     strImagepath = WebServices.MAIN_SUB_URL + str_characterPath;
                                 }

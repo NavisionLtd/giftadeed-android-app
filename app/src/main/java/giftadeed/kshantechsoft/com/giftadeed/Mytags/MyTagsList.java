@@ -218,7 +218,11 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
                                     result.getTaggedlist().get(i).getTagStatus(),
                                     result.getTaggedlist().get(i).getViews(),
                                     result.getTaggedlist().get(i).getEndorse(),
-                                    result.getTaggedlist().get(i).getPermanent()));
+                                    result.getTaggedlist().get(i).getPermanent(),
+                                    result.getTaggedlist().get(i).getCategoryType(),
+                                    "",
+                                    "",
+                                    ""));
 
                     /*Log.d("photopath",result.getTaggedlist().get(i).getTaggedPhotoPath());
                     Log.d("charpath",result.getTaggedlist().get(i).getCharacterPath());

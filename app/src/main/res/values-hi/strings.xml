@@ -1,40 +1,41 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 02 August</string>
+    <string name="app_name">गिफ्ट ए डीड  P2 Test 12 September</string>
 
     <!--Login page-->
     <string name="login_terms">नियम और शर्तें</string>
     <string name="login_privacy">गोपनीयता नीति</string>
     <string name="login_string">लॉग इन</string>
     <string name="email_string">ईमेल</string>
-    <string name="not_registered">पंजीकरण नहीं किया?</string>
-    <string name="password_string">पासवर्ड</string>
-    <string name="signup">पंजीकरण नहीं किया? साइन अप करें</string>
+	<string name="password_string">पासवर्ड</string>
+    <string name="not_registered">नए उपयोगकर्ता</string>
+    <string name="signup">नया खाता बनाएँ</string>
     <string name="forgot">पासवर्ड भूल गए?</string>
     <string name="change_pic">चित्र बदलें</string>
     <string name="txtseperator">या इसके साथ लॉग इन करें</string>
-    <string name="txtagree1">लॉग इन करके, आप हमारे लिए सहमत हैं </string>
-    <string name="txtsignagree">साइन अप करके, आप हमारे लिए सहमत हैं </string>
+    <string name="txtagree1">लॉग इन करके, आप हमारे निम्नलिखित विषय से सहमत हैं!</string>
+    <string name="txtsignagree">साइन अप करके, आप हमारे निम्नलिखित विषय से सहमत हैं!</string>
     <string name="terms_and">तथा</string>
     <string name="select_language">भाषा चुनिए</string>
     <string name="registered_email">पंजीकृत ईमेल दर्ज करें</string>
-    <string name="submit">जमा करें</string>
+    <string name="submit">ईमेल में नया पासवर्ड लिंक भेजें</string>
     <string name="cancel">रद्द करें</string>
+	<string name="reg_completion_link_3">हमने अभी आपको एक पासवर्ड पुनर्प्राप्ति लिंक ईमेल किया है। कृपया अपना ईमेल देखें और लिंक पर क्लिक करें।</string>
     <string name="wrong_password">गलत पासवर्ड</string>
     <string name="login_failed">लॉग इन असफल हुआ</string>
 
     <!--Sign up page-->
-    <string name="sign_up">साइन अप</string>
+    <string name="sign_up">नया खाता बनाएँ</string>
     <string name="first_name">पहला नाम</string>
     <string name="last_name">अंतिम नाम</string>
     <string name="country">देश</string>
     <string name="logintxt">पहले से ही एक खाता है? <u>लॉग इन</u></string>
-    <string name="length_error_1">लंबाई 15 अक्षर से अधिक नहीं हो सकती</string>
-    <string name="length_error_2">लंबाई 20 अक्षर से अधिक नहीं हो सकती</string>
+    <string name="length_error_1">लंबाई 15 अक्षर से अधिक न रखे</string>
+    <string name="length_error_2">लंबाई 20 अक्षर से अधिक न रखे</string>
 
     <!--App update-->
     <string name="youAreNotUpdatedTitle">अपडेट उपलब्ध</string>
-    <string name="youAreNotUpdatedMessage">GiftADeed का एक नया संस्करण उपलब्ध है। कृपया अपडेट करें|</string>
+    <string name="youAreNotUpdatedMessage">गिफ्ट ए डीड ऐप का एक नया संस्करण उपलब्ध है। कृपया अपडेट करें|</string>
     <string name="update">अपडेट</string>
 
     <!--Navigation drawer-->
@@ -54,8 +55,8 @@
     <string name="noti_history">डीड अपडेट्स</string>
     <string name="list_of_myfulfilled_tags">मेरे पूर्ण टैग की सूची</string>
     <string name="list_of_your">आपके द्वारा टैग की गई सूची</string>
-    <string name="list_of_taggers">अपने शहर के सर्वोच्च 10 टैगर्स की सूची</string>
-    <string name="list_of_fulfillers">अपने शहर में सर्वोच्च 10 टैग पूरा करने वालों की सूची</string>
+    <string name="list_of_taggers">अपने शहर के 10 सर्वोच्च टैगर्स की सूची</string>
+    <string name="list_of_fulfillers">अपने शहर में 10 सर्वोच्च टैग पूर्ण करने वालों की सूची</string>
     <string name="dash1">आपने पिछला अच्छा काम किया है</string>
     <string name="dash2">टैग की आपकी कुल संख्या है</string>
     <string name="dash3">आपकी कुल संख्याएँ पूर्ण हैं</string>
@@ -64,7 +65,7 @@
     <string name="my_tags">मेरे टैग</string>
     <string name="my_tags_heading">मेरे टैग</string>
     <string name="list_of_mytags">मेरे टैग की सूची</string>
-    <string name="my_fulfil_tags_heading">मेरा पूरा टैग</string>
+    <string name="my_fulfil_tags_heading">मेरा पूर्ण टैग</string>
     <string name="fulfil_tags_heading">पूरा टैग</string>
     <string name="top_ten_heading">टॉप 10 टैगर्स</string>
     <string name="top_ten_fulfill_heading">टॉप 10 टैग पूरा करने वाले</string>
@@ -74,21 +75,21 @@
     <string name="terms_heading">नियम और शर्तें</string>
     <string name="privacy_heading">गोपनीयता नीति</string>
     <string name="cookies_heading">कुकीज़ नीति</string>
-    <string name="end_user_heading">एंड-यूजर समझौता</string>
+    <string name="end_user_heading">उपयोगकर्ता सहमति</string>
     <string name="dis_heading">अस्वीकरण</string>
-    <string name="help_heading">FAQs</string>
+    <string name="help_heading">अक्सर पूछे जाने वाले प्रश्न</string>
     <string name="contact_us_heading">संपर्क करें</string>
 
     <!--App update-->
     <string name="map_map">नक्षा</string>
     <string name="map_list">सूची</string>
-    <string name="tab_group">Groups</string>
-    <string name="tab_colab">Collaborations</string>
+    <string name="tab_group">समूह</string>
+    <string name="tab_colab">कोलैबोरेशन</string>
     <string name="map_tagged_deeds">टैग किए गए कर्म</string>
 
     <!--Toast messages-->
     <string name="network_validation">नेटवर्क उपलब्ध नहीं है</string>
-    <string name="server_response_error">कुछ गलत हो गया। बाद में कोशिश करें</string>
+    <string name="server_response_error">कुछ गलत हो गया। कृपया पुन: प्रयास करें</string>
     <string name="contact_saved">संपर्क सहेजा गया</string>
     <string name="setting_saved">सेटिंग्स को सहेजा गया</string>
     <string name="block_toast">आपको ब्लॉक कर दिया गया है</string>
@@ -125,6 +126,9 @@
     <string name="login_unsuccess">लॉगिन असफल रहा</string>
     <string name="email_already_exist">ईमेल पता पहले से ही मौजूद है</string>
     <string name="length_msg">लंबाई 500 अक्षरों से अधिक नहीं हो सकती</string>
+	<string name="length_msg_2">लंबाई 140 अक्षर से अधिक नहीं हो सकती</string>
+   <string name="length_msg_3">लंबाई 50 अक्षर से अधिक नहीं हो सकती</string>
+	
     <string name="unable_to_find">पता खोजने में असमर्थ</string>
     <string name="edited_unsucess">असफल रूप से संपादित किया गया</string>
     <string name="select_country">देश चुनिए</string>
@@ -142,18 +146,18 @@
     <string name="map_fulfilled_tags">भरे हुआ टैग</string>
 
     <!--Group-->
-    <string name="grp_deed_title">समूह कर्म</string>
+    <string name="grp_deed_title">समूह टैग</string>
     <string name="active_tags">सक्रिय टैग</string>
-    <string name="no_group_found">कोई समूह नहीं मिला। क्या आप एक बनाना चाहते हैं?</string>
+    <string name="no_group_found">कोई समूह नहीं मिला। क्या आप एक नया समूह बनाना चाहते हैं?</string>
     <string name="action_create_group">समूह बनाएँ</string>
-    <string name="action_create_collab">सहयोग बनाएं</string>
-    <string name="action_collab_invitation">सहयोग निमंत्रण</string>
+    <string name="action_create_collab">कोलैबोरेशन बनाएं</string>
+    <string name="action_collab_invitation">कोलैबोरेशन निमंत्रण</string>
     <string name="edit_group">समूह संपादित करें</string>
     <string name="search_email">ईमेल ढूंढें *</string>
     <string name="group_name">समूह का नाम *</string>
     <string name="group_desc">समूह चर्चा</string>
     <string name="save">बचाना</string>
-    <string name="take_picture">तस्वीर ले लो</string>
+    <string name="take_picture">तस्वीर खींचें</string>
     <string name="invite_creators">समूह निर्माताओं को आमंत्रित करें</string>
     <string name="browse">सिलेक्ट करें</string>
     <string name="add_member">सदस्य जोड़ें</string>
@@ -186,13 +190,13 @@
     <!--My profile-->
     <string name="my_profile">मेरी प्रोफाइल</string>
     <string name="edit_profile">संपादित करें</string>
-    <string name="my_credits">मेरी साख - </string>
+    <string name="my_credits">मेरे क्रेडिट - </string>
     <string name="change_pass">पासवर्ड</string>
     <string name="state">राज्य</string>
     <string name="city">शहर</string>
-    <string name="privacy">एकांत :</string>
-    <string name="anonymous">गुमनाम</string>
-    <string name="public_1">जनता</string>
+    <string name="privacy">गोपनीयता</string>
+    <string name="anonymous">गुप्त</string>
+    <string name="public_1">सार्वजानिक</string>
     <string name="gender">लिंग :</string>
     <string name="male">पुरुष</string>
     <string name="female">महिला</string>
@@ -203,6 +207,8 @@
     <string name="edit_deed">डीड संपादित करें</string>
     <string name="select_category">श्रेणी का चयन करें</string>
     <string name="select_pref">प्राथमिकताएँ चुनें</string>
+    <string name="select_pref_for_people">लोगों की संख्या के लिए प्राथमिकताएं चुनें</string>
+    <string name="no_pref_found">कोई प्राथमिकता नहीं मिली</string>
     <string name="select_location">स्थान चुनें</string>
     <string name="select_sub_category">उप-श्रेणी का चयन करें</string>
     <string name="permanent_location">स्थायी स्थान</string>
@@ -213,12 +219,13 @@
     <string name="description">जरूरत की कहानी :</string>
     <string name="post">पोस्ट </string>
     <string name="container_available">कंटेनर उपलब्ध है</string>
-    <string name="container_note">* क्या उस जरूरतमंद व्यक्ति को दान किए गए भोजन / पानी को पिलाने के लिए भोजन की थाली / पानी का पात्र है?</string>
-
+    <string name="container_note">* क्या उस जरूरतमंद व्यक्ति के पास दान किए गए भोजन / पानी को पिने के लिए भोजन की थाली / पानी का पात्र है?</string>
+	<string name="tag_unsuccess">टैग असफल रहा</string>
+	
     <!--Deed details-->
     <string name="deed_details_heading">डीड विवरण</string>
     <string name="str_location">स्थान : </string>
-    <string name="no_needy">आपके आसपास कोई जरूरतमंद लोग नहीं</string>
+    <string name="no_needy">आपके आसपास कोई जरूरतमंद लोग नहीं है</string>
     <string name="people_looking_1"> डीड आपके नजदिक पाये गये </string>
     <string name="people_looking_2"> डीड्स आपके नजदिक पाये गये </string>
     <string name="pref_1"> व्यक्ति के लिए प्राथमिकताएं : </string>
@@ -242,6 +249,7 @@
     <string name="upload_picture">तसवीर डालें</string>
     <string name="snap">स्नैप  </string>
     <string name="is_this_deed">क्या यह काम पूरी तरह से पूरा हो गया है?</string>
+    <string name="mention_people_benifited">कृपया इस विलेख की पूर्ति से लाभान्वित लोगों की संख्या का उल्लेख करें</string>
     <string name="tell_people">अपने गिफ्ट के बारे में लोगों को बताएं</string>
 
     <!--First login-->
@@ -351,7 +359,7 @@
     <string name="Enter_emailaddress">ईमेल पता दर्ज</string>
     <string name="Enter_Mobileno">मोबाइल नंबर दर्ज करें</string>
     <string name="Password_blank">पासवर्ड रिक्त नहीं हो सकता</string>
-    <string name="Password_length">पासवर्ड की लंबाई 6-20 अक्षरों के बीच होनी चाहिए</string>
+    <string name="Password_length">पासवर्ड की लंबाई 6 - 20 अक्षरों के बीच होनी चाहिए</string>
     <string name="resenttxt"><u>पुन: ईमेल भेजें</u></string>
     <string name="facebook_app_id">1250339181777732</string>
     <string name="fb_login_protocol_scheme">fb1250339181777732</string>
@@ -379,10 +387,10 @@
     <string name="time">पहर</string>
     <string name="search">खोज</string>
     <string name="coming_soon">जल्द आ रहा है......</string>
-    <string name="take_photo">फोटो लो</string>
+    <string name="take_photo">तस्वीर खींचें</string>
     <string name="select_from_gallery">गैलरी से चयन करें</string>
     <string name="select_from_avatars">अवतार से चुनें</string>
-    <string name="suggest_sub_type">सुझाव उप-प्रकार</string>
+    <string name="suggest_sub_type">उप-प्रकार सुझाव </string>
     <string name="enter_suggession">सुझाव दर्ज करें</string>
     <string name="subtype_already_exist">उप-प्रकार पहले से मौजूद हैं</string>
     <string name="subtype_success">उप-प्रकार सफलतापूर्वक सबमिट किया गया</string>
@@ -401,7 +409,7 @@
     <string name="action_group_messages">समूह संदेश</string>
     <string name="all_app_version">Sample UI v%1$s / SDK v%2$s</string>
     <string name="select_channel_type">चैनल प्रकार चुनें</string>
-    <string name="blocked_members_list">Blocked सदस्य</string>
+    <string name="blocked_members_list">ब्लॉक सदस्य</string>
     <string name="GroupMessage_Community">संदेश</string>
     <string name="login_user_id">User ID</string>
     <string name="login_user_nickname">Nickname</string>
@@ -423,5 +431,15 @@
     <string name="message_sending">भेज रहे है</string>
     <string name="message_failed">असफल हुआ</string>
     <string name="invite">आमंत्रण</string>
-    <string name="welcomechatmessage">GiftADeed चैट में आपका स्वागत है</string>
+    <string name="welcomechatmessage">गिफ्ट ए डीड चैट में आपका स्वागत है</string>
+	
+	
+	<!-- Validation messages -->
+   <string name="res_name_req">रिसोर्स नाम आवश्यक है</string>
+   <string name="valid_number">वैध संख्या लिखे</string>
+   <string name="valid_email">वैध ईमेल आईडी लिखे</string>
+   <string name="colab_name_req">कोलैबोरेशन का नाम आवश्यक है</string>
+   <string name="colab_desc_req">कोलैबोरेशन का वर्णन आवश्यक है</string>
+   <string name="grp_name_req">समूह का नाम आवश्यक है</string>
+	
 </resources>

@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 02 August</string>
+    <string name="app_name">GAD P2 Test 12 September</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
@@ -19,6 +19,7 @@
     <string name="registered_email">输入注册邮箱</string>
     <string name="submit">提交</string>
     <string name="cancel">取消</string>
+	<string name="reg_completion_link_3">我們剛給您發送了一個恢復鏈接。請檢查您的電子郵件，然後單擊鏈接</string>
     <string name="wrong_password">密碼錯誤</string>
     <string name="login_failed">登錄失敗</string>
 
@@ -204,6 +205,8 @@
     <string name="select_category">选择类别</string>
     <string name="select_sub_category">選擇子類別</string>
     <string name="select_pref">選擇首選項</string>
+    <string name="select_pref_for_people">請提及履行此契約而受益的人數</string>
+    <string name="no_pref_found">沒有找到偏好</string>
     <string name="select_location">选择位置</string>
     <string name="permanent_location">永久的位置</string>
     <string name="remove_location">刪除位置</string>
@@ -241,6 +244,7 @@
     <string name="gift_title">禮物契約</string>
     <string name="upload_picture">上传图片</string>
     <string name="snap">卡  </string>
+    <string name="mention_people_benifited">請提及履行此契約而受益的人數</string>
     <string name="is_this_deed">这件事完全履行了吗？</string>
     <string name="tell_people">告诉别人你的礼物</string>
 
@@ -424,4 +428,18 @@
     <string name="no_channel">找不到頻道</string>
     <string name="action_group_messages">群組消息</string>
     <string name="invite">邀請</string>
+	
+	<!-- Validation messages -->
+   <string name="res_name_req">需要資源名稱</string>
+   <string name="valid_number">輸入有效數字</string>
+   <string name="valid_email">輸入有效的郵箱</string>
+   <string name="colab_name_req">協作名稱必需</string>
+   <string name="colab_desc_req">協作說明必需</string>
+   <string name="grp_name_req">需要組名</string>
+   
+   <string name="length_msg_2">長度不能超過140個字符</string>
+   <string name="length_msg_3">長度不能超過50個字符</string>
+
+<string name="tag_unsuccess">標籤不成功</string>
+
 </resources>

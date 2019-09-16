@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //-----------------------initializing the UI elements-------------------------------------------------
+    //-----------------------initializing the UI elements-----------------------
     private void init() {
         btncharity = (Button) findViewById(R.id.charity);
         btnsubscription = (Button) findViewById(R.id.subscription);
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //------------------------------clicking the back button----------------------------------------
+    //--------------------clicking the back button--------------------
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    //----------------------------------forgot password dialog------------------------------------------
+    //----------------------------------forgot password dialog----------------------------------
     private void submitdialog() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         LayoutInflater li = LayoutInflater.from(this);

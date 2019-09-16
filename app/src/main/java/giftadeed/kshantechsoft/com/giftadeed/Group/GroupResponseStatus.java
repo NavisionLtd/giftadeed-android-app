@@ -24,6 +24,9 @@ public class GroupResponseStatus {
     @SerializedName("group_id")
     @Expose
     private Integer groupid;
+    @SerializedName("img_path")
+    @Expose
+    private String grpImagePath;
 
     public Integer getStatus() {
         return status;
@@ -63,5 +66,13 @@ public class GroupResponseStatus {
 
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
+    }
+
+    public String getGrpImagePath() {
+        return grpImagePath;
+    }
+
+    public void setGrpImagePath(String grpImagePath) {
+        this.grpImagePath = grpImagePath;
     }
 }

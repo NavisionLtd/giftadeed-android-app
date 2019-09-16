@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -115,7 +118,6 @@ public class SignUp extends AppCompatActivity {
             Charity = "No";
         }
 
-
         edFname.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -127,19 +129,13 @@ public class SignUp extends AppCompatActivity {
                 //     edMerchantName.setSelection(edMerchantName.getText().length());   //set cursor at right placee of text
 
                 if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
-
-
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                 } else if (!(edFname.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                 } else if (!(edFname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                     ToastPopUp.show(context, getString(R.string.first_character_not_space));
                 }
-
             }
 
             @Override
@@ -149,6 +145,7 @@ public class SignUp extends AppCompatActivity {
                 }
             }
         });
+
         edFname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -263,22 +260,14 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //    edemailaddress.setSelection(edemailaddress.getText().length());   //set cursor at right placee of text
-
-
                 if (Validation.isStringNullOrBlank(edEmail.getText().toString())) {
                     edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                 } else if (!(edEmail.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
                     ToastPopUp.show(context, getString(R.string.first_character_not_space));
                     edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                } else if (!(Validation.isValidEmailAddress(edEmail.getText().toString().trim()))) {
-                    //ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
+                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edEmail.getText().toString().trim()).matches()) {
                     edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    // edEmail.setText("");
                 }
-
-
             }
 
             @Override
@@ -301,16 +290,12 @@ public class SignUp extends AppCompatActivity {
 
                     }
                     if (!Validation.isStringNullOrBlank(edEmail.getText().toString())) {
-
-                        if (!(Validation.isValidEmailAddress(edEmail.getText().toString().trim()))) {
+                        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edEmail.getText().toString().trim()).matches()) {
                             ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
                             edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                            //edEmail.requestFocus();
                             edEmail.selectAll();
-                            //edPhone.clearFocus();
-                            //edEmail.selectAll();
-                        } else if (!Validation.isStringNullOrBlank(edEmail.getText().toString())) {
-
+                        }
+                        else if (!Validation.isStringNullOrBlank(edEmail.getText().toString())) {
                             checkemail(1);
                         }
                     } else {
@@ -1075,13 +1060,13 @@ public class SignUp extends AppCompatActivity {
         } else if (stremailaddress.length() < 1) {
             ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
             edEmail.requestFocus();
-        } else if (!(Validation.isValidEmailAddress(edEmail.getText().toString().trim()))) {
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edEmail.getText().toString().trim()).matches()) {
             ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
             edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             edEmail.requestFocus();
             edEmail.selectAll();
-
-        } else if (!(Validation.isOnline(SignUp.this))) {
+        }
+        else if (!(Validation.isOnline(SignUp.this))) {
             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
 
         } else if (strCountry.length() < 1) {

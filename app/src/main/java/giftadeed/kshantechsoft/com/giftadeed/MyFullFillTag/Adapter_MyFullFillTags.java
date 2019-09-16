@@ -78,19 +78,17 @@ public class Adapter_MyFullFillTags extends RecyclerView.Adapter<Adapter_MyFullF
         // mainHolder.txtMytagsDate.setText(model.getTaggedDatetime());
         if (strImagepath.length() > 57) {
             try {
-
-                Picasso.with(context).load(MANI_URL + SUB_URL + model.getFullFilledPhotoPath()).placeholder(R.drawable.pictu).resize(100, 100).into(mainHolder.imgMyFullfilltags);
+                Picasso.with(context).load(MANI_URL + SUB_URL + model.getFullFilledPhotoPath()).placeholder(R.drawable.pictu).into(mainHolder.imgMyFullfilltags);
             } catch (Exception es) {
                 // Picasso.with(context).load(R.drawable.pictu).resize(100, 100).into(mainHolder.imgMyFullfilltags);
                 mainHolder.imgMyFullfilltags.setImageResource(R.drawable.pictu);
-                mainHolder.imgMyFullfilltags.setScaleType(ImageView.ScaleType.FIT_XY);
+//                mainHolder.imgMyFullfilltags.setScaleType(ImageView.ScaleType.FIT_XY);
             }
         } else {
             // Picasso.with(context).load(R.drawable.pictu).resize(100, 100).into(mainHolder.imgMyFullfilltags);
             mainHolder.imgMyFullfilltags.setImageResource(R.drawable.pictu);
-            mainHolder.imgMyFullfilltags.setScaleType(ImageView.ScaleType.FIT_XY);
+//            mainHolder.imgMyFullfilltags.setScaleType(ImageView.ScaleType.FIT_XY);
         }
-
     }
 
     @Override

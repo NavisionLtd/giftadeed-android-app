@@ -2,9 +2,6 @@ package giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
@@ -14,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,6 +27,7 @@ import com.sendbird.android.GroupChannel;
 import com.sendbird.android.Member;
 import com.sendbird.android.SendBird;
 import com.sendbird.android.UserMessage;
+import com.squareup.picasso.Picasso;
 import com.stfalcon.multiimageview.MultiImageView;
 
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.ToDoubleBiFunction;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import giftadeed.kshantechsoft.com.giftadeed.R;
@@ -260,29 +259,35 @@ class GroupChannelListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
 
-            Log.d("channel_image_url", "" + channel.getCoverUrl());
             // TODO: 01-Aug-19 Show group profile image in sendbird channel
-            /*if (channel.getCoverUrl().length() > 0) {
+            if (channel.getName().contains("- CLB")) {
                 Glide.with(context)
                         .asBitmap()
-                        .load(channel.getCoverUrl())
+                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                        .load(R.drawable.ic_circular_collaboration)
                         .apply(myOptions)
                         .into(coverImage);
-            } else {*/
-                if (channel.getName().contains("- CLB")) {
-                    Glide.with(context)
+            } else {
+                if (channel.getCoverUrl().length() > 0) {
+                    Picasso.with(context).load(channel.getCoverUrl()).placeholder(R.drawable.group_member).into(coverImage);
+
+                    /*Glide.with(context)
                             .asBitmap()
-                            .load(R.drawable.ic_circular_collaboration)
+                            .apply(RequestOptions.skipMemoryCacheOf(true))
+                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                            .load(channel.getCoverUrl())
                             .apply(myOptions)
-                            .into(coverImage);
+                            .into(coverImage);*/
+                    Log.d("channel_image_url", "" + channel.getCoverUrl());
                 } else {
                     Glide.with(context)
                             .asBitmap()
+                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
                             .load(R.drawable.ic_circular_group)
                             .apply(myOptions)
                             .into(coverImage);
                 }
-//            }
+            }
 
 //            if (!mIsCacheLoading) {
 //                setChannelImage(context, channel, coverImage);

@@ -1,6 +1,6 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 02 August</string>
+    <string name="app_name">GAD P2 Test 12 September</string>
 
     <!--Login page-->
     <string name="login_terms">Terms and Conditions</string>
@@ -44,7 +44,7 @@
     <string name="block_toast">You have been blocked</string>
     <string name="group_deleted">Group deleted successfully</string>
     <string name="profile_updated">Profile updated successfully</string>
-    <string name="collab_deleted">Collaboration deleted successfully</string>colab_created_msg
+    <string name="collab_deleted">Collaboration deleted successfully</string>
     <string name="contacts_saved">Contacts saved</string>
     <string name="error">Error</string>
     <string name="updation_failed">Updation failed</string>
@@ -75,6 +75,8 @@
     <string name="login_unsuccess">Login was unsuccessful</string>
     <string name="email_already_exist">Email address already exists</string>
     <string name="length_msg">Length cannot be greater than 500 characters</string>
+    <string name="length_msg_2">Length cannot be greater than 140 characters</string>
+    <string name="length_msg_3">Length cannot be greater than 50 characters</string>
     <string name="unable_to_find">Unable to find address</string>
     <string name="edited_unsucess">Edited unsuccessfully</string>
     <string name="select_country">Select country</string>
@@ -204,6 +206,8 @@
     <string name="select_category">Select Category</string>
     <string name="select_sub_category">Select Sub-Category</string>
     <string name="select_pref">Select Preferences</string>
+    <string name="select_pref_for_people">Select preferences for number of people</string>
+    <string name="no_pref_found">No preferences found</string>
     <string name="select_location">Select Location</string>
     <string name="permanent_location">Permanent location</string>
     <string name="remove_location">Remove Location</string>
@@ -214,6 +218,7 @@
     <string name="post">Post</string>
     <string name="container_available">Container Available</string>
     <string name="container_note">* Whether that needy person has a food plate/water container to receive the donated food/water?</string>
+    <string name="tag_unsuccess">Tag was unsuccessful</string>
 
     <!--Deed details-->
     <string name="deed_details_heading">Deed Details</string>
@@ -242,6 +247,7 @@
     <string name="upload_picture">Upload Picture</string>
     <string name="snap">Snap  </string>
     <string name="is_this_deed">Is this deed fulfilled completely?</string>
+    <string name="mention_people_benifited">Please mention the number of people benefited by fulfillment of this deed</string>
     <string name="tell_people">Tell people about your gift</string>
 
     <!--First login-->
@@ -330,6 +336,14 @@
     <string name="contacts_to_send_alert">Contacts to send alert message in emergency situation</string>
     <string name="family_or_friend">e.g. Family member or Friend</string>
 
+    <!-- Validation messages -->
+    <string name="res_name_req">Resource name required</string>
+    <string name="valid_number">Enter valid number</string>
+    <string name="valid_email">Enter valid email</string>
+    <string name="colab_name_req">Collaboration Name Required</string>
+    <string name="colab_desc_req">Collaboration Description Required</string>
+    <string name="grp_name_req">Group name required</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="middle_terms">  ,and  </string>
@@ -360,6 +374,7 @@
     <string name="reg_completion_link">A registration completion link has been sent to </string>
     <string name="reg_completion_link_1">. You can set your password using that link.</string>
     <string name="reg_completion_link_2">Please check your promotions, social, spam or junk mails folders. Depending on your email preference settings, email from admin@giftadeed.com may end up in different folders.</string>
+    <string name="reg_completion_link_3">We just emailed you a recovery link. Please check your email and click the link.</string>
     <string name="you_earned">You earned:</string>
     <string name="your_points">Your total points:</string>
     <string name="tagged_deeds_for_day">Tagged Deeds &amp; Fulfilled Deeds for day</string>

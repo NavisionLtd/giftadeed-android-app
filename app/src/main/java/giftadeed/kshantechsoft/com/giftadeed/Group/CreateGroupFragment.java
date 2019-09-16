@@ -13,12 +13,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,6 +57,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,10 +74,12 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.ModalSendBrdUpdat
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.FileUtil;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
+import id.zelory.compressor.Compressor;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -85,6 +90,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     View rootview;
+    File mediaFile;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
@@ -107,6 +113,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     private String strMessage = "Welcome to GiftADeed chat";
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
     private String fetchedChannelUrl;
+    private String grpImageUrl = "";
 
     public static CreateGroupFragment newInstance(int sectionNumber) {
         CreateGroupFragment fragment = new CreateGroupFragment();
@@ -191,29 +198,29 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                 if (groupName.getText().length() == 0) {
                     groupName.requestFocus();
                     groupName.setFocusable(true);
-                    groupName.setError("Group name required");
+                    groupName.setError(getResources().getString(R.string.grp_name_req));
                 } else {
                     if (!(Validation.isOnline(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         if (callingFrom.equals("create")) {
                             //call api
-                            if (rotatedBitmap != null) {
-                                pathToSend = getStringImage(rotatedBitmap);
-                            }
+//                            if (rotatedBitmap != null) {
+//                                pathToSend = getStringImage(rotatedBitmap);
+//                            }
                             createGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID);
                         } else {
                             // call edit group api
-                            if (rotatedBitmap != null) {
-                                pathToSend = getStringImage(rotatedBitmap);
-                                editGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID, receivedGid);
-                            } else {
+//                            if (rotatedBitmap != null) {
+//                                pathToSend = getStringImage(rotatedBitmap);
+//                                editGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID, receivedGid);
+//                            } else {
                                 if (receivedGname.equals(groupName.getText().toString()) && receivedGdesc.equals(groupDesc.getText().toString())) {
                                     Toast.makeText(getContext(), getResources().getString(R.string.you_havnt_change), Toast.LENGTH_SHORT).show();
                                 } else {
                                     editGroup(pathToSend, groupName.getText().toString(), groupDesc.getText().toString(), strUser_ID, receivedGid);
                                 }
-                            }
+//                            }
                         }
                     }
                 }
@@ -252,9 +259,10 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
+        mDialog = new SimpleArcDialog(getContext());
         ArcConfiguration configuration = new ArcConfiguration(getContext());
         configuration.setText("Creating group..");
-        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
@@ -301,6 +309,10 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                         if (groupResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.group_created_msg), Toast.LENGTH_SHORT).show();
                             sessionManager.store_GroupName(groupname);
+                            grpImageUrl = groupResponseStatus.getGrpImagePath();
+                            if (grpImageUrl.length() > 0) {
+                                grpImageUrl = WebServices.MANI_URL + WebServices.SUB_URL + grpImageUrl;
+                            }
                             //group chat
                             mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
                             if (strUser_ID != null && channelName != null) {
@@ -336,9 +348,10 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
+        mDialog = new SimpleArcDialog(getContext());
         ArcConfiguration configuration = new ArcConfiguration(getContext());
-        configuration.setText("Editing group..");
-        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        configuration.setText("Updating group details..");
+        mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
@@ -381,7 +394,10 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                         Log.d("edit_group_status", groupResponseStatus.getStatus().toString());
                         if (groupResponseStatus.getStatus() == 1) {
                             Toast.makeText(getContext(), getResources().getString(R.string.group_edited), Toast.LENGTH_SHORT).show();
-
+                            grpImageUrl = groupResponseStatus.getGrpImagePath();
+                            if (grpImageUrl.length() > 0) {
+                                grpImageUrl = WebServices.MANI_URL + WebServices.SUB_URL + grpImageUrl;
+                            }
                             // update sendbird also
                             String channelName = "";
                             // Sendbird edit channel. Concat with GRP for Group and CLB for Collaboration
@@ -443,7 +459,6 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }
-        File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + imageFileName + ".jpg");
         strimagePath = mediaFile.getAbsolutePath();
         return mediaFile;
@@ -502,6 +517,22 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                 int bitmap_file_size = capturedBitmap.getByteCount();
                 Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
                 rotateImage(setReducedImageSize());
+
+                /*try {
+                    File newCompressedFile = new Compressor(getContext())
+                            .setMaxWidth(640)
+                            .setMaxHeight(480)
+                            .setQuality(50)
+                            .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                            .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                                    Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                            .compressToFile(mediaFile);
+                    Log.d("newCompressedBitmap", "" + (String.format("Size : %s", getReadableFileSize(newCompressedFile.length()))));
+                    rotatedBitmap = BitmapFactory.decodeFile(newCompressedFile.getAbsolutePath());
+                    imageView.setImageBitmap(rotatedBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
             }
         }
 
@@ -518,7 +549,33 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
             int bitmap_file_size = capturedBitmap.getByteCount();
             Log.d("gallery_photo_size", "bitmap_size : " + bitmap_file_size);
             rotateImage(setReducedImageSize());
+
+            /*try {
+                mediaFile = FileUtil.from(getContext(), data.getData());
+                File newCompressedFile = new Compressor(getContext())
+                        .setMaxWidth(640)
+                        .setMaxHeight(480)
+                        .setQuality(50)
+                        .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                        .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                        .compressToFile(mediaFile);
+                Log.d("newCompressedBitmap", "" + (String.format("Size : %s", getReadableFileSize(newCompressedFile.length()))));
+                rotatedBitmap = BitmapFactory.decodeFile(newCompressedFile.getAbsolutePath());
+                imageView.setImageBitmap(rotatedBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
         }
+    }
+
+    public String getReadableFileSize(long size) {
+        if (size <= 0) {
+            return "0";
+        }
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     private Bitmap setReducedImageSize() {
@@ -557,6 +614,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         }
         rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         imageView.setImageBitmap(rotatedBitmap);
+        pathToSend = getStringImage(rotatedBitmap);
     }
 
     public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) { // BEST QUALITY MATCH
@@ -585,7 +643,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
     //-----------------------------getting string from bitmap image---------------------------------
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
@@ -627,7 +685,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     // Error.
                     return;
                 }
-                GroupChannel.createChannelWithUserIds(userIds, distinct, clubName, "https://kshandemo.co.in/gad3p2/api/image/resource/resource_marker.png", message, new GroupChannel.GroupChannelCreateHandler() {
+                GroupChannel.createChannelWithUserIds(userIds, distinct, clubName, grpImageUrl, message, new GroupChannel.GroupChannelCreateHandler() {
                     @Override
                     public void onResult(GroupChannel groupChannel, SendBirdException e) {
                         if (e != null) {
@@ -697,13 +755,19 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                 .baseUrl(WebServices.MANI_SENDBRD_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        //pass the json obhect
-        JsonObject postParam = new JsonObject();
+        //pass the json object
+        /*JsonObject postParam = new JsonObject();
         postParam.addProperty("name", channelName);
+        postParam.addProperty("cover_url", grpImageUrl);*/
+        Log.d("cover_url", grpImageUrl);
+
+        ModalSendBrdUpdate modalSendBrdUpdate = new ModalSendBrdUpdate();
+        modalSendBrdUpdate.setName(channelName);
+        modalSendBrdUpdate.setCoverUrl(grpImageUrl);
 
         //call interface
         UpdateGrpChannel service = retrofit.create(UpdateGrpChannel.class);
-        Call<ModalSendBrdUpdate> call = service.sendData(urlOfChannel, postParam);
+        Call<ModalSendBrdUpdate> call = service.sendData(urlOfChannel, modalSendBrdUpdate);
         call.enqueue(new Callback<ModalSendBrdUpdate>() {
             @Override
             public void onResponse(Response<ModalSendBrdUpdate> response, Retrofit retrofit) {

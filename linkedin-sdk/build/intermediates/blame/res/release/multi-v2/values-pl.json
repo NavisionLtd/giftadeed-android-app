@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "D:\\Bhakti\\giftadeed_git\\giftadeed\\linkedin-sdk\\build\\intermediates\\res\\merged\\release\\values-pl\\values-pl.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Darshan Rambole\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\9cd0dc379f6e2242463baec897915e32\\res\\values-pl\\values-pl.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "D:\\Bhakti\\giftadeed_git\\giftadeed\\linkedin-sdk\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-pl\\values-pl.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Darshan Rambole\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.0.0.aar\\9cd0dc379f6e2242463baec897915e32\\res\\values-pl\\values-pl.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}

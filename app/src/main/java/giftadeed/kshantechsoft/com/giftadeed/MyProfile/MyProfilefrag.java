@@ -394,7 +394,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 
                 if (s.length() >= 15) {
                     if (edFname.isEnabled()) {
-                        ToastPopUp.show(getContext(), "Length cannot be greater than 15 characters");
+                        ToastPopUp.show(getContext(), getString(R.string.length_error));
                     }
                 }
             }
@@ -465,7 +465,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             public void afterTextChanged(Editable s) {
                 if (edLname.getText().length() > 19) {
                     if (edLname.isEnabled()) {
-                        ToastPopUp.show(getContext(), "Length cannot be greater than 20 characters");
+                        ToastPopUp.show(getContext(), getString(R.string.length_error_2));
                     }
                 }
             }

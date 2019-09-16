@@ -133,10 +133,10 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((editsearch.getText().length() == 0) || (!Validation.isValidEmailAddress(editsearch.getText().toString().trim()))) {
+                if ((editsearch.getText().length() == 0) || (!android.util.Patterns.EMAIL_ADDRESS.matcher(editsearch.getText().toString().trim()).matches())) {
                     editsearch.requestFocus();
                     editsearch.setFocusable(true);
-                    editsearch.setError("Enter valid email");
+                    editsearch.setError(getResources().getString(R.string.valid_email));
                 } else {
                     if (!(Validation.isOnline(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
@@ -144,6 +144,11 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                         searchMember(strUser_ID, editsearch.getText().toString(), receivedGid);
                     }
                 }
+                /*if ((editsearch.getText().length() == 0) || (!Validation.isValidEmailAddress(editsearch.getText().toString().trim()))) {
+                    editsearch.requestFocus();
+                    editsearch.setFocusable(true);
+                    editsearch.setError(getResources().getString(R.string.valid_email));
+                } */
             }
         });
 

@@ -17,5 +17,4 @@ public interface taglistInterface {
     @FormUrlEncoded
     @POST(path)
     Call<Modeltaglist> fetchData(@Field("user_id") String User_ID);
-
 }

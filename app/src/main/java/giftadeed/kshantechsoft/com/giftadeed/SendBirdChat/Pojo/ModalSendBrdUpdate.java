@@ -5,7 +5,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ModalSendBrdUpdate {
-
     @SerializedName("unread_message_count")
     @Expose
     private Long unreadMessageCount;
@@ -193,5 +192,4 @@ public class ModalSendBrdUpdate {
     public void setChannel(Channel channel) {
         this.channel = channel;
     }
-
 }

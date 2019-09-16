@@ -2,8 +2,10 @@ package giftadeed.kshantechsoft.com.giftadeed.Collaboration;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,10 +93,10 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                     e.printStackTrace();
                 }
                 // Sendbird channel. Concat with GRP for Group and CLB for Collaboration
-                strClubName = list.get(position).getColabName() + " - CLB" + list.get(position).getId();
+                strClubName = list.get(position).getColabName() + " - CLB" + list.get(position).getCollabId();
                 Log.d("club_channel_name", strClubName);
                 // call accept invite api. Send A for accept
-                updateInviteRequest(strUser_ID, list.get(position).getId(), "A");
+                updateInviteRequest(strUser_ID, list.get(position).getCollabId(), "A");
             }
         });
 
@@ -102,7 +104,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
             @Override
             public void onClick(View v) {
                 // call reject invite api. Send R for reject
-                updateInviteRequest(strUser_ID, list.get(position).getId(), "R");
+                updateInviteRequest(strUser_ID, list.get(position).getCollabId(), "R");
             }
         });
     }
@@ -170,6 +172,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                         loginintent.putExtra("message", "Charity");
                         context.startActivity(loginintent);
                     } else {
+                        Log.d("response_status", "" + collabResponseStatus.getStatus());
                         if (collabResponseStatus.getStatus() == 1) {
                             Toast.makeText(context, collabResponseStatus.getSuccessMsg(), Toast.LENGTH_SHORT).show();
 
@@ -227,7 +230,6 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                         if (e != null) {
                             // Error.
                             return;
-
                         }
                         if (list != null) {
                             for (int i = 0; i < list.size(); i++) {

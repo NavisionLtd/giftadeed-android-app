@@ -39,10 +39,10 @@ public class Validation {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-    public static boolean isValidEmailAddress(String email) {
+    /*public static boolean isValidEmailAddress(String email) {
         String ePattern = "^[A-Za-z][A-Za-z0-9_]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
         java.util.regex.Matcher m = p.matcher(email);
         return m.matches();
-    }
+    }*/
 }

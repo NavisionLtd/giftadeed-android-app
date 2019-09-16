@@ -71,7 +71,7 @@ public class NeedListAdapter extends RecyclerView.Adapter<NeedListAdapter.ViewHo
             // strdate=strdate.substring(0,10);
             String strImagepath = WebServices.MAIN_SUB_URL + item.get(position).getImagepath();
             if (item.get(position).getCatType().equals("C")) {
-                strCharpath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + item.get(position).getGetIconPath();
+                strCharpath = WebServices.CUSTOM_CATEGORY_IMAGE_URL + item.get(position).getCharacterPath();
                 Log.d("tab2_C_character_path", strCharpath);
             } else {
                 strCharpath = WebServices.MAIN_SUB_URL + item.get(position).getCharacterPath();

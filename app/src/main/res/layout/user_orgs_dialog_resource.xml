@@ -13,7 +13,20 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@color/colorAccent"
-            android:gravity="center" />
+            android:gravity="center">
+
+            <!-- <TextView
+                 android:id="@+id/txtFogot_password"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:layout_marginBottom="10dp"
+                 android:gravity="center"
+                 android:text="Forgot Password?"
+                 android:textColor="#FFFFFF"
+                 android:textSize="@dimen/finalheaderfont"
+                 android:textStyle="bold" />-->
+        </LinearLayout>
 
         <ImageView
             android:layout_width="@dimen/gridmenuimg_height"
@@ -27,26 +40,25 @@
         android:id="@+id/txt_head_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:padding="10dp"
         android:text="@string/your_groups"
-        android:layout_marginLeft="10dp"
         android:textColor="@color/black"
         android:textSize="15dp"
         android:textStyle="bold" />
 
-   <!-- <ListView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_orgs_list_1"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        android:scrollbars="vertical" />
+    <!--<ListView
         android:id="@+id/user_orgs_list_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:scrollbars="none" />-->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/user_orgs_list_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:scrollbars="none" />
 
     <View
         android:layout_width="match_parent"
@@ -58,8 +70,8 @@
         android:id="@+id/chk_all_other_orgs_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_marginLeft="10dp"
+        android:padding="10dp"
         android:text="@string/all_groups"
         android:textColor="@color/black"
         android:textSize="15dp"

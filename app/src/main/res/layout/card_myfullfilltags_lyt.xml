@@ -140,6 +140,7 @@
                 android:id="@+id/imgMyFullFilltags"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:background="@drawable/imgbackground"
                 android:src="@android:drawable/ic_menu_gallery" />
         </LinearLayout>

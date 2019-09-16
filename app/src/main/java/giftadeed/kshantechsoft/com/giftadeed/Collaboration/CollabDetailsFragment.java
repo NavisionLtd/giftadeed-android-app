@@ -346,7 +346,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                 Button dialogconfirm1 = (Button) confirmDialog1.findViewById(R.id.btn_submit_mobileno);
                 Button dialogcancel1 = (Button) confirmDialog1.findViewById(R.id.btn_Cancel_mobileno);
                 TextView dialogtext1 = (TextView) confirmDialog1.findViewById(R.id.txtgiftneeddialog);
-                dialogtext1.setText(getResources().getString(R.string.exit_grp_msg));
+                dialogtext1.setText(getResources().getString(R.string.exit_clb_msg));
                 alertexit.setView(confirmDialog1);
                 alertexit.setCancelable(false);
                 alertDialog = alertexit.create();

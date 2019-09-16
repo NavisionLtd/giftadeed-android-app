@@ -31,6 +31,9 @@ public class Taggedlist {
     @SerializedName("cat_type")
     @Expose
     private String catType;
+    @SerializedName("Category_Type")
+    @Expose
+    private String categoryType;
     @SerializedName("Icon_Path")
     @Expose
     private String iconPath;
@@ -92,29 +95,22 @@ public class Taggedlist {
     @Expose
     private String userGroupNames;
 
-    public Taggedlist(String taggedTitle, String address, String fullFilledPhotoPath, String charpath, String fullFilledDatetime, String fullFilledPoints, String status,String views,String endorse,String permanent) {
-        this.taggedTitle = taggedTitle;
-        this.address = address;
-        this.fullFilledPhotoPath = fullFilledPhotoPath;
-        this.fullFilledDatetime = fullFilledDatetime;
-        this.fullFilledPoints = fullFilledPoints;
-        this.tagStatus = status;
-        this.characterPath = charpath;
-        this.views=views;
-        this.endorse=endorse;
-        this.permanent=permanent;
-    }
-
-    public Taggedlist(String taggedPhotoPath, String address, String taggedTitle, String charpath, String taggedDatetime, String status,String views,String endorse,String permanent) {
+    public Taggedlist(String taggedPhotoPath, String address, String taggedTitle, String charpath, String taggedDatetime,
+                      String status, String views, String endorse, String permanent, String catType, String fullFilledPhotoPath,
+                      String fullFilledDatetime, String fullFilledPoints) {
         this.taggedPhotoPath = taggedPhotoPath;
         this.address = address;
         this.taggedTitle = taggedTitle;
         this.characterPath = charpath;
         this.taggedDatetime = taggedDatetime;
         this.tagStatus = status;
-        this.views=views;
-        this.endorse=endorse;
-        this.permanent=permanent;
+        this.views = views;
+        this.endorse = endorse;
+        this.permanent = permanent;
+        this.categoryType = catType;
+        this.fullFilledPhotoPath = fullFilledPhotoPath;
+        this.fullFilledDatetime = fullFilledDatetime;
+        this.fullFilledPoints = fullFilledPoints;
     }
 
     public Integer getIsBlocked() {
@@ -348,5 +344,13 @@ public class Taggedlist {
 
     public void setUserGroupNames(String userGroupNames) {
         this.userGroupNames = userGroupNames;
+    }
+
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
     }
 }

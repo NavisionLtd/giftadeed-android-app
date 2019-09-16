@@ -66,6 +66,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -84,6 +85,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
+import com.leo.simplearcloader.SimpleArcLoader;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
@@ -94,8 +96,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -103,6 +109,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
@@ -117,11 +124,13 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.MobileModel;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.FileUtil;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
+import id.zelory.compressor.Compressor;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -142,6 +151,7 @@ import static android.app.Activity.RESULT_OK;
 public class TagaNeed extends Fragment implements Animation.AnimationListener, GoogleApiClient.OnConnectionFailedListener {
     EditText ed;
     TextView tv;
+    File mediaFile;
     List<EditText> allEds = new ArrayList<EditText>();
     List<TextView> allTvs = new ArrayList<TextView>();
     int spinnerPosition = 0;
@@ -171,7 +181,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     LinearLayout layout_container, layout_audiance, fromGroupLinearLayout;
     CheckBox Checkbox_container;
     private Bitmap capturedBitmap, rotatedBitmap;
-    String image;
+    String imageToSend;
     ScrollView deeddetails_scrollview;
     String strCategory, strlocation, strFullDescription;
     SessionManager sessionManager;
@@ -314,8 +324,12 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
                 // From group not allowed to edit because anyone can edit deed
                 fromGroupLinearLayout.setVisibility(View.GONE);
-                getCategory("");
                 categoryCallingFrom = "EditDeedScreenload";
+                if (selectedFromGroupId.equals("")) {
+                    getCategory("");
+                } else {
+                    getCategory(selectedFromGroupId);
+                }
 //                }
 
                 if (strcontainer.equals("1")) {
@@ -329,7 +343,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 String strImagepath = WebServices.MAIN_SUB_URL + strImagenamereturned;
                 if (strImagepath.length() > 57) {
                     Picasso.with(getContext()).load(strImagepath).placeholder(R.drawable.imgbackground).into(tagneedimg);
-                    tagneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
                     String[] words = strImagenamereturned.split("/");
                     strImagenamereturned = words[2].replace(".png", "");
                     Log.d("editimgpath", strImagenamereturned);
@@ -420,16 +433,26 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         edselectcategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                edselectcategory.setEnabled(false);
                 if (fromGroupLinearLayout.getVisibility() == View.VISIBLE) {
                     if (edSelectFromGroup.getText().length() < 1) {
                         ToastPopUp.displayToast(getContext(), getResources().getString(R.string.select_res_group));
+                        edselectcategory.setEnabled(true);
                     } else {
+                        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
+                        simpleArcDialog.show();
                         categoryCallingFrom = "SelectCategoryClick";
                         getCategory(selectedFromGroupId);
                     }
                 } else {
+                    simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
+                    simpleArcDialog.show();
                     categoryCallingFrom = "SelectCategoryClick";
-                    getCategory("");
+                    if (selectedFromGroupId.equals("")) {
+                        getCategory("");
+                    } else {
+                        getCategory(selectedFromGroupId);
+                    }
                 }
             }
         });
@@ -668,7 +691,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                         //updateUI(false);
                                     }
                                 });
-
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -703,7 +725,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             } else {
                                 fromGroupLinearLayout.setVisibility(View.GONE);
                             }
-                            edselectAudiance.setText("All Groups");
+                            edselectAudiance.setText(getResources().getString(R.string.all_groups));
                             checkedOtherOrg = "Y";
                         } else if (userGroupsCallingFrom.equals("SelectFromGroupClick")) {
                             // calling from From Group
@@ -726,7 +748,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                     dialog.dismiss();
                                     getCategory(selectedFromGroupId);
                                     categoryCallingFrom = "TagDeedScreenload";
-                                    edselectAudiance.setText("All Groups");
+                                    edselectAudiance.setText(getResources().getString(R.string.all_groups));
                                     checkedOtherOrg = "Y";
                                 }
                             });
@@ -870,6 +892,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
     //--------------------------getting categories and custom categories from server------------------------------------------
     public void getCategory(String selectedgroupid) {
+        edselectcategory.setEnabled(true);
         categories = new ArrayList<>();
         customCategories = new ArrayList<>();
 //        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
@@ -885,7 +908,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         call.enqueue(new Callback<CategoryType>() {
             @Override
             public void onResponse(Response<CategoryType> response, Retrofit retrofit) {
-//                simpleArcDialog.dismiss();
+                simpleArcDialog.dismiss();
                 CategoryType categoryType = response.body();
                 Log.d("response_categories", "" + response.body());
                 if (categoryCallingFrom.equals("EditDeedScreenload")) {
@@ -918,7 +941,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             spinnerPosition = i;
                             edselectcategory.setText(categoryType.getCustomneedtype().get(i).getNeedName().toString());
                             str_needid = categoryType.getCustomneedtype().get(i).getNeedMappingID().toString();
-                            strCharacter_Path = categoryType.getCustomneedtype().get(i).getIconPath();
+                            strCharacter_Path = categoryType.getCustomneedtype().get(i).getCharacterPath();
                             String path = WebServices.CUSTOM_CATEGORY_IMAGE_URL + strCharacter_Path;
                             Picasso.with(getContext()).load(path).resize(50, 50).into(imgcategory);
                             strNeedmapping_ID = str_needid;
@@ -926,6 +949,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
                             //No sub categories for custom category
                             selectedPrefLayout.setVisibility(View.GONE);
+                            formattedSubTypePref = "";
 
                             if (str_needid.equals("1") || str_needid.equals("21")) {
                                 layout_container.setVisibility(View.VISIBLE);
@@ -962,7 +986,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             customNeedtype.setNeedMappingID(categoryType.getCustomneedtype().get(i).getNeedMappingID().toString());
                             customNeedtype.setNeedName(categoryType.getCustomneedtype().get(i).getNeedName().toString());
                             customNeedtype.setType(categoryType.getCustomneedtype().get(i).getType());
-                            customNeedtype.setIconPath(categoryType.getCustomneedtype().get(i).getIconPath());
+                            customNeedtype.setIconPath(categoryType.getCustomneedtype().get(i).getCharacterPath());
                             customNeedtype.setCharacterPath(categoryType.getCustomneedtype().get(i).getCharacterPath());
                             customCategories.add(customNeedtype);
                         }
@@ -985,7 +1009,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         }
 
                         getSubCategory("yes");
-                        edselectAudiance.setText("All Groups");
+                        edselectAudiance.setText(getResources().getString(R.string.all_groups));
                         checkedOtherOrg = "Y";
                     } else {
                         showCatDialog();
@@ -995,7 +1019,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
             @Override
             public void onFailure(Throwable t) {
-//                simpleArcDialog.dismiss();
+                simpleArcDialog.dismiss();
                 ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
         });
@@ -1063,7 +1087,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             edselectAudiance.setText("");
                             edselectAudiance.clearFocus();*/
 
-                            edselectAudiance.setText("All Groups");
+                            edselectAudiance.setText(getResources().getString(R.string.all_groups));
                             checkedOtherOrg = "Y";
 
                             //call getsubcategory to check subcategories available for selected main categories
@@ -1103,18 +1127,20 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             } else {
                                 layout_container.setVisibility(View.GONE);
                             }
-                            strCharacter_Path = customCategories.get(i).getIconPath();
+                            strCharacter_Path = customCategories.get(i).getCharacterPath();
                             String path = WebServices.CUSTOM_CATEGORY_IMAGE_URL + strCharacter_Path;
                             Log.d("path", "" + path);
                             Picasso.with(getContext()).load(path).resize(50, 50).into(imgcategory);
 
                             //No sub categories for custom category
                             selectedPrefLayout.setVisibility(View.GONE);
+                            formattedSubTypePref = "";
 
                             //if user select custom category then audience will be his from group only. Audience click will be disabled
                             edselectAudiance.setText(selectedFromGroupName);
                             selectedUserGroups.add(selectedFromGroupId);
                             selectedUserGrpNames.add(selectedFromGroupName);
+                            checkedOtherOrg = "N";
                             edselectAudiance.setEnabled(false);
                         }
                     } catch (Exception e) {
@@ -1213,7 +1239,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         TableLayout tableLayout = (TableLayout) dialog.findViewById(R.id.tableLayout1);
         Log.d("subcatlist_size", "" + subcategories.size());
         if (subcategories.size() > 0) {
-            tvMsg.setText("Select preferences for number of people");
+            tvMsg.setText(getResources().getString(R.string.select_pref_for_people));
             subcategorylist.setVisibility(View.GONE);
             ok.setVisibility(View.VISIBLE);
             cancel.setVisibility(View.VISIBLE);
@@ -1259,7 +1285,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 tableLayout.addView(row, 0);
             }
         } else {
-            tvMsg.setText("No preferences found");
+            tvMsg.setText(getResources().getString(R.string.no_pref_found));
             ok.setVisibility(View.GONE);
             cancel.setVisibility(View.VISIBLE);
             subcategorylist.setVisibility(View.GONE);
@@ -1507,12 +1533,25 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
     //----------------------sending image captured by camera or gallery to server-------------------
     public void sendImageToServer() {
+        simpleArcDialog = new SimpleArcDialog(getContext());
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setText("Uploading image...");
+        simpleArcDialog.setConfiguration(configuration);
+        simpleArcDialog.show();
+        simpleArcDialog.setCancelable(false);
         final Bundle bundle = this.getArguments();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, WebServices.UPLOAD_URL,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
+                        simpleArcDialog.dismiss();
                         strImagenamereturned = s;
+                        Calendar c = Calendar.getInstance();
+                        c.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                        String currentDateTimeString = df.format(c.getTime());
+                        Log.d("upload_image_api", "Response received time : " + currentDateTimeString);
+                        Log.d("upload_image_api", "Response string : " + s);
                         if (!(Validation.isOnline(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
@@ -1539,23 +1578,29 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        simpleArcDialog.dismiss();
                         ToastPopUp.show(myContext, getString(R.string.server_response_error));
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                //Converting Bitmap to String
-                // String image = getStringImage(bitmap);
-                //Creating parameters
                 Map<String, String> params = new Hashtable<String, String>();
-                //Adding parameters
-                params.put("image", image);
-                Log.d("saveimg_image", "" + image);
+                params.put("image", imageToSend);
+                Log.d("saveimg_image", "" + imageToSend);
                 params.put("name", "name");
-                //returning parameters
+                Calendar c = Calendar.getInstance();
+                c.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                String currentDateTimeString = df.format(c.getTime());
+                Log.d("upload_image_api", "Parameters request time : " + currentDateTimeString);
                 return params;
             }
         };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,  // 20 seconds
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         //Creating a Request Queue
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         //Adding request to the queue
@@ -1565,10 +1610,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     //---------------------sending tag data to server-----------------------------------------------
     public void sendaTag(String user_id, String NeedMapping_ID, String geopoints, String Imagename, String title, String description, String locat, String container, String validity, String paddress, String subTypePref, String checkedOtherOrg, String checkedIndi, String userOrgs) {
         OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(1, TimeUnit.HOURS);
-        client.setReadTimeout(1, TimeUnit.HOURS);
-        client.setWriteTimeout(1, TimeUnit.HOURS);
-        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        client.setReadTimeout(10, TimeUnit.SECONDS);
+        client.setWriteTimeout(10, TimeUnit.SECONDS);
+        simpleArcDialog = new SimpleArcDialog(getContext());
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setText("Tagging deed...");
+        simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
@@ -1614,11 +1662,10 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             edDescription.setText("");
                             edselectlocation.setText(adress_show);
                             tagneedimg.setImageResource(R.drawable.pictu);
-                            tagneedimg.setScaleType(ImageView.ScaleType.FIT_XY);
                             imgcategory.setImageResource(android.R.color.transparent);
                             capturedBitmap = null;
                             rotatedBitmap = null;
-                            image = null;
+                            imageToSend = null;
                             int i = 7;
                             // ToastPopUp.displayToast(getContext(), "Your tag was successful");
                             String strImagepath = WebServices.MAIN_SUB_URL + strCharacter_Path;
@@ -1638,7 +1685,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             if (!(Validation.isOnline(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
-                                ToastPopUp.show(getActivity(), "Tag was unsuccessful");
+                                ToastPopUp.show(getActivity(), getString(R.string.tag_unsuccess));
                             }
                         }
                     }
@@ -1663,7 +1710,10 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
+        simpleArcDialog = new SimpleArcDialog(getContext());
+        ArcConfiguration configuration = new ArcConfiguration(getContext());
+        configuration.setText("Updating deed...");
+        simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
@@ -1791,12 +1841,10 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         data);
                 // TODO: Handle the error.
                 Log.e("Tag", status.getStatusMessage());
-
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
         }
-
 
         if (requestCode == REQUEST_CAMERA) {
             if (resultCode == RESULT_OK) {
@@ -1813,8 +1861,25 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     capturedBitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
                 }
                 int bitmap_file_size = capturedBitmap.getByteCount();
-                Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);
+                Log.d("img_compress_capture", "bitmap_size : " + bitmap_file_size);
                 rotateImage(setReducedImageSize());
+
+                /*try {
+                    File newCompressedFile = new Compressor(getContext())
+                            .setMaxWidth(640)
+                            .setMaxHeight(480)
+                            .setQuality(50)
+                            .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                            .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                                    Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                            .compressToFile(mediaFile);
+                    Log.d("newCompressedBitmap", "" + (String.format("Size : %s", getReadableFileSize(newCompressedFile.length()))));
+                    rotatedBitmap = BitmapFactory.decodeFile(newCompressedFile.getAbsolutePath());
+                    tagneedimg.setImageBitmap(rotatedBitmap);
+                    imageToSend = getStringImage(rotatedBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
             }
         }
 
@@ -1832,9 +1897,35 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             cursor.close();
             capturedBitmap = decodeSampledBitmapFromFile(strimagePath, 512, 512);
             int bitmap_file_size = capturedBitmap.getByteCount();
-            Log.d("gallery_photo_size", "bitmap_size : " + bitmap_file_size);
             rotateImage(setReducedImageSize());
+
+            /*try {
+                mediaFile = FileUtil.from(getContext(), data.getData());
+                File newCompressedFile = new Compressor(getContext())
+                        .setMaxWidth(640)
+                        .setMaxHeight(480)
+                        .setQuality(50)
+                        .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                        .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                        .compressToFile(mediaFile);
+                Log.d("newCompressedBitmap", "" + (String.format("Size : %s", getReadableFileSize(newCompressedFile.length()))));
+                rotatedBitmap = BitmapFactory.decodeFile(newCompressedFile.getAbsolutePath());
+                tagneedimg.setImageBitmap(rotatedBitmap);
+                imageToSend = getStringImage(rotatedBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
         }
+    }
+
+    public String getReadableFileSize(long size) {
+        if (size <= 0) {
+            return "0";
+        }
+        final String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     private Bitmap setReducedImageSize() {
@@ -1872,7 +1963,10 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             default:
         }
         rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        int bitmap_file_size = rotatedBitmap.getByteCount();
+        Log.d("img_compress_rotated", "rotated_bitmap_size : " + bitmap_file_size);
         tagneedimg.setImageBitmap(rotatedBitmap);
+        imageToSend = getStringImage(rotatedBitmap);
     }
 
     //-----------------get address----------------
@@ -1969,7 +2063,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 }
             }
         } else {
-            image = getStringImage(rotatedBitmap);
+//            image = getStringImage(rotatedBitmap);
             sendImageToServer();
             // Toast.makeText(getContext(), "Your bitmap is not empty", Toast.LENGTH_SHORT).show();
         }
@@ -2009,7 +2103,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs();
         }
-        File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + imageFileName + ".jpg");
         strimagePath = mediaFile.getAbsolutePath();
         return mediaFile;
@@ -2072,10 +2165,28 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     //-----------------------------getting string from bitmap image---------------------------------
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        Log.d("successBase64", "" + encodedImage);
         return encodedImage;
+    }
+
+    public String getBase64Image(Bitmap bitmap) {
+        try {
+            ByteBuffer buffer =
+                    ByteBuffer.allocate(bitmap.getRowBytes() *
+                            bitmap.getHeight());
+            bitmap.copyPixelsToBuffer(buffer);
+            byte[] data = buffer.array();
+            String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
+            Log.d("successBase64", "" + encodedImage);
+            return encodedImage;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("errorBase64", "" + e.getMessage());
+        }
+        return null;
     }
 
     public Uri getOutputMediaFileUri(int type) {

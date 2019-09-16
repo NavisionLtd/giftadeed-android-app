@@ -171,11 +171,11 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                 } else if (collabName.getText().length() == 0) {
                     collabName.requestFocus();
                     collabName.setFocusable(true);
-                    collabName.setError("Collaboration Name Required");
+                    collabName.setError(getResources().getString(R.string.colab_name_req));
                 } else if (collabDesc.getText().length() == 0) {
                     collabDesc.requestFocus();
                     collabDesc.setFocusable(true);
-                    collabDesc.setError("Collaboration Description Required");
+                    collabDesc.setError(getResources().getString(R.string.colab_desc_req));
                 } else {
                     if (!(Validation.isOnline(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
@@ -633,12 +633,16 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         //pass the json obhect
-        JsonObject postParam = new JsonObject();
-        postParam.addProperty("name", channelName);
+        /*JsonObject postParam = new JsonObject();
+        postParam.addProperty("name", channelName);*/
+
+        ModalSendBrdUpdate modalSendBrdUpdate = new ModalSendBrdUpdate();
+        modalSendBrdUpdate.setName(channelName);
+        modalSendBrdUpdate.setCoverUrl("");
 
         //call interface
         UpdateGrpChannel service = retrofit.create(UpdateGrpChannel.class);
-        Call<ModalSendBrdUpdate> call = service.sendData(urlOfChannel, postParam);
+        Call<ModalSendBrdUpdate> call = service.sendData(urlOfChannel, modalSendBrdUpdate);
         call.enqueue(new Callback<ModalSendBrdUpdate>() {
             @Override
             public void onResponse(Response<ModalSendBrdUpdate> response, Retrofit retrofit) {

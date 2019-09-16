@@ -2,7 +2,9 @@ package giftadeed.kshantechsoft.com.giftadeed.Mytags;
 
 import android.content.Context;
 import android.graphics.Color;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.AdapterToptenFullfiller;
 import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.RESULTFFILLER;
 
@@ -58,15 +61,14 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         Taggedlist model = lstdetail.get(position);
         RecyclerViewHolder mainHolder = (RecyclerViewHolder) holder;// holder
-       // mainHolder.txtMyTagsTitle.setTypeface(FontDetails.fontStandardForPage);
+        // mainHolder.txtMyTagsTitle.setTypeface(FontDetails.fontStandardForPage);
         mainHolder.txtMyTagsTitle.setText(model.getTaggedTitle());
         mainHolder.txtMytagsAddress.setTypeface(FontDetails.fontStandardForPage);
         mainHolder.txtstatus.setTypeface(FontDetails.fontStandardForPage);
         if (model.getTagStatus().equals("No")) {
             mainHolder.txtstatus.setText("Fulfilled");
             mainHolder.txtstatus.setTextColor(Color.parseColor("#73c67b"));
-        }else
-        {
+        } else {
             mainHolder.txtstatus.setText("Unfulfilled");
             mainHolder.txtstatus.setTextColor(Color.parseColor("#f84048"));
         }
@@ -75,8 +77,6 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
         mainHolder.txtMytagsAddress.setText(model.getAddress().trim());
         Picasso.with(context).load(MANI_URL + SUB_URL + model.getCharacterPath()).resize(50, 50).into(mainHolder.imgchar);
         mainHolder.txtMytagsDate.setTypeface(FontDetails.fontStandardForPage);
-
-
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
@@ -99,7 +99,7 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
 
             try {
 
-                Picasso.with(context).load(MANI_URL + SUB_URL + model.getTaggedPhotoPath()).placeholder(R.drawable.pictu)  .into(mainHolder.imgMytags);
+                Picasso.with(context).load(MANI_URL + SUB_URL + model.getTaggedPhotoPath()).placeholder(R.drawable.pictu).into(mainHolder.imgMytags);
             } catch (Exception e) {
                 // Picasso.with(context).load(R.drawable.pictu).resize(100, 100).into(mainHolder.imgMytags);
                 StringWriter writer = new StringWriter();
@@ -124,7 +124,7 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
 
-        public TextView txtMyTagsTitle, txtMytagsAddress, txtMytagsDate,txtstatus,mytagsviews,mytagsendorse;
+        public TextView txtMyTagsTitle, txtMytagsAddress, txtMytagsDate, txtstatus, mytagsviews, mytagsendorse;
         public ImageView imgMytags, imgchar;
 
 
@@ -135,9 +135,9 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
             txtMytagsDate = (TextView) view.findViewById(R.id.txtmytagsdatentime);
             imgMytags = (ImageView) view.findViewById(R.id.imgMytagsList);
             imgchar = (ImageView) view.findViewById(R.id.imgmytagschar);
-            txtstatus= (TextView) view.findViewById(R.id.txtmytagsstatus);
-            mytagsviews=view.findViewById(R.id.mytagsviews);
-            mytagsendorse=view.findViewById(R.id.mytagsendorse);
+            txtstatus = (TextView) view.findViewById(R.id.txtmytagsstatus);
+            mytagsviews = view.findViewById(R.id.mytagsviews);
+            mytagsendorse = view.findViewById(R.id.mytagsendorse);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
