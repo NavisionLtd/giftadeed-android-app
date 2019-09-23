@@ -1,0 +1,38 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/warning"
+        android:shortcutDisabledMessage="@string/compose_disabled_message1"
+        android:shortcutId="open_sos"
+        android:shortcutShortLabel="@string/compose_shortcut_short_label1">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="giftadeed.kshantechsoft.com.giftadeed.splash.AppShortcutActivity"
+            android:targetPackage="giftadeed.kshantechsoft.com.giftadeed">
+            <extra
+                android:name="selected_option"
+                android:value="sos" />
+        </intent>
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/tag_a_deed_map_icon"
+        android:shortcutDisabledMessage="@string/compose_disabled_message1"
+        android:shortcutId="open_tagdeed"
+        android:shortcutShortLabel="@string/compose_shortcut_short_label2">
+        <intent
+            android:action="giftadeed.kshantechsoft.com.giftadeed.custom.name"
+            android:targetClass="giftadeed.kshantechsoft.com.giftadeed.splash.AppShortcutActivity"
+            android:targetPackage="giftadeed.kshantechsoft.com.giftadeed">
+            <extra
+                android:name="selected_option"
+                android:value="tagdeed" />
+        </intent>
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+    </shortcut>
+</shortcuts>

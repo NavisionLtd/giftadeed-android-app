@@ -1,0 +1,449 @@
+<resources>
+    <string name="app_name">GiftADeed</string>
+    <!--<string name="app_name">GAD P2 Test 17 September</string>-->
+
+    <!-- Shortcut strings -->
+    <string name="compose_shortcut_short_label1">SOS</string>
+    <string name="compose_shortcut_long_label1">SOS</string>
+    <string name="compose_shortcut_short_label2">Tag deed</string>
+    <string name="compose_shortcut_long_label2">Tag deed</string>
+    <string name="compose_disabled_message1">Not available</string>
+
+    <!--Login page-->
+    <string name="login_terms">Términos y Condiciones</string>
+    <string name="login_privacy">Política de privacidad</string>
+    <string name="login_string">Iniciar sesión</string>
+    <string name="email_string">Email</string>
+    <string name="password_string">Contraseña</string>
+    <string name="not_registered">Todavía no estas registrado?</string>
+    <string name="signup">Regístrate</string>
+    <string name="forgot">¿Se te olvidó tu contraseña?</string>
+    <string name="txtseperator">O INICIE SESIÓN CON</string>
+    <string name="txtagree1">Al iniciar sesión, acepta nuestro</string>
+    <string name="txtsignagree">Al registrarte, aceptas nuestro</string>
+    <string name="terms_and">y</string>
+    <string name="select_language">Seleccione el idioma</string>
+    <string name="registered_email">Ingrese correo electrónico registrado</string>
+    <string name="submit">Enviar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="wrong_password">Contraseña incorrecta</string>
+    <string name="login_failed">error de inicio de sesion</string>
+
+    <!--Sign up page-->
+    <string name="sign_up">Regístrate</string>
+    <string name="first_name">Primer nombre</string>
+    <string name="last_name">Apellido</string>
+    <string name="country">País</string>
+    <string name="logintxt">¿Ya tienes una cuenta? <u> Iniciar sesión </u></string>
+    <string name="length_error_1">La longitud no puede tener más de 15 caracteres.</string>
+    <string name="length_error_2">La longitud no puede tener más de 20 caracteres.</string>
+
+    <!--App update-->
+    <string name="youAreNotUpdatedTitle">Actualización disponible</string>
+    <string name="youAreNotUpdatedMessage">Una nueva versión de GiftADeed está disponible. Por favor actualice.</string>
+    <string name="update">Actualizar</string>
+
+    <!--Toast messages-->
+    <string name="network_validation">¡Vaya! Sin internet. Por favor verifique su conexión de red</string>
+    <string name="server_response_error">¡LO SIENTO! Algo salió mal. Por favor intente mas tarde</string>
+    <string name="contact_saved">Contacto guardado</string>
+    <string name="setting_saved">Ajustes guardados</string>
+    <string name="block_toast">Has sido bloqueado</string>
+    <string name="group_deleted">Grupo eliminado con éxito</string>
+    <string name="profile_updated">perfil actualizado con éxito</string>
+    <string name="collab_deleted">Colaboración eliminada con éxito</string>
+    <string name="contacts_saved">Contactos guardados</string>
+    <string name="error">Error</string>
+    <string name="updation_failed">Actualización fallida</string>
+    <string name="blank_contact_number">¡El número de contacto no existe!</string>
+    <string name="address_toast">La dirección debe contener alfabeto</string>
+    <string name="select_contact">Por favor seleccione su contacto de emergencia</string>
+    <string name="accepted">Aceptado</string>
+    <string name="exit_group_msg">Saliste exitosamente del grupo</string>
+    <string name="group_created_msg">Grupo creado con éxito</string>
+    <string name="colab_created_msg">Colaboración creada con éxito</string>
+    <string name="you_havnt_change">No has cambiado la información del grupo</string>
+    <string name="group_edited">Grupo editado con éxito</string>
+    <string name="collab_edited">Colaboración editada con éxito</string>
+    <string name="member_removed">Miembro eliminado con éxito</string>
+    <string name="member_added">Miembro agregado exitosamente</string>
+    <string name="password_toast">La contraseña debe contener al menos un número, un carácter especial y un alfabeto</string>
+    <string name="password_toast_1">La contraseña debe contener al menos un alfabeto</string>
+    <string name="password_toast_2">La contraseña debe contener al menos un carácter especial</string>
+    <string name="password_toast_3">La contraseña debe contener al menos un número</string>
+    <string name="no_data_found">Datos no encontrados</string>
+    <string name="admin_assigned">Administrador asignado con éxito</string>
+    <string name="admin_dismissed">Administrador despedido con éxito</string>
+    <string name="address_notfound">Dirección no encontrada</string>
+    <string name="user_reported">Usuario informado con éxito</string>
+    <string name="edited_success">Editado con éxito</string>
+    <string name="check_email">Por favor revise su correo electrónico</string>
+    <string name="select_account">Por favor seleccione su cuenta de la lista</string>
+    <string name="login_unsuccess">El inicio de sesión no fue exitoso</string>
+    <string name="email_already_exist">La dirección de correo ya existe</string>
+    <string name="length_msg">La longitud no puede ser superior a 500 caracteres.</string>
+    <string name="length_msg_2">La longitud no puede tener más de 140 caracteres.</string>
+    <string name="length_msg_3">La longitud no puede tener más de 50 caracteres.</string>
+    <string name="unable_to_find">No se puede encontrar la dirección</string>
+    <string name="edited_unsucess">Editado sin éxito</string>
+    <string name="select_country">Seleccionar país</string>
+    <string name="select_state">Seleccione estado</string>
+    <string name="select_city">Ciudad selecta</string>
+    <string name="permission_denied">Permiso denegado, habilite los permisos</string>
+    <string name="already_deed">Este hecho ya ha sido reportado por alguien</string>
+    <string name="sos_location_error">La ubicación no puede estar en blanco. Por favor, obtenga la ubicación</string>
+    <string name="sos_success">Emergencia creada exitosamente</string>
+    <string name="invite_sent">Invitación enviada</string>
+
+    <!--Navigation drawer-->
+    <string name="view_profile">Ver perfil</string>
+    <string name="drawer_home">Casa</string>
+    <string name="drawer_groups">Grupos</string>
+    <string name="drawer_inspire">Inspirar a la comunidad</string>
+    <string name="drawer_tag_deed">Etiquetar una escritura</string>
+    <string name="drawer_resources">Recursos</string>
+    <string name="drawer_about_app">Tablero</string>
+    <string name="drawer_notification">Notificaciones</string>
+    <string name="drawer_settings">Configuraciones</string>
+    <string name="drawer_emergency_contacts">Contactos de emergencia</string>
+    <string name="drawer_logout">Cerrar sesión</string>
+
+    <!--Grid menu and details-->
+    <string name="my_tags">MIS ETIQUETAS</string>
+    <string name="noti_history">Actualizaciones de escritura</string>
+    <string name="my_tags_heading">Mis etiquetas</string>
+    <string name="list_of_your">Lista de tus etiquetados</string>
+    <string name="list_of_mytags">Lista de mis etiquetas</string>
+    <string name="list_of_myfulfilled_tags">Lista de mis etiquetas cumplidas</string>
+    <string name="list_of_taggers">Lista de los 10 mejores etiquetadores en tu ciudad</string>
+    <string name="list_of_fulfillers">Lista de los 10 mejores cumplidores de etiquetas en tu ciudad</string>
+    <string name="dash1">Tu última buena acción estaba en</string>
+    <string name="dash2">Su número total de etiquetas son</string>
+    <string name="dash3">Su número total de cumplimientos es</string>
+    <string name="dash4">Su porcentaje de etiquetas exitosas es</string>
+    <string name="dash5">Su puntaje de Gift a Deed es</string>
+    <string name="my_fulfil_tags_heading">Mis etiquetas cumplidas</string>
+    <string name="fulfil_tags_heading">Etiquetas cumplidas</string>
+    <string name="top_ten_heading">Top 10 Taggers</string>
+    <string name="top_ten_fulfill_heading">Los 10 mejores rellenos de etiquetas</string>
+    <string name="tag_counter_heading">Contador de etiquetas</string>
+    <string name="dashboard_heading">Tablero</string>
+    <string name="about_us_heading">Sobre nosotros</string>
+    <string name="terms_heading">Términos y Condiciones</string>
+    <string name="privacy_heading">Política de privacidad</string>
+    <string name="cookies_heading">Política de cookies</string>
+    <string name="end_user_heading">Acuerdo de usuario final</string>
+    <string name="dis_heading">Descargo de responsabilidad</string>
+    <string name="help_heading">Preguntas frecuentes</string>
+    <string name="contact_us_heading">Contáctenos</string>
+
+    <!--App update-->
+    <string name="map_map">MAPA</string>
+    <string name="map_list">LISTA</string>
+    <string name="tab_group">Grupos</string>
+    <string name="tab_colab">Colaboraciones</string>
+    <string name="map_tagged_deeds">Escrituras etiquetadas</string>
+
+    <!--Bottom navigation-->
+    <string name="map_home">Casa</string>
+    <string name="map_tagadeed">Etiquetar una escritura</string>
+    <string name="map_fulfilled_tags">Etiquetas cumplidas</string>
+
+    <!--Group-->
+    <string name="grp_deed_title">Escrituras grupales</string>
+    <string name="active_tags">Etiquetas activas</string>
+    <string name="no_group_found">No se encontraron grupos. ¿Quieres crear uno?</string>
+    <string name="action_create_group">Crea un grupo</string>
+    <string name="action_create_collab">Crear colaboración</string>
+    <string name="action_collab_invitation">Invitaciones Collab</string>
+    <string name="edit_group">Editar grupo</string>
+    <string name="group_name">Nombre del grupo *</string>
+    <string name="group_desc">Descripción del Grupo</string>
+    <string name="save">Salvar</string>
+    <string name="take_picture">Tomar la foto</string>
+    <string name="browse">Vistazo</string>
+    <string name="add_member">Añadir miembros</string>
+    <string name="invite_creators">Invita a creadores de grupos</string>
+    <string name="member_list">Lista de miembros</string>
+    <string name="total_members">Miembros totales</string>
+    <string name="no_members">No se encontraron miembros</string>
+    <string name="search_member">Buscar miembro *</string>
+    <string name="select_action">Seleccione la acción</string>
+    <string name="remove_member">Eliminar miembro</string>
+    <string name="make_admin">Hacer administrador de grupo</string>
+    <string name="dismiss_admin">Descartar como administrador</string>
+    <string name="search_email">Buscar correo electrónico *</string>
+    <string name="view_member_list">Ver lista de miembros</string>
+    <string name="delete_group">Eliminar grupo</string>
+    <string name="group_info">Información del grupo</string>
+    <string name="exit_group">Salir del grupo</string>
+
+    <!--Collab-->
+    <string name="collab_name">Nombre de colaboración *</string>
+    <string name="collab_desc">Descripción de la colaboración *</string>
+    <string name="edit_collab">Editar colaboración</string>
+    <string name="delete_collab">Eliminar collab</string>
+    <string name="exit_collab">Salir de Collab</string>
+    <string name="collab_info">Información de colaboración</string>
+    <string name="no_colab_found">No se encontraron colaboraciones. ¿Quieres crear uno?</string>
+    <string name="no_pending_invites">No hay invitaciones pendientes</string>
+    <string name="collab_details">Detalles de la colaboración</string>
+    <string name="search_group">Buscar grupo *</string>
+    <string name="select_grp_creators">Seleccionar creadores de grupo</string>
+
+    <!--My profile-->
+    <string name="my_profile">Mi perfil</string>
+    <string name="edit_profile">Editar</string>
+    <string name="my_credits">Mis créditos</string>
+    <string name="change_pass">Contraseña</string>
+    <string name="change_pic">Cambiar imagen</string>
+    <string name="state">Estado</string>
+    <string name="city">Ciudad</string>
+    <string name="privacy">Privacidad:</string>
+    <string name="anonymous">Anónimo</string>
+    <string name="public_1">Público</string>
+    <string name="gender">Género:</string>
+    <string name="male">Masculino</string>
+    <string name="female">Hembra</string>
+
+    <!--Tag a deed-->
+    <string name="main_cat">Categorías principales</string>
+    <string name="group_cat">Categorías de grupo</string>
+    <string name="edit_deed">Editar escritura</string>
+    <string name="select_category">selecciona una categoría</string>
+    <string name="select_sub_category">Seleccionar subcategoría</string>
+    <string name="select_pref">Seleccionar preferencias</string>
+    <string name="select_pref_for_people">Seleccionar preferencias por número de personas</string>
+    <string name="no_pref_found">No se encontraron preferencias</string>
+    <string name="select_location">Seleccionar ubicación</string>
+    <string name="permanent_location">Ubicación permanente</string>
+    <string name="remove_location">Eliminar ubicación</string>
+    <string name="deed_validity_heading">Validez de escritura (1 a 48 horas)</string>
+    <string name="select_audiance">Seleccione audiencia</string>
+    <string name="tag_description">Historia de necesidad</string>
+    <string name="description">Historia de necesidad:</string>
+    <string name="post">Enviar</string>
+    <string name="container_available">Contenedor disponible</string>
+    <string name="container_note">* Si esa persona necesitada tiene un plato de comida / recipiente de agua para recibir la comida / agua donada?</string>
+    <string name="tag_unsuccess">La etiqueta no tuvo éxito</string>
+
+    <!--Deed details-->
+    <string name="deed_details_heading">Detalles de escritura</string>
+    <string name="str_location">Ubicación :</string>
+    <string name="no_needy">No hay personas necesitadas a tu alrededor</string>
+    <string name="people_looking_1">Escritura encontrada cerca de ti</string>
+    <string name="people_looking_2">Escrituras encontradas cerca de ti</string>
+    <string name="pref_1">Preferencias por persona / personas:</string>
+    <string name="deed_location">Lugar de escritura:</string>
+    <string name="deed_details">Detalles de la escritura:</string>
+    <string name="see_more">Ver más</string>
+    <string name="get_directions">Obtener las direcciones</string>
+    <string name="tagged_by">Escritura etiquetada por:</string>
+    <string name="tagged_by_group">Etiquetado por grupo:</string>
+    <string name="edit">Editar</string>
+    <string name="comment">COMENTARIO</string>
+    <string name="report_deed">Informe de escritura</string>
+    <string name="report_user">Reportar usuario</string>
+    <string name="last_endorse_time">Último avalado en:</string>
+    <string name="gift_now">Regalo ahora</string>
+    <string name="press_enter_to_post">Presione Entrar para publicar</string>
+    <string name="comments">Comentarios</string>
+
+    <!--gift a deed-->
+    <string name="gift_title">Regalar una escritura</string>
+    <string name="upload_picture">Subir foto</string>
+    <string name="snap">Chasquido</string>
+    <string name="is_this_deed">¿Se cumple este hecho por completo?</string>
+    <string name="mention_people_benifited">Mencione la cantidad de personas beneficiadas por el cumplimiento de esta escritura.</string>
+    <string name="tell_people">Dile a la gente sobre tu regalo</string>
+
+    <!--First login-->
+    <string name="first_login">Primer inicio de sesión</string>
+
+    <!--Settings page-->
+    <string name="app_settings">Ajustes de Aplicacion</string>
+    <string name="notif_settings">Configuración de las notificaciones</string>
+    <string name="receive_notif">Recibir notificaciones</string>
+    <string name="groupwise_notif">Notificaciones grupales</string>
+    <string name="catwise_notif">Notificaciones sabias de categoría</string>
+    <string name="save_settings">Guardar ajustes</string>
+    <string name="GPSsettings">Configuraciones GPS</string>
+    <string name="GPSsettingsmessage">El GPS no está habilitado. Vaya al menú de configuración y active el GPS</string>
+    <string name="settings">Configuraciones</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="aboutMe">Sobre mi</string>
+    <string name="here_hyperlink"><a href="https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed">here</a></string>
+
+    <!--Dialog strings-->
+    <string name="exit_msg">¿Realmente desea salir?</string>
+    <string name="post_msg">¿De verdad quieres publicar?</string>
+    <string name="report_msg">¿Realmente quieres informar al usuario?</string>
+    <string name="report_deed_msg">¿Realmente quieres denunciar un hecho?</string>
+    <string name="remove_sos_msg">¿Realmente quieres eliminar este SOS?</string>
+    <string name="delete_grp_msg">¿Realmente quieres eliminar este grupo?</string>
+    <string name="exit_grp_msg">¿Realmente quieres salir de este grupo?</string>
+    <string name="delete_clb_msg">¿Realmente quieres eliminar esta colaboración?</string>
+    <string name="exit_clb_msg">¿Realmente quieres salir de esta colaboración?</string>
+    <string name="delete_resource_msg">¿Realmente quieres eliminar este recurso?</string>
+    <string name="logout_msg">¿Realmente quieres cerrar sesión?</string>
+    <string name="remove_member_dialog">¿Eliminar este miembro del grupo?</string>
+    <string name="remove_collab_member_dialog">¿Eliminar a este miembro de la colaboración?</string>
+    <string name="exit_yes">si</string>
+    <string name="exit_no">No</string>
+    <string name="tag_success_msg1">Has ganado</string>
+    <string name="tag_success_msg2">necesitar</string>
+    <string name="tag_success_msg3">marcando</string>
+    <string name="tag_success_msg4">puntos</string>
+    <string name="tag_success_msg5">Sus puntos totales son</string>
+
+    <!--Resource-->
+    <string name="resource_error">No posee grupos para crear el recurso</string>
+    <string name="res_success">Recurso creado con éxito</string>
+    <string name="action_create_resource">Crear recurso</string>
+    <string name="edit_resource">Editar recurso</string>
+    <string name="delete_resource">Eliminar recurso</string>
+    <string name="res_details">Detalles del recurso</string>
+    <string name="category">Categoría:</string>
+    <string name="created_by">Creado por :</string>
+    <string name="created_on">Creado en :</string>
+    <string name="no_res_found">No se encontraron recursos. ¿Quieres crear uno?</string>
+    <string name="select_res_group">Selecciona tu grupo</string>
+    <string name="res_cat">Categoría de recurso</string>
+    <string name="res_subcat">Subcategoría de recursos</string>
+    <string name="res_name">Nombre del recurso *</string>
+    <string name="res_desc">Descripción del recurso</string>
+    <string name="res_audi">Seleccionar audiencia de recursos</string>
+    <string name="create_res">Crear recurso</string>
+    <string name="res_added_by">Recurso agregado por:</string>
+    <string name="res_name_1">Nombre del recurso :</string>
+    <string name="description_1">Descripción:</string>
+    <string name="res_cat_1">Categorías de recursos:</string>
+    <string name="res_location">Ubicación del recurso:</string>
+    <string name="res_created_on">Recurso creado en:</string>
+
+    <!--SOS details-->
+    <string name="emer_details">Detalles de emergencia</string>
+    <string name="sos_heading">Publica los detalles mencionados a continuación</string>
+    <string name="current_location">Ubicación actual</string>
+    <string name="refresh_current_location">Obtener ubicación actual</string>
+    <string name="nature_emer">Naturaleza de la emergencia</string>
+    <string name="sos_added_by">SOS agregado por:</string>
+    <string name="type_of_emer">Tipo de emergencia:</string>
+    <string name="sos_location_1">Ubicación SOS:</string>
+    <string name="sos_created_on">SOS creado en:</string>
+    <string name="del_sos">Eliminar SOS</string>
+    <string name="use_in_case">USO EN CASO DE</string>
+    <string name="emergency">EMERGENCIA</string>
+    <string name="call_police">Llamar a la sala de control policial</string>
+    <string name="alert_contact">Alerte a su contacto de emergencia</string>
+    <string name="no_emergency_contacts">No ha configurado Contactos de emergencia para enviar alertas</string>
+    <string name="set">Conjunto</string>
+    <string name="share_location">Comparte tu ubicación</string>
+    <string name="close">CERRAR</string>
+    <string name="contacts_to_send_alert">Contactos para enviar mensajes de alerta en situaciones de emergencia</string>
+    <string name="family_or_friend">por ejemplo, miembro de la familia o amigo</string>
+
+    <!-- Validation messages -->
+    <string name="res_name_req">Nombre del recurso requerido</string>
+    <string name="valid_number">Ingrese un número válido</string>
+    <string name="valid_email">Ingrese un email valido</string>
+    <string name="colab_name_req">Nombre de colaboración requerido</string>
+    <string name="colab_desc_req">Descripción de la colaboración requerida</string>
+    <string name="grp_name_req">Nombre del grupo requerido</string>
+
+    <string name="navigation_drawer_open">Abrir el cajón de navegación</string>
+    <string name="navigation_drawer_close">Cerrar el cajón de navegación</string>
+    <string name="middle_terms">,y</string>
+    <string name="privacy_policy"><u> Política de privacidad </u></string>
+    <string name="last_text_terms">para ser cambiado para adaptarse a la audiencia global.</string>
+    <string name="share"><u> Compartir </u></string>
+    <string name="Enter_FirstName">Ingrese el nombre</string>
+    <string name="validation_first_name_special_characters_merchant">Ingrese solo alfabetos</string>
+    <string name="validation_last_name_special_characters_merchant">Ingrese alfabetos solo en apellido</string>
+    <string name="first_character_not_space">El primer caracter no puede ser un espacio en blanco</string>
+    <string name="spaces_not_allowed">No se permiten espacios en blanco.</string>
+    <string name="length_error">La longitud no puede tener más de 15 caracteres.</string>
+    <string name="min_length">La longitud debe tener entre 3 y 15 caracteres.</string>
+    <string name="Lnamemin_length">La longitud debe tener entre 1 y 20 caracteres.</string>
+    <string name="Enter_LastName">Introduzca el apellido</string>
+    <string name="Enter_Address">Ingresa la direccion</string>
+    <string name="Enter_validemailaddress">Introduzca una dirección de correo electrónico válida</string>
+    <string name="Enter_emailaddress">Introduzca la dirección de correo electrónico</string>
+    <string name="Enter_Mobileno">Ingrese el número de teléfono móvil</string>
+    <string name="Password_blank">La contraseña no puede estar en blanco</string>
+    <string name="Password_length">La longitud de la contraseña debe tener entre 6 y 20 caracteres.</string>
+    <string name="resenttxt"><u> Reenviar correo electrónico </u></string>
+    <string name="facebook_app_id">1250339181777730</string>
+    <string name="fb_login_protocol_scheme">fb1250339181777732</string>
+    <string name="enter_password">Introducir la contraseña</string>
+    <string name="no_records_found">No se encontraron registros</string>
+    <string name="list_of_people">La gente busca tu ayuda</string>
+    <string name="reg_completion_link">Se ha enviado un enlace de finalización de registro a</string>
+    <string name="reg_completion_link_1">. Puede configurar su contraseña utilizando ese enlace.</string>
+    <string name="reg_completion_link_2">Por favor revise sus carpetas de promociones, redes sociales, spam o correo basura. Dependiendo de su configuración de preferencia de correo electrónico, el correo electrónico de admin@giftadeed.com puede terminar en diferentes carpetas.</string>
+    <string name="reg_completion_link_3">Acabamos de enviarle un enlace de recuperación. Por favor revise su correo electrónico y haga clic en el enlace.</string>
+    <string name="you_earned">Usted ganó:</string>
+    <string name="your_points">Tus puntos totales:</string>
+    <string name="tagged_deeds_for_day">Escrituras etiquetadas &amp; Escrituras cumplidas por día</string>
+    <string name="todays_deeds">Hechos etiquetados de hoy</string>
+    <string name="todays_fulfilled_deeds">Hechos cumplidos de hoy</string>
+    <string name="filter">Filtrar</string>
+    <string name="filters">Filtros</string>
+    <string name="filter_group">Filtrar por grupo</string>
+    <string name="start_writing">Comienza a escribir aquí ...</string>
+    <string name="apply_filters">Aplicar filtros</string>
+    <string name="radius">Radio</string>
+    <string name="apply">Aplicar</string>
+    <string name="send">Enviar</string>
+    <string name="you_can_contact">Puedes contactarnos en -</string>
+    <string name="contact_directly">Contáctanos directamente</string>
+    <string name="distance">Distancia</string>
+    <string name="time">Hora</string>
+    <string name="search">Buscar</string>
+    <string name="coming_soon">Próximamente......</string>
+    <string name="take_photo">Tomar foto</string>
+    <string name="select_from_gallery">Seleccionar de la galería</string>
+    <string name="select_from_avatars">Seleccionar de avatares</string>
+    <string name="suggest_sub_type">¿No se ha encontrado ninguna preferencia? Haga clic aquí para sugerir</string>
+    <string name="enter_suggession">Ingrese sugerencia</string>
+    <string name="subtype_already_exist">El subtipo ya existe</string>
+    <string name="subtype_success">Subtipo enviado correctamente</string>
+    <string name="suggession_error">No se pudo enviar su sugerencia</string>
+    <string name="your_groups">Sus grupos</string>
+    <string name="all_groups">Todos los grupos</string>
+    <string name="all_individuals">Todos los usuarios individuales</string>
+    <string name="tell_people_remaining">Dile a la gente lo que queda</string>
+    <string name="already_deeds_msg">Los siguientes hechos ya están etiquetados para la ubicación seleccionada:</string>
+
+    //--------------------key-------------------
+    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>
+
+    <!-- SendBird -->
+    <string name="no_channel">No se ha encontrado ningún canal.</string>
+    <string name="action_group_messages">Mensajes grupales</string>
+    <string name="all_app_version">UI de muestra v% 1 $ s / SDK v% 2 $ s</string>
+    <string name="select_channel_type">Seleccionar tipo de canal</string>
+    <string name="blocked_members_list">Miembros bloqueados</string>
+    <string name="GroupMessage_Community">Mensajes</string>
+    <string name="login_user_id">ID de usuario</string>
+    <string name="login_user_nickname">Apodo</string>
+    <string name="login_connect">Conéctate al chat</string>
+    <string name="login_disconnect">Desconectar</string>
+    <string name="open_channel_list_participant_count">% 1 $ d participantes</string>
+    <string name="create_open_channel">Crear canal abierto</string>
+    <string name="participant_list">Participantes</string>
+    <string name="group_channel_list_file_message_text">% 1 $ s ha subido un archivo.</string>
+    <string name="create_group_channel">Crear canal grupal</string>
+    <string name="members">Miembros</string>
+    <string name="invite_member">Invitar a los miembros</string>
+    <string name="invite">Invitación</string>
+    <string name="open_channel_chat_content_desc_profile">Imagen de perfil</string>
+    <string name="action_create_channel">Crear canal</string>
+    <string name="download">Descargar</string>
+    <string name="upload">Subir</string>
+    <string name="resend_message">Reenviar</string>
+    <string name="delete_message">Eliminar</string>
+    <string name="message_sending">Enviando</string>
+    <string name="message_failed">Ha fallado</string>
+    <string name="welcomechatmessage">Bienvenido al chat GiftADeed</string>
+</resources>

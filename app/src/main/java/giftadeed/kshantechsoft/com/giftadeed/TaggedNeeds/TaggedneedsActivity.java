@@ -126,6 +126,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
     public static String userClubCount;
+    String selectedOption = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,8 +242,18 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         adress_show = new GetingAddress(TaggedneedsActivity.this).getCompleteAddressString(new GPSTracker(TaggedneedsActivity.this).getLatitude(), new GPSTracker(TaggedneedsActivity.this).getLatitude());
         Log.d("myadd", adress_show);
 
-        if (savedInstanceState == null) {
-            selectfragment(1);
+        selectedOption = getIntent().getStringExtra("selected_option");
+        Log.d("selected_option", "" + selectedOption);
+        if (selectedOption != null) {
+            Log.d("selected_option_inside", "" + selectedOption);
+            if (selectedOption.equals("tagdeed")) {
+                // open tag deed if calling from app shortcut tag deed
+                selectfragment(2);
+            }
+        } else {
+            if (savedInstanceState == null) {
+                selectfragment(1);
+            }
         }
     }
 
@@ -739,6 +750,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
 
     /**
      * Updates the user's nickname.
+     *
      * @param userNickname The new nickname of the user.
      */
     private void updateCurrentUserInfo(final String userNickname, String photoPath) {

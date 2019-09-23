@@ -3,11 +3,15 @@ package giftadeed.kshantechsoft.com.giftadeed.splash;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +27,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
@@ -54,8 +59,8 @@ public class SplashActivity extends AppCompatActivity {
         try {
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
             if (currentVersion.length() > 0) {
-//                txt_app_version.setText("App Version " + currentVersion);
-                txt_app_version.setText(getResources().getString(R.string.app_name));
+                txt_app_version.setText("App Version " + currentVersion);
+//                txt_app_version.setText(getResources().getString(R.string.app_name));
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -205,18 +210,17 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String onlineVersion) {
             super.onPostExecute(onlineVersion);
-            /*if (onlineVersion != null && !onlineVersion.isEmpty()) {
+            if (onlineVersion != null && !onlineVersion.isEmpty()) {
                 if (Float.valueOf(currentVersion) < Float.valueOf(onlineVersion)) {
                     //show update dialog
                     showForceUpdateDialog();
                 } else {
-            proceedToApp();
-            // Animation trial
+                    proceedToApp();
+                // Animation trial
 //            Intent log = new Intent(getApplicationContext(), FadeInActivity.class);
 //            startActivity(log);
                 }
-            }*/
-            proceedToApp();
+            }
             Log.d("appinfodetails", "Current version " + currentVersion + "playstore version " + onlineVersion);
         }
     }

@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:padding="10dp"
         android:gravity="center"
+        android:padding="10dp"
         android:text="@string/select_language"
         android:textColor="@color/white"
         android:textSize="16dp" />
@@ -33,6 +33,12 @@
             android:text="English" />
 
         <RadioButton
+            android:id="@+id/rb_french"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="French" />
+
+        <RadioButton
             android:id="@+id/rb_hindi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,5 +49,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Portuguese" />
+
+        <RadioButton
+            android:id="@+id/rb_spanish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Spanish" />
     </RadioGroup>
 </LinearLayout>

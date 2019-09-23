@@ -177,7 +177,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     TextView dialogtext, txtDescription, txtvalidity, txtdialogcreditpoints, txttotalpoints, txt2, txtneedname;
     EditText edSelectFromGroup, edselectcategory, selectedPref, edselectAudiance, edselectlocation, edDescription;
     String latitude_source, longitude_source;
-    String selectedFromGroupId = "", selectedFromGroupName, strNeedmapping_ID, strNeed_Name, strCharacter_Path, strImagenamereturned, strUser_ID, strCreditpoints, strTotalpoints;
+    String selectedFromGroupId = "", selectedFromGroupName, strNeedmapping_ID, strNeed_Name, strCharacter_Path, strImagenamereturned, strUser_ID = "", strCreditpoints, strTotalpoints;
     LinearLayout layout_container, layout_audiance, fromGroupLinearLayout;
     CheckBox Checkbox_container;
     private Bitmap capturedBitmap, rotatedBitmap;
@@ -1859,6 +1859,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     }
                 } else {
                     capturedBitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                    strimagePath = fileUri.getPath();
                 }
                 int bitmap_file_size = capturedBitmap.getByteCount();
                 Log.d("img_compress_capture", "bitmap_size : " + bitmap_file_size);

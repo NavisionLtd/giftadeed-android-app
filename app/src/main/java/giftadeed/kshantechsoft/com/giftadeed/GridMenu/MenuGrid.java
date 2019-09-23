@@ -115,8 +115,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
             currentVersion = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
             if (currentVersion.length() > 0) {
                 txt_app_version.setVisibility(View.VISIBLE);
-//                txt_app_version.setText("App Version " + currentVersion);
-                txt_app_version.setText(getResources().getString(R.string.app_name));
+                txt_app_version.setText("App Version " + currentVersion);
             } else {
                 txt_app_version.setVisibility(View.GONE);
             }

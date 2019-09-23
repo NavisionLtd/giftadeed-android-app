@@ -110,6 +110,8 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
             android:name=".Animation.FadeInActivity"
@@ -199,6 +201,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".SendBirdChat.utils.Activity_Audio" />
         <activity android:name=".SendBirdChat.utils.VideoPlayer" />
+        <activity android:name=".splash.AppShortcutActivity" />
     </application>
 
 </manifest>

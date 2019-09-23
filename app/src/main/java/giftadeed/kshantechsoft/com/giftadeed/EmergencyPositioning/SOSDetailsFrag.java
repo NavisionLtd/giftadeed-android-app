@@ -169,7 +169,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                 Bundle bundle = new Bundle();
                 bundle.putString("str_tagid", str_sosid);
                 bundle.putString("str_geopoint", str_geopoints);
-                bundle.putString("str_characterPath", "https://kshandemo.co.in/gad3p2/api/image/sos/sos_marker.png");
+                bundle.putString("str_characterPath", "https://www.giftadeed.com/api/image/sos/sos_marker.png");
                 bundle.putString("tab", "from_sos");
                 SingleDeedMap fragInfo = new SingleDeedMap();
                 fragInfo.setArguments(bundle);

@@ -295,8 +295,8 @@ public class DatabaseAccess {
             File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "//data//giftadeed.kshantechsoft.com//databases//giftadeed.db";
-                String backupDBPath = "giftadeed.db";
+                String currentDBPath = "//data//giftadeed.kshantechsoft.com//databases//giftadeed_new.db";
+                String backupDBPath = "giftadeed_new.db";
                 File currentDB = new File(data, currentDBPath);
                 File backupDB = new File(Environment.getExternalStorageDirectory() + "/giftadeed"
                         + "/DatabaseBackup/");

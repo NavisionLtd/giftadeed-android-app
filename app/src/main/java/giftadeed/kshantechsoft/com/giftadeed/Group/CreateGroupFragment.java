@@ -513,6 +513,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     }
                 } else {
                     capturedBitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+                    strimagePath = fileUri.getPath();
                 }
                 int bitmap_file_size = capturedBitmap.getByteCount();
                 Log.d("camera_photo_size", "bitmap_size : " + bitmap_file_size);

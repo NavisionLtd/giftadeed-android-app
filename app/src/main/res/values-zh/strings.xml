@@ -1,6 +1,13 @@
 <resources>
     <!--<string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD P2 Test 12 September</string>
+    <string name="app_name">GAD P2 Test 17 September</string>
+
+    <!-- Shortcut strings -->
+    <string name="compose_shortcut_short_label1">SOS</string>
+    <string name="compose_shortcut_long_label1">SOS</string>
+    <string name="compose_shortcut_short_label2">Tag deed</string>
+    <string name="compose_shortcut_long_label2">Tag deed</string>
+    <string name="compose_disabled_message1">Not available</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>

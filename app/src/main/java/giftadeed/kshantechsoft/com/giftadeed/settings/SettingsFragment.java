@@ -125,10 +125,14 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
             etSelectLanguage.setText("Chinese");
         } else if (storedLanguage.equals("en")) {
             etSelectLanguage.setText("English");
+        } else if (storedLanguage.equals("fr-rFR")) {
+            etSelectLanguage.setText("French");
         } else if (storedLanguage.equals("hi")) {
             etSelectLanguage.setText("Hindi");
         } else if (storedLanguage.equals("pt")) {
             etSelectLanguage.setText("Portuguese");
+        } else if (storedLanguage.equals("es")) {
+            etSelectLanguage.setText("Spanish");
         }
         databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
@@ -163,17 +167,23 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                 dialog.setContentView(R.layout.dialog_select_language);
                 final RadioButton rbChinese = (RadioButton) dialog.findViewById(R.id.rb_chinese);
                 final RadioButton rbEnglish = (RadioButton) dialog.findViewById(R.id.rb_english);
+                final RadioButton rbFrench = (RadioButton) dialog.findViewById(R.id.rb_french);
                 final RadioButton rbHindi = (RadioButton) dialog.findViewById(R.id.rb_hindi);
                 final RadioButton rbPortuguese = (RadioButton) dialog.findViewById(R.id.rb_portuguese);
+                final RadioButton rbSpanish = (RadioButton) dialog.findViewById(R.id.rb_spanish);
                 RadioGroup rgLanguages = (RadioGroup) dialog.findViewById(R.id.rg_language_group);
                 if (storedLanguage.equals("zh")) {
                     rbChinese.setChecked(true);
                 } else if (storedLanguage.equals("en")) {
                     rbEnglish.setChecked(true);
+                } else if (storedLanguage.equals("fr-rFR")) {
+                    rbFrench.setChecked(true);
                 } else if (storedLanguage.equals("hi")) {
                     rbHindi.setChecked(true);
                 } else if (storedLanguage.equals("pt")) {
                     rbPortuguese.setChecked(true);
+                } else if (storedLanguage.equals("es")) {
+                    rbSpanish.setChecked(true);
                 }
                 rgLanguages.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
@@ -186,6 +196,10 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                             storedLanguage = "en";
                             etSelectLanguage.setText("English");
                             dialog.dismiss();
+                        } else if (rbFrench.isChecked()) {
+                            storedLanguage = "fr-rFR";
+                            etSelectLanguage.setText("French");
+                            dialog.dismiss();
                         } else if (rbHindi.isChecked()) {
                             storedLanguage = "hi";
                             etSelectLanguage.setText("Hindi");
@@ -193,6 +207,10 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                         } else if (rbPortuguese.isChecked()) {
                             storedLanguage = "pt";
                             etSelectLanguage.setText("Portuguese");
+                            dialog.dismiss();
+                        } else if (rbSpanish.isChecked()) {
+                            storedLanguage = "es";
+                            etSelectLanguage.setText("Spanish");
                             dialog.dismiss();
                         }
                     }
@@ -274,12 +292,18 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                 } else if (storedLanguage.equals("en")) {
                     sessionManager.store_language("en");
                     updateLanguage("en");
+                } else if (storedLanguage.equals("fr-rFR")) {
+                    sessionManager.store_language("fr-rFR");
+                    updateLanguage("fr-rFR");
                 } else if (storedLanguage.equals("hi")) {
                     sessionManager.store_language("hi");
                     updateLanguage("hi");
                 } else if (storedLanguage.equals("pt")) {
                     sessionManager.store_language("pt");
                     updateLanguage("pt");
+                } else if (storedLanguage.equals("es")) {
+                    sessionManager.store_language("es");
+                    updateLanguage("es");
                 }
 
                 Toast.makeText(getContext(), getResources().getString(R.string.setting_saved), Toast.LENGTH_SHORT).show();

@@ -231,18 +231,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 dialog.setContentView(R.layout.dialog_select_language);
                 final RadioButton rbChinese = (RadioButton) dialog.findViewById(R.id.rb_chinese);
                 final RadioButton rbEnglish = (RadioButton) dialog.findViewById(R.id.rb_english);
+                final RadioButton rbFrench = (RadioButton) dialog.findViewById(R.id.rb_french);
                 final RadioButton rbHindi = (RadioButton) dialog.findViewById(R.id.rb_hindi);
                 final RadioButton rbPortuguese = (RadioButton) dialog.findViewById(R.id.rb_portuguese);
+                final RadioButton rbSpanish = (RadioButton) dialog.findViewById(R.id.rb_spanish);
                 RadioGroup rgLanguages = (RadioGroup) dialog.findViewById(R.id.rg_language_group);
                 storedLanguage = sharedPreferences.getLanguage();
                 if (storedLanguage.equals("zh")) {
                     rbChinese.setChecked(true);
                 } else if (storedLanguage.equals("en")) {
                     rbEnglish.setChecked(true);
+                } else if (storedLanguage.equals("fr-rFR")) {
+                    rbFrench.setChecked(true);
                 } else if (storedLanguage.equals("hi")) {
                     rbHindi.setChecked(true);
                 } else if (storedLanguage.equals("pt")) {
                     rbPortuguese.setChecked(true);
+                } else if (storedLanguage.equals("es")) {
+                    rbSpanish.setChecked(true);
                 }
                 rgLanguages.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
@@ -255,6 +261,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             sharedPreferences.store_language("en");
                             updateLanguage("en");
                             dialog.dismiss();
+                        } else if (rbFrench.isChecked()) {
+                            sharedPreferences.store_language("fr-rFR");
+                            updateLanguage("fr-rFR");
+                            dialog.dismiss();
                         } else if (rbHindi.isChecked()) {
                             sharedPreferences.store_language("hi");
                             updateLanguage("hi");
@@ -262,6 +272,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         } else if (rbPortuguese.isChecked()) {
                             sharedPreferences.store_language("pt");
                             updateLanguage("pt");
+                            dialog.dismiss();
+                        } else if (rbSpanish.isChecked()) {
+                            sharedPreferences.store_language("es");
+                            updateLanguage("es");
                             dialog.dismiss();
                         }
                     }

@@ -61,7 +61,6 @@ import retrofit.Retrofit;
 /////////////////////////////////////////////////////////////////
 
 public class Contactus extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
-
     static FragmentManager fragmgr;
     View rootview;
     TextView txtadminemail;
@@ -126,7 +125,6 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                 }
             }
         });
-
 
         edContactUsMessage.addTextChangedListener(new TextWatcher() {
             @Override
@@ -255,10 +253,8 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
         });
     }
 
-
     @Override
     public void onResume() {
-
         super.onResume();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getView().setFocusableInTouchMode(true);
@@ -266,19 +262,16 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     MenuGrid menuGrid = new MenuGrid();
                     fragmgr.beginTransaction().replace(R.id.content_frame, menuGrid).commit();
-
                     return true;
                 }
                 return false;
             }
         });
     }
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

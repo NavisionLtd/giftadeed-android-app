@@ -121,7 +121,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                 Bundle bundle = new Bundle();
                 bundle.putString("str_tagid", str_resid);
                 bundle.putString("str_geopoint", str_geopoint);
-                bundle.putString("str_characterPath", "https://kshandemo.co.in/gad3p2/api/image/resource/resource_marker.png");
+                bundle.putString("str_characterPath", "https://www.giftadeed.com/api/image/resource/resource_marker.png");
                 bundle.putString("tab", "from_resource");
                 SingleDeedMap fragInfo = new SingleDeedMap();
                 fragInfo.setArguments(bundle);
