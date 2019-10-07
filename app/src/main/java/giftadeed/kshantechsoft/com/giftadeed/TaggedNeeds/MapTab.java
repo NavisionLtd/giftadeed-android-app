@@ -232,7 +232,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
 
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             mDialog.setConfiguration(new ArcConfiguration(getContext()));
@@ -306,7 +306,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                 str_tagid = taggedlists.get(m).getTaggedID();
                                 str_geopoint = taggedlists.get(m).getGeopoint();
                                 str_address = taggedlists.get(m).getAddress();
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     getPermanentDeedList(str_tagid, str_geopoint, str_address);
@@ -314,7 +314,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                             }
                         } else if (marker.getTag().equals(taggedlists.get(m).getNeedName())) {
                             if (marker.getSnippet().equals(taggedlists.get(m).getTaggedID())) {
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     Log.d("taggedlistsize", "in condition");
@@ -378,7 +378,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     for (int m = 0; m < soslists.size(); m++) {
                         if (marker.getTag().equals("SOS")) {
                             if (marker.getSnippet().equals(soslists.get(m).getId())) {
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     Log.d("soslistsize", "in condition");
@@ -398,7 +398,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     for (int m = 0; m < resourcelists.size(); m++) {
                         if (marker.getTag().equals("Resource")) {
                             if (marker.getSnippet().equals(resourcelists.get(m).getId())) {
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     Log.d("reslistsize", "in condition");
@@ -1222,7 +1222,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                             @Override
                             public void onClick(View view) {
                                 dialog.dismiss();
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     removeLocation(tagid);

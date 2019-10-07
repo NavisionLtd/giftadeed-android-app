@@ -1,5 +1,6 @@
 package giftadeed.kshantechsoft.com.giftadeed.MyProfile;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -327,7 +328,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 text3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (!(Validation.isOnline(getContext()))) {
+                        if (!(Validation.isNetworkAvailable(getContext()))) {
                             ToastPopUp.show(getContext(), getString(R.string.network_validation));
                         } else {
                             Intent i = new Intent(getContext(), ShowImageActivity.class);
@@ -598,7 +599,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
 
                     } else if (Validation.isStringNullOrBlank(edPhone.getText().toString())) {
@@ -1257,6 +1258,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void selectCountry() {
         //getcountry();
         if (!(Validation.isNetworkAvailable(myContext))) {
@@ -1280,7 +1282,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     setDynamicHeight(categorylist);
                     //------------search
                     txtsearch.addTextChangedListener(new TextWatcher() {
-
                         @Override
                         public void afterTextChanged(Editable arg0) {
                             // TODO Auto-generated method stub
@@ -1642,7 +1643,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         edPhone.setText("");
                     } else {
                         if (chekmobile == 0) {
-                            if (!(Validation.isOnline(getActivity()))) {
+                            if (!(Validation.isNetworkAvailable(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
                                 updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -1910,8 +1911,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
+        //        if (id == R.id.action_settings) {
 //            return true;
 //        }
 
@@ -1975,7 +1975,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 
                 ToastPopUp.show(getContext(), getString(R.string.min_length));
                 edFname.setText("");
-            } else if (!(Validation.isOnline(getActivity()))) {
+            } else if (!(Validation.isNetworkAvailable(getActivity()))) {
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
 
             } else if (strAddress.length() > 0) {
@@ -2019,7 +2019,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         edpassword.setText("");
                     } */
                     else {
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -2027,7 +2027,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         }
                     }
                 } else {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -2062,7 +2062,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 } */
 
                 else {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -2070,7 +2070,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     }
                 }
             } else {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -2083,7 +2083,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 
             ToastPopUp.show(getContext(), getString(R.string.min_length));
             edFname.setText("");
-        } else if (!(Validation.isOnline(getActivity()))) {
+        } else if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
 
         } else if (strAddress.length() > 0) {
@@ -2105,7 +2105,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 
                 ToastPopUp.show(getContext(), getString(R.string.min_length));
                 edFname.setText("");
-            } else if (!(Validation.isOnline(getActivity()))) {
+            } else if (!(Validation.isNetworkAvailable(getActivity()))) {
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
 
             } else if (strCountry.length() < 1) {
@@ -2136,7 +2136,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 }*/
 
                 else {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -2144,7 +2144,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     }
                 }
             } else {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -2179,7 +2179,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             }*/
 
             else {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
@@ -2187,7 +2187,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 }
             }
         } else {
-            if (!(Validation.isOnline(getActivity()))) {
+            if (!(Validation.isNetworkAvailable(getActivity()))) {
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
             } else {
                 updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,

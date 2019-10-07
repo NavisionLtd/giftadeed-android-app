@@ -51,7 +51,6 @@ public class AboutApp extends Fragment {
 
         txtAgreementDetails= (WebView)rootview. findViewById(R.id.txtaboutapp);
         //----------------------Loading data from html file
-//        txtAgreementDetails.loadUrl("file:///android_asset/AboutApp.html");
         txtAgreementDetails.loadUrl("https://giftadeed.com/pages/about_app_mob.html");
 
         WebSettings settings = txtAgreementDetails.getSettings();

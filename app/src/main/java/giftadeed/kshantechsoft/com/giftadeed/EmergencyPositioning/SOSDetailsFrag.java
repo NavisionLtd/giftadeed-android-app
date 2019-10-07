@@ -103,7 +103,6 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.sos_details_layout, container, false);
         sessionManager = new SessionManager(getActivity());
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -124,7 +123,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
         HashMap<String, String> user = sessionManager.getUserDetails();
         strUser_ID = user.get(sessionManager.USER_ID);
         str_sosid = this.getArguments().getString("str_sosid");
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             getSOS_Details();
@@ -200,7 +199,7 @@ public class SOSDetailsFrag extends Fragment implements GoogleApiClient.OnConnec
                         @Override
                         public void onClick(View v) {
                             // call delete resource api
-                            if (!(Validation.isOnline(getActivity()))) {
+                            if (!(Validation.isNetworkAvailable(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
                                 deleteSOS();

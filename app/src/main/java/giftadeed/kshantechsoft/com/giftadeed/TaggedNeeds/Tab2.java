@@ -129,7 +129,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (!(Validation.isOnline(getActivity()))) {
+                                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                                             swipeRefreshLayout.setRefreshing(false);
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
@@ -516,7 +516,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
     @Override
     public void onRefresh() {
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             swipeRefreshLayout.setRefreshing(false);
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {

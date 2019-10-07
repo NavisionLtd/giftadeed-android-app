@@ -23,21 +23,15 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.SelectableUserListAdapter;
 
 public class BlockedMembersListActivity extends AppCompatActivity {
-
     private static final int STATE_NORMAL = 0;
     private static final int STATE_EDIT = 1;
-
     private LinearLayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
     private SelectableUserListAdapter mListAdapter;
     private UserListQuery mUserListQuery;
-
     private Button mButtonEdit, mButtonUnblock;
-
     private List<String> mSelectedIds;
     private int mCurrentState;
-
-    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +60,7 @@ public class BlockedMembersListActivity extends AppCompatActivity {
         });
         mButtonUnblock.setEnabled(false);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_blocked_members_list);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_blocked_members_list);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -73,15 +73,18 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class CreateCollabFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
-    View rootview;
-    FragmentActivity myContext;
-    static FragmentManager fragmgr;
+    private View rootview;
+    private FragmentActivity myContext;
+    private static FragmentManager fragmgr;
     private SimpleArcDialog mDialog;
     private EditText selectGroup, collabName, collabDesc;
     private Button btnCreateCollab;
     private SessionManager sessionManager;
     private String strUser_ID;
-    private String receivedCollabid = "", receivedCollabname = "", receivedCollabdesc = "", callingFrom = "", calling = "screenload";
+    private String receivedCollabid = "";
+    private String receivedCollabname = "";
+    private String callingFrom = "";
+    private String calling = "screenload";
     private String strGroupmapping_ID, strGroupmapping_Name;
     private GoogleApiClient mGoogleApiClient;
     private List<String> lstusers = new ArrayList<String>();
@@ -110,11 +113,10 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.create_collab_layout, container, false);
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.fragname = CreateCollabFragment.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -130,14 +132,14 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
         init();
         mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+        strUser_ID = user.get(SessionManager.USER_ID);
         HashMap<String, String> collab = sessionManager.getSelectedColabDetails();
-        callingFrom = collab.get(sessionManager.COLAB_CALL_FROM);
-        receivedCollabid = collab.get(sessionManager.COLAB_ID);
-        receivedCollabname = collab.get(sessionManager.COLAB_NAME);
-        receivedCollabdesc = collab.get(sessionManager.COLAB_DESC);
-        strGroupmapping_ID = collab.get(sessionManager.COLAB_FROMGID);
-        strGroupmapping_Name = collab.get(sessionManager.COLAB_FROMGNAME);
+        callingFrom = collab.get(SessionManager.COLAB_CALL_FROM);
+        receivedCollabid = collab.get(SessionManager.COLAB_ID);
+        receivedCollabname = collab.get(SessionManager.COLAB_NAME);
+        String receivedCollabdesc = collab.get(SessionManager.COLAB_DESC);
+        strGroupmapping_ID = collab.get(SessionManager.COLAB_FROMGID);
+        strGroupmapping_Name = collab.get(SessionManager.COLAB_FROMGNAME);
         if (callingFrom.equals("create")) {
             //from create menu
             TaggedneedsActivity.updateTitle(getResources().getString(R.string.action_create_collab));
@@ -154,7 +156,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
         selectGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     calling = "group";
@@ -177,7 +179,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                     collabDesc.setFocusable(true);
                     collabDesc.setError(getResources().getString(R.string.colab_desc_req));
                 } else {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         if (callingFrom.equals("create")) {
@@ -227,7 +229,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
         client.setWriteTimeout(1, TimeUnit.HOURS);
         ArcConfiguration configuration = new ArcConfiguration(getContext());
         configuration.setText("Creating collaboration..");
-        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
@@ -275,7 +277,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                             Log.d("channel_name", channelName);
                             //group chat
                             mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
-                            if (strUser_ID != null && channelName != null) {
+                            if (strUser_ID != null) {
                                 lstusers.add(strUser_ID);
                                 mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
                                 createCollabChannel(lstusers, channelName, strMessage, mIsDistinct);
@@ -339,7 +341,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
-                                    public void onResult(Status status) {
+                                    public void onResult(@NonNull Status status) {
                                         //updateUI(false);
                                     }
                                 });
@@ -377,44 +379,48 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
                                 selectGroup.clearFocus();
                             }
                         } else if (calling.equals("group")) {
-                            final Dialog dialog = new Dialog(getContext());
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setCancelable(false);
-                            dialog.setCanceledOnTouchOutside(false);
-                            dialog.setContentView(R.layout.groups_dialog);
-                            ListView ownedgrouplist = (ListView) dialog.findViewById(R.id.owned_group_list);
-                            Button cancel = (Button) dialog.findViewById(R.id.group_cancel);
-                            ownedgrouplist.setAdapter(new OwnedGroupsAdapter(groupArrayList, getContext()));
-                            ownedgrouplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    try {
-                                        if (groupArrayList.size() > 0) {
-                                            if (groupArrayList.get(i).getGroup_name().length() > 30) {
-                                                selectGroup.setText(groupArrayList.get(i).getGroup_name().substring(0, 29) + "...");
-                                            } else {
-                                                selectGroup.setText(groupArrayList.get(i).getGroup_name());
+                            if (groupArrayList.size() > 0) {
+                                final Dialog dialog = new Dialog(getContext());
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog.setCancelable(false);
+                                dialog.setCanceledOnTouchOutside(false);
+                                dialog.setContentView(R.layout.groups_dialog);
+                                ListView ownedgrouplist = (ListView) dialog.findViewById(R.id.owned_group_list);
+                                Button cancel = (Button) dialog.findViewById(R.id.group_cancel);
+                                ownedgrouplist.setAdapter(new OwnedGroupsAdapter(groupArrayList, getContext()));
+                                ownedgrouplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        try {
+                                            if (groupArrayList.size() > 0) {
+                                                if (groupArrayList.get(i).getGroup_name().length() > 30) {
+                                                    selectGroup.setText(groupArrayList.get(i).getGroup_name().substring(0, 29) + "...");
+                                                } else {
+                                                    selectGroup.setText(groupArrayList.get(i).getGroup_name());
+                                                }
+                                                strGroupmapping_ID = groupArrayList.get(i).getGroup_id();
+                                                strGroupmapping_Name = groupArrayList.get(i).getGroup_name();
                                             }
-                                            strGroupmapping_ID = groupArrayList.get(i).getGroup_id();
-                                            strGroupmapping_Name = groupArrayList.get(i).getGroup_name();
-                                        }
-                                    } catch (Exception e) {
+                                        } catch (Exception e) {
 //                                    StringWriter writer = new StringWriter();
 //                                    e.printStackTrace(new PrintWriter(writer));
 //                                    Bugreport bg = new Bugreport();
 //                                    bg.sendbug(writer.toString());
+                                        }
+                                        dialog.dismiss();
                                     }
-                                    dialog.dismiss();
-                                }
-                            });
-                            cancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            mDialog.dismiss();
-                            dialog.show();
+                                });
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                mDialog.dismiss();
+                                dialog.show();
+                            } else {
+                                ToastPopUp.show(myContext, "No groups to show");
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -442,7 +448,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
         client.setWriteTimeout(1, TimeUnit.HOURS);
         ArcConfiguration configuration = new ArcConfiguration(getContext());
         configuration.setText("Editing collaboration..");
-        mDialog.setConfiguration(new ArcConfiguration(getContext()));
+        mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
@@ -610,7 +616,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
     }
 
     //***********************************transform*************************************************
-    public void filterGroupChannel(String clubname) {
+    private void filterGroupChannel(String clubname) {
         System.out.println("clbname line n0 3950        " + clubname);
         if (lstGetChannelsList != null && lstGetChannelsList.size() != 0) {
             for (int i = 0; i < lstGetChannelsList.size(); i++) {
@@ -623,7 +629,7 @@ public class CreateCollabFragment extends Fragment implements GoogleApiClient.On
     }
 
     //==============================================================================================
-    public void callUpdateSendBird(String urlOfChannel, final String channelName) {
+    private void callUpdateSendBird(String urlOfChannel, final String channelName) {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);

@@ -421,7 +421,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         edSelectFromGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     userGroupsCallingFrom = "SelectFromGroupClick";
@@ -497,7 +497,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         edselectAudiance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     userGroupsCallingFrom = "SelectAudienceGroupClick";
@@ -546,7 +546,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             public void onClick(View v) {
                 // Log.d("Geopoints", str_Geopint);
                 //gifDialog() ;
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else if (fragmentpage.equals("detailspage")) {
                     editdeedValidations();
@@ -1552,7 +1552,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         String currentDateTimeString = df.format(c.getTime());
                         Log.d("upload_image_api", "Response received time : " + currentDateTimeString);
                         Log.d("upload_image_api", "Response string : " + s);
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (fragmentpage.equals("detailspage")) {
@@ -1623,7 +1623,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 .addConverterFactory(GsonConverterFactory.create()).build();
         TagAneedInterface service = retrofit.create(TagAneedInterface.class);
         Log.d("tag_input", user_id + ":" + NeedMapping_ID + ":" + geopoints + ":" + Imagename + ":" + title + ":" + description + ":" + locat + ":" + container + ":" + validity + ":" + paddress + ":" + subTypePref + ":" + checkedOtherOrg + ":" + checkedIndi + ":" + userOrgs + ":" + selectedFromGroupId);
-        Call<MobileModel> call = service.sendData(user_id, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, paddress, subTypePref, checkedOtherOrg, checkedIndi, userOrgs, selectedFromGroupId);
+        Call<MobileModel> call = service.sendData(user_id, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, "1000", paddress, subTypePref, checkedOtherOrg, checkedIndi, userOrgs, selectedFromGroupId);
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
@@ -1682,7 +1682,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                             intent.putExtra("reason", "by tagging");
                             startActivity(intent);
                         } else {
-                            if (!(Validation.isOnline(getActivity()))) {
+                            if (!(Validation.isNetworkAvailable(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
                                 ToastPopUp.show(getActivity(), getString(R.string.tag_unsuccess));
@@ -1720,7 +1720,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditdeedInterface service = retrofit.create(EditdeedInterface.class);
         Log.d("edit_deed_params", "" + user_id + "," + deedId + "," + NeedMapping_ID + "," + geopoints + "," + Imagename + "," + title + "," + description + "," + locat + "," + container + "," + validity + "," + str_subtypes + "," + str_permanent);
-        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, validity, str_subtypes, str_permanent);
+        Call<StatusModel> call = service.sendData(user_id, deedId, NeedMapping_ID, geopoints, Imagename, title, description, locat, container, "1000", str_subtypes, str_permanent);
         call.enqueue(new Callback<StatusModel>() {
             @Override
             public void onResponse(Response<StatusModel> response, Retrofit retrofit) {
@@ -2042,7 +2042,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         if (rotatedBitmap == null) {
             // Toast.makeText(getContext(), "You have not selected any image", Toast.LENGTH_SHORT).show();
             // Log.d("image",image);
-            if (!(Validation.isOnline(getActivity()))) {
+            if (!(Validation.isNetworkAvailable(getActivity()))) {
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
             } else {
                 if (fragmentpage.equals("detailspage")) {

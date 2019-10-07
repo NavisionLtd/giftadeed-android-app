@@ -87,22 +87,40 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
             @Override
             public void onClick(View v) {
                 collabCreatorID = list.get(position).getCreator_id();
-                try {
-                    getChannelsDetails();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Log.d("collab_creator_id", collabCreatorID);
                 // Sendbird channel. Concat with GRP for Group and CLB for Collaboration
                 strClubName = list.get(position).getColabName() + " - CLB" + list.get(position).getCollabId();
                 Log.d("club_channel_name", strClubName);
-                // call accept invite api. Send A for accept
-                updateInviteRequest(strUser_ID, list.get(position).getCollabId(), "A");
+
+                mDialog = new SimpleArcDialog(context);
+                ArcConfiguration configuration = new ArcConfiguration(context);
+                configuration.setText("Sending your response...");
+                mDialog.setConfiguration(configuration);
+                mDialog.show();
+                mDialog.setCancelable(false);
+
+                try {
+                    getChannelsDetails(list.get(position).getCollabId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                /*if (lstGetChannelsList.size() > 0) {
+                    // call accept invite api. Send A for accept
+                    updateInviteRequest(strUser_ID, list.get(position).getCollabId(), "A");
+                }*/
             }
         });
 
         holder.ivReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialog = new SimpleArcDialog(context);
+                ArcConfiguration configuration = new ArcConfiguration(context);
+                configuration.setText("Sending your response...");
+                mDialog.setConfiguration(configuration);
+                mDialog.show();
+                mDialog.setCancelable(false);
                 // call reject invite api. Send R for reject
                 updateInviteRequest(strUser_ID, list.get(position).getCollabId(), "R");
             }
@@ -134,9 +152,6 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        mDialog = new SimpleArcDialog(context);
-        mDialog.setConfiguration(new ArcConfiguration(context));
-        mDialog.show();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ChangeInviteInterface service = retrofit.create(ChangeInviteInterface.class);
@@ -176,20 +191,21 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                         if (collabResponseStatus.getStatus() == 1) {
                             Toast.makeText(context, collabResponseStatus.getSuccessMsg(), Toast.LENGTH_SHORT).show();
 
-                            ((CollabPendingInvitesFragment) fragment).getPendingInviteList();
-
                             //============add member in sendbird group channel==============
                             if (invite_status.equals("A")) {
-                                if (lstGetChannelsList != null) {
-                                    for (int i = 0; i < lstGetChannelsList.size(); i++) {
-                                        Log.d("channel_name", lstGetChannelsList.get(i).getmChannelName());
-                                        if (lstGetChannelsList.get(i).getmChannelName().equals(strClubName)) {
-                                            Log.d("channel_url", lstGetChannelsList.get(i).getmUrl());
-                                            inviteUser(lstGetChannelsList.get(i).getmUrl().toString(), strUser_ID);
-                                        }
+                                for (int i = 0; i < lstGetChannelsList.size(); i++) {
+                                    Log.d("channel_name", lstGetChannelsList.get(i).getmChannelName());
+                                    Log.d("strClubName", strClubName);
+                                    if (lstGetChannelsList.get(i).getmChannelName().equals(strClubName)) {
+                                        Log.d("channel_url", lstGetChannelsList.get(i).getmUrl());
+                                        inviteUser(lstGetChannelsList.get(i).getmUrl().toString(), strUser_ID);
+                                        break;
                                     }
                                 }
                             }
+
+                            ((CollabPendingInvitesFragment) fragment).getPendingInviteList();
+
                         } else if (collabResponseStatus.getStatus() == 0) {
                             Toast.makeText(context, collabResponseStatus.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
@@ -213,7 +229,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         });
     }
 
-    public void getChannelsDetails() {
+    public void getChannelsDetails(String collab_id) {
         //always use connect() along with any method of chat
         SendBird.connect(collabCreatorID, new SendBird.ConnectHandler() {
             @Override
@@ -233,9 +249,16 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                         }
                         if (list != null) {
                             for (int i = 0; i < list.size(); i++) {
-                                System.out.println("Chnalls: " + list.get(i).getName());
+                                System.out.println("all_channels: " + list.get(i).getName());
                                 /// lstGetChannelsList.add(list.get(i).getName().toString());
                                 lstGetChannelsList.add(new GroupListInfo(list.get(i).getData().toString(), list.get(i).getName().toString(), list.get(i).getUrl().toString()));
+                            }
+
+                            if (lstGetChannelsList.size() > 0) {
+                                // call accept invite api. Send A for accept
+                                updateInviteRequest(strUser_ID, collab_id, "A");
+                            } else {
+                                mDialog.dismiss();
                             }
                         }
                     }

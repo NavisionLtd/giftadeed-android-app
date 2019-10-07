@@ -31,6 +31,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
+            android:focusableInTouchMode="true"
             android:background="@drawable/search_background"
             android:drawableRight="@android:drawable/ic_menu_close_clear_cancel"
             android:hint="@string/search"

@@ -32,7 +32,8 @@ public class Bugreport {
             }
         }
         String message = builder.toString() + errormsg;
-        SendMail sm = new SendMail("giftadeed2017@gmail.com", subject, message);
+        String email_id = "giftadeed2017@gmail.com";
+        SendMail sm = new SendMail(email_id, subject, message);
         //Executing sendmail to send email
         sm.execute();
     }

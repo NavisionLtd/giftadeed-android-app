@@ -88,18 +88,11 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        myContext = (FragmentActivity) activity;
-        super.onAttach(activity);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.group_creators_list_layout, container, false);
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.invite_creators));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -127,7 +120,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (!(Validation.isOnline(getActivity()))) {
+                                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                                             swipeRefreshLayout.setRefreshing(false);
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
@@ -411,7 +404,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
 
     @Override
     public void onRefresh() {
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             swipeRefreshLayout.setRefreshing(false);
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {

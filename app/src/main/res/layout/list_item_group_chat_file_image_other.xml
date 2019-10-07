@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text_group_chat_nickname"
         android:layout_toRightOf="@id/image_group_chat_profile"
-        app:cardBackgroundColor="@color/cardview_light_background"
+        app:cardBackgroundColor="@color/white"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
         android:layout_marginTop="8dp"

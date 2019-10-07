@@ -9,7 +9,7 @@
         android:id="@+id/player_header_bg"
         android:layout_width="fill_parent"
         android:layout_height="60dip"
-        android:background="@layout/bg_player_header"
+        android:background="@drawable/bg_player_header"
         android:layout_alignParentTop="true"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
@@ -56,7 +56,7 @@
         android:layout_width="fill_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:background="@layout/bg_player_footer"
+        android:background="@drawable/bg_player_footer"
         android:gravity="center">
 
         <!-- Player Buttons -->
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:background="@layout/rounded_corner"
+            android:background="@drawable/rounded_corner"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
             <!-- Previous Button -->

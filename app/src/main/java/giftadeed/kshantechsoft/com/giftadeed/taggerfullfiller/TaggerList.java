@@ -118,7 +118,7 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
         // TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         //------------------------------method for getting the list of data -----------
 //        Log.d("userid", strUSERID);
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             fetch_TopTenist(strUSERID);

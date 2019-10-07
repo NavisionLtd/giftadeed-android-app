@@ -7,22 +7,19 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.Locale;
-
 import giftadeed.kshantechsoft.com.giftadeed.R;
-
 import static giftadeed.kshantechsoft.com.giftadeed.Collaboration.AddCollabMemberFragment.selectedCreatorIds;
 
 public class CollabAddMemberAdapter extends RecyclerView.Adapter<CollabAddMemberAdapter.ViewHolder> {
-    ArrayList<Creatorslist> creatorlist = new ArrayList<>();
+    private ArrayList<Creatorslist> creatorlist = new ArrayList<>();
     private ArrayList<Creatorslist> arraylist;
-    Context myContext;
+    private Context myContext;
 
-    public CollabAddMemberAdapter(ArrayList<Creatorslist> list, Context context) {
+    CollabAddMemberAdapter(ArrayList<Creatorslist> list, Context context) {
         this.creatorlist = list;
         this.myContext = context;
         this.arraylist = new ArrayList<Creatorslist>();
@@ -30,7 +27,7 @@ public class CollabAddMemberAdapter extends RecyclerView.Adapter<CollabAddMember
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_creators_list_item, parent, false);
         return new ViewHolder(view);
     }
@@ -87,7 +84,7 @@ public class CollabAddMemberAdapter extends RecyclerView.Adapter<CollabAddMember
             chkCreator = (CheckBox) view.findViewById(R.id.chk_creator);
         }
 
-        public void bindData(Creatorslist creatorslist) {
+        void bindData(Creatorslist creatorslist) {
             cName.setText(creatorslist.getFirstName() + " " + creatorslist.getLastName());
             cGroups.setText(creatorslist.getGroupNames());
         }

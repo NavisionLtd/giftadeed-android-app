@@ -1,6 +1,8 @@
 package giftadeed.kshantechsoft.com.giftadeed.AdvisoryBoard;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -43,13 +45,9 @@ import retrofit.Retrofit;
 /////////////////////////////////////////////////////////////////
 
 public class AdvisoryBoard extends Fragment {
-
-    private View view;
-    private FragmentManager fragmgr;
-    private RecyclerView advisoryRecyclerView;
     private AdvisoryAdapter advisoryAdapter;
     private List<AdvisoryResponse.Advisory> advisories = new ArrayList<>();
-    SimpleArcDialog mDialog;
+    private SimpleArcDialog mDialog;
 
     public static AdvisoryBoard newInstance(int sectionNumber) {
         AdvisoryBoard fragment = new AdvisoryBoard();
@@ -58,8 +56,8 @@ public class AdvisoryBoard extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_advisory_board, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_advisory_board, container, false);
 
         TaggedneedsActivity.updateTitle("Advisory Board");
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -72,7 +70,7 @@ public class AdvisoryBoard extends Fragment {
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         TaggedneedsActivity.fragname = AdvisoryBoard.newInstance(0);
         mDialog = new SimpleArcDialog(getContext());
-        fragmgr = getFragmentManager();
+        FragmentManager fragmgr = getFragmentManager();
 
 
         return view;
@@ -83,7 +81,7 @@ public class AdvisoryBoard extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        advisoryRecyclerView = (RecyclerView) view.findViewById(R.id.advisoryRecyclerView);
+        RecyclerView advisoryRecyclerView = (RecyclerView) view.findViewById(R.id.advisoryRecyclerView);
         advisoryAdapter = new AdvisoryAdapter(getContext(), advisories);
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();

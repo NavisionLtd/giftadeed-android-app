@@ -100,7 +100,7 @@ public class FilterGroupMemberAdapter extends BaseAdapter {
             holder.role.setVisibility(View.GONE);
         }
 
-        if (!(Validation.isOnline(mContext))) {
+        if (!(Validation.isNetworkAvailable(mContext))) {
             ToastPopUp.show(mContext, mContext.getString(R.string.network_validation));
         } else {
             mFirebaseInstance = FirebaseDatabase.getInstance();

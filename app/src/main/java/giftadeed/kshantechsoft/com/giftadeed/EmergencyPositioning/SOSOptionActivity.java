@@ -164,7 +164,7 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         layoutCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(Validation.isOnline(SOSOptionActivity.this))) {
+                if (!(Validation.isNetworkAvailable(SOSOptionActivity.this))) {
                     ToastPopUp.show(SOSOptionActivity.this, getString(R.string.network_validation));
                     country_sos_number = sessionManager.getCountrySOSCode();
                     String dial = "tel:" + country_sos_number;

@@ -187,7 +187,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
 //        txtProfileName.setText(strUserName);
 //        profiletxtview.setText(getResources().getString(R.string.view_profile));
 
-        if (!(Validation.isOnline(TaggedneedsActivity.this))) {
+        if (!(Validation.isNetworkAvailable(TaggedneedsActivity.this))) {
             ToastPopUp.show(TaggedneedsActivity.this, getString(R.string.network_validation));
         } else {
             mFirebaseInstance = FirebaseDatabase.getInstance();
@@ -229,7 +229,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         profiletxtview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(Validation.isOnline(TaggedneedsActivity.this))) {
+                if (!(Validation.isNetworkAvailable(TaggedneedsActivity.this))) {
                     ToastPopUp.show(TaggedneedsActivity.this, getString(R.string.network_validation));
                 } else {
                     selectfragment(0);
@@ -299,7 +299,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.map_tagged_deeds));
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle bottom_navigation view item clicks here.
@@ -318,7 +317,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         } else if (id == R.id.nav_taganeed) {
             selectfragment(2);
         } else if (id == R.id.nav_resources) {
-            if (!(Validation.isOnline(TaggedneedsActivity.this))) {
+            if (!(Validation.isNetworkAvailable(TaggedneedsActivity.this))) {
                 ToastPopUp.show(TaggedneedsActivity.this, getString(R.string.network_validation));
             } else {
                 getOwnedGroupList(strUserId);
@@ -492,7 +491,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
 //        mDialog.setConfiguration(new ArcConfiguration(TaggedneedsActivity.this));
 //        mDialog.show();
 //        mDialog.setCancelable(false);
-        if (!(Validation.isOnline(TaggedneedsActivity.this))) {
+        if (!(Validation.isNetworkAvailable(TaggedneedsActivity.this))) {
             ToastPopUp.show(TaggedneedsActivity.this, getString(R.string.network_validation));
         } else {
             getNotificationCount();

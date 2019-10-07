@@ -137,7 +137,6 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.deed_details_heading));
         rootview = inflater.inflate(R.layout.fragment_need_details, container, false);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -246,7 +245,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
             @Override
             public void onClick(View view) {
-                if (!(Validation.isOnline(getContext()))) {
+                if (!(Validation.isNetworkAvailable(getContext()))) {
                     Toast.makeText(myContext, getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
                 } else {
                     try {
@@ -985,13 +984,13 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                 mDialog.dismiss();
                                 submitdialog("user");
                             } else if (fromwhere.equals("endorse")) {
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     endorseDeed();
                                 }
                             } else if (fromwhere.equals("comment")) {
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     commentDeed();
@@ -1200,7 +1199,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                 mDialog.show();
                 mDialog.setCancelable(false);
 //                btnPost.setEnabled(true);
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     if (report.equals("user")) {

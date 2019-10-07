@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -15,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -29,27 +30,21 @@ import java.util.concurrent.TimeUnit;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 
 public class Activity_Audio extends AppCompatActivity {
-
-    private ImageButton b1, btnPause, btnPlay, b4;
+    private ImageButton b1;
+    private ImageButton btnPause;
+    private ImageButton btnPlay;
     private ImageView iv;
-
-
     private String mUrl;
     String mName;
     private MediaPlayer mediaPlayer;
-
     private double startTime = 0;
     private double finalTime = 0;
-
     private Handler myHandler = new Handler();
-    ;
     private int forwardTime = 5000;
     private int backwardTime = 5000;
     private SeekBar seekbar;
     private TextView tx1, tx2, tx3;
-
     public int oneTimeOnly = 0;
-    Handler mHandler;
     public int length = 0;
     Handler handler = new Handler();
     private ProgressDialog progressDialog;
@@ -62,7 +57,7 @@ public class Activity_Audio extends AppCompatActivity {
         b1 = (ImageButton) findViewById(R.id.btnForward);
         btnPause = (ImageButton) findViewById(R.id.btnPause);
         btnPlay = (ImageButton) findViewById(R.id.btnPlay);
-        b4 = (ImageButton) findViewById(R.id.btnBackward);
+        ImageButton b4 = (ImageButton) findViewById(R.id.btnBackward);
         iv = (ImageView) findViewById(R.id.imageView);
 
         tx1 = (TextView) findViewById(R.id.songCurrentDurationLabel);
@@ -85,10 +80,8 @@ public class Activity_Audio extends AppCompatActivity {
                 if (fromUser) {
                     //  tx1.setText(progress + "/" + seekBar.getMax());
                     mediaPlayer.seekTo(progress);
-
                     handler.removeCallbacks(UpdateSongTime);
                     handler.postDelayed(UpdateSongTime, 50);
-
                 }
             }
 
@@ -109,27 +102,14 @@ public class Activity_Audio extends AppCompatActivity {
         File extStore = Environment.getExternalStorageDirectory();
         File myFile = new File(extStore.getAbsolutePath() + "/BillinYogiChat/" + mName);
 
-        if(myFile.exists()){
+        if (myFile.exists()) {
             existingPlayMedia(audioFilePath);
-        }
-        else
-        {
+        } else {
             startDownload(mUrl);
         }
 
-
-
-
-
-
-
-
-
         //  startDownload(mUrl);
-
-
         // btnPause.setEnabled(false);
-
 
         tx2.setText("" + mName);  //add music name
         btnPlay.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +137,6 @@ public class Activity_Audio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int temp = (int) startTime;
-
                 if ((temp + forwardTime) <= finalTime) {
                     startTime = startTime + forwardTime;
                     mediaPlayer.seekTo((int) startTime);
@@ -172,7 +151,6 @@ public class Activity_Audio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int temp = (int) startTime;
-
                 if ((temp - backwardTime) > 0) {
                     startTime = startTime - backwardTime;
                     mediaPlayer.seekTo((int) startTime);
@@ -198,7 +176,6 @@ public class Activity_Audio extends AppCompatActivity {
             //    mediaPlayer.prepareAsync();
             seekbar.setProgress((int) startTime);
             Log.d("PROGRESS", "" + startTime);
-
             myHandler.postDelayed(this, 50);
         }
     };
@@ -210,7 +187,6 @@ public class Activity_Audio extends AppCompatActivity {
     }
 
     class DownloadFileAsync extends AsyncTask<String, String, String> {
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

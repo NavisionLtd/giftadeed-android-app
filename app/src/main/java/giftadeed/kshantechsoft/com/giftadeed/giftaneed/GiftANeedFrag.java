@@ -165,7 +165,6 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         rootview = inflater.inflate(R.layout.fragment_gift_aneed, container, false);
         init();
         fragmgr = getFragmentManager();
-        //android.support.v4.app.FragmentManager fragManager = myContext.getSupportFragmentManager();
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -631,7 +630,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
     //---------------------------checking image is avilable to send to server-----------------------
     public void checkimage() {
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             if (rotatedBitmap == null) {
@@ -664,7 +663,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         Log.d("upload_image_api", "Response received time : " + currentDateTimeString);
                         Log.d("upload_image_api", "Response string : " + s);
 
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);

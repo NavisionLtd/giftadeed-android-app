@@ -113,7 +113,7 @@ public class TopTenFullfillerList extends Fragment implements GoogleApiClient.On
             }
         });
 
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             fetch_ToptenFillfiller(strUSERID);//used to fetch the data via retrofit

@@ -29,16 +29,14 @@ import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 public class FilterCollabMemberAdapter extends BaseAdapter {
-    Context mContext;
-    LayoutInflater inflater;
+    private Context mContext;
+    private LayoutInflater inflater;
     private List<CollabMember> memberList = null;
     private ArrayList<CollabMember> arraylist;
-    private DatabaseReference mFirebaseDatabase;
-    private FirebaseDatabase mFirebaseInstance;
     private List<Profile> profileList;
     private String user_role = "";
 
-    public FilterCollabMemberAdapter(Context context,
+    FilterCollabMemberAdapter(Context context,
                                      List<CollabMember> list, String user_role) {
         mContext = context;
         this.memberList = list;
@@ -108,11 +106,11 @@ public class FilterCollabMemberAdapter extends BaseAdapter {
             }
         }
 
-        if (!(Validation.isOnline(mContext))) {
+        if (!(Validation.isNetworkAvailable(mContext))) {
             ToastPopUp.show(mContext, mContext.getString(R.string.network_validation));
         } else {
-            mFirebaseInstance = FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_PROFILE_PIC_UPLOADS);
+            FirebaseDatabase mFirebaseInstance = FirebaseDatabase.getInstance();
+            DatabaseReference mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_PROFILE_PIC_UPLOADS);
             profileList = new ArrayList<>();
             DatabaseReference reference = mFirebaseDatabase.child("profile");
             //adding an event listener to fetch values

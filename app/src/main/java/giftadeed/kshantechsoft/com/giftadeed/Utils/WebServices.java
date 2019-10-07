@@ -19,7 +19,7 @@ public class WebServices {
 
 
     /* Urls for production */
-     public static final String MANI_URL = "https://www.giftadeed.com/";
+    public static final String MANI_URL = "https://www.giftadeed.com/";
     public static final String SUB_URL = "api/";
     public static final String SOS_STORAGE_PATH_UPLOADS = "uploads/";
     public static final String DATABASE_SOS_UPLOADS = "SOS";

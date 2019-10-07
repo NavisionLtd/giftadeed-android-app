@@ -6,8 +6,8 @@ android {
         applicationId "giftadeed.kshantechsoft.com.giftadeed"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 37
-        versionName "3.9"
+        versionCode 40
+        versionName "4.1"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -113,10 +113,10 @@ dependencies {
     implementation 'id.zelory:compressor:2.1.0'
 
     implementation('androidx.lifecycle:lifecycle-livedata:2.0.0') {
-        force = true;
+        force = true
     }
     implementation('androidx.lifecycle:lifecycle-viewmodel:2.0.0') {
-        force = true;
+        force = true
     }
 
     //circular imageview

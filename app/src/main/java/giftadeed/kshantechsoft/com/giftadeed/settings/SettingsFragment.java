@@ -107,7 +107,6 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
         updateLanguage(storedLanguage);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.settings));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         simpleArcDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -125,7 +124,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
             etSelectLanguage.setText("Chinese");
         } else if (storedLanguage.equals("en")) {
             etSelectLanguage.setText("English");
-        } else if (storedLanguage.equals("fr-rFR")) {
+        } else if (storedLanguage.equals("fr")) {
             etSelectLanguage.setText("French");
         } else if (storedLanguage.equals("hi")) {
             etSelectLanguage.setText("Hindi");
@@ -176,7 +175,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                     rbChinese.setChecked(true);
                 } else if (storedLanguage.equals("en")) {
                     rbEnglish.setChecked(true);
-                } else if (storedLanguage.equals("fr-rFR")) {
+                } else if (storedLanguage.equals("fr")) {
                     rbFrench.setChecked(true);
                 } else if (storedLanguage.equals("hi")) {
                     rbHindi.setChecked(true);
@@ -197,7 +196,7 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                             etSelectLanguage.setText("English");
                             dialog.dismiss();
                         } else if (rbFrench.isChecked()) {
-                            storedLanguage = "fr-rFR";
+                            storedLanguage = "fr";
                             etSelectLanguage.setText("French");
                             dialog.dismiss();
                         } else if (rbHindi.isChecked()) {
@@ -292,9 +291,9 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
                 } else if (storedLanguage.equals("en")) {
                     sessionManager.store_language("en");
                     updateLanguage("en");
-                } else if (storedLanguage.equals("fr-rFR")) {
-                    sessionManager.store_language("fr-rFR");
-                    updateLanguage("fr-rFR");
+                } else if (storedLanguage.equals("fr")) {
+                    sessionManager.store_language("fr");
+                    updateLanguage("fr");
                 } else if (storedLanguage.equals("hi")) {
                     sessionManager.store_language("hi");
                     updateLanguage("hi");

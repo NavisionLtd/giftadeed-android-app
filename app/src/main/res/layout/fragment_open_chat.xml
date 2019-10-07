@@ -48,7 +48,8 @@
             android:gravity="center"
             android:text="SEND"
             android:textColor="@color/colorPrimary"
-            android:textSize="14dp" />
+            android:textSize="14dp"
+            android:focusable="true" />
     </LinearLayout>
 
     <View

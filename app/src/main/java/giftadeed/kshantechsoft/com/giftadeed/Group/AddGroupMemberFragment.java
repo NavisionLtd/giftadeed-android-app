@@ -102,7 +102,6 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.add_member));
         TaggedneedsActivity.fragname = AddGroupMemberFragment.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -138,7 +137,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                     editsearch.setFocusable(true);
                     editsearch.setError(getResources().getString(R.string.valid_email));
                 } else {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         searchMember(strUser_ID, editsearch.getText().toString(), receivedGid);
@@ -155,7 +154,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         btnAddSearchedMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     addMemberInGroup(strUser_ID, searchedMemberId, receivedGid);

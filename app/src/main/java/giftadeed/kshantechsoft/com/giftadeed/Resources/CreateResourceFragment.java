@@ -3,7 +3,6 @@ package giftadeed.kshantechsoft.com.giftadeed.Resources;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -58,8 +57,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
-import br.com.simplepass.loading_button_lib.interfaces.OnAnimationEndListener;
 import giftadeed.kshantechsoft.com.giftadeed.Collaboration.CollabResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
@@ -143,7 +140,6 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         rootview = inflater.inflate(R.layout.create_resource_layout, container, false);
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.fragname = CreateResourceFragment.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         simpleArcDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -238,7 +234,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         selectFromGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(Validation.isOnline(getActivity()))) {
+                if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
                     getOwnedGroupList(strUser_ID);
@@ -274,7 +270,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                             // only custom  category selected
                             showSubCatDialog();
                         } else {
-                            if (!(Validation.isOnline(getActivity()))) {
+                            if (!(Validation.isNetworkAvailable(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
                                 getSubCategory("no");
@@ -290,7 +286,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                             // only custom  category selected
                             showSubCatDialog();
                         } else {
-                            if (!(Validation.isOnline(getActivity()))) {
+                            if (!(Validation.isNetworkAvailable(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
                                 getSubCategory("no");
@@ -314,7 +310,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 if (groupArrayList.size() > 0) {
                     showAudienceDialog();
                 } else {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         getUserGroups(strUser_ID);
@@ -350,7 +346,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     formattedSubTypeIds = subtypePrefId.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                     formattedCustomTypeIds = customTypePrefId.toString().replaceAll("\\[", "").replaceAll("\\]", "");
                     //call api
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
 //                        btnCreateResource.startAnimation();

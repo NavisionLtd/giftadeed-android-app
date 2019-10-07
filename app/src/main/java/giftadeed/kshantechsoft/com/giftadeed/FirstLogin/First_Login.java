@@ -745,7 +745,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
             ToastPopUp.displayToast(First_Login.this, getResources().getString(R.string.select_city));
         } else if (edfirstlogin_email.getVisibility() == View.VISIBLE) {
             strEmail = edfirstlogin_email.getText().toString();
-            if (!(Validation.isOnline(First_Login.this))) {
+            if (!(Validation.isNetworkAvailable(First_Login.this))) {
                 ToastPopUp.show(First_Login.this, getString(R.string.network_validation));
             } else if (strEmail.length() < 1) {
                 ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
@@ -881,7 +881,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         if (chkemail == 0) {
 
                             //checkmobileno(1);
-                            if (!(Validation.isOnline(First_Login.this))) {
+                            if (!(Validation.isNetworkAvailable(First_Login.this))) {
                                 mDialog.dismiss();
                                 ToastPopUp.show(First_Login.this, getString(R.string.network_validation));
 

@@ -199,7 +199,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        if (!(Validation.isOnline(EmergencyStageTwo.this))) {
+        if (!(Validation.isNetworkAvailable(EmergencyStageTwo.this))) {
             ToastPopUp.show(EmergencyStageTwo.this, getString(R.string.network_validation));
         } else {
             getTypes();
@@ -222,7 +222,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                 formattedChecked = checkedList.toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s+", "");
                 Log.d("checked_list", "" + formattedChecked);
 
-                if (!(Validation.isOnline(EmergencyStageTwo.this))) {
+                if (!(Validation.isNetworkAvailable(EmergencyStageTwo.this))) {
                     ToastPopUp.show(EmergencyStageTwo.this, getString(R.string.network_validation));
                 } else {
                     if (etCurrentLocation.getText().length() <= 0) {

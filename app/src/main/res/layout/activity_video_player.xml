@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:layout_width="fill_parent"
-
     android:layout_height="fill_parent"
-    android:background="@layout/bg_player_header"
+    android:background="@drawable/bg_player_header"
     android:layout_gravity="center">
 
 

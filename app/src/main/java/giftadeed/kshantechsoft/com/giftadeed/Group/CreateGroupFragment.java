@@ -138,7 +138,6 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
         rootview = inflater.inflate(R.layout.create_group_layout, container, false);
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.fragname = CreateGroupFragment.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -200,7 +199,7 @@ public class CreateGroupFragment extends Fragment implements GoogleApiClient.OnC
                     groupName.setFocusable(true);
                     groupName.setError(getResources().getString(R.string.grp_name_req));
                 } else {
-                    if (!(Validation.isOnline(getActivity()))) {
+                    if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
                         if (callingFrom.equals("create")) {

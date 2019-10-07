@@ -106,8 +106,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     RemoveUserFromClub model_obj;
 
     public static CollabDetailsFragment newInstance(int sectionNumber) {
-        CollabDetailsFragment fragment = new CollabDetailsFragment();
-        return fragment;
+        return new CollabDetailsFragment();
     }
 
     @Override
@@ -123,17 +122,16 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.collab_details_layout, container, false);
         sessionManager = new SessionManager(getActivity());
         HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+        strUser_ID = user.get(SessionManager.USER_ID);
         HashMap<String, String> collab = sessionManager.getSelectedColabDetails();
-        receivedCid = collab.get(sessionManager.COLAB_ID);
-        receivedCname = collab.get(sessionManager.COLAB_NAME);
+        receivedCid = collab.get(SessionManager.COLAB_ID);
+        receivedCname = collab.get(SessionManager.COLAB_NAME);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.collab_details));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -151,7 +149,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         loadNextUserList();
         collabName.setText(receivedCname);
         radius_set = sessionManager.getradius();
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             collabInfo(receivedCid);
@@ -323,7 +321,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                     @Override
                     public void onClick(View v) {
                         // call delete group api
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             deleteCollab(receivedCid);
@@ -357,7 +355,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                     @Override
                     public void onClick(View v) {
 //                         call exit group api
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             exitCollab(receivedCid, strUser_ID);

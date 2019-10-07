@@ -115,7 +115,6 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.member_list));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -148,7 +147,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (!(Validation.isOnline(getActivity()))) {
+                                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                                             swipeRefreshLayout.setRefreshing(false);
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
@@ -250,7 +249,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
 //                                        Toast.makeText(getContext(), "Member removed successfully", Toast.LENGTH_SHORT).show();
 
                                         // call remove member api
-                                        if (!(Validation.isOnline(getActivity()))) {
+                                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             removeMember(strUser_ID, clickedMemberId, receivedGid);
@@ -266,7 +265,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                 });
                                 break;
                             case 1:
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     makeGroupAdmin(strUser_ID, clickedMemberId, receivedGid);
@@ -309,7 +308,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
 //                                        Toast.makeText(getContext(), "Member removed successfully", Toast.LENGTH_SHORT).show();
 
                                         // call remove member api
-                                        if (!(Validation.isOnline(getActivity()))) {
+                                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
                                             removeMember(strUser_ID, clickedMemberId, receivedGid);
@@ -325,7 +324,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                 });
                                 break;
                             case 1:
-                                if (!(Validation.isOnline(getActivity()))) {
+                                if (!(Validation.isNetworkAvailable(getActivity()))) {
                                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                 } else {
                                     dismissAsAdmin(strUser_ID, clickedMemberId, receivedGid);
@@ -377,7 +376,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (groupResponseStatus.getStatus() == 1) {
@@ -471,7 +470,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (groupResponseStatus.getStatus() == 1) {
@@ -539,7 +538,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                         loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             if (groupResponseStatus.getStatus() == 1) {
@@ -686,7 +685,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             swipeRefreshLayout.setRefreshing(false);
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {

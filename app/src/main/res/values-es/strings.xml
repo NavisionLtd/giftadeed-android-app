@@ -421,7 +421,7 @@
     <!-- SendBird -->
     <string name="no_channel">No se ha encontrado ningún canal.</string>
     <string name="action_group_messages">Mensajes grupales</string>
-    <string name="all_app_version">UI de muestra v% 1 $ s / SDK v% 2 $ s</string>
+    <string name="all_app_version">UI de muestra v%1$s / SDK v%2$s</string>
     <string name="select_channel_type">Seleccionar tipo de canal</string>
     <string name="blocked_members_list">Miembros bloqueados</string>
     <string name="GroupMessage_Community">Mensajes</string>
@@ -429,10 +429,10 @@
     <string name="login_user_nickname">Apodo</string>
     <string name="login_connect">Conéctate al chat</string>
     <string name="login_disconnect">Desconectar</string>
-    <string name="open_channel_list_participant_count">% 1 $ d participantes</string>
+    <string name="open_channel_list_participant_count">%1$d participantes</string>
     <string name="create_open_channel">Crear canal abierto</string>
     <string name="participant_list">Participantes</string>
-    <string name="group_channel_list_file_message_text">% 1 $ s ha subido un archivo.</string>
+    <string name="group_channel_list_file_message_text">%1$s ha subido un archivo.</string>
     <string name="create_group_channel">Crear canal grupal</string>
     <string name="members">Miembros</string>
     <string name="invite_member">Invitar a los miembros</string>

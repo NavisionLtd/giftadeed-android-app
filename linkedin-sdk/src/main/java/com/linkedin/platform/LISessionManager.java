@@ -242,7 +242,7 @@ public class LISessionManager {
         private void save() {
             SharedPreferences.Editor edit = getSharedPref().edit();
             edit.putString(SHARED_PREFERENCES_ACCESS_TOKEN, accessToken == null ? null : accessToken.toString());
-            edit.commit();
+            edit.apply();
         }
 
         private void recover() {

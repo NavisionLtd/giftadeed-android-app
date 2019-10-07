@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/text_group_chat_date"
-        app:cardBackgroundColor="@color/cardview_light_background"
+        app:cardBackgroundColor="@color/white"
         app:cardUseCompatPadding="true"
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"

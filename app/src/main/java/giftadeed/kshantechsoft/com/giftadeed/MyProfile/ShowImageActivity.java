@@ -55,7 +55,7 @@ public class ShowImageActivity extends AppCompatActivity {
         //displaying progress dialog while fetching images
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
-        if (!(Validation.isOnline(ShowImageActivity.this))) {
+        if (!(Validation.isNetworkAvailable(ShowImageActivity.this))) {
             ToastPopUp.show(ShowImageActivity.this, getString(R.string.network_validation));
         } else {
             mDatabase = FirebaseDatabase.getInstance().getReference(DATABASE_PATH_UPLOADS);

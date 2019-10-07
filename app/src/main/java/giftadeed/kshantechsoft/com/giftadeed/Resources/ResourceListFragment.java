@@ -107,7 +107,6 @@ public class ResourceListFragment extends Fragment
         sessionManager = new SessionManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_resources));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -132,7 +131,7 @@ public class ResourceListFragment extends Fragment
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (!(Validation.isOnline(getActivity()))) {
+                                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                                             swipeRefreshLayout.setRefreshing(false);
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
@@ -201,7 +200,7 @@ public class ResourceListFragment extends Fragment
 
     @Override
     public void onRefresh() {
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             swipeRefreshLayout.setRefreshing(false);
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {

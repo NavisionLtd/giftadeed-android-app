@@ -30,8 +30,10 @@ public class Validation {
     }
 
     public static boolean isNetworkAvailable(Context context) {
-        NetworkInfo localNetworkInfo = ((ConnectivityManager) context.getSystemService("connectivity")).getActiveNetworkInfo();
-        return (localNetworkInfo != null) && (localNetworkInfo.isConnected());
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public static boolean isOnline(Context context) {

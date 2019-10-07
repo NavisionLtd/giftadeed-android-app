@@ -87,7 +87,6 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.resource_details_layout, container, false);
         sessionManager = new SessionManager(getActivity());
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -109,7 +108,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         strUser_ID = user.get(sessionManager.USER_ID);
         str_resid = this.getArguments().getString("str_resid");
         callingFrom = this.getArguments().getString("callingFrom");
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             getResource_Details();
@@ -412,7 +411,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                         @Override
                         public void onClick(View v) {
                             // call delete resource api
-                            if (!(Validation.isOnline(getActivity()))) {
+                            if (!(Validation.isNetworkAvailable(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
                                 deleteResource();

@@ -58,7 +58,7 @@ public class SOSDetailsActivity extends AppCompatActivity {
 
         mDialog = new SimpleArcDialog(this);
         str_sosid = getIntent().getStringExtra("sos_id");
-        if (!(Validation.isOnline(SOSDetailsActivity.this))) {
+        if (!(Validation.isNetworkAvailable(SOSDetailsActivity.this))) {
             ToastPopUp.show(SOSDetailsActivity.this, getString(R.string.network_validation));
         } else {
             getSOS_Details();

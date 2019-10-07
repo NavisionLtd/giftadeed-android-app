@@ -17,15 +17,14 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
  */
 
 public class CategoryAdapter extends BaseAdapter {
-    ArrayList<Needtype> categories;
-    Context context;
-    private ArrayList<Needtype> arraylist;
+    private ArrayList<Needtype> categories;
+    private Context context;
 
     public CategoryAdapter(ArrayList<Needtype> categories, Context context) {
         this.categories = categories;
         this.context = context;
-        this.arraylist = new ArrayList<Needtype>();
-        this.arraylist.addAll(categories);
+        ArrayList<Needtype> arraylist = new ArrayList<Needtype>();
+        arraylist.addAll(categories);
         notifyDataSetChanged();
     }
 

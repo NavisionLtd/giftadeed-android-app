@@ -159,7 +159,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (!(Validation.isOnline(getActivity()))) {
+                                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                                             swipeRefreshLayout.setRefreshing(false);
                                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                                         } else {
@@ -645,7 +645,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             swipeRefreshLayout.setRefreshing(false);
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {

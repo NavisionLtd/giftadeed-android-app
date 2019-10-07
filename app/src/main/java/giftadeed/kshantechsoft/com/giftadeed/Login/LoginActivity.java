@@ -241,7 +241,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     rbChinese.setChecked(true);
                 } else if (storedLanguage.equals("en")) {
                     rbEnglish.setChecked(true);
-                } else if (storedLanguage.equals("fr-rFR")) {
+                } else if (storedLanguage.equals("fr")) {
                     rbFrench.setChecked(true);
                 } else if (storedLanguage.equals("hi")) {
                     rbHindi.setChecked(true);
@@ -250,6 +250,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 } else if (storedLanguage.equals("es")) {
                     rbSpanish.setChecked(true);
                 }
+
                 rgLanguages.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -262,8 +263,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             updateLanguage("en");
                             dialog.dismiss();
                         } else if (rbFrench.isChecked()) {
-                            sharedPreferences.store_language("fr-rFR");
-                            updateLanguage("fr-rFR");
+                            sharedPreferences.store_language("fr");
+                            updateLanguage("fr");
                             dialog.dismiss();
                         } else if (rbHindi.isChecked()) {
                             sharedPreferences.store_language("hi");
@@ -295,7 +296,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //    edemailaddress.setSelection(edemailaddress.getText().length());   //set cursor at right placee of text
                 //password.setFocusableInTouchMode(false);
-                if (!(Validation.isOnline(LoginActivity.this))) {
+                if (!(Validation.isNetworkAvailable(LoginActivity.this))) {
                     ToastPopUp.displayToast(LoginActivity.this, getResources().getString(R.string.network_validation));
                 } else if (Validation.isStringNullOrBlank(email.getText().toString())) {
 
@@ -326,7 +327,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
 
-                    if (!(Validation.isOnline(LoginActivity.this))) {
+                    if (!(Validation.isNetworkAvailable(LoginActivity.this))) {
                         ToastPopUp.show(LoginActivity.this, getString(R.string.network_validation));
                         email.setText("");
                         email.requestFocus();
@@ -595,7 +596,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         dialogconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!(Validation.isOnline(LoginActivity.this))) {
+                if (!(Validation.isNetworkAvailable(LoginActivity.this))) {
                     ToastPopUp.show(LoginActivity.this, getString(R.string.network_validation));
 
                 }

@@ -140,7 +140,6 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
 
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.grp_deed_title));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -160,7 +159,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
         loadNextUserList();
         groupName.setText(receivedGname);
         radius_set = sessionManager.getradius();
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             get_Tag_data();
@@ -392,7 +391,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                     @Override
                     public void onClick(View v) {
                         // call delete group api
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             deleteGroup(receivedGid, strUser_ID);
@@ -431,7 +430,7 @@ public class GroupDetailsFragment extends Fragment implements GoogleApiClient.On
                     @Override
                     public void onClick(View v) {
 //                         call exit group api
-                        if (!(Validation.isOnline(getActivity()))) {
+                        if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
                             exitGroup(receivedGid, strUser_ID);

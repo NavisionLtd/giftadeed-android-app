@@ -106,7 +106,6 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
         strUser_ID = user.get(sessionManager.USER_ID);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.group_info));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
-        FragmentManager fragManager = myContext.getSupportFragmentManager();
         fragmgr = getFragmentManager();
         mDialog = new SimpleArcDialog(getContext());
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -124,7 +123,7 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
 
         HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
         receivedGid = group.get(sessionManager.GROUP_ID);
-        if (!(Validation.isOnline(getActivity()))) {
+        if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             groupInfo(strUser_ID, receivedGid);

@@ -1,15 +1,7 @@
 package giftadeed.kshantechsoft.com.giftadeed.Bug;
 
-/**
- * Created by admin on 2/12/2016.
- */
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
-
 import java.util.Properties;
-
-import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -18,39 +10,20 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-/**
- * Created by Belal on 10/30/2015.
- */
-
 //Class is extending AsyncTask because this class is going to perform a networking operation
-public class SendMail extends AsyncTask<Void,Void,Void> {
-
-    //Declaring Variables
-    private Context context;
-    private Session session;
-
+class SendMail extends AsyncTask<Void, Void, Void> {
     //Information to send email
-    private String email = "";
-    private String subject = "";
-    private String message = "";
-
-    //Progressdialog to show while sending email
-    private ProgressDialog progressDialog;
+    private final String email;
+    private final String subject;
+    private final String message;
 
     //Class Constructor
-    public SendMail(String email, String subject, String message){
+    SendMail(String email, String subject, String message) {
         //Initializing variables
-      //  this.context = context;
+        //  this.context = context;
         this.email = email;
         this.subject = subject;
         this.message = message;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        //Showing progress dialog while sending email
-     //   progressDialog = ProgressDialog.show(context,"Sending message","Please wait...",false,false);
     }
 
     @Override
@@ -59,7 +32,7 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
         //Dismissing the progress dialog
 //        progressDialog.dismiss();
         //Showing a success message
-      //  Toast.makeText(context,"Message Sent",Toast.LENGTH_LONG).show();
+        //  Toast.makeText(context,"Message Sent",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -76,7 +49,8 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
         props.put("mail.smtp.port", "465");
         props.put("mail.smtp.starttls.enable", "true");
         //Creating a new session
-       session = Session.getDefaultInstance(props,
+        //Authenticating the password
+        Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     //Authenticating the password
                     protected PasswordAuthentication getPasswordAuthentication() {
@@ -97,7 +71,7 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
             mm.setFrom(new InternetAddress(Config.EMAIL));
             //Adding receiver
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-          //  mm.addRecipient(Message.RecipientType.BCC,new InternetAddress("darshan@kshantechsoft.com"));
+            //  mm.addRecipient(Message.RecipientType.BCC,new InternetAddress("darshan@kshantechsoft.com"));
             //Adding subject
             mm.setSubject(subject);
             //Adding message
@@ -107,7 +81,7 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
             Transport.send(mm);
 
         } catch (MessagingException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
         return null;
     }

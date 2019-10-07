@@ -2,8 +2,10 @@ package giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,15 +21,12 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.openchannel.OpenChanne
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 
 public class ChoiceActivity extends AppCompatActivity {
-
-    private Toolbar mToolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choice);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(mToolbar);
 
         findViewById(R.id.linear_layout_group_channels).setOnClickListener(new View.OnClickListener() {
@@ -55,9 +54,9 @@ public class ChoiceActivity extends AppCompatActivity {
         });
 
         // Displays the SDK version in a TextView
-        String sdkVersion = String.format(getResources().getString(R.string.all_app_version),
+        /*String sdkVersion = String.format(getResources().getString(R.string.all_app_version),
                 GiftAdeed.VERSION, SendBird.getSDKVersion());
-        ((TextView) findViewById(R.id.text_main_versions)).setText(sdkVersion);
+        ((TextView) findViewById(R.id.text_main_versions)).setText(sdkVersion);*/
     }
 
     /**
@@ -71,10 +70,7 @@ public class ChoiceActivity extends AppCompatActivity {
                 if (e != null) {
                     // Error!
                     e.printStackTrace();
-
                     // Don't return because we still need to disconnect.
-                } else {
-//                    Toast.makeText(MainActivity.this, "All push tokens unregistered.", Toast.LENGTH_SHORT).show();
                 }
 
                 ConnectionManager.logout(new SendBird.DisconnectHandler() {
@@ -97,11 +93,10 @@ public class ChoiceActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_main:
-                Intent intent = new Intent(ChoiceActivity.this, SendBirdSettingsActivity.class);
-                startActivity(intent);
-                return true;
+        if (item.getItemId() == R.id.menu_main) {
+            Intent intent = new Intent(ChoiceActivity.this, SendBirdSettingsActivity.class);
+            startActivity(intent);
+            return true;
         }
         return false;
     }

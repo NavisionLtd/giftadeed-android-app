@@ -285,7 +285,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (!(Validation.isOnline(SignUp.this))) {
+                    if (!(Validation.isNetworkAvailable(SignUp.this))) {
                         ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
 
                     }
@@ -974,7 +974,7 @@ public class SignUp extends AppCompatActivity {
                         if (chkemail == 0) {
 
                             //checkmobileno(1);
-                            if (!(Validation.isOnline(SignUp.this))) {
+                            if (!(Validation.isNetworkAvailable(SignUp.this))) {
                                 mDialog.dismiss();
                                 ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
 
@@ -1055,7 +1055,7 @@ public class SignUp extends AppCompatActivity {
 
             ToastPopUp.show(context, getString(R.string.min_length));
             edFname.setText("");
-        } else if (!(Validation.isOnline(SignUp.this))) {
+        } else if (!(Validation.isNetworkAvailable(SignUp.this))) {
             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
         } else if (stremailaddress.length() < 1) {
             ToastPopUp.show(context, getString(R.string.Enter_emailaddress));
@@ -1066,7 +1066,7 @@ public class SignUp extends AppCompatActivity {
             edEmail.requestFocus();
             edEmail.selectAll();
         }
-        else if (!(Validation.isOnline(SignUp.this))) {
+        else if (!(Validation.isNetworkAvailable(SignUp.this))) {
             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
 
         } else if (strCountry.length() < 1) {
@@ -1165,7 +1165,7 @@ public class SignUp extends AppCompatActivity {
 
                     } else {
 
-                        if (!(Validation.isOnline(SignUp.this))) {
+                        if (!(Validation.isNetworkAvailable(SignUp.this))) {
                             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
 
                             mDialog.dismiss();
