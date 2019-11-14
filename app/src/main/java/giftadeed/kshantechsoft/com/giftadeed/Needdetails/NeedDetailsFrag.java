@@ -114,7 +114,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
     int str_isreported, is_endorse, requiredDistEndorse;
     String str_address, str_tagid, str_geopoint, str_taggedPhotoPath, str_description, str_catType, str_iconPath, str_characterPath, str_fname, str_lname,
             str_privacy, str_userID, str_needName, str_totalTaggedCreditPoints, str_totalFulfilledCreditPoints, str_title, str_date,
-            str_subtypes, str_permanent, str_distance, tab, str_container, str_Views, str_endorse, str_validity, str_mappingId, strdeedowner_id, strGroup_id, strGroup_name,
+            str_subtypes, str_permanent, str_distance, tab, str_container, str_Views, str_endorse, str_validity, str_mappingId, strdeedowner_id, strGroup_id="", strGroup_name,
             strLastEndorseTime;
     static FragmentManager fragmgr;
     LinearLayout layout_editdeed, layout_endorsedeed, layout_viewdeed, detailspage_containerlayout, comments_layout;

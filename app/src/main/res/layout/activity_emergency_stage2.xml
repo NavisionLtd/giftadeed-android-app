@@ -25,7 +25,7 @@
             android:src="@drawable/first_login" />
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -43,12 +43,6 @@
                 android:text="@string/sos_heading"
                 android:textColor="@color/grey"
                 android:textSize="16dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -159,7 +153,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
-            </LinearLayout>
+
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

@@ -8,10 +8,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,19 +44,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        GPSTracker gps=new GPSTracker(MainActivity.this);
-        if (!gps.isGPSEnabled)
-        {
-           gps.showSettingsAlert();
+        GPSTracker gps = new GPSTracker(MainActivity.this);
+        if (!gps.isGPSEnabled) {
+            gps.showSettingsAlert();
             //showSettingsAlert();
         }
-        if(checkPermission()){
-
-           // Toast.makeText(MainActivity.this, "All Permissions Granted Successfully", Toast.LENGTH_LONG).show();
-
-        }
-        else {
-
+        if (checkPermission()) {
+            // Toast.makeText(MainActivity.this, "All Permissions Granted Successfully", Toast.LENGTH_LONG).show();
+        } else {
             requestPermission();
         }
 //--------------------------------clicking charety button-------------------------------------------
@@ -72,16 +69,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 messagesubscription = "Subscription";
-                Intent subscribe=new Intent(getApplicationContext(), Subscription_Activity.class);
+                Intent subscribe = new Intent(getApplicationContext(), Subscription_Activity.class);
                 startActivity(subscribe);
-               // Toast.makeText(MainActivity.this, "Coming soon.........", Toast.LENGTH_LONG).show();
+                // Toast.makeText(MainActivity.this, "Coming soon.........", Toast.LENGTH_LONG).show();
                 /*Intent log = new Intent(getApplicationContext(), SendBirdLoginActivity.class);
                 log.putExtra("message", messagesubscription);
                 startActivity(log);*/
             }
         });
     }
-
 
 
     //-----------------------initializing the UI elements-----------------------
@@ -111,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater li = LayoutInflater.from(this);
         View confirmDialog = li.inflate(R.layout.giftneeddialog, null);
         dialogconfirm = (Button) confirmDialog.findViewById(R.id.btn_submit_mobileno);
-        dialogcancel= (Button) confirmDialog.findViewById(R.id.btn_Cancel_mobileno);
+        dialogcancel = (Button) confirmDialog.findViewById(R.id.btn_Cancel_mobileno);
         dialogtext = (TextView) confirmDialog.findViewById(R.id.txtgiftneeddialog);
 
         dialogtext.setText(getResources().getString(R.string.exit_msg));
@@ -141,7 +137,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-//---------------------request permissions method---------------------------------------------------
+
+    //---------------------request permissions method---------------------------------------------------
     private void requestPermission() {
         ActivityCompat.requestPermissions(MainActivity.this, new String[]
                 {
@@ -162,10 +159,9 @@ public class MainActivity extends AppCompatActivity {
                     boolean WriteExternalStoragePermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                     boolean InternetPermission = grantResults[3] == PackageManager.PERMISSION_GRANTED;
                     if (CameraPermission && ReadExternalStoragePermission && WriteExternalStoragePermission && InternetPermission) {
-                      //  Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                       // Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_LONG).show();
+                    } else {
+                        // Toast.makeText(MainActivity.this,"Permission Denied",Toast.LENGTH_LONG).show();
                     }
                 }
                 break;
@@ -186,8 +182,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    public void showSettingsAlert(){
+    public void showSettingsAlert() {
         AlertDialog.Builder alertDialog;
         alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.AppCompatAlertDialogStyle);
         // Setting Dialog Title
@@ -201,15 +196,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 
-                if(!provider.contains("gps")){ //if gps is disabled
+                if (!provider.contains("gps")) { //if gps is disabled
                     final Intent poke = new Intent();
                     poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
                     poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
                     poke.setData(Uri.parse("3"));
                     sendBroadcast(poke);
                 }
-
-
 
 
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -221,17 +214,13 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
 
 
-
-
     }
 
 
-
-
-    private void turnGPSOn(){
+    private void turnGPSOn() {
         String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 
-        if(!provider.contains("gps")){ //if gps is disabled
+        if (!provider.contains("gps")) { //if gps is disabled
             final Intent poke = new Intent();
             poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
             poke.addCategory(Intent.CATEGORY_ALTERNATIVE);

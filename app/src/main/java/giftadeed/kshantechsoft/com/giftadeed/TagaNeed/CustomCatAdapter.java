@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -17,62 +19,42 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.SignupPOJO;
  * Created by I-Sys on 21-Jan-17.
  */
 
-public class CustomCatAdapter extends BaseAdapter {
-    ArrayList<CustomNeedtype> customCategories;
-    Context context;
-    private ArrayList<CustomNeedtype> arraylist;
+public class CustomCatAdapter extends RecyclerView.Adapter<CustomCatAdapter.ViewHolder> {
+    ArrayList<CustomNeedtype> list = new ArrayList<>();
 
-    public CustomCatAdapter(ArrayList<CustomNeedtype> customCategories, Context context) {
-        this.customCategories = customCategories;
-        this.context = context;
-        this.arraylist = new ArrayList<CustomNeedtype>();
-        this.arraylist.addAll(customCategories);
-        notifyDataSetChanged();
+    public CustomCatAdapter(ArrayList<CustomNeedtype> categoryPOJOS) {
+        this.list = categoryPOJOS;
     }
 
     @Override
-    public int getCount() {
-        return customCategories.size();
+    public CustomCatAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
+        return new CustomCatAdapter.ViewHolder(view);
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public void onBindViewHolder(final CustomCatAdapter.ViewHolder holder, final int position) {
+        holder.bindData(list.get(position));
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view=inflater.inflate(R.layout.category_item,null);
-        TextView storename= (TextView) view.findViewById(R.id.store_name);
-        notifyDataSetChanged();
-        storename.setText(customCategories.get(i).getNeedName());
-
-        return view;
-    }
-
-
-    public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        customCategories.clear();
-        if (charText.length() == 0) {
-            customCategories.addAll(arraylist);
+    public int getItemCount() {
+        if (list == null) {
+            return 0;
         }
-        else
-        {
-            for (CustomNeedtype wp : arraylist)
-            {
-                if (wp.getNeedName().toLowerCase(Locale.getDefault()).contains(charText))
-                {
-                    customCategories.add(wp);
-                }
-            }
+        return list.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvCatName;
+
+        public ViewHolder(View view) {
+            super(view);
+            tvCatName = (TextView) itemView.findViewById(R.id.store_name);
         }
-        notifyDataSetChanged();
+
+        public void bindData(CustomNeedtype customNeedtype) {
+            tvCatName.setText(customNeedtype.getNeedName());
+        }
     }
 }

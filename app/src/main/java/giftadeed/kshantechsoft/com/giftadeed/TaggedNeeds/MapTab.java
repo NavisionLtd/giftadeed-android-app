@@ -111,7 +111,8 @@ import retrofit.Retrofit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, Animation.AnimationListener {
+public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, Animation.AnimationListener {
     ArrayList<TaggedDeedsPojo> taggeddeeds = new ArrayList<TaggedDeedsPojo>();
     FragmentActivity myContext;
     List<Taggedlist> taggedlists = new ArrayList<>();
@@ -231,7 +232,6 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
-
         if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
@@ -246,6 +246,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         longitude_gps = new GPSTracker(myContext).getLongitude();
         LatLng latLng = new LatLng(latitude_gps, longitude_gps);
         googleMap.getUiSettings().setCompassEnabled(true);
+
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions

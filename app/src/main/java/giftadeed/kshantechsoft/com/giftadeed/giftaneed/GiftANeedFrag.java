@@ -634,7 +634,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             if (rotatedBitmap == null) {
-                fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);
+                fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName, strNoOfPeople);
             } else {
                 sendImageToServer();
             }
@@ -666,7 +666,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
-                            fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName);
+                            fullfilTag(strUser_ID, str_tagid, strImagenamereturned, strAboutgift, ispartial, str_needName, strNoOfPeople);
                         }
                     }
                 },
@@ -850,22 +850,22 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     }
 
     //-----------------------------------sending data to server-------------------------------------
-    public void fullfilTag(String strUser_id, String strTag_ID, String strfulfilphotopath, String strDescr, String ispartial, String need) {
+    public void fullfilTag(String strUser_id, String strTag_ID, String strfulfilphotopath, String strDescr, String ispartial, String need, String no_of_people) {
         OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(1, TimeUnit.HOURS);
-        client.setReadTimeout(1, TimeUnit.HOURS);
-        client.setWriteTimeout(1, TimeUnit.HOURS);
+        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        client.setReadTimeout(10, TimeUnit.SECONDS);
+        client.setWriteTimeout(10, TimeUnit.SECONDS);
         simpleArcDialog = new SimpleArcDialog(getContext());
         ArcConfiguration configuration = new ArcConfiguration(getContext());
         configuration.setText("Fulfilling deed...");
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL).client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GiftaNeedInterface service = retrofit.create(GiftaNeedInterface.class);
-        Call<MobileModel> call = service.sendData(strUser_id, strTag_ID, strfulfilphotopath, strDescr, ispartial, need, strNoOfPeople);
-        Log.d("fulfill_input", strNoOfPeople);
+        Call<MobileModel> call = service.sendData(strUser_id, strTag_ID, strfulfilphotopath, strDescr, ispartial, need, no_of_people);
+        Log.d("fulfill_input", no_of_people);
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
