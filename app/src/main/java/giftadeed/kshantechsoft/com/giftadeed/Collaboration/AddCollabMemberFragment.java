@@ -314,13 +314,13 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
 
                         sessionManager.set_notification_status("ON");
 
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");

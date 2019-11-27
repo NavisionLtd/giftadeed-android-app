@@ -331,12 +331,12 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
                                 sharedPreferences.createUserCredentialSession(null, null, null);
                                 LoginManager.getInstance().logOut();
                                 Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                        new ResultCallback<Status>() {
-                                            @Override
-                                            public void onResult(Status status) {
-                                                //updateUI(false);
-                                            }
-                                        });
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });
 
                                 sharedPreferences.set_notification_status("OFF");
                                 Intent loginintent = new Intent(getActivity(), SendBirdLoginActivity.class);

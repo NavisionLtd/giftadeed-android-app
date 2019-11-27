@@ -3,6 +3,7 @@ package giftadeed.kshantechsoft.com.giftadeed.Resources;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -37,12 +38,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -86,6 +85,7 @@ import retrofit.Retrofit;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class CreateResourceFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     private ArrayList<GroupPOJO> groupArrayList = new ArrayList<>();
@@ -454,13 +454,13 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -1057,8 +1057,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                 str_Geopoints = latitude_source + "," + longitude_source;
                 Log.d("Geopoints after change", str_Geopoints);
                 //  Toast.makeText(getApplicationContext(), "select lat"+strLat, Toast.LENGTH_LONG).show();
-               /* Location src_loc=new Location(String.valueOf(place.getLatLng()));
-                Toast.makeText(getApplicationContext(), "select lat "+src_loc.getLatitude(), Toast.LENGTH_LONG).show();*/
+//                Location src_loc = new Location(String.valueOf(place.getLatLng()));
+//                Toast.makeText(getApplicationContext(), "select lat " + src_loc.getLatitude(), Toast.LENGTH_LONG).show();
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(myContext,
                         data);
@@ -1145,13 +1145,13 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -1342,13 +1342,13 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -1417,13 +1417,13 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);

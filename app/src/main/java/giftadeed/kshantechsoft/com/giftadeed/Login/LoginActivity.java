@@ -182,13 +182,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         //mGoogleApiClient.getConnectionResult(this)
         if (mGoogleApiClient.isConnected()) {
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status status) {
-                            //updateUI(false);
-                        }
-                    });
+            /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });*/
         }
 
         mDialog = new SimpleArcDialog(this);

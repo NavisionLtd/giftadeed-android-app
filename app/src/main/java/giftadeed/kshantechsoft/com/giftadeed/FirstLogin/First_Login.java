@@ -818,13 +818,13 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
         LoginManager.getInstance().logOut();
 
 
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        //updateUI(false);
-                    }
-                });
+        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });*/
         Intent in = new Intent(First_Login.this, LoginActivity.class);
         in.putExtra("message", message);
         startActivity(in);

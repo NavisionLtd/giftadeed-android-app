@@ -6,8 +6,8 @@ android {
         applicationId "giftadeed.kshantechsoft.com.giftadeed"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 42
-        versionName "4.3"
+        versionCode 44
+        versionName "4.5"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -69,7 +69,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:11.6.0'
     implementation 'com.google.android.gms:play-services-maps:11.6.0'
     implementation 'com.google.android.gms:play-services-location:11.6.0'
-    implementation 'com.google.android.gms:play-services-places:11.6.0'
+    implementation 'com.google.android.gms:play-services-places:11.6.0' // old places api
 
     //firebase libraries
     implementation 'com.google.firebase:firebase-messaging:11.6.0'

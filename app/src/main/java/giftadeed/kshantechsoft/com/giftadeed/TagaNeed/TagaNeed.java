@@ -82,13 +82,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
-import com.leo.simplearcloader.SimpleArcLoader;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 
@@ -100,7 +98,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -114,7 +111,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-import java.util.function.ToDoubleBiFunction;
 
 import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
@@ -128,13 +124,11 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.MobileModel;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.FileUtil;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
-import id.zelory.compressor.Compressor;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -689,13 +683,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");
@@ -1641,17 +1635,17 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
     //---------------------sending tag data to server---------------------
     public void sendaTag(String user_id, String NeedMapping_ID, String geopoints, String Imagename, String title, String description, String locat, String container, String validity, String paddress, String subTypePref, String checkedOtherOrg, String checkedIndi, String userOrgs, String from_grp_id) {
-        OkHttpClient client = new OkHttpClient();
+        /*OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(10, TimeUnit.SECONDS);
         client.setReadTimeout(10, TimeUnit.SECONDS);
-        client.setWriteTimeout(10, TimeUnit.SECONDS);
+        client.setWriteTimeout(10, TimeUnit.SECONDS);*/
         simpleArcDialog = new SimpleArcDialog(getContext());
         ArcConfiguration configuration = new ArcConfiguration(getContext());
         configuration.setText("Tagging deed...");
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL).client(client)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)  //.client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         TagAneedInterface service = retrofit.create(TagAneedInterface.class);
         Log.d("tag_input", user_id + ":" + NeedMapping_ID + ":" + geopoints + ":" + Imagename + ":" + title + ":" + description + ":" + locat + ":" + container + ":" + validity + ":" + paddress + ":" + subTypePref + ":" + checkedOtherOrg + ":" + checkedIndi + ":" + userOrgs + ":" + from_grp_id);
@@ -1677,13 +1671,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
@@ -1774,13 +1768,13 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);

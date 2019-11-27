@@ -851,17 +851,17 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
 
     //-----------------------------------sending data to server-------------------------------------
     public void fullfilTag(String strUser_id, String strTag_ID, String strfulfilphotopath, String strDescr, String ispartial, String need, String no_of_people) {
-        OkHttpClient client = new OkHttpClient();
+        /*OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(10, TimeUnit.SECONDS);
         client.setReadTimeout(10, TimeUnit.SECONDS);
-        client.setWriteTimeout(10, TimeUnit.SECONDS);
+        client.setWriteTimeout(10, TimeUnit.SECONDS);*/
         simpleArcDialog = new SimpleArcDialog(getContext());
         ArcConfiguration configuration = new ArcConfiguration(getContext());
         configuration.setText("Fulfilling deed...");
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL).client(client)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)    //.client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GiftaNeedInterface service = retrofit.create(GiftaNeedInterface.class);
         Call<MobileModel> call = service.sendData(strUser_id, strTag_ID, strfulfilphotopath, strDescr, ispartial, need, no_of_people);
@@ -883,13 +883,13 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sessionManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
                         sessionManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");

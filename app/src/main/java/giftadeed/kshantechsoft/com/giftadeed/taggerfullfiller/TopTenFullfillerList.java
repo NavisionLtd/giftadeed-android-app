@@ -182,13 +182,13 @@ public class TopTenFullfillerList extends Fragment implements GoogleApiClient.On
                         LoginManager.getInstance().logOut();
 
 
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         sessionManager.set_notification_status("ON");
 

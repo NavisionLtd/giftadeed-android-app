@@ -354,13 +354,13 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 public void onClick(View v) {
                     LoginManager.getInstance().logOut();
                     if (mGoogleApiClient.isConnected()) {
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
                     }
                     sharedPreferences.createUserCredentialSession(null, null, null);
                     DisconnectSendbirdCall();
@@ -641,13 +641,13 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
                         sharedPreferences.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
                         sharedPreferences.set_notification_status("ON");
                         Intent loginintent = new Intent(getApplicationContext(), LoginActivity.class);
                         loginintent.putExtra("message", "Charity");

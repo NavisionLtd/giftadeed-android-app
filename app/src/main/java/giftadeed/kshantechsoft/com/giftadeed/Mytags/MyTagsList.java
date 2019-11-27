@@ -115,7 +115,7 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
         // mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         try {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+//                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
                     .addApi(Auth.GOOGLE_SIGN_IN_API)
                     .build();
         } catch (Exception e) {
@@ -187,16 +187,6 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
                                         //updateUI(false);
                                     }
                                 });*/
-                        try {
-                            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-                                @Override
-                                public void onResult(@NonNull Status status) {
-
-                                }
-                            });
-                        } catch (Exception e) {
-
-                        }
                         sessionManager.createUserCredentialSession(null, null, null);
 
                         sessionManager.set_notification_status("ON");

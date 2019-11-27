@@ -193,13 +193,13 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
                         LoginManager.getInstance().logOut();
 
 
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
                                     public void onResult(Status status) {
                                         //updateUI(false);
                                     }
-                                });
+                                });*/
 
                         sessionManager.set_notification_status("ON");
 

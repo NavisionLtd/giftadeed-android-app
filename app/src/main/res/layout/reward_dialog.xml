@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D9000000"
@@ -28,7 +29,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
-                android:src="@drawable/ic_dialog_close_light" />
+                android:src="@drawable/delete" />
 
             <LinearLayout
                 android:id="@+id/reward_image_layout"

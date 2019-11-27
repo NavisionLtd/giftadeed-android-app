@@ -13,10 +13,8 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
 
-import giftadeed.kshantechsoft.com.giftadeed.R;
 
 import static com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE;
-import static com.google.firebase.crash.FirebaseCrash.log;
 
 public class AppUpdateActivity extends AppCompatActivity {
     AppUpdateManager appUpdateManager;
@@ -57,9 +55,10 @@ public class AppUpdateActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MY_REQUEST_CODE) {
             if (resultCode != RESULT_OK) {
-                log("Update flow failed! Result code: " + resultCode);
+                Log.d("Update Result code: " , ""+ resultCode);
                 // If the update is cancelled or fails,
                 // you can request to start the update again.
             }
