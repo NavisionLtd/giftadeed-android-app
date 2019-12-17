@@ -54,8 +54,8 @@ public class Help extends Fragment {
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
         txtAgreementDetails = (WebView) rootview.findViewById(R.id.txtfaq);
-        txtAgreementDetails.loadUrl("https://giftadeed.com/gad3/GAD-mobile_App-html/FAQ.html");
-
+//        txtAgreementDetails.loadUrl("https://giftadeed.com/gad3/GAD-mobile_App-html/FAQ.html");
+        txtAgreementDetails.loadUrl("https://giftadeed.com/pages/FAQ.html");
         WebSettings settings = txtAgreementDetails.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);

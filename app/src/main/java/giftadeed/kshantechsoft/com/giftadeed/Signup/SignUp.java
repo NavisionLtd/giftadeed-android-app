@@ -83,7 +83,7 @@ public class SignUp extends AppCompatActivity {
     String contryid = null;
     String stateid = null;
     String cityid = null;
-    String stremailaddress, strMobileno, strFirstMerchantName, strLastName, strAddress, stredgender, strgender, strPassword, strConfirmpassword, strCountry, strState, strCity;
+    private String stremailaddress, strMobileno, strFirstName, strLastName, strAddress, stredgender, strgender, strPassword, strConfirmpassword, strCountry, strState, strCity;
     String Charity, Subscription, message, strDeviceid;
     CountryAdapter ctryadptr;
     StateAdapter stateadptr;
@@ -132,9 +132,6 @@ public class SignUp extends AppCompatActivity {
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 } else if (!(edFname.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                } else if (!(edFname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                    edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    ToastPopUp.show(context, getString(R.string.first_character_not_space));
                 }
             }
 
@@ -149,34 +146,26 @@ public class SignUp extends AppCompatActivity {
         edFname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                strFirstMerchantName = edFname.getText().toString();
+                strFirstName = edFname.getText().toString().trim();
+
                 if (!hasFocus) {
                     if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
                         ToastPopUp.show(context, getString(R.string.Enter_FirstName));
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    } else if (!(strFirstMerchantName.matches("^[a-zA-Z.'_\\s]*$"))) {
+                    } else if (!(strFirstName.matches("^[a-zA-Z.'_\\s]*$"))) {
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         ToastPopUp.show(SignUp.this, getString(R.string.validation_first_name_special_characters_merchant) + " in first name");
-                        edFname.setText("");
-                    } else if (!(edFname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
+                    } else if (!(strFirstName.matches("\\w*"))) {
+//                        edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                        ToastPopUp.show(context, getString(R.string.spaces_not_allowed));
+                        strFirstName = strFirstName.replaceAll("\\s{2,}", " ");
+                    } else if ((strFirstName.length() < 3) || (strFirstName.length() > 15)) {
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                        ToastPopUp.show(context, getString(R.string.first_character_not_space));
-                        edFname.setText("");
-                    } else if (!(edFname.getText().toString().matches("\\w*"))) {
-                        edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                        ToastPopUp.show(context, getString(R.string.spaces_not_allowed));
-                        edFname.setText("");
-                    } else if ((edFname.getText().toString().length() < 3) || (edFname.getText().toString().length() > 15)) {
-                        edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                         ToastPopUp.show(context, getString(R.string.min_length));
-                        edFname.setText("");
                     } else {
 
                     }
-
+                    edFname.setText(strFirstName);
                 }
             }
         });
@@ -191,18 +180,10 @@ public class SignUp extends AppCompatActivity {
                 //     edMerchantName.setSelection(edMerchantName.getText().length());   //set cursor at right placee of text
 
                 if (Validation.isStringNullOrBlank(edLname.getText().toString())) {
-
-
                     edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                 } else if (!(edLname.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
                     edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     ToastPopUp.show(SignUp.this, getString(R.string.validation_first_name_special_characters_merchant));
-
-                } else if (!(edLname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                    edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                    ToastPopUp.show(context, getString(R.string.first_character_not_space));
                 }
 
             }
@@ -210,9 +191,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (edLname.getText().length() > 19) {
-
                     ToastPopUp.show(SignUp.this, getResources().getString(R.string.length_error_2));
-
                 }
             }
         });
@@ -220,32 +199,24 @@ public class SignUp extends AppCompatActivity {
         edLname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                strLastName = edLname.getText().toString();
+                strLastName = edLname.getText().toString().trim();
 
                 if (!hasFocus) {
                     if (strLastName.length() > 0) {
                         if (!(strLastName.matches("^[a-zA-Z.'_\\s]*$"))) {
                             edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                             ToastPopUp.show(SignUp.this, getString(R.string.validation_last_name_special_characters_merchant));
-                            edLname.setText("");
-                        } else if (!(edLname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                            edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                            ToastPopUp.show(context, getString(R.string.first_character_not_space));
-                            edLname.setText("");
                         } else if (!(edLname.getText().toString().matches("\\w*"))) {
-                            edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                            ToastPopUp.show(context, getString(R.string.spaces_not_allowed));
-                            edLname.setText("");
+//                            edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                            ToastPopUp.show(context, getString(R.string.spaces_not_allowed));
+                            strLastName = strLastName.replaceAll("\\s{2,}", " ");
                         } else if ((edLname.getText().toString().length() < 1) || (edLname.getText().toString().length() > 20)) {
                             edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                             ToastPopUp.show(context, getString(R.string.min_length));
-                            edLname.setText("");
                         } else {
 
                         }
+                        edLname.setText(strLastName);
                     }
                 }
             }
@@ -261,9 +232,6 @@ public class SignUp extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //    edemailaddress.setSelection(edemailaddress.getText().length());   //set cursor at right placee of text
                 if (Validation.isStringNullOrBlank(edEmail.getText().toString())) {
-                    edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                } else if (!(edEmail.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                    ToastPopUp.show(context, getString(R.string.first_character_not_space));
                     edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edEmail.getText().toString().trim()).matches()) {
                     edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -287,15 +255,13 @@ public class SignUp extends AppCompatActivity {
                 if (!hasFocus) {
                     if (!(Validation.isNetworkAvailable(SignUp.this))) {
                         ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
-
                     }
                     if (!Validation.isStringNullOrBlank(edEmail.getText().toString())) {
                         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edEmail.getText().toString().trim()).matches()) {
                             ToastPopUp.show(context, getString(R.string.Enter_validemailaddress));
                             edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                             edEmail.selectAll();
-                        }
-                        else if (!Validation.isStringNullOrBlank(edEmail.getText().toString())) {
+                        } else if (!Validation.isStringNullOrBlank(edEmail.getText().toString())) {
                             checkemail(1);
                         }
                     } else {
@@ -936,48 +902,31 @@ public class SignUp extends AppCompatActivity {
 
     //----------------------checking email on server------------------------------------------------
     public void checkemail(final int chkemail) {
-
-
         stremailaddress = edEmail.getText().toString();
-
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         EmailChechInterface service = retrofit.create(EmailChechInterface.class);
-
-
         Call<MobileModel> call = service.sendData(stremailaddress);
-
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
-
                 try {
-
                     MobileModel result = new MobileModel();
                     String successstatus = response.body().getCheckstatus().get(0).getStatus();
-
                     System.out.println("successstatus" + successstatus);
-
                     if (successstatus.equals("1")) {
                         mDialog.dismiss();
                         Toast.makeText(SignUp.this, getResources().getString(R.string.email_already_exist), Toast.LENGTH_LONG).show();
                         edEmail.setText("");
-
-
                     } else {
                         mDialog.dismiss();
-
                         if (chkemail == 0) {
-
                             //checkmobileno(1);
                             if (!(Validation.isNetworkAvailable(SignUp.this))) {
                                 mDialog.dismiss();
                                 ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
-
                             } else {
                                 /*String user="";
                                 Intent in =new Intent(SignUp.this, First_Login.class);
@@ -985,25 +934,18 @@ public class SignUp extends AppCompatActivity {
                                 bundle.putString("EmailId", stremailaddress);
                                 bundle.putString("strMerchant_id",user);
                                 bundle.putString("message", message);
-                                bundle.putString("FName",strFirstMerchantName);
+                                bundle.putString("FName",strFirstName);
                                 bundle.putString("LName",strLastName);
                                 bundle.putString("countryid",contryid);
                                 in.putExtras(bundle);
                                 startActivity(in);*/
-                                signupdata(strFirstMerchantName, strLastName, stremailaddress, contryid, strDeviceid);
-
+                                signupdata(strFirstName.trim(), strLastName.trim(), stremailaddress.trim(), contryid, strDeviceid);
                             }
-
                         }
-
-
                     }
-
-
                 } catch (Exception e) {
                     // e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -1012,17 +954,13 @@ public class SignUp extends AppCompatActivity {
                 //netowrk goes off then dialog continue running so due to this validation dialog is dismiss.
                 mDialog.dismiss();
             }
-
-
         });
     }
 
     //---------------------------checking validations-----------------------------------------------
     public void checkvalidations() {
-
-
-        strFirstMerchantName = edFname.getText().toString().trim();
-        strLastName = edLname.getText().toString();
+        strFirstName = edFname.getText().toString().trim();
+        strLastName = edLname.getText().toString().trim();
         stremailaddress = edEmail.getText().toString().trim();
         //   strMobileno = edPhone.getText().toString().trim();
         //  strAddress = edAddress.getText().toString();
@@ -1033,28 +971,14 @@ public class SignUp extends AppCompatActivity {
         // strPassword = edPassword.getText().toString();
         // strConfirmpassword = edConfirmPassword.getText().toString();
         if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
-
             ToastPopUp.show(context, getString(R.string.Enter_FirstName));
             edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        } else if (!(strFirstMerchantName.matches("^[a-zA-Z.'_\\s]*$"))) {
+        } else if (!(strFirstName.matches("^[a-zA-Z.'_\\s]*$"))) {
             edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             ToastPopUp.show(SignUp.this, getString(R.string.validation_first_name_special_characters_merchant));
-            edFname.setText("");
-        } else if (!(edFname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-            edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-            ToastPopUp.show(context, getString(R.string.first_character_not_space));
-            edFname.setText("");
-        } else if (!(edFname.getText().toString().matches("\\w*"))) {
-            edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-            ToastPopUp.show(context, getString(R.string.spaces_not_allowed));
-            edFname.setText("");
         } else if ((edFname.getText().toString().length() < 3) || (edFname.getText().toString().length() > 15)) {
             edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
             ToastPopUp.show(context, getString(R.string.min_length));
-            edFname.setText("");
         } else if (!(Validation.isNetworkAvailable(SignUp.this))) {
             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
         } else if (stremailaddress.length() < 1) {
@@ -1065,10 +989,8 @@ public class SignUp extends AppCompatActivity {
             edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             edEmail.requestFocus();
             edEmail.selectAll();
-        }
-        else if (!(Validation.isNetworkAvailable(SignUp.this))) {
+        } else if (!(Validation.isNetworkAvailable(SignUp.this))) {
             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
-
         } else if (strCountry.length() < 1) {
             ToastPopUp.displayToast(SignUp.this, getResources().getString(R.string.select_country));
         }
@@ -1092,14 +1014,14 @@ public class SignUp extends AppCompatActivity {
                 bundle.putString("EmailId", stremailaddress);
                 bundle.putString("strMerchant_id",user);
                 bundle.putString("message", message);
-                bundle.putString("FName",strFirstMerchantName);
+                bundle.putString("FName",strFirstName);
                 bundle.putString("LName",strLastName);
                 bundle.putString("countryid",contryid);
                 in.putExtras(bundle);
                 startActivity(in);*/
 
-                //signupdata(strFirstMerchantName, strLastName, stremailaddress, strMobileno, strAddress, contryid, stateid, cityid, strgender, Charity, Subscription, strPassword, strDeviceid);
-                signupdata(strFirstMerchantName, strLastName, stremailaddress, contryid, strDeviceid);
+                //signupdata(strFirstName, strLastName, stremailaddress, strMobileno, strAddress, contryid, stateid, cityid, strgender, Charity, Subscription, strPassword, strDeviceid);
+                signupdata(strFirstName.trim(), strLastName.trim(), stremailaddress.trim(), contryid, strDeviceid);
             }
         }
     }

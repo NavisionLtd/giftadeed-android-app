@@ -361,7 +361,7 @@
     <string name="validation_first_name_special_characters_merchant">Enter alphabets only</string>
     <string name="validation_last_name_special_characters_merchant">Enter alphabets only in last name</string>
     <string name="first_character_not_space">First character cannot be blank space</string>
-    <string name="spaces_not_allowed">Blank space are not allowed</string>
+    <string name="spaces_not_allowed">Multiple blank spaces are not allowed</string>
     <string name="length_error">Length cannot be greater than 15 characters</string>
     <string name="min_length">Length should be between 3-15 characters</string>
     <string name="Lnamemin_length">Length should be between 1-20 characters</string>

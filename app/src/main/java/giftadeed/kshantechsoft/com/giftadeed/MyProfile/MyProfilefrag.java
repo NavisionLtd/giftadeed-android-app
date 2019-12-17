@@ -49,8 +49,6 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -145,7 +143,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     FragmentActivity myContext;
     String strProfilrName, strCreditpoints, strUserId, strfname, stremail, strmobile, strgender, strprivacy;
     String strCountry, contryid, strState, stateid, strCity, cityid;
-    String strMobileno, strFirstMerchantName, strLastName, strAddress, stredgender, strPassword, strnewPassword;
+    private String strMobileno, strFirstName, strLastName, strAddress, stredgender, strPassword, strnewPassword;
     RadioGroup radioGroup, radiogrpprivacy;
     TextView txtName, txtCredits, txtPoints, txtGender;
     EditText edFname, edLname, edEmail, edPhone, edAddress, edCountry, edState, edCity, edpassword;
@@ -384,9 +382,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 } else if (!(edFname.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                } else if (!(edFname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                    edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    //ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
                 }
             }
 
@@ -406,27 +401,21 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         edFname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                strFirstMerchantName = edFname.getText().toString();
+                strFirstName = edFname.getText().toString().trim();
                 if (!hasFocus) {
                     if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
                         ToastPopUp.show(getContext(), getString(R.string.Enter_FirstName));
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    } else if (!(strFirstMerchantName.matches("^[a-zA-Z.'_\\s]*$"))) {
+                    } else if (!(strFirstName.matches("^[a-zA-Z.'_\\s]*$"))) {
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         ToastPopUp.show(getActivity(), getString(R.string.validation_first_name_special_characters_merchant) + " in first name");
-                        edFname.setText("");
-                    } else if (!(edFname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                        edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                        ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
-                        edFname.setText("");
                     } else if (!(edFname.getText().toString().matches("\\w*"))) {
-                        edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                        ToastPopUp.show(getContext(), getString(R.string.spaces_not_allowed));
-                        edFname.setText("");
+//                        edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                        ToastPopUp.show(getContext(), getString(R.string.spaces_not_allowed));
+                        strFirstName = strFirstName.replaceAll("\\s{2,}", " ");
                     } else if ((edFname.getText().toString().length() < 3) || (edFname.getText().toString().length() > 15)) {
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         ToastPopUp.show(getContext(), getString(R.string.min_length));
-                        edFname.setText("");
                     }
                     /*else if ((edFname.getText().toString().length()>15)) {
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -437,7 +426,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     else {
 
                     }
-
+                    edFname.setText(strFirstName);
                 }
             }
         });
@@ -455,9 +444,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 } else if (!(edLname.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
                     edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                } else if (!(edLname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                    edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    // ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
                 }
 
             }
@@ -475,27 +461,19 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         edLname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                strLastName = edLname.getText().toString();
+                strLastName = edLname.getText().toString().trim();
                 if (!hasFocus) {
                     if (strLastName.length() > 0) {
                         if (!(strLastName.matches("^[a-zA-Z.'_\\s]*$"))) {
                             edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                             ToastPopUp.show(getActivity(), getString(R.string.validation_first_name_special_characters_merchant));
-                            edLname.setText("");
-                        } else if (!(edLname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                            edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                            ToastPopUp.show(getContext(), getString(R.string.first_character_not_space) + " in last name");
-                            edLname.setText("");
                         } else if (!(edLname.getText().toString().matches("\\w*"))) {
-                            edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                            ToastPopUp.show(getContext(), getString(R.string.spaces_not_allowed));
-                            edLname.setText("");
+//                            edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//                            ToastPopUp.show(getContext(), getString(R.string.spaces_not_allowed));
+                            strLastName = strLastName.replaceAll("\\s{2,}", " ");
                         } else if ((edLname.getText().toString().length() < 1) || (edLname.getText().toString().length() > 20)) {
                             edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                             ToastPopUp.show(getContext(), getString(R.string.min_length));
-                            edLname.setText("");
                         } /*else if ((edLname.getText().toString().length() > 20)) {
                             edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
@@ -504,6 +482,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         } */ else {
 
                         }
+                        edLname.setText(strLastName);
                     }
                 }
             }
@@ -527,10 +506,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 } else if (!(edAddress.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
                     edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
-                } else if (!(edAddress.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                    edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                    // ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
                 }
 
             }
@@ -547,18 +522,10 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 strAddress = edAddress.getText().toString();
                 if (strAddress.length() > 0) {
                     if (Validation.isStringNullOrBlank(edAddress.getText().toString())) {
-
                         ToastPopUp.show(getContext(), getString(R.string.Enter_Address));
                         edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    } else if (!(edAddress.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                        edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                        ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
-                        edAddress.setText("");
                     } else if (!(strAddress.matches(".*[a-zA-Z]+.*"))) {
-
                         ToastPopUp.displayToast(getContext(), getResources().getString(R.string.address_toast));
-                        edAddress.setText("");
                     }
                 }
             }
@@ -669,7 +636,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
                     } else if (strPassword.length() < 6 || strPassword.length() > 20) {
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
-                        edpassword.setText("");
                     }
 
                     // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
@@ -1646,7 +1612,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                             if (!(Validation.isNetworkAvailable(getActivity()))) {
                                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                             } else {
-                                updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                                updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                                         strAddress, contryid, stateid, cityid, stredgender, strPassword, strprivacy);
                             }
                         }
@@ -1682,7 +1648,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         UpdateProfile service = retrofit.create(UpdateProfile.class);
-        Call<MobileModel> call = service.sendData(U_Id, Fname, Lname, email, Mobile, add, con_Id, Stat_Id, CIt_Id, gen, Pass, privacy);
+        Call<MobileModel> call = service.sendData(U_Id, Fname.trim(), Lname.trim(), email.trim(), Mobile.trim(), add.trim(), con_Id, Stat_Id, CIt_Id, gen, Pass, privacy);
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
@@ -1920,78 +1886,41 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
 
     //----------------------checking validations--------------------------------------------------------
     public void checkvalidations() {
-        strFirstMerchantName = edFname.getText().toString().trim();
-        strLastName = edLname.getText().toString();
+        strFirstName = edFname.getText().toString().trim();
+        strLastName = edLname.getText().toString().trim();
         strMobileno = edPhone.getText().toString().trim();
         strAddress = edAddress.getText().toString();
         strCountry = edCountry.getText().toString();
         strState = edState.getText().toString();
         strCity = edCity.getText().toString();
         // strgender = stredgender;
-        strnewPassword = edpassword.getText().toString();
-
+        strnewPassword = edpassword.getText().toString().trim();
 
         if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
-
             ToastPopUp.show(getContext(), getString(R.string.Enter_FirstName));
             edFname.requestFocus();
-        } else if (!(strFirstMerchantName.matches("^[a-zA-Z.'_\\s]*$"))) {
+        } else if (!(strFirstName.matches("^[a-zA-Z.'_\\s]*$"))) {
             edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             ToastPopUp.show(getActivity(), getString(R.string.validation_first_name_special_characters_merchant) + " in first name");
-            edFname.setText("");
-        } else if (!(edFname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-            edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-            ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
-            edFname.setText("");
-        } else if (!(edFname.getText().toString().matches("\\w*"))) {
-            edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-            ToastPopUp.show(getContext(), getString(R.string.spaces_not_allowed));
-            edFname.setText("");
         } else if (strLastName.length() > 0) {
             if (!(strLastName.matches("^[a-zA-Z.'_\\s]*$"))) {
                 edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 ToastPopUp.show(getActivity(), getString(R.string.validation_first_name_special_characters_merchant) + " in last name");
-                edLname.setText("");
-                edLname.requestFocus();
-            } else if (!(edLname.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
-                edLname.setText("");
-                edLname.requestFocus();
-            } else if (!(edLname.getText().toString().matches("\\w*"))) {
-                edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                ToastPopUp.show(getContext(), getString(R.string.spaces_not_allowed));
-                edLname.setText("");
                 edLname.requestFocus();
             } else if ((edLname.getText().toString().length() < 1) || (edLname.getText().toString().length() > 20)) {
                 ToastPopUp.show(getContext(), getString(R.string.min_length));
-                edLname.setText("");
                 edLname.requestFocus();
             } else if ((edFname.getText().toString().length() < 3) || (edFname.getText().toString().length() > 15)) {
                 edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                 ToastPopUp.show(getContext(), getString(R.string.min_length));
-                edFname.setText("");
             } else if (!(Validation.isNetworkAvailable(getActivity()))) {
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-
             } else if (strAddress.length() > 0) {
                 if (Validation.isStringNullOrBlank(edAddress.getText().toString())) {
-
                     ToastPopUp.show(getContext(), getString(R.string.Enter_Address));
                     edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                } else if (!(edAddress.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                    edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                    ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
-                    edAddress.setText("");
                 } else if (!(strAddress.matches(".*[a-zA-Z]+.*"))) {
-
                     ToastPopUp.displayToast(getContext(), getResources().getString(R.string.address_toast));
-                    edAddress.setText("");
                 } else if (strCountry.length() < 1) {
                     ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_country));
                 } else if (strState.length() < 1) {
@@ -2003,7 +1932,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
                     } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                         ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
-                        edpassword.setText("");
                     }
 
                     // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
@@ -2022,7 +1950,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         if (!(Validation.isNetworkAvailable(getActivity()))) {
                             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                         } else {
-                            updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                            updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                                     strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
                         }
                     }
@@ -2030,7 +1958,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
-                        updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                        updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                                 strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
                     }
                 }
@@ -2045,7 +1973,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
                 } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
-                    edpassword.setText("");
                 }
 
                 // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
@@ -2065,7 +1992,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
-                        updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                        updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                                 strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
                     }
                 }
@@ -2073,41 +2000,28 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
-                    updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                    updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                             strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
                 }
             }
 
         } else if ((edFname.getText().toString().length() < 3) || (edFname.getText().toString().length() > 15)) {
             edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
             ToastPopUp.show(getContext(), getString(R.string.min_length));
-            edFname.setText("");
         } else if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
 
         } else if (strAddress.length() > 0) {
             if (Validation.isStringNullOrBlank(edAddress.getText().toString())) {
-
                 ToastPopUp.show(getContext(), getString(R.string.Enter_Address));
                 edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            } else if (!(edAddress.getText().toString().matches("^(?!\\s*$|\\s).*$"))) {
-                edAddress.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
-                ToastPopUp.show(getContext(), getString(R.string.first_character_not_space));
-                edAddress.setText("");
             } else if (!(strAddress.matches(".*[a-zA-Z]+.*"))) {
-
                 ToastPopUp.displayToast(getContext(), getResources().getString(R.string.address_toast));
-                edAddress.setText("");
             } else if ((edFname.getText().toString().length() < 3) || (edFname.getText().toString().length() > 15)) {
                 edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
                 ToastPopUp.show(getContext(), getString(R.string.min_length));
-                edFname.setText("");
             } else if (!(Validation.isNetworkAvailable(getActivity()))) {
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
-
             } else if (strCountry.length() < 1) {
                 ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.select_country));
             } else if (strState.length() < 1) {
@@ -2119,7 +2033,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
                 } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                     ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
-                    edpassword.setText("");
                 }
 
                 // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
@@ -2139,7 +2052,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                     if (!(Validation.isNetworkAvailable(getActivity()))) {
                         ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                     } else {
-                        updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                        updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                                 strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
                     }
                 }
@@ -2147,7 +2060,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
-                    updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                    updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                             strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
                 }
             }
@@ -2162,7 +2075,6 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 ToastPopUp.displayToast(getActivity(), getString(R.string.Password_blank));
             } else if (strnewPassword.length() < 6 || strnewPassword.length() > 20) {
                 ToastPopUp.displayToast(getActivity(), getString(R.string.Password_length));
-                edpassword.setText("");
             }
 
             // Refer GAD-3_Priority_2_SRS_version32_21May2019.doc Point no.15.2 Change Request
@@ -2182,7 +2094,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                 if (!(Validation.isNetworkAvailable(getActivity()))) {
                     ToastPopUp.show(getActivity(), getString(R.string.network_validation));
                 } else {
-                    updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                    updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                             strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
                 }
             }
@@ -2190,7 +2102,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
             if (!(Validation.isNetworkAvailable(getActivity()))) {
                 ToastPopUp.show(getActivity(), getString(R.string.network_validation));
             } else {
-                updatedata(strUserId, strFirstMerchantName, strLastName, stremail, strMobileno,
+                updatedata(strUserId, strFirstName, strLastName, stremail, strMobileno,
                         strAddress, contryid, stateid, cityid, stredgender, strnewPassword, strprivacy);
             }
         }

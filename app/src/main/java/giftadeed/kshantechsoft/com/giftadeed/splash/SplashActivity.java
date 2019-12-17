@@ -60,7 +60,6 @@ public class SplashActivity extends AppCompatActivity {
             currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
             if (currentVersion.length() > 0) {
                 txt_app_version.setText("App Version " + currentVersion);
-//                txt_app_version.setText(getResources().getString(R.string.app_name));
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -116,7 +115,6 @@ public class SplashActivity extends AppCompatActivity {
                 i.setData(Uri.parse("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN"));
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
-//                getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")));
                 dialog.dismiss();
                 SplashActivity.this.finish();
             }
@@ -126,7 +124,6 @@ public class SplashActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
                 SplashActivity.this.finish();
-//                proceedToApp();
             }
         });
         alertDialogBuilder.show();
@@ -215,10 +212,8 @@ public class SplashActivity extends AppCompatActivity {
                     //show update dialog
                     showForceUpdateDialog();
                 } else {
+                    //proceed to app
                     proceedToApp();
-                // Animation trial
-//            Intent log = new Intent(getApplicationContext(), FadeInActivity.class);
-//            startActivity(log);
                 }
             }
             Log.d("appinfodetails", "Current version " + currentVersion + "playstore version " + onlineVersion);

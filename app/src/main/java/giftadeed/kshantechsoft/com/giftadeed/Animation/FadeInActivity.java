@@ -1,6 +1,7 @@
 package giftadeed.kshantechsoft.com.giftadeed.Animation;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,7 +20,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 
 public class FadeInActivity extends AppCompatActivity implements Animation.AnimationListener {
     private TextView txt2, txtcreditpoints, txttotalpoints, txtneedname;
-    private ImageView imageView, imageViewClose;
+    private ImageView gifSmiley, gifImage, imageView, imageViewClose;
     private LottieAnimationView lottieAnimationView;
     private Button btnShare;
     private Animation animFadein;
@@ -30,6 +31,8 @@ public class FadeInActivity extends AppCompatActivity implements Animation.Anima
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reward_dialog);
+        gifSmiley = findViewById(R.id.gif_smiley_face);
+        gifImage = (ImageView) findViewById(R.id.gif_image);
         imageView = (ImageView) findViewById(R.id.image_reward);
         lottieAnimationView = (LottieAnimationView) findViewById(R.id.image_reward1);
         imageViewClose = (ImageView) findViewById(R.id.ic_close);
@@ -51,19 +54,39 @@ public class FadeInActivity extends AppCompatActivity implements Animation.Anima
         animFadein.setAnimationListener(this);
 
         if (reason.equals("by tagging")) {
-            imageView.setVisibility(View.VISIBLE);
+            /*imageView.setVisibility(View.VISIBLE);
             lottieAnimationView.setVisibility(View.GONE);
             Glide.with(this)
                     .load(R.drawable.tag_reward)
                     .into(imageView);
             // start the animation
-            imageView.startAnimation(animFadein);
+            imageView.startAnimation(animFadein);*/
+
+            // play sound from RAW folder
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.endorsed_sound);
+            mp.start();
+            //load thumb gif image from assets
+            gifSmiley.setVisibility(View.GONE);
+            gifImage.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .load(R.drawable.thumb_gif)
+                    .into(gifImage);
         } else {
             /*Glide.with(this)
                     .load(R.drawable.gift_reward)
                     .into(imageView);*/
-            lottieAnimationView.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.GONE);
+//            lottieAnimationView.setVisibility(View.VISIBLE);
+//            imageView.setVisibility(View.GONE);
+
+            // play clapping sound from RAW folder
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.claps_sound);
+            mp.start();
+            //load clapping gif image from assets
+            gifSmiley.setVisibility(View.VISIBLE);
+            gifImage.setVisibility(View.GONE);
+            Glide.with(this)
+                    .load(R.drawable.smiley_face)
+                    .into(gifSmiley);
         }
 
         txt2.setText(reason);
@@ -113,5 +136,10 @@ public class FadeInActivity extends AppCompatActivity implements Animation.Anima
     @Override
     public void onAnimationStart(Animation animation) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

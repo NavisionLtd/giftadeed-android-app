@@ -79,11 +79,13 @@ import java.util.concurrent.TimeUnit;
 import giftadeed.kshantechsoft.com.giftadeed.BottomNavigation.BottomNavigationViewHelper;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSDetailsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning.SOSOptionActivity;
+import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupResponseStatus;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.MyFullFillTag.MyFullFillTags;
 import giftadeed.kshantechsoft.com.giftadeed.Needdetails.NeedDetailsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.R;
+import giftadeed.kshantechsoft.com.giftadeed.Resources.OwnedGroupsInterface;
 import giftadeed.kshantechsoft.com.giftadeed.Resources.ResourceDetailsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
@@ -239,7 +241,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
             mDialog.show();
             get_Taglist_data(strUserId); // get normal deeds and permanent deeds
             get_SOSlist_data(strUserId); // get sos list tags
-            get_Resourcelist_data(strUserId); // get resource list tags
+            getOwnedGroupList(strUserId); // inside this api response call get resource list
         }
 
         latitude_gps = new GPSTracker(myContext).getLatitude();
@@ -257,8 +259,8 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-//        mGoogleMap.setMyLocationEnabled(true);
-        mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("My location"));
+        mGoogleMap.setMyLocationEnabled(true);
+//        mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("My location"));
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
@@ -417,6 +419,65 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                         }
                     }
                 }
+            }
+        });
+    }
+
+    //--------------------------getting user owned groups from server------------------------------------------
+    public void getOwnedGroupList(String userid) {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(1, TimeUnit.HOURS);
+        client.setReadTimeout(1, TimeUnit.HOURS);
+        client.setWriteTimeout(1, TimeUnit.HOURS);
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        OwnedGroupsInterface service = retrofit.create(OwnedGroupsInterface.class);
+        Call<List<GroupPOJO>> call = service.sendData(userid);
+        call.enqueue(new Callback<List<GroupPOJO>>() {
+            @Override
+            public void onResponse(Response<List<GroupPOJO>> response, Retrofit retrofit) {
+                Log.d("response_ownedgrouplist", "" + response.body());
+                try {
+                    List<GroupPOJO> res = response.body();
+                    int isblock = 0;
+                    try {
+                        isblock = res.get(0).getIsBlocked();
+                    } catch (Exception e) {
+                        isblock = 0;
+                    }
+                    if (isblock == 1) {
+                        FacebookSdk.sdkInitialize(getApplicationContext());
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
+                        sessionManager.createUserCredentialSession(null, null, null);
+                        LoginManager.getInstance().logOut();
+                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+                                        //updateUI(false);
+                                    }
+                                });*/
+                        sessionManager.set_notification_status("ON");
+                        Intent loginintent = new Intent(getApplicationContext(), LoginActivity.class);
+                        loginintent.putExtra("message", "Charity");
+                        startActivity(loginintent);
+                    } else {
+                        List<GroupPOJO> groupPOJOS = response.body();
+                        if (groupPOJOS.size() > 0) {
+                            //this is group member show resource markers
+                            get_Resourcelist_data(strUserId); // get resource list tags
+                        } else {
+                            //this is individual user don't show resource markers
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.d("response_ownedgrouplist", "" + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                ToastPopUp.show(myContext, getString(R.string.server_response_error));
             }
         });
     }
