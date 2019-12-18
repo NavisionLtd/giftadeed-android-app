@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
- <layer-list xmlns:android="http://schemas.android.com/apk/res/android">    
+ <!--
+  ~ Copyright (C) Navision Ltd. - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  -->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <clip>
         <bitmap xmlns:android="http://schemas.android.com/apk/res/android"

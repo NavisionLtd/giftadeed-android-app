@@ -1,3 +1,8 @@
+<!--
+  ~ Copyright (C) Navision Ltd. - All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  -->
+
 <vector android:height="200dp" android:viewportHeight="2299.866"
     android:viewportWidth="1152.866" android:width="200dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#dcdcdc" android:pathData="M29.85,6.48a22,22 0,0 1,8.92 3.38,13.91 13.91,0 0,1 5.16,5.95 1.01,1.01 0,1 0,1.87 -0.79,15.92 15.92,0 0,0 -5.9,-6.84 24.03,24.03 0,0 0,-9.75 -3.71,1.01 1.01,0 0,0 -0.31,2ZM29.85,6.48"/>

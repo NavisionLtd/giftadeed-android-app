@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) Navision Ltd. - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ */
+
 package com.linkedin.platform.utils;
 
 import java.util.Collection;
