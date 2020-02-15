@@ -7,14 +7,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_terms__conditions"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
     tools:context="giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Conditions">
 
     <LinearLayout
-        android:id="@+id/activity_welcome_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -25,7 +23,6 @@
             android:background="@color/white">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbarwelcomepage"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="?attr/colorPrimary"

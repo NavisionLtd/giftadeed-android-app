@@ -12,7 +12,6 @@
     tools:context="giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed">
 
     <RelativeLayout
-        android:id="@+id/ButtonLayout"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
@@ -146,7 +145,6 @@
                             android:weightSum="2">
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/taganeedgrouplength"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
@@ -185,7 +183,6 @@
                             android:weightSum="2">
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/taganeedcategorylength"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
@@ -311,7 +308,6 @@
                                 android:src="@drawable/current_locn" />
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/inputlayouttagneedlocation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="15dp"
@@ -370,7 +366,6 @@
                             android:weightSum="2">
 
                             <TextView
-                                android:id="@+id/txttaganeedvalidator"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
@@ -474,7 +469,6 @@
                         </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/inputlayouttagneeddescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"

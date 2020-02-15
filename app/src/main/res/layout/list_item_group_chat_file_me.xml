@@ -67,7 +67,6 @@
             android:background="#d8d8d8" />
 
         <Button
-            android:id="@+id/button_group_chat_file_download"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginLeft="7dp"

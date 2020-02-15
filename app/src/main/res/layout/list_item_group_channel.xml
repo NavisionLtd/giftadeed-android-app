@@ -70,7 +70,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/container_group_channel_list_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/container_group_channel_list_topic"

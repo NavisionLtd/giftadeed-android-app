@@ -7,7 +7,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/loginimg"
@@ -425,7 +424,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txtagreeagree"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -451,7 +449,6 @@
                             android:textSize="15dp" />
 
                         <TextView
-                            android:id="@+id/txtagree_and"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -491,7 +488,6 @@
                         android:textSize="@dimen/finaltextfont" />
 
                     <TextView
-                        android:id="@+id/txtaccept"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"

@@ -9,13 +9,10 @@
 
     <!-- Shortcut strings -->
     <string name="compose_shortcut_short_label1">SOS</string>
-    <string name="compose_shortcut_long_label1">SOS</string>
     <string name="compose_shortcut_short_label2">Tag deed</string>
-    <string name="compose_shortcut_long_label2">Tag deed</string>
     <string name="compose_disabled_message1">Not available</string>
 
     <!--Firebase log-->
-    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <!--Login page-->
     <string name="login_terms">Termos e Condições</string>
@@ -44,7 +41,6 @@
     <string name="last_name">Último nome</string>
     <string name="country">País</string>
     <string name="logintxt">já tem uma conta? <u>Entrar</u></string>
-    <string name="length_error_1">Comprimento não pode ser maior que 15 caracteres</string>
     <string name="length_error_2">Comprimento não pode ser maior que 20 caracteres</string>
 
     <!--App update-->
@@ -60,26 +56,16 @@
     <string name="block_toast">Você foi bloqueado</string>
     <string name="group_deleted">Grupo excluído com sucesso</string>
     <string name="profile_updated">Perfil atualizado com sucesso</string>
-    <string name="collab_deleted">Colaboração excluída com sucesso</string>
-    <string name="contacts_saved">Contatos salvos</string>
     <string name="error">Erro</string>
     <string name="updation_failed">Atualização falhou</string>
     <string name="blank_contact_number">Número de contato não existe!</string>
     <string name="address_toast">O endereço deve conter alfabeto</string>
-    <string name="select_contact">Por favor, selecione seu contato de emergência</string>
-    <string name="accepted">Aceitaram</string>
     <string name="exit_group_msg">Você saiu do grupo com sucesso</string>
     <string name="group_created_msg">Grupo criado com sucesso</string>
-    <string name="colab_created_msg">Colaboração criada com sucesso</string>
     <string name="you_havnt_change">Você não alterou as informações do grupo</string>
     <string name="group_edited">Grupo editado com sucesso</string>
-    <string name="collab_edited">Colaboração editada com sucesso</string>
     <string name="member_removed">Membro removido com sucesso</string>
     <string name="member_added">Membro adicionado com sucesso</string>
-    <string name="password_toast">A senha deve conter pelo menos um número, um caractere especial e um alfabeto</string>
-    <string name="password_toast_1">A senha deve conter pelo menos um alfabeto</string>
-    <string name="password_toast_2">A senha deve conter pelo menos um caractere especial</string>
-    <string name="password_toast_3">A senha deve conter pelo menos um número</string>
     <string name="no_data_found">Nenhum dado encontrado</string>
     <string name="admin_assigned">Admin atribuído com sucesso</string>
     <string name="admin_dismissed">Admin dispensado com sucesso</string>
@@ -96,11 +82,9 @@
     <string name="select_country">Selecione o pais</string>
     <string name="select_state">Selecione o estado</string>
     <string name="select_city">Selecione a cidade</string>
-    <string name="permission_denied">A permissão foi negada, ative as permissões</string>
     <string name="already_deed">Esta ação já é relatada por alguém</string>
     <string name="sos_location_error">A localização não pode ficar em branco. Por favor, obtenha a localização</string>
     <string name="sos_success">Emergência criada com sucesso</string>
-    <string name="invite_sent">Convite enviado</string>
 
     <!--Navigation drawer-->
     <string name="view_profile">Ver perfil</string>
@@ -116,7 +100,6 @@
     <string name="drawer_logout">Sair</string>
 
     <!--Grid menu and details-->
-    <string name="my_tags">MINHAS ETIQUETAS</string>
     <string name="noti_history">Atualizações de ações</string>
     <string name="my_tags_heading">Minhas etiquetas</string>
     <string name="list_of_your">Lista dos seus tags</string>
@@ -154,7 +137,6 @@
     <!--Bottom navigation-->
     <string name="map_home">Casa</string>
     <string name="map_tagadeed">Tag a deed</string>
-    <string name="map_fulfilled_tags">Tags cumpridas</string>
 
     <!--Group-->
     <string name="grp_deed_title">Ações de grupo</string>
@@ -191,7 +173,6 @@
     <string name="edit_collab">Editar o Collab</string>
     <string name="delete_collab">Excluir Collab</string>
     <string name="exit_collab">Sair do Collab</string>
-    <string name="collab_info">Informação de colaboração</string>
     <string name="no_colab_found">Nenhuma colaboração encontrada. Você quer criar um?</string>
     <string name="no_pending_invites">Nenhum convite pendente</string>
     <string name="collab_details">Detalhes de colaboração</string>
@@ -241,9 +222,7 @@
     <string name="people_looking_2">Ações encontradas perto de você</string>
     <string name="pref_1"> Preferências para pessoa / pessoas : </string>
     <string name="deed_location">Localização da ação : </string>
-    <string name="deed_details">Detalhes da ação : </string>
     <string name="see_more">Ver mais</string>
-    <string name="get_directions">Obter direções</string>
     <string name="tagged_by">Deed marcado por : </string>
     <string name="tagged_by_group">Tagged By grupo : </string>
     <string name="edit">Editar</string>
@@ -257,8 +236,6 @@
 
     <!--gift a deed-->
     <string name="gift_title">Gift A Deed</string>
-    <string name="upload_picture">Carregar foto</string>
-    <string name="snap">Snap  </string>
     <string name="mention_people_benifited">Por favor, mencione o número de pessoas beneficiadas pelo cumprimento desta escritura</string>
     <string name="is_this_deed">Esta ação é cumprida completamente?</string>
     <string name="tell_people">Diga às pessoas sobre seu presente</string>
@@ -278,7 +255,6 @@
     <string name="settings">Definições</string>
     <string name="title_activity_maps">Mapa</string>
     <string name="aboutMe">Sobre mim</string>
-    <string name="here_hyperlink"><a href="https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed">here</a></string>
 
     <!--Dialog strings-->
     <string name="exit_msg">Você realmente quer sair?</string>
@@ -298,13 +274,11 @@
     <string name="exit_no">Não</string>
     <string name="tag_success_msg1">Você venceu </string>
     <string name="tag_success_msg2">precisar</string>
-    <string name="tag_success_msg3">por marcação </string>
     <string name="tag_success_msg4">pontos </string>
     <string name="tag_success_msg5">Seu total de pontos é </string>
 
     <!--Resource-->
     <string name="resource_error">Você não possui grupos para criar o recurso</string>
-    <string name="res_success">Recurso criado com sucesso</string>
     <string name="action_create_resource">Criar Recurso</string>
     <string name="edit_resource">Editar recurso</string>
     <string name="delete_resource">Apagar Recurso</string>
@@ -351,19 +325,11 @@
 
     <string name="navigation_drawer_open">Abra a gaveta de navegação</string>
     <string name="navigation_drawer_close">Fechar gaveta de navegação</string>
-    <string name="middle_terms">  ,e  </string>
-    <string name="privacy_policy"><u>Política de Privacidade</u></string>
-    <string name="last_text_terms"> para ser alterado para atender o público global.</string>
-    <string name="share"><u>Compartilhar</u></string>
     <string name="Enter_FirstName">Introduza o primeiro nome</string>
     <string name="validation_first_name_special_characters_merchant">Digite apenas alfabetos</string>
     <string name="validation_last_name_special_characters_merchant">Digite os alfabetos apenas no sobrenome</string>
-    <string name="first_character_not_space">Primeiro caractere não pode ser espaço em branco</string>
-    <string name="spaces_not_allowed">Espaço em branco não são permitidos</string>
     <string name="length_error">Comprimento não pode ser maior que 15 caracteres</string>
     <string name="min_length">O comprimento deve ter entre 3 e 15 caracteres</string>
-    <string name="Lnamemin_length">O comprimento deve ter entre 1 a 20 caracteres</string>
-    <string name="Enter_LastName">Insira o último nome</string>
     <string name="Enter_Address">Insira o endereço</string>
     <string name="Enter_validemailaddress">Digite um endereço de e-mail válido</string>
     <string name="Enter_emailaddress">Insira o endereço de e-mail</string>
@@ -372,22 +338,16 @@
     <string name="Password_length">O tamanho da senha deve estar entre 6 e 20 caracteres</string>
     <string name="resenttxt"><u>Reenviar email</u></string>
     <string name="facebook_app_id">1250339181777732</string>
-    <string name="fb_login_protocol_scheme">fb1250339181777732</string>
     <string name="enter_password">Digite a senha</string>
     <string name="no_records_found">Nenhum registro foi encontrado</string>
-    <string name="list_of_people">As pessoas estão procurando sua ajuda</string>
     <string name="reg_completion_link">Um link de conclusão de registro foi enviado para </string>
     <string name="reg_completion_link_1">. Você pode definir sua senha usando esse link.</string>
     <string name="reg_completion_link_2">Por favor, verifique suas promoções, social, spam ou pastas de lixo eletrônico. Dependendo das suas configurações de preferência de e-mail, o e-mail de admin@giftadeed.com pode acabar em pastas diferentes.</string>
-    <string name="you_earned">Você ganhou:</string>
-    <string name="your_points">Seu total de pontos:</string>
     <string name="tagged_deeds_for_day">Ações com tags and Ações Cumpridas por dia</string>
     <string name="todays_deeds">Actos marcados de hoje</string>
     <string name="todays_fulfilled_deeds">Ações cumpridas de hoje</string>
-    <string name="filter">Filtro</string>
     <string name="filters">Filtros</string>
     <string name="filter_group">Filtrar por grupo</string>
-    <string name="start_writing">Comece a escrever aqui... </string>
     <string name="apply_filters">Aplicar filtros</string>
     <string name="radius">Raio</string>
     <string name="apply">Aplique</string>
@@ -397,7 +357,6 @@
     <string name="distance">Distância</string>
     <string name="time">Tempo</string>
     <string name="search">Procurar</string>
-    <string name="coming_soon">Em breve......</string>
     <string name="take_photo">Tirar fotos</string>
     <string name="select_from_gallery">Selecione da galeria</string>
     <string name="select_from_avatars">Selecione a partir de Avatares</string>
@@ -410,7 +369,6 @@
     <string name="all_groups">Todos os grupos</string>
     <string name="all_individuals">Todos os usuários individuais</string>
     <string name="tell_people_remaining">Diga às pessoas o que resta</string>
-    <string name="already_deeds_msg">As ações a seguir já foram marcadas para o local selecionado:</string>
 
     //--------------------key-------------------
     <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
@@ -435,7 +393,6 @@
     <string name="invite_member">Invite members</string>
     <string name="invite">Invite</string>
     <string name="open_channel_chat_content_desc_profile">Profile image</string>
-    <string name="action_create_channel">Create channel</string>
     <string name="download">Download</string>
     <string name="upload">Upload</string>
     <string name="resend_message">Resend</string>

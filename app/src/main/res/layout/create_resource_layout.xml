@@ -167,7 +167,6 @@
                         android:src="@drawable/current_locn" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/resource_location_inputlayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -233,7 +232,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
-                    android:id="@+id/select_resource_visibility"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"

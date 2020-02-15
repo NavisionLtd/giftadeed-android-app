@@ -9,13 +9,10 @@
 
     <!-- Shortcut strings -->
     <string name="compose_shortcut_short_label1">SOS</string>
-    <string name="compose_shortcut_long_label1">SOS</string>
     <string name="compose_shortcut_short_label2">Tag deed</string>
-    <string name="compose_shortcut_long_label2">Tag deed</string>
     <string name="compose_disabled_message1">Not available</string>
 
     <!--Firebase log-->
-    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <!--Login page-->
     <string name="login_terms">条款和条件 </string>
@@ -44,7 +41,6 @@
     <string name="last_name">姓</string>
     <string name="country">国家</string>
     <string name="logintxt">已经有账号？ <u>登录</u></string>
-    <string name="length_error_1">長度不能超過15個字符</string>
     <string name="length_error_2">長度不能超過20個字符</string>
 
     <!--App update-->
@@ -76,7 +72,6 @@
     <string name="dash3">您的履行總數是</string>
     <string name="dash4">您成功標記的百分比是</string>
     <string name="dash5">你的禮物得分是</string>
-    <string name="my_tags">我的標籤</string>
     <string name="my_tags_heading">我的標籤</string>
     <string name="list_of_mytags">我的標籤列表</string>
     <string name="my_fulfil_tags_heading">我完成的標籤</string>
@@ -107,26 +102,16 @@
     <string name="contact_saved">聯繫已保存</string>
     <string name="setting_saved">設置已保存</string>
     <string name="block_toast">你被封鎖了</string>
-    <string name="contacts_saved">聯繫人已保存</string>
-    <string name="collab_deleted">協作已成功刪除</string>
     <string name="profile_updated">資料更新成功</string>
     <string name="updation_failed">更新失敗</string>
     <string name="blank_contact_number">聯繫電話號碼不存在</string>
     <string name="address_toast">地址應包含字母表</string>
-    <string name="select_contact">請選擇您的緊急聯繫人</string>
-    <string name="password_toast">密碼應包含至少一個數字，一個特殊字符和一個字母</string>
-    <string name="password_toast_1">密碼應至少包含一個字母</string>
-    <string name="password_toast_2">密碼應至少包含一個特殊字符</string>
-    <string name="password_toast_3">密碼至少應包含一個數字</string>
     <string name="group_deleted">組已成功刪除</string>
     <string name="error">錯誤</string>
-    <string name="accepted">公認</string>
     <string name="exit_group_msg">您已成功退出群組</string>
     <string name="group_created_msg">組成功創建</string>
-    <string name="colab_created_msg">協作創建成功</string>
     <string name="you_havnt_change">你沒有改變團體信息</string>
     <string name="group_edited">組編輯成功</string>
-    <string name="collab_edited">協作編輯成功</string>
     <string name="member_removed">會員已成功刪除</string>
     <string name="member_added">會員成功添加</string>
     <string name="no_data_found">沒有找到數據</string>
@@ -145,16 +130,13 @@
     <string name="select_country">選擇國家</string>
     <string name="select_state">選擇狀態</string>
     <string name="select_city">選擇城市</string>
-    <string name="permission_denied">權限被拒絕請啟用權限</string>
     <string name="already_deed">這個契約已經有人報導了</string>
     <string name="sos_location_error">位置不能為空。 請到位置</string>
     <string name="sos_success">緊急創建成功</string>
-    <string name="invite_sent">邀請已發送</string>
 
     <!--Bottom navigation-->
     <string name="map_home">家</string>
     <string name="map_tagadeed">标记契约</string>
-    <string name="map_fulfilled_tags">完成标签</string>
 
     <!--Group-->
     <string name="grp_deed_title">團體契約</string>
@@ -191,7 +173,6 @@
     <string name="edit_collab">編輯協作</string>
     <string name="delete_collab">刪除協作</string>
     <string name="exit_collab">退出協作</string>
-    <string name="collab_info">協作信息</string>
     <string name="no_colab_found">沒有找到合作。你想創造一個嗎？</string>
     <string name="no_pending_invites">沒有待處理的邀請</string>
     <string name="collab_details">協作細節</string>
@@ -241,8 +222,6 @@
     <string name="people_looking_2"> 在你附近找到了契約 </string>
     <string name="pref_1">人/人的偏好 : </string>
     <string name="deed_location">契約地點 : </string>
-    <string name="get_directions">獲取路線</string>
-    <string name="deed_details">契約細節 : </string>
     <string name="tagged_by_group">標記為組 : </string>
     <string name="last_endorse_time">最後支持 : </string>
     <string name="see_more">看更多</string>
@@ -257,8 +236,6 @@
 
     <!--gift a deed-->
     <string name="gift_title">禮物契約</string>
-    <string name="upload_picture">上传图片</string>
-    <string name="snap">卡  </string>
     <string name="mention_people_benifited">請提及履行此契約而受益的人數</string>
     <string name="is_this_deed">这件事完全履行了吗？</string>
     <string name="tell_people">告诉别人你的礼物</string>
@@ -278,7 +255,6 @@
     <string name="settings">设置</string>
     <string name="title_activity_maps">地图</string>
     <string name="aboutMe">关于我</string>
-    <string name="here_hyperlink"><a href="https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed">这里</a></string>
 
     <!--Dialog strings-->
     <string name="exit_msg">你真的想退出吗？</string>
@@ -297,14 +273,12 @@
     <string name="exit_no">没有</string>
     <string name="tag_success_msg1">你已經標記了 </string>
     <string name="tag_success_msg2">需要</string>
-    <string name="tag_success_msg3">你賺了 </string>
     <string name="tag_success_msg4">點 </string>
     <string name="tag_success_msg5">你的總積分是 </string>
     <string name="remove_member_dialog">從組中刪除此成員 ?</string>
 
     <!--Resource-->
     <string name="resource_error">您沒有自己的組來創建資源</string>
-    <string name="res_success">資源創建成功</string>
     <string name="action_create_resource">創建資源</string>
     <string name="edit_resource">編輯資源</string>
     <string name="delete_resource">刪除資源</string>
@@ -351,19 +325,11 @@
 
     <string name="navigation_drawer_open">打开导航抽屉</string>
     <string name="navigation_drawer_close">关闭导航抽屉</string>
-    <string name="middle_terms">  ,和  </string>
-    <string name="privacy_policy"><u>隐私政策</u></string>
-    <string name="last_text_terms"> 改变以适应全球观众.</string>
-    <string name="share"><u>分享</u></string>
     <string name="Enter_FirstName">输入名字</string>
     <string name="validation_first_name_special_characters_merchant">仅输入字母</string>
     <string name="validation_last_name_special_characters_merchant">仅在姓氏中输入字母</string>
-    <string name="first_character_not_space">第一个字符不能是空格</string>
-    <string name="spaces_not_allowed">不允许有空格</string>
     <string name="length_error">Length cannot be greater than 15 characters</string>
     <string name="min_length">长度应在3-15个字符之间</string>
-    <string name="Lnamemin_length">长度应在1-20个字符之间</string>
-    <string name="Enter_LastName">输入姓氏</string>
     <string name="Enter_Address">输入地址</string>
     <string name="Enter_validemailaddress">输入一个有效的电子邮件地址</string>
     <string name="Enter_emailaddress">输入电邮地址</string>
@@ -372,25 +338,19 @@
     <string name="Password_length">密码长度应在6-20个字符之间</string>
     <string name="resenttxt"><u>重发电子邮件</u></string>
     <string name="facebook_app_id">1250339181777732</string>
-    <string name="fb_login_protocol_scheme">fb1250339181777732</string>
     <string name="enter_password">输入密码</string>
     <string name="take_photo">拍照</string>
     <string name="select_from_gallery">從圖庫中選擇</string>
     <string name="select_from_avatars">從頭像中選擇</string>
     <string name="no_records_found">没有找到记录</string>
-    <string name="list_of_people">需要帮助的人员名单</string>
     <string name="reg_completion_link">已發送註冊完成鏈接 </string>
     <string name="reg_completion_link_1">. 您可以使用該鏈接設置密碼.</string>
     <string name="reg_completion_link_2">請檢查您的促銷，社交，垃圾郵件或垃圾郵件文件夾。根據您的電子郵件首選項設置，來自admin@giftadeed.com的電子郵件可能最終位於不同的文件夾中</string>
-    <string name="you_earned">你赚取了:</string>
-    <string name="your_points">你的总积分:</string>
     <string name="tagged_deeds_for_day">标记的行为 &amp; 实现了一天的行动</string>
     <string name="todays_deeds">今天的标记事迹</string>
     <string name="todays_fulfilled_deeds">今天的履行行动</string>
-    <string name="filter">過濾</string>
     <string name="filters">過濾器</string>
     <string name="filter_group">按組過濾</string>
-    <string name="start_writing">开始在这里写... </string>
     <string name="apply_filters">应用过滤器</string>
     <string name="radius">半径</string>
     <string name="apply">应用</string>
@@ -400,7 +360,6 @@
     <string name="distance">距离</string>
     <string name="time">时间</string>
     <string name="search">搜索</string>
-    <string name="coming_soon">快来了......</string>
     <string name="suggest_sub_type">建議子類型</string>
     <string name="enter_suggession">輸入建議</string>
     <string name="subtype_already_exist">子類型已經存在</string>
@@ -410,7 +369,6 @@
     <string name="all_individuals">所有個人用戶</string>
     <string name="your_groups">你的團體</string>
     <string name="tell_people_remaining">告訴別人剩下的是什麼</string>
-    <string name="already_deeds_msg">以下契約已經標記為選定的位置:</string>
 
     //--------------------key-------------------
     <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
@@ -432,7 +390,6 @@
     <string name="members">會員</string>
     <string name="invite_member">邀請成員</string>
     <string name="open_channel_chat_content_desc_profile">個人資料圖片</string>
-    <string name="action_create_channel">創建頻道</string>
     <string name="download">下載</string>
     <string name="upload">上傳</string>
     <string name="resend_message">重發</string>

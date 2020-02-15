@@ -92,7 +92,6 @@
                         android:src="@drawable/current_locn" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/current_location_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"

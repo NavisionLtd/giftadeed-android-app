@@ -26,7 +26,6 @@
             android:visibility="gone" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/sos_alert_animation_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
@@ -34,46 +33,6 @@
             android:visibility="visible"
             app:lottie_autoPlay="true"
             app:lottie_fileName="sos_alert.json"
-            app:lottie_loop="true" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="gift_reward.json"
-            app:lottie_loop="true" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="success_stars.json"
-            app:lottie_loop="true" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="thumbs_up_party.json"
-            app:lottie_loop="true" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="winner.json"
             app:lottie_loop="true" />
 
         <TextView

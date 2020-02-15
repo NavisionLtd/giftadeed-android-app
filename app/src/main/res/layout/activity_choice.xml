@@ -124,7 +124,6 @@
         </androidx.appcompat.widget.AppCompatButton>
 
         <TextView
-            android:id="@+id/text_main_versions"
             android:text="@string/all_app_version"
             android:textSize="12dp"
             android:textColor="#a0a0a0"

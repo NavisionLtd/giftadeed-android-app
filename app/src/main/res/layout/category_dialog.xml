@@ -79,7 +79,6 @@
             android:visibility="gone" />
 
         <ListView
-            android:id="@+id/custom_category_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/custom_cat_heading"

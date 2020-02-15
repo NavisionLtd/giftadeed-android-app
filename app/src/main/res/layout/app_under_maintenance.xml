@@ -17,7 +17,6 @@
         android:src="@drawable/logo_new" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/sos_alert_animation_view"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_gravity="center"
