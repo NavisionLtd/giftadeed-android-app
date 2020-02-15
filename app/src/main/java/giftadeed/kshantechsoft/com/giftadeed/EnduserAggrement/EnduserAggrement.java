@@ -68,8 +68,8 @@ public class EnduserAggrement extends Fragment {
 
 
         txtAgreementDetails= (WebView)rootview. findViewById(R.id.txtenduseragreement);
-        txtAgreementDetails.loadUrl("file:///android_asset/EndUserAgreement.html");
-
+//        txtAgreementDetails.loadUrl("file:///android_asset/EndUserAgreement.html");
+        txtAgreementDetails.loadUrl("https://giftadeed.com/pages/EndUserAgreement.html");
         WebSettings settings = txtAgreementDetails.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);

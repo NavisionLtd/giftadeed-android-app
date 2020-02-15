@@ -7,7 +7,7 @@ package giftadeed.kshantechsoft.com.giftadeed.Dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -22,11 +22,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -44,9 +39,8 @@ import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
 import retrofit.Callback;
@@ -59,14 +53,14 @@ import retrofit.Retrofit;
 //     Shows details about users tagging details                //
 /////////////////////////////////////////////////////////////////
 
-public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class Dashboard extends Fragment {
     static FragmentManager fragmgr;
     View rootview;
     TextView txtdashboard_date, txtnumberoftags, txtnumberoffulfilments, txtsuccessfulpercent, txtdeedsscore,
             txtlsatdeed, txttotaltags, txttotalfulfills, txttagpercent, txttotalscore;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     SimpleArcDialog mDialog;
-    private GoogleApiClient mGoogleApiClient;
+
 
     public static Dashboard newInstance(int sectionNumber) {
         Dashboard fragment = new Dashboard();
@@ -97,11 +91,6 @@ public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionF
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
         init();
-        // mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API)
-                .build();
         mDialog = new SimpleArcDialog(getContext());
         getdashboard();
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
@@ -119,9 +108,9 @@ public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionF
     public void getdashboard() {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -148,7 +137,7 @@ public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionF
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -158,9 +147,8 @@ public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionF
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         DashboardModel dashboardModel = response.body();
@@ -247,8 +235,5 @@ public class Dashboard extends Fragment implements GoogleApiClient.OnConnectionF
     }
 
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

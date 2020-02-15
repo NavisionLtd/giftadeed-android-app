@@ -36,11 +36,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.sendbird.android.GroupChannel;
@@ -72,8 +67,7 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.RemoveUserFromClu
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.RowData;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -83,20 +77,19 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class CollabDetailsFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class CollabDetailsFragment extends Fragment {
     View rootview;
     RecyclerView recyclerView;
     List<RowData> item_list;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     TextView collabName, collabDesc, collabGroup, collabStartDate, memberCount, noRecordsFound;
     LinearLayout countLayout;
     String strUser_ID;
     private AlertDialog alertDialog;
     String receivedCid = "", receivedCname = "";
-    private GoogleApiClient mGoogleApiClient;
     String collabCreatorId = "", admin_ids = "";
     ArrayList<String> split = new ArrayList<String>();
     int isMember = 1;
@@ -129,12 +122,12 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.collab_details_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(SessionManager.USER_ID);
-        HashMap<String, String> collab = sessionManager.getSelectedColabDetails();
-        receivedCid = collab.get(SessionManager.COLAB_ID);
-        receivedCname = collab.get(SessionManager.COLAB_NAME);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(SharedPrefManager.USER_ID);
+        HashMap<String, String> collab = sharedPrefManager.getSelectedColabDetails();
+        receivedCid = collab.get(SharedPrefManager.COLAB_ID);
+        receivedCname = collab.get(SharedPrefManager.COLAB_NAME);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.collab_details));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         fragmgr = getFragmentManager();
@@ -153,13 +146,12 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
         getChannelsDetails();
         loadNextUserList();
         collabName.setText(receivedCname);
-        radius_set = sessionManager.getradius();
+        radius_set = sharedPrefManager.getradius();
         if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
             collabInfo(receivedCid);
         }
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,7 +211,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -229,9 +221,8 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         int colabstatus = collabPOJO.getStatus();
@@ -242,7 +233,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                             collabGroup.setText("Created by : " + collabPOJO.getColabinfo().getGroupname() + " (" + collabPOJO.getColabinfo().getUsername() + ")");
                             collabStartDate.setText("Start date : " + collabPOJO.getColabinfo().getCollabstartDate());
                             collabCreatorId = collabPOJO.getColabinfo().getUserid();
-                            sessionManager.createColabDetails("", receivedCid, collabPOJO.getColabinfo().getCollabname(), collabPOJO.getColabinfo().getCollabdesc(), collabPOJO.getColabinfo().getGroupid(), collabPOJO.getColabinfo().getGroupname());
+                            sharedPrefManager.createColabDetails("", receivedCid, collabPOJO.getColabinfo().getCollabname(), collabPOJO.getColabinfo().getCollabdesc(), collabPOJO.getColabinfo().getGroupid(), collabPOJO.getColabinfo().getGroupname());
                         } else if (colabstatus == 0) {
                             Toast.makeText(getContext(), collabPOJO.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
@@ -410,7 +401,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -420,9 +411,8 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (collabResponseStatus.getStatus() == 1) {
@@ -492,7 +482,7 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -502,9 +492,8 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (collabResponseStatus.getStatus() == 1) {
@@ -585,11 +574,6 @@ public class CollabDetailsFragment extends Fragment implements GoogleApiClient.O
                 return false;
             }
         });
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
     }
 
     //channel details

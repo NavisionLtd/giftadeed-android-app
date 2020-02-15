@@ -9,13 +9,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
 
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
 
 
 import androidx.fragment.app.FragmentManager;
@@ -33,11 +31,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
@@ -56,9 +49,8 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryType;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Modeltaglist;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.taglistInterface;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -76,20 +68,20 @@ import retrofit.Retrofit;
 //                                                               //
 //     Shows list of tags in your area                          //
 /////////////////////////////////////////////////////////////////
-public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
+public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View rootview;
     RecyclerView recyclerView;
     List<RowData> item_list;
     float radius_set;
     String strUser_ID;
     NeedListAdapter needListAdapter;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     static FragmentManager fragmgr;
     FragmentActivity myContext;
     String filter_category = Validation.FILTER_CATEGORY;
     String filter_groups = Validation.FILTER_GROUP_IDS;
     TextView txtlist_count, textView;
-    private GoogleApiClient mGoogleApiClient;
+
     DatabaseAccess databaseAccess;
     ArrayList<GroupPOJO> groupArrayList;
     ArrayList<CategoryPOJO> categories;
@@ -118,12 +110,11 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         recyclerView.setLayoutManager(layoutManager);
         txtlist_count = (TextView) rootview.findViewById(R.id.txtlist_count);
         textView = (TextView) rootview.findViewById(R.id.textView3);
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         // get_Tag_data(strUser_ID);
-        radius_set = sessionManager.getradius();
+        radius_set = sharedPrefManager.getradius();
         databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -170,9 +161,9 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
     public void get_Tag_data() {
         //item_list.clear();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
         item_list = new ArrayList<>();
         // final ProgressDialog progressDialog = new ProgressDialog(getContext());
 //        progressDialog.show();
@@ -204,10 +195,10 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
                                     @Override
@@ -216,7 +207,6 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                                     }
                                 });*/
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         Modeltaglist result = new Modeltaglist();
@@ -336,6 +326,32 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                                                         item_list.add(rowData);
                                                     }
                                                 }
+                                            } else {
+                                                RowData rowData = new RowData();
+                                                rowData.setTitle(result.getTaggedlist().get(j).getNeedName());
+                                                rowData.setAddress(result.getTaggedlist().get(j).getAddress());
+                                                rowData.setDate(result.getTaggedlist().get(j).getTaggedDatetime());
+                                                rowData.setImagepath(result.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDistance(dist1);
+                                                rowData.setCharacterPath(result.getTaggedlist().get(j).getCharacterPath());
+                                                rowData.setFname(result.getTaggedlist().get(j).getFname());
+                                                rowData.setLname(result.getTaggedlist().get(j).getLname());
+                                                rowData.setPrivacy(result.getTaggedlist().get(j).getPrivacy());
+                                                rowData.setCatType(model.getTaggedlist().get(j).getCatType());
+                                                rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
+                                                rowData.setNeedName(result.getTaggedlist().get(j).getNeedName());
+                                                rowData.setTotalTaggedCreditPoints(result.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                                rowData.setTotalFulfilledCreditPoints(result.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                                rowData.setUserID(result.getTaggedlist().get(j).getUserID());
+                                                rowData.setTaggedID(result.getTaggedlist().get(j).getTaggedID());
+                                                rowData.setGeopoint(result.getTaggedlist().get(j).getGeopoint());
+                                                rowData.setTaggedPhotoPath(result.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                rowData.setDescription(result.getTaggedlist().get(j).getDescription());
+                                                rowData.setViews(result.getTaggedlist().get(j).getViews());
+                                                rowData.setEndorse(result.getTaggedlist().get(j).getEndorse());
+                                                rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
+                                                rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
+                                                item_list.add(rowData);
                                             }
                                         }
                                     }
@@ -400,7 +416,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -410,9 +426,8 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();
@@ -514,10 +529,6 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
 
     @Override
     public void onRefresh() {

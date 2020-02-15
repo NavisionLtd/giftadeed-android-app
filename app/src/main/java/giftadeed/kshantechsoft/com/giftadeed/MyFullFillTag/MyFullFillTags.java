@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -28,11 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 
@@ -46,7 +40,7 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
@@ -63,21 +57,21 @@ import retrofit.Retrofit;
 //                                                               //
 //     Shows list of tags fulfilled by user                     //
 /////////////////////////////////////////////////////////////////
-public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class MyFullFillTags extends Fragment  {
     RecyclerView recyclerView;
     RelativeLayout relativeNoResultFound;
     View rootview;
     private RecyclerView.LayoutManager layoutManager;
     static FragmentManager fragmgr;
     FragmentActivity myContext;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUSERID;
     List<Taggedlist> lstMyfullfillTags = new ArrayList<>();
     Adapter_MyFullFillTags adapter;
     TextView txtmytags;
     SimpleArcDialog mDialog;
     String tab = "";
-    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,19 +81,10 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.my_fulfil_tags_heading));
         TaggedneedsActivity.fragname = MyFullFillTags.newInstance(0);
         mDialog = new SimpleArcDialog(getContext());
-        //mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        try {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API)
-                    .build();
-        } catch (Exception e) {
-
-        }
         //----------------------------------this code is used for taking user id from session preference
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUSERID = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUSERID = user.get(sharedPrefManager.USER_ID);
         myfullFillTagsFetchDetails(strUSERID);
         //-----------------------------------recycler view layout------------------
         recyclerView = (RecyclerView) rootview.findViewById(R.id.recycler_myTags);
@@ -186,7 +171,7 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
 
@@ -198,10 +183,9 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         ModalMyFullfillTag result = new ModalMyFullfillTag();
@@ -303,8 +287,5 @@ public class MyFullFillTags extends Fragment implements GoogleApiClient.OnConnec
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

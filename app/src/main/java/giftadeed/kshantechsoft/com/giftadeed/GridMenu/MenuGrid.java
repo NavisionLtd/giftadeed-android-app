@@ -7,7 +7,7 @@ package giftadeed.kshantechsoft.com.giftadeed.GridMenu;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,9 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +39,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.Tagcounter.Tagcounter;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Utility;
 import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.TaggerList;
 import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.TopTenFullfillerList;
@@ -51,12 +48,12 @@ import giftadeed.kshantechsoft.com.giftadeed.termsandconditions.Terms_Condition;
 ////////////////////////////////////////////////////////////////////
 //     Shows menu on clicking about app from drawer              //
 /////////////////////////////////////////////////////////////////
-public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class MenuGrid extends Fragment  {
     static FragmentManager fragmgr;
-    SessionManager sharedPreferences;
+    SharedPrefManager sharedPreferences;
     String strUserId, strUserName;
     static String NotificationCountnum;
-    private GoogleApiClient mGoogleApiClient;
+
     static int color_pos = 0;
     TextView txt_app_version;
     String currentVersion = "";
@@ -104,7 +101,7 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
         TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
-        sharedPreferences = new SessionManager(getContext());
+        sharedPreferences = new SharedPrefManager(getContext());
         HashMap<String, String> user = sharedPreferences.getUserDetails();
         strUserId = user.get(sharedPreferences.USER_ID);
         strUserName = user.get(sharedPreferences.USER_NAME);
@@ -112,8 +109,6 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
         int mNoOfColumns = Utility.calculateNoOfColumns(getContext());
         latitude_gps = new GPSTracker(getContext()).getLatitude();
         longitude_gps = new GPSTracker(getContext()).getLongitude();
-        //----------------for google logout
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
         RecyclerView recyclerView = (RecyclerView) rootview.findViewById(R.id.recycler_view);
         txt_app_version = rootview.findViewById(R.id.tv_about_app_version);
         try {
@@ -345,7 +340,6 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
 
                                 sharedPreferences.set_notification_status("OFF");
                                 Intent loginintent = new Intent(getActivity(), SendBirdLoginActivity.class);
-                                loginintent.putExtra("message", "Charity");
                                 startActivity(loginintent);
                             }
                         });
@@ -368,7 +362,6 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
     @Override
     public void onResume() {
         super.onResume();
-        mGoogleApiClient.connect();
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
         getView().setOnKeyListener(new View.OnKeyListener() {
@@ -397,15 +390,10 @@ public class MenuGrid extends Fragment implements GoogleApiClient.OnConnectionFa
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     @Override
     public void onPause() {
         super.onPause();
-        mGoogleApiClient.stopAutoManage(getActivity());
-        mGoogleApiClient.disconnect();
     }
 }

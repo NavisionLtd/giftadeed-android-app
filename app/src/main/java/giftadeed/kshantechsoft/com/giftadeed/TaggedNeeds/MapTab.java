@@ -50,11 +50,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -105,8 +102,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.SOSlist;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.SOSlistInterface;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.taglistInterface;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -125,7 +121,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
     List<Taggedlist> taggedlists = new ArrayList<>();
     List<SOSlist> soslists = new ArrayList<>();
     List<Resourcelist> resourcelists = new ArrayList<>();
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUserId, str_tagid = "", str_geopoint = "", str_address = "";
     ArrayList<String> lat_long = new ArrayList<>();
     ArrayList<String> icon_path = new ArrayList<>();
@@ -173,18 +169,23 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
 
-        sessionManager = new SessionManager(getActivity());
-        selectedLangugae = sessionManager.getLanguage();
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        selectedLangugae = sharedPrefManager.getLanguage();
         updateLanguage(selectedLangugae);
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUserId = user.get(sessionManager.USER_ID);
-        HashMap<String, String> notification = sessionManager.get_notification_status();
-        String Notification_status = notification.get(sessionManager.KEY_NOTIFICATION);
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUserId = user.get(sharedPrefManager.USER_ID);
+        HashMap<String, String> notification = sharedPrefManager.get_notification_status();
+        String Notification_status = notification.get(sharedPrefManager.KEY_NOTIFICATION);
         Log.d("Notification_status", "" + Notification_status);
-        strUserId = user.get(sessionManager.USER_ID);
-        sessionManager = new SessionManager(getActivity());
+        strUserId = user.get(sharedPrefManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
         if (!(Validation.isNetworkAvailable(myContext))) {
             Toast.makeText(myContext, getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
         } else {
@@ -222,9 +223,9 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 case R.id.navigation_sos:
                     Intent i = new Intent(getApplicationContext(), SOSOptionActivity.class);
                     i.putExtra("callingfrom", "app");
-                    sessionManager.store_sos_option1_clicked("no");
-                    sessionManager.store_sos_option2_clicked("no");
-                    sessionManager.store_sos_option3_clicked("no");
+                    sharedPrefManager.store_sos_option1_clicked("no");
+                    sharedPrefManager.store_sos_option2_clicked("no");
+                    sharedPrefManager.store_sos_option3_clicked("no");
                     startActivity(i);
 
 //                    endorseDialog();
@@ -238,7 +239,6 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-        mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
         if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
@@ -453,7 +453,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getApplicationContext());
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -462,9 +462,8 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                         //updateUI(false);
                                     }
                                 });*/
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getApplicationContext(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();
@@ -603,10 +602,10 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -617,7 +616,6 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                 });*/
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         taggedlists = response.body().getTaggedlist();
@@ -640,12 +638,13 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                         Location tagLocation2 = new Location("tag Location");
                                         tagLocation2.setLatitude(Double.parseDouble(words[0]));
                                         tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                        double radi = sessionManager.getradius();
+                                        double radi = sharedPrefManager.getradius();
                                         DecimalFormat df2 = new DecimalFormat("#.##");
                                         double dist1 = myLocation.distanceTo(tagLocation2);
                                         Log.d("radius", String.valueOf(dist1));
                                         if (dist1 < radi) {
-                                            if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && filter_groups.equals("All")) || (filter_category.equals("All") && filter_groups.equals("All"))) {
+                                            if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && filter_groups.equals("All")) ||
+                                                    (filter_category.equals("All") && filter_groups.equals("All"))) {
                                                 // System.out.print(model.getTaggedlist().get(j).getIconPath());
                                                 lat_long.add(model.getTaggedlist().get(j).getGeopoint());
                                                 icon_path.add(model.getTaggedlist().get(j).getIconPath());
@@ -718,7 +717,8 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                                 }
                                                             });
                                                 }
-                                            } else if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && (!filter_groups.equals("All"))) || (filter_category.equals("All") && (!filter_groups.equals("All")))) {
+                                            } else if ((filter_category.equals(model.getTaggedlist().get(j).getNeedName()) && (!filter_groups.equals("All"))) ||
+                                                    (filter_category.equals("All") && (!filter_groups.equals("All")))) {
                                                 String[] split_filter_groups = filter_groups.split(",");       // filter selected groupids
                                                 ArrayList<String> filterGroupList = new ArrayList<String>(Arrays.asList(split_filter_groups)); // arraylist for filter selected groupids
 
@@ -870,6 +870,76 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                             }
                                                         }
                                                     }
+                                                } else {
+                                                    lat_long.add(model.getTaggedlist().get(j).getGeopoint());
+                                                    icon_path.add(model.getTaggedlist().get(j).getIconPath());
+                                                    tag_title.add(model.getTaggedlist().get(j).getNeedName());
+                                                    //---------------------for tab2
+                                                    rowData.setTitle(model.getTaggedlist().get(j).getNeedName());
+                                                    rowData.setAddress(model.getTaggedlist().get(j).getAddress());
+                                                    rowData.setDate(model.getTaggedlist().get(j).getTaggedDatetime());
+                                                    rowData.setImagepath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                    rowData.setDistance(dist1);
+                                                    rowData.setCharacterPath(model.getTaggedlist().get(j).getCharacterPath());
+                                                    rowData.setGetIconPath(model.getTaggedlist().get(j).getIconPath());
+                                                    rowData.setFname(model.getTaggedlist().get(j).getFname());
+                                                    rowData.setLname(model.getTaggedlist().get(j).getLname());
+                                                    rowData.setPrivacy(model.getTaggedlist().get(j).getPrivacy());
+                                                    rowData.setNeedName(model.getTaggedlist().get(j).getNeedName());
+                                                    rowData.setTotalTaggedCreditPoints(model.getTaggedlist().get(j).getTotalTaggedCreditPoints());
+                                                    rowData.setTotalFulfilledCreditPoints(model.getTaggedlist().get(j).getTotalFulfilledCreditPoints());
+                                                    rowData.setUserID(model.getTaggedlist().get(j).getUserID());
+                                                    rowData.setTaggedID(model.getTaggedlist().get(j).getTaggedID());
+                                                    rowData.setCatType(model.getTaggedlist().get(j).getCatType());
+                                                    rowData.setGeopoint(model.getTaggedlist().get(j).getGeopoint());
+                                                    rowData.setTaggedPhotoPath(model.getTaggedlist().get(j).getTaggedPhotoPath());
+                                                    rowData.setDescription(model.getTaggedlist().get(j).getDescription());
+                                                    rowData.setViews(model.getTaggedlist().get(j).getViews());
+                                                    rowData.setEndorse(model.getTaggedlist().get(j).getEndorse());
+                                                    rowData.setPermanent(model.getTaggedlist().get(j).getPermanent());
+                                                    rowData.setAllGroups(model.getTaggedlist().get(j).getAll_groups());
+                                                    rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
+                                                    item.add(rowData);
+
+                                                    String str_lati_logi = model.getTaggedlist().get(j).getGeopoint();
+                                                    String[] words_new = str_lati_logi.split(",");
+                                                    if (words_new.length > 1) {
+                                                        final String marker_id = model.getTaggedlist().get(j).getTaggedID();
+                                                        final String catType = model.getTaggedlist().get(j).getCatType();
+                                                        final String permanent = model.getTaggedlist().get(j).getPermanent();
+                                                        final String markerTitle, icon_path_str_new;
+                                                        if (permanent.equals("Y")) {
+                                                            markerTitle = "Permanent";
+                                                            icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
+                                                        } else {
+                                                            if (catType.equals("C")) {
+                                                                markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                                icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
+                                                            } else {
+                                                                markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
+                                                                icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
+                                                            }
+                                                        }
+
+                                                        Log.d("imagepath2", icon_path_str_new);
+                                                        Double maplat = Double.parseDouble(words_new[0]);
+                                                        Double maplong = Double.parseDouble(words_new[1]);
+                                                        final LatLng point = new LatLng(maplat, maplong);//
+                                                        Glide.with(getApplicationContext())
+                                                                .asBitmap()
+                                                                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
+                                                                .load(icon_path_str_new)
+                                                                .into(new SimpleTarget<Bitmap>() {
+                                                                    @Override
+                                                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(point)
+                                                                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(customView, resource))).title(markerTitle).anchor(0.5f, 0.907f));
+                                                                        marker.setTag(markerTitle);
+                                                                        marker.setSnippet(marker_id);
+//                                                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 17f));
+                                                                    }
+                                                                });
+                                                    }
                                                 }
                                             }
                                         }
@@ -924,10 +994,10 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), "You have been blocked", Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -938,7 +1008,6 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                 });*/
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         soslists = response.body().getSoslist();
@@ -957,7 +1026,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                         Location tagLocation2 = new Location("tag Location");
                                         tagLocation2.setLatitude(Double.parseDouble(words[0]));
                                         tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                        double radi = sessionManager.getradius();
+                                        double radi = sharedPrefManager.getradius();
                                         DecimalFormat df2 = new DecimalFormat("#.##");
                                         double dist1 = myLocation.distanceTo(tagLocation2);
                                         Log.d("radius", String.valueOf(dist1));
@@ -1039,10 +1108,10 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1053,7 +1122,6 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                 });*/
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         resourcelists = response.body().getReslist();
@@ -1072,7 +1140,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                         Location tagLocation2 = new Location("tag Location");
                                         tagLocation2.setLatitude(Double.parseDouble(words[0]));
                                         tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                                        double radi = sessionManager.getradius();
+                                        double radi = sharedPrefManager.getradius();
                                         DecimalFormat df2 = new DecimalFormat("#.##");
                                         double dist1 = myLocation.distanceTo(tagLocation2);
                                         Log.d("radius", String.valueOf(dist1));
@@ -1164,7 +1232,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     mDialog.dismiss();
                     FacebookSdk.sdkInitialize(getActivity());
                     Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                    sessionManager.createUserCredentialSession(null, null, null);
+                    sharedPrefManager.createUserCredentialSession(null, null, null);
                     LoginManager.getInstance().logOut();
                     /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1174,9 +1242,8 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                     }
                                 });*/
 
-                    sessionManager.set_notification_status("ON");
+                    sharedPrefManager.set_notification_status("ON");
                     Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                    loginintent.putExtra("message", "Charity");
                     startActivity(loginintent);
                 } else {
                     mDialog.dismiss();
@@ -1338,7 +1405,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1348,9 +1415,8 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
@@ -1462,8 +1528,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i("map", "Connection suspended");
-        mGoogleApiClient.connect();
+
     }
 
     @Override

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
 import retrofit.Callback;
@@ -149,9 +149,9 @@ public class Foreground extends Application implements Application.ActivityLifec
         paused = false;
         boolean wasBackground = !foreground;
         foreground = true;
-        SessionManager sessionManager = new SessionManager(activity.getApplicationContext());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        user_id = user.get(sessionManager.USER_ID);
+        SharedPrefManager sharedPrefManager = new SharedPrefManager(activity.getApplicationContext());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        user_id = user.get(sharedPrefManager.USER_ID);
         Log.d("userid", "" + user_id);
 
         if (check != null)

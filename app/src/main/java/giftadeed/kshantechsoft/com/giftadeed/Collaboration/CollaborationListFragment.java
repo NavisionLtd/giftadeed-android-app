@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -33,11 +32,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -52,8 +46,7 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -64,7 +57,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class CollaborationListFragment extends Fragment
-        implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
+        implements SwipeRefreshLayout.OnRefreshListener {
     View rootview;
     FragmentActivity myContext;
     SimpleArcDialog mDialog;
@@ -74,8 +67,7 @@ public class CollaborationListFragment extends Fragment
     Button btnCreateColab;
     SwipeRefreshLayout swipeRefreshLayout;
     String strUser_ID;
-    SessionManager sessionManager;
-    private GoogleApiClient mGoogleApiClient;
+    SharedPrefManager sharedPrefManager;
     CollabListAdapter collabListAdapter;
 
     public static CollaborationListFragment newInstance(int sectionNumber) {
@@ -105,7 +97,7 @@ public class CollaborationListFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.fragment_colab_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_groups));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         mDialog = new SimpleArcDialog(getContext());
@@ -120,9 +112,8 @@ public class CollaborationListFragment extends Fragment
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         swipeRefreshLayout.setOnRefreshListener(this);
         /**
          * Showing Swipe Refresh animation on activity create
@@ -149,7 +140,7 @@ public class CollaborationListFragment extends Fragment
                 FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
                 CreateCollabFragment createCollabFragment = new CreateCollabFragment();
-                sessionManager.createColabDetails("create", "", "", "", "", "");
+                sharedPrefManager.createColabDetails("create", "", "", "", "", "");
                 newfrag.beginTransaction().replace(R.id.content_frame, createCollabFragment).commit();
             }
         });
@@ -161,7 +152,7 @@ public class CollaborationListFragment extends Fragment
                 FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
                 Log.d("infoclb", "" + colabArrayList.get(position).getId() + colabArrayList.get(position).getColabName());
-                sessionManager.createColabDetails("", colabArrayList.get(position).getId(), colabArrayList.get(position).getColabName(), "", "", "");
+                sharedPrefManager.createColabDetails("", colabArrayList.get(position).getId(), colabArrayList.get(position).getColabName(), "", "", "");
                 CollabDetailsFragment fragment = new CollabDetailsFragment();
                 newfrag.beginTransaction().replace(R.id.content_frame, fragment).commit();
             }
@@ -222,7 +213,7 @@ public class CollaborationListFragment extends Fragment
                         swipeRefreshLayout.setRefreshing(false);
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -232,9 +223,8 @@ public class CollaborationListFragment extends Fragment
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         colabArrayList.clear();
@@ -309,10 +299,5 @@ public class CollaborationListFragment extends Fragment
                 return false;
             }
         });
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
     }
 }

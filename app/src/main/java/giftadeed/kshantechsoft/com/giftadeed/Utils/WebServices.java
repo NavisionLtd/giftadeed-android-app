@@ -11,27 +11,32 @@ package giftadeed.kshantechsoft.com.giftadeed.Utils;
 
 public class WebServices {
 
+
+//    public static final String MANI_URL = "https://kshandemo.co.in/";
+//    public static final String SUB_URL = "gad3p2/api/";
+
+
     /* Urls for development */
-    /*public static final String MANI_URL = "https://kshandemo.co.in/";
-    public static final String SUB_URL = "gad3p2/api/";
+    public static final String MANI_URL = "https://devtest.giftadeed.com/";
+    public static final String SUB_URL = "api/";
     public static final String SOS_STORAGE_PATH_UPLOADS = "uploadsDev/";
     public static final String DATABASE_SOS_UPLOADS = "SOSDev";
     public static final String DATABASE_PROFILE_PIC_UPLOADS = "usersDev";
     public static final String PROFILEPIC_STORAGE_PATH_UPLOADS = "profilepicsDev/";
     public static final String SENDBIRD_APP_ID = "2B2DA376-91B5-4604-9279-C0533F130126";
-    public static final String SENDBIRD_API_TOKEN = "cf709ee2fa69a3823f90bdc98647c0d2e850d3cf";*/
+    public static final String SENDBIRD_API_TOKEN = "cf709ee2fa69a3823f90bdc98647c0d2e850d3cf";
     /* End of Urls for development */
 
 
     /* Urls for production */
-    public static final String MANI_URL = "https://www.giftadeed.com/";
+    /*public static final String MANI_URL = "https://www.giftadeed.com/";
     public static final String SUB_URL = "api/";
     public static final String SOS_STORAGE_PATH_UPLOADS = "uploads/";
     public static final String DATABASE_SOS_UPLOADS = "SOS";
     public static final String DATABASE_PROFILE_PIC_UPLOADS = "users";
     public static final String PROFILEPIC_STORAGE_PATH_UPLOADS = "profilepics/";
     public static final String SENDBIRD_APP_ID = "A90E8A82-E9CD-477C-829D-A162F478B0E4";
-    public static final String SENDBIRD_API_TOKEN = "2dcdfe3d32794628037846383f037b87db12a349";
+    public static final String SENDBIRD_API_TOKEN = "2dcdfe3d32794628037846383f037b87db12a349";*/
     /* End of Urls for production */
 
     public static final String CUSTOM_CATEGORY_IMAGE_URL = MANI_URL + SUB_URL + "image/group_category/";

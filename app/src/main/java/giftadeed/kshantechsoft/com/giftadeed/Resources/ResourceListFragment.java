@@ -9,7 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -35,11 +35,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -55,8 +50,7 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -67,7 +61,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class ResourceListFragment extends Fragment
-        implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
+        implements SwipeRefreshLayout.OnRefreshListener {
     View rootview;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
@@ -78,8 +72,8 @@ public class ResourceListFragment extends Fragment
     Button btnCreateRes;
     SwipeRefreshLayout swipeRefreshLayout;
     String strUser_ID;
-    SessionManager sessionManager;
-    private GoogleApiClient mGoogleApiClient;
+    SharedPrefManager sharedPrefManager;
+
     ResListAdapter resListAdapter;
 
     public static ResourceListFragment newInstance() {
@@ -109,7 +103,7 @@ public class ResourceListFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.fragment_res_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_resources));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         fragmgr = getFragmentManager();
@@ -125,9 +119,9 @@ public class ResourceListFragment extends Fragment
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         swipeRefreshLayout.setOnRefreshListener(this);
         /**
          * Showing Swipe Refresh animation on activity create
@@ -152,7 +146,7 @@ public class ResourceListFragment extends Fragment
             @Override
             public void onClick(View view) {
                 CreateResourceFragment createResourceFragment = new CreateResourceFragment();
-                sessionManager.createResourceDetails("create","","");
+                sharedPrefManager.createResourceDetails("create","","");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createResourceFragment).commit();
             }
         });
@@ -195,7 +189,7 @@ public class ResourceListFragment extends Fragment
         switch (id) {
             case R.id.action_create_resource:
                 CreateResourceFragment createGroupFragment = new CreateResourceFragment();
-                sessionManager.createResourceDetails("create","","");
+                sharedPrefManager.createResourceDetails("create","","");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
                 return true;
             default:
@@ -243,7 +237,7 @@ public class ResourceListFragment extends Fragment
                         swipeRefreshLayout.setRefreshing(false);
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -253,9 +247,8 @@ public class ResourceListFragment extends Fragment
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<ResourcePOJO> resourcePOJOList = response.body();
@@ -327,8 +320,5 @@ public class ResourceListFragment extends Fragment
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

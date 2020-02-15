@@ -45,7 +45,7 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.main.ConnectionManager;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -64,7 +64,7 @@ public class GroupChannelListFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefresh;
 
     //==============================================
-    public SessionManager sessionManager;
+    public SharedPrefManager sharedPrefManager;
     private String strUserID, strUsername, strClubName;
     public Context mContext;
     private boolean mIsDistinct = true;
@@ -106,13 +106,13 @@ public class GroupChannelListFragment extends Fragment {
         //PreferenceUtils.setGroupChannelDistinct(mContext,true);
         PreferenceUtils.setGroupChannelDistinct(mContext, false);
 
-        sessionManager = new SessionManager(mContext);
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUserID = user.get(sessionManager.USER_ID);
-        strUsername = user.get(sessionManager.USER_NAME);
+        sharedPrefManager = new SharedPrefManager(mContext);
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUserID = user.get(sharedPrefManager.USER_ID);
+        strUsername = user.get(sharedPrefManager.USER_NAME);
 
         mIsDistinct = PreferenceUtils.getGroupChannelDistinct(mContext);
-        strClubName = sessionManager.getGroupName();
+        strClubName = sharedPrefManager.getGroupName();
         String userId = PreferenceUtils.getUserId(getActivity());
 
         Log.d("ZZZ", "useridhg" + strUserID);

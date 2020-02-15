@@ -50,9 +50,8 @@
 
                     <Button
                         android:id="@+id/giftcamera"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:layout_weight="1"
                         android:background="@drawable/white_button_background"
                         android:drawableLeft="@drawable/cam_1"
                         android:drawablePadding="10dp"
@@ -74,6 +73,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="11dp"
                         android:text="@string/browse"
+                        android:visibility="gone"
                         android:textAllCaps="false"
                         android:textColor="@color/grey"
                         android:textSize="16dp" />

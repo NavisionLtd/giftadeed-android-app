@@ -27,7 +27,7 @@ import java.util.List;
 
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 /**
  * An Activity to create a new Group Channel.
@@ -47,7 +47,7 @@ public class CreateGroupChannelActivity extends AppCompatActivity
     private int mCurrentState;
     private Toolbar mToolbar;
     //========================================================
-    public SessionManager sessionManager;
+    public SharedPrefManager sharedPrefManager;
     public Context mContext;
     public String strUserID, strUsername, strClubName, strSendBirdServerUsers;
     List<String> lstusers = new ArrayList<>();
@@ -74,12 +74,12 @@ public class CreateGroupChannelActivity extends AppCompatActivity
 
 
 
-      //  sessionManager = new SharedPreferenceManager(this);
-      //  HashMap<String, String> user = sessionManager.getUserDetails();
-      //  strUserID = user.get(sessionManager.USER_ID);
-      //  strUsername = user.get(sessionManager.USER_NAME);
+      //  sharedPrefManager = new SharedPreferenceManager(this);
+      //  HashMap<String, String> user = sharedPrefManager.getUserDetails();
+      //  strUserID = user.get(sharedPrefManager.USER_ID);
+      //  strUsername = user.get(sharedPrefManager.USER_NAME);
         mIsDistinct = PreferenceUtils.getGroupChannelDistinct(CreateGroupChannelActivity.this);
-      //  strClubName = sessionManager.getGroupName();
+      //  strClubName = sharedPrefManager.getGroupName();
         strSendBirdServerUsers = PreferenceUtils.getUserId(mContext);
       //  strSendBirdServerUsers = strUserID;
 

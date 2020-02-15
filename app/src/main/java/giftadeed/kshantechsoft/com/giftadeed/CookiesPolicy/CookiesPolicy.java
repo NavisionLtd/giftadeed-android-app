@@ -29,7 +29,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 public class CookiesPolicy extends Fragment {
     static FragmentManager fragmgr;
     View rootview;
-    WebView txtAgreementDetails;
+    WebView txtCookiesPolicy;
 
     public static CookiesPolicy newInstance(int sectionNumber) {
         CookiesPolicy fragment = new CookiesPolicy();
@@ -59,21 +59,22 @@ public class CookiesPolicy extends Fragment {
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
-        txtAgreementDetails = (WebView) rootview.findViewById(R.id.txtcookiespolicy);
-        txtAgreementDetails.loadUrl("file:///android_asset/CookiesPolicy.html");
-        WebSettings settings = txtAgreementDetails.getSettings();
+        txtCookiesPolicy = (WebView) rootview.findViewById(R.id.txtcookiespolicy);
+//        txtCookiesPolicy.loadUrl("file:///android_asset/CookiesPolicy.html");
+        txtCookiesPolicy.loadUrl("https://giftadeed.com/pages/CookiesPolicy.html");
+        WebSettings settings = txtCookiesPolicy.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);
-        txtAgreementDetails.getSettings().setJavaScriptEnabled(true);
-        txtAgreementDetails.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-        txtAgreementDetails.getSettings().setAppCacheEnabled(true);
-        txtAgreementDetails.setOnLongClickListener(new View.OnLongClickListener() {
+        txtCookiesPolicy.getSettings().setJavaScriptEnabled(true);
+        txtCookiesPolicy.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        txtCookiesPolicy.getSettings().setAppCacheEnabled(true);
+        txtCookiesPolicy.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 return true;
             }
         });
-        txtAgreementDetails.setLongClickable(false);
+        txtCookiesPolicy.setLongClickable(false);
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

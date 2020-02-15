@@ -28,8 +28,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,11 +46,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import static android.view.View.GONE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class SingleDeedMap extends Fragment implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        GoogleMap.OnMarkerDragListener
-        , GoogleMap.OnMapLongClickListener {
+public class SingleDeedMap extends Fragment implements OnMapReadyCallback,GoogleMap.OnMarkerDragListener,GoogleMap.OnMapLongClickListener {
     private GoogleMap mMap;
     View rootview;
     static FragmentManager fragmgr;
@@ -75,6 +69,7 @@ public class SingleDeedMap extends Fragment implements OnMapReadyCallback,
         rootview = inflater.inflate(R.layout.fragment_single_deed_map, container, false);
         fragmgr = getFragmentManager();
         ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.singlemap)).getMapAsync(this);
+
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.title_activity_maps));
         TaggedneedsActivity.imgHamburger.setVisibility(GONE);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
@@ -205,21 +200,6 @@ public class SingleDeedMap extends Fragment implements OnMapReadyCallback,
 
 
     private void moveMap(double latitude, double longitude) {
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     @Override

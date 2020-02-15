@@ -20,10 +20,10 @@ public interface FacebookLoginInterface {
         String path = WebServices.facebooklogin;
         @FormUrlEncoded
         @POST(path)
-        Call<LinkedInLoginModel> sendData(@Field("Fname") String fname,
-                                          @Field("Lname") String lname,
-                                          @Field("Email") String email,
-                                          @Field("Device_ID") String did,
-                                          @Field("Social_Login_ID") String fb_id);
+        Call<GoogleLoginModel> sendData(@Field("Fname") String fname,
+                                        @Field("Lname") String lname,
+                                        @Field("Email") String email,
+                                        @Field("Device_ID") String did,
+                                        @Field("Social_Login_ID") String fb_id);
 
     }

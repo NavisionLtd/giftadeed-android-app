@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -54,7 +54,7 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
     int contactsCount;
     String callingfrom = "";
     ArrayList<Contact> contactArrayList;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class SOSEmergencyNumbers extends AppCompatActivity {
         contactBook2 = (ImageView) findViewById(R.id.contact_book_2);
         btnSaveNumbers = (Button) findViewById(R.id.btn_save_numbers);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        sessionManager = new SessionManager(SOSEmergencyNumbers.this);
+        sharedPrefManager = new SharedPrefManager(SOSEmergencyNumbers.this);
         databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
         callingfrom = getIntent().getStringExtra("callingfrom");

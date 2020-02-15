@@ -8,7 +8,6 @@ package giftadeed.kshantechsoft.com.giftadeed.Resources;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,7 +30,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -43,13 +41,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -78,7 +73,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.SuggestSubType;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.SuggestType;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -90,9 +85,9 @@ import retrofit.Retrofit;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class CreateResourceFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class CreateResourceFragment extends Fragment {
+    int AUTOCOMPLETE_REQUEST_CODE = 100;
     private ArrayList<GroupPOJO> groupArrayList = new ArrayList<>();
     private ArrayList<GroupPOJO> ownedGroupsArrayList = new ArrayList<>();
     ArrayList<String> selectedGroups = new ArrayList<String>();
@@ -111,7 +106,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     EditText selectFromGroup, resourceCat, resourceSubCat, resourceName, resourceLocation, resourceDesc, edselectAudiance;
     LinearLayout resSubCatLayout;
     Button btnCreateResource;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUser_ID;
     String receivedGid = "", receivedRid = "", receivedRname = "", callingFrom = "", str_rescat_id = "", str_rescat = "",
             str_ressubcat_id = "", str_ressubcat = "", str_resdesc = "", str_address = "", str_rescreatorid = "",
@@ -124,7 +119,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     String latitude_source, longitude_source;
     public String str_Geopoints, lat, longi, itemname, itemid;
     String checkedAllGrps = "N";
-    private GoogleApiClient mGoogleApiClient;
+
 //    private List<String> resultResCatId;
 //    private List<String> resultResSubCatId;
 //    private List<String> resultResAudienceGrpId;
@@ -143,7 +138,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.create_resource_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.fragname = CreateResourceFragment.newInstance(0);
         fragmgr = getFragmentManager();
         simpleArcDialog = new SimpleArcDialog(getContext());
@@ -158,15 +153,15 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
-        HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
-        receivedGid = group.get(sessionManager.GROUP_ID);
-        HashMap<String, String> resource = sessionManager.getSelectedResourceDetails();
-        callingFrom = resource.get(sessionManager.RES_CALL_FROM);
-        receivedRid = resource.get(sessionManager.RESOURCE_ID);
-        receivedRname = resource.get(sessionManager.RESOURCE_NAME);
+
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
+        HashMap<String, String> group = sharedPrefManager.getSelectedGroupDetails();
+        receivedGid = group.get(sharedPrefManager.GROUP_ID);
+        HashMap<String, String> resource = sharedPrefManager.getSelectedResourceDetails();
+        callingFrom = resource.get(sharedPrefManager.RES_CALL_FROM);
+        receivedRid = resource.get(sharedPrefManager.RESOURCE_ID);
+        receivedRname = resource.get(sharedPrefManager.RESOURCE_NAME);
         lat = String.valueOf(new GPSTracker(myContext).latitude);
         longi = String.valueOf(new GPSTracker(myContext).longitude);
         catPrefId = new ArrayList<>();
@@ -305,7 +300,15 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         resourceLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAutocompleteActivity(1);
+                // Set the fields to specify which types of place data to
+                // return after the user has made a selection.
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
+
+                // Start the autocomplete intent.
+                Intent autoCompleteIntent = new Autocomplete.IntentBuilder(
+                        AutocompleteActivityMode.FULLSCREEN, fields)
+                        .build(getActivity());
+                startActivityForResult(autoCompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
 
@@ -457,7 +460,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -466,9 +469,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                         //updateUI(false);
                                     }
                                 });*/
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();
@@ -1021,23 +1023,9 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         });
     }
 
-    private void openAutocompleteActivity(int requestcode_MyLoc_MyDest) {
-        try {
-            // The autocomplete activity requires Google Play Services to be available. The intent
-            // builder checks this and throws an exception if it is not the case.
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                    .build(myContext);
-            startActivityForResult(intent, requestcode_MyLoc_MyDest);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
+        /*if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 // retrive the data by using getPlace() method.
                 Place place = PlaceAutocomplete.getPlace(myContext, data);
@@ -1053,10 +1041,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     ++i;
                     if (i == 1) {
                         latitude_source = strValue.substring(10);
-                        //    Log.d(TAG, "********** Latitude = " + strLat);
                     } else if (i == 2) {
                         longitude_source = strValue.substring(0, (strValue.length() - 1));
-                        //Log.d(TAG, "********** Longitude = " + strLong);
                     }
                 }
                 str_Geopoints = latitude_source + "," + longitude_source;
@@ -1069,6 +1055,33 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         data);
                 // TODO: Handle the error.
                 Log.e("Tag", status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }*/
+
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i("CreateResource", "Place: " + place.getName() + ", " + place.getAddress() + ", " + place.getId());
+                resourceLocation.setText(place.getName() + ",\n" +
+                        place.getAddress());
+                StringTokenizer st = new StringTokenizer("" + place.getLatLng(), ",");
+                int i = 0;
+                while (st.hasMoreTokens()) {
+                    String strValue = st.nextToken();
+                    //Log.d(TAG, strValue);
+                    ++i;
+                    if (i == 1) {
+                        latitude_source = strValue.substring(10);
+                    } else if (i == 2) {
+                        longitude_source = strValue.substring(0, (strValue.length() - 1));
+                    }
+                }
+                str_Geopoints = latitude_source + "," + longitude_source;
+                Log.d("Geopoints after change", str_Geopoints);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
@@ -1148,7 +1161,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1158,9 +1171,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();
@@ -1345,7 +1357,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         simpleArcDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1355,9 +1367,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
@@ -1420,7 +1431,7 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                         simpleArcDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1430,9 +1441,8 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (collabResponseStatus.getStatus() == 1) {
@@ -1498,8 +1508,5 @@ public class CreateResourceFragment extends Fragment implements GoogleApiClient.
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

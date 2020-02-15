@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Modeltaglist;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 /**
  * Created by I-Sys on 30-Nov-16.
@@ -25,7 +25,7 @@ public class Pager extends FragmentPagerAdapter {
     //List<RowData> item;
     FragmentActivity myContext;
     double radius_set = 10.00;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     ArrayList<String> lat_long = new ArrayList<>();
     ArrayList<String> icon_path = new ArrayList<>();
     ArrayList<String> tag_title = new ArrayList<>();

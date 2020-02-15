@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -35,11 +35,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.sendbird.android.GroupChannel;
 import com.sendbird.android.GroupChannelListQuery;
@@ -67,8 +62,7 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Interfaces.RemoveMembe
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.Pojo.RemoveUserFromClub;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -78,12 +72,12 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
+public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View rootview;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUser_ID;
     String receivedGid = "", receivedGname = "";
     EditText editsearch;
@@ -92,7 +86,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
     FilterGroupMemberAdapter adapter;
     ArrayList<GroupMember> groupMemberList;
     private AlertDialog alertDialog;
-    private GoogleApiClient mGoogleApiClient;
+
     String member_count, groupCreatorId, clickedMemberId;
     SwipeRefreshLayout swipeRefreshLayout;
     private UserListQuery mUserListQuery;
@@ -117,7 +111,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.manage_group_member_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.member_list));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         fragmgr = getFragmentManager();
@@ -133,12 +127,12 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
-        HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
-        receivedGid = group.get(sessionManager.GROUP_ID);
-        receivedGname = group.get(sessionManager.GROUP_NAME);
+
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
+        HashMap<String, String> group = sharedPrefManager.getSelectedGroupDetails();
+        receivedGid = group.get(sharedPrefManager.GROUP_ID);
+        receivedGname = group.get(sharedPrefManager.GROUP_NAME);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             groupCreatorId = bundle.getString("groupCreatorId");
@@ -366,7 +360,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -376,9 +370,8 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (!(Validation.isNetworkAvailable(getActivity()))) {
@@ -460,7 +453,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -470,9 +463,8 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (!(Validation.isNetworkAvailable(getActivity()))) {
@@ -528,7 +520,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -538,9 +530,8 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (!(Validation.isNetworkAvailable(getActivity()))) {
@@ -601,10 +592,10 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                         swipeRefreshLayout.setRefreshing(false);
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -615,7 +606,6 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
                                 });*/
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         member_count = memberDetails.getTotalMembers();
@@ -683,10 +673,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     @Override
     public void onRefresh() {

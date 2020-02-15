@@ -35,7 +35,7 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.openchannel.OpenChanne
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PushUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 public class SendBirdLoginActivity extends Fragment {
     View rootview;
@@ -44,7 +44,7 @@ public class SendBirdLoginActivity extends Fragment {
     private TextInputEditText mUserIdConnectEditText, mUserNicknameEditText;
     private Button mConnectButton;
     private ContentLoadingProgressBar mProgressBar;
-    public SessionManager sessionManager;
+    public SharedPrefManager sharedPrefManager;
     private String strUsername;
     private String strUserID;
     public Context mContext;
@@ -74,10 +74,10 @@ public class SendBirdLoginActivity extends Fragment {
         mUserIdConnectEditText = (TextInputEditText) rootview.findViewById(R.id.edittext_login_user_id);
         mUserNicknameEditText = (TextInputEditText) rootview.findViewById(R.id.edittext_login_user_nickname);
         //add sharePreference
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUserID = user.get(sessionManager.USER_ID);
-        strUsername = user.get(sessionManager.USER_NAME);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUserID = user.get(sharedPrefManager.USER_ID);
+        strUsername = user.get(sharedPrefManager.USER_NAME);
         mUserIdConnectEditText.setText(PreferenceUtils.getUserId(getActivity()));
         mUserNicknameEditText.setText(PreferenceUtils.getNickname(getActivity()));
 

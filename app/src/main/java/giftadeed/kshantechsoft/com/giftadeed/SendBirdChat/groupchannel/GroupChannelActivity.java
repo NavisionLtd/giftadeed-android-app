@@ -30,10 +30,10 @@ import java.util.List;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 public class GroupChannelActivity extends AppCompatActivity {
-    public SessionManager sessionManager;
+    public SharedPrefManager sharedPrefManager;
     public Context mContext;
     private String strUserID, strUsername, strClubName;
     List<String> lstusers = new ArrayList<>();
@@ -63,12 +63,12 @@ public class GroupChannelActivity extends AppCompatActivity {
 
         //====================================================================================
         //get data from shared prereference to get the data of userid,usrname,clubname , clubname is sued for creting grouap name  made by nilesh feb 2018
-        sessionManager = new SessionManager(this);
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUserID = user.get(sessionManager.USER_ID);
-        strUsername = user.get(sessionManager.USER_NAME);
+        sharedPrefManager = new SharedPrefManager(this);
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUserID = user.get(sharedPrefManager.USER_ID);
+        strUsername = user.get(sharedPrefManager.USER_NAME);
         mIsDistinct = PreferenceUtils.getGroupChannelDistinct(GroupChannelActivity.this);
-        strClubName = sessionManager.getGroupName();
+        strClubName = sharedPrefManager.getGroupName();
 
 
         //     Log.d("ZZZ", "userid" + strUserID);

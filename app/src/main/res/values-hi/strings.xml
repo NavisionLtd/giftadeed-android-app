@@ -14,6 +14,9 @@
     <string name="compose_shortcut_long_label2">Tag deed</string>
     <string name="compose_disabled_message1">Not available</string>
 
+    <!--Firebase log-->
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+
     <!--Login page-->
     <string name="login_terms">नियम और शर्तें</string>
     <string name="login_privacy">गोपनीयता नीति</string>
@@ -414,7 +417,7 @@
     <string name="already_deeds_msg">चयनित स्थानों के लिए निम्नलिखित कर्म पहले से ही टैग किए गए हैं :</string>
 
     //--------------------key-------------------
-    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>
+    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
 
     <!-- SendBird -->
     <string name="no_channel">कोई चैनल नहीं मिला</string>

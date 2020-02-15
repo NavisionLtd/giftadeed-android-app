@@ -8,12 +8,16 @@ package giftadeed.kshantechsoft.com.giftadeed.ActiveUser;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+
 import androidx.multidex.MultiDex;
+
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.libraries.places.api.Places;
 import com.sendbird.android.SendBird;
 
+import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 /**
@@ -59,6 +63,11 @@ public class GiftAdeed extends Application {
         registerComponentCallbacks(handler);
 
         SendBird.init(WebServices.SENDBIRD_APP_ID, getApplicationContext());
+
+        //Initialize places api
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), getString(R.string.google_key));
+        }
     }
 
     @Override

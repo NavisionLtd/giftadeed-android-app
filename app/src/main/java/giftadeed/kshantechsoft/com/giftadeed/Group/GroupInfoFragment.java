@@ -9,7 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -31,11 +31,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -53,8 +48,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -64,20 +58,20 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class GroupInfoFragment extends Fragment  {
     View rootview;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
     ImageView imageView;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     TextView groupName, groupDesc, createdBy, createdDate, groupMemHeading, groupMemberCount;
     String strUser_ID, groupid, member_count;
     private AlertDialog alertDialog;
     ListView listView;
     ArrayList<GroupMember> groupMemberList;
     String receivedGid = "", receivedGname = "", receivedGdesc = "";
-    private GoogleApiClient mGoogleApiClient;
+
 
     public static GroupInfoFragment newInstance(int sectionNumber) {
         GroupInfoFragment fragment = new GroupInfoFragment();
@@ -106,9 +100,9 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.group_info_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.group_info));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         fragmgr = getFragmentManager();
@@ -124,10 +118,10 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
 
-        HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
-        receivedGid = group.get(sessionManager.GROUP_ID);
+
+        HashMap<String, String> group = sharedPrefManager.getSelectedGroupDetails();
+        receivedGid = group.get(sharedPrefManager.GROUP_ID);
         if (!(Validation.isNetworkAvailable(getActivity()))) {
             ToastPopUp.show(getActivity(), getString(R.string.network_validation));
         } else {
@@ -186,7 +180,7 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -196,9 +190,8 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         groupName.setText(groupInfoPOJO.get(0).getGroup_name());
@@ -264,10 +257,10 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -278,7 +271,6 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
                                 });*/
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         member_count = memberDetails.getTotalMembers();
@@ -344,8 +336,5 @@ public class GroupInfoFragment extends Fragment implements GoogleApiClient.OnCon
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

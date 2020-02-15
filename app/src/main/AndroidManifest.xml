@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) Navision Ltd. - All Rights Reserved
   ~ Unauthorized copying of this file, via any medium is strictly prohibited
   -->
@@ -25,7 +24,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <supports-screens
@@ -56,6 +54,10 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -90,10 +92,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Landing.MainActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Login.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
@@ -105,6 +103,17 @@
             android:name=".EmergencyPositioning.SOSEmergencyNumbers"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+
+        <!--<activity
+            android:name=".splash.AppMaintenanceActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
+
         <activity
             android:name=".splash.SplashActivity"
             android:configChanges="orientation"
@@ -115,7 +124,8 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
@@ -126,22 +136,12 @@
             android:name=".Signup.SignUp"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-
-        <service android:name=".NotificationModule.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".NotificationModule.MyFirebaseMessagingService">
+        <service android:name=".NotificationModule.MyFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <activity
-            android:name=".subscription.Subscription_Activity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".termsandconditions.Terms_Conditions"
             android:configChanges="orientation"

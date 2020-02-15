@@ -10,13 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import com.google.android.material.textfield.TextInputLayout;
-
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -41,6 +34,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputLayout;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -55,7 +52,6 @@ import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.PrivacyPolicy.Privacy_policy;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -73,13 +69,13 @@ import retrofit.Retrofit;
 /////////////////////////////////////////////////////////////////
 public class SignUp extends AppCompatActivity {
     TextView txtagreet_C, txtagreePolicy;
-    TextView login, txtsignup, txtgender, txtTermsandconditions;
-    EditText edFname, edLname, edEmail, edPhone, edAddress, edState, edCity, edCountry, edPassword, edConfirmPassword;
+    TextView login, txtsignup, txtTermsandconditions;
+    EditText edFname, edLname, edEmail, edState, edCity, edCountry;
     CheckBox chkboxagree;
     RadioGroup radioGroup;
     Button btnSignup;
     Context context;
-    TextInputLayout txtILfnmae, txtILlnmae, txtILphone, txtILemail, txtILaddress, txtILcountry, txtILstate, txtILcity, txtILpassword, txtILconfirmpass;
+    TextInputLayout txtILfnmae, txtILlnmae, txtILemail, txtILcountry;
     ListView categorylist;
     EditText txtsearch;
     private ArrayList<SignupPOJO> countries;
@@ -88,14 +84,13 @@ public class SignUp extends AppCompatActivity {
     String contryid = null;
     String stateid = null;
     String cityid = null;
-    private String stremailaddress, strMobileno, strFirstName, strLastName, strAddress, stredgender, strgender, strPassword, strConfirmpassword, strCountry, strState, strCity;
-    String Charity, Subscription, message, strDeviceid;
+    private String stremailaddress, strFirstName, strLastName, strCountry;
+    String strDeviceid;
     CountryAdapter ctryadptr;
     StateAdapter stateadptr;
     CityAdapter cityadptr;
     SimpleArcDialog mDialog;
-    private AlertDialog alertDialogForgot, alertDialogreturn;
-    private FragmentManager fragmgr;
+    private AlertDialog alertDialogreturn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,24 +99,7 @@ public class SignUp extends AppCompatActivity {
         mDialog = new SimpleArcDialog(this);
 
         context = SignUp.this;
-        Bundle bundle = getIntent().getExtras();
-        message = bundle.getString("message");
-        //strDeviceid = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        fragmgr = getSupportFragmentManager();
-
-        //------------changed for firebase notification
-        String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
-//        Log.d("deviceid", strDeviceid);
-        //getcountry();
         init();
-
-        if (message.equals("Charity")) {
-            Charity = "Yes";
-            Subscription = "No";
-        } else {
-            Subscription = "Yes";
-            Charity = "No";
-        }
 
         edFname.addTextChangedListener(new TextWatcher() {
             @Override
@@ -131,8 +109,6 @@ public class SignUp extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //     edMerchantName.setSelection(edMerchantName.getText().length());   //set cursor at right placee of text
-
                 if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
                     edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 } else if (!(edFname.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
@@ -152,7 +128,6 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 strFirstName = edFname.getText().toString().trim();
-
                 if (!hasFocus) {
                     if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
                         ToastPopUp.show(context, getString(R.string.Enter_FirstName));
@@ -161,8 +136,6 @@ public class SignUp extends AppCompatActivity {
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                         ToastPopUp.show(SignUp.this, getString(R.string.validation_first_name_special_characters_merchant) + " in first name");
                     } else if (!(strFirstName.matches("\\w*"))) {
-//                        edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-//                        ToastPopUp.show(context, getString(R.string.spaces_not_allowed));
                         strFirstName = strFirstName.replaceAll("\\s{2,}", " ");
                     } else if ((strFirstName.length() < 3) || (strFirstName.length() > 15)) {
                         edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -182,8 +155,6 @@ public class SignUp extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //     edMerchantName.setSelection(edMerchantName.getText().length());   //set cursor at right placee of text
-
                 if (Validation.isStringNullOrBlank(edLname.getText().toString())) {
                     edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 } else if (!(edLname.getText().toString().matches("^[a-zA-Z.'_\\s]*$"))) {
@@ -212,8 +183,6 @@ public class SignUp extends AppCompatActivity {
                             edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                             ToastPopUp.show(SignUp.this, getString(R.string.validation_last_name_special_characters_merchant));
                         } else if (!(edLname.getText().toString().matches("\\w*"))) {
-//                            edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-//                            ToastPopUp.show(context, getString(R.string.spaces_not_allowed));
                             strLastName = strLastName.replaceAll("\\s{2,}", " ");
                         } else if ((edLname.getText().toString().length() < 1) || (edLname.getText().toString().length() > 20)) {
                             edLname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -235,7 +204,6 @@ public class SignUp extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //    edemailaddress.setSelection(edemailaddress.getText().length());   //set cursor at right placee of text
                 if (Validation.isStringNullOrBlank(edEmail.getText().toString())) {
                     edEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(edEmail.getText().toString().trim()).matches()) {
@@ -284,13 +252,10 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-        stredgender = "Male";
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent login = new Intent(SignUp.this, LoginActivity.class);
-                login.putExtra("message", message);
                 startActivity(login);
             }
         });
@@ -300,8 +265,6 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkvalidations();
-
-
             }
         });
 
@@ -320,15 +283,8 @@ public class SignUp extends AppCompatActivity {
                 startActivity(trmscondn);
             }
         });
-        // dffddf
+
         customTextView(txtTermsandconditions, "Agree ", "Terms and Conditions,", "\nand ", "Privacy Policy.", "to be changed to suit global audience.");
-      /*  txtTermsandconditions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
-
     }
 
     //--------------------Initilizing UI variables--------------------------------------------------
@@ -416,7 +372,6 @@ public class SignUp extends AppCompatActivity {
                 edState.setText(states.get(i).getName());
                 stateid = states.get(i).getId();
                 edCity.setText("");
-                strState = edState.getText().toString();
                 getcity(stateid);
                 dialog.dismiss();
             }
@@ -446,7 +401,6 @@ public class SignUp extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //  category_id = categories.get(i).getCategory_id();
                 edCity.setText(cities.get(i).getName());
-                strCity = edCity.getText().toString();
                 cityid = cities.get(i).getId();
                 //getstate(contryid);
                 dialog.dismiss();
@@ -738,7 +692,6 @@ public class SignUp extends AppCompatActivity {
                                     edState.setText(states.get(i).getName());
                                     stateid = states.get(i).getId();
                                     edCity.setText("");
-                                    strState = edState.getText().toString();
                                     //  edPassword.requestFocus();
                                     //cityid.equals("");
                                     // getcity(stateid);
@@ -877,7 +830,6 @@ public class SignUp extends AppCompatActivity {
                             //  category_id = categories.get(i).getCategory_id();
                             if (cities.size() > 0) {
                                 edCity.setText(cities.get(i).getName());
-                                strCity = edCity.getText().toString();
                                 cityid = cities.get(i).getId();
                                 //getstate(contryid);
                                 //   edPassword.requestFocus();
@@ -938,7 +890,6 @@ public class SignUp extends AppCompatActivity {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("EmailId", stremailaddress);
                                 bundle.putString("strMerchant_id",user);
-                                bundle.putString("message", message);
                                 bundle.putString("FName",strFirstName);
                                 bundle.putString("LName",strLastName);
                                 bundle.putString("countryid",contryid);
@@ -967,14 +918,7 @@ public class SignUp extends AppCompatActivity {
         strFirstName = edFname.getText().toString().trim();
         strLastName = edLname.getText().toString().trim();
         stremailaddress = edEmail.getText().toString().trim();
-        //   strMobileno = edPhone.getText().toString().trim();
-        //  strAddress = edAddress.getText().toString();
         strCountry = edCountry.getText().toString();
-        // strState = edState.getText().toString();
-        // strCity = edCity.getText().toString();
-        // strgender = stredgender;
-        // strPassword = edPassword.getText().toString();
-        // strConfirmpassword = edConfirmPassword.getText().toString();
         if (Validation.isStringNullOrBlank(edFname.getText().toString())) {
             ToastPopUp.show(context, getString(R.string.Enter_FirstName));
             edFname.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -1013,19 +957,6 @@ public class SignUp extends AppCompatActivity {
                 mDialog.show();
                 mDialog.setCancelable(false);
                 String strDeviceid = "";
-                /*Intent in =new Intent(SignUp.this, First_Login.class);
-                String user="";
-                Bundle bundle = new Bundle();
-                bundle.putString("EmailId", stremailaddress);
-                bundle.putString("strMerchant_id",user);
-                bundle.putString("message", message);
-                bundle.putString("FName",strFirstName);
-                bundle.putString("LName",strLastName);
-                bundle.putString("countryid",contryid);
-                in.putExtras(bundle);
-                startActivity(in);*/
-
-                //signupdata(strFirstName, strLastName, stremailaddress, strMobileno, strAddress, contryid, stateid, cityid, strgender, Charity, Subscription, strPassword, strDeviceid);
                 signupdata(strFirstName.trim(), strLastName.trim(), stremailaddress.trim(), contryid, strDeviceid);
             }
         }
@@ -1033,30 +964,19 @@ public class SignUp extends AppCompatActivity {
 
     //--------------------------sending signup data to server-------------------------------------------
     public void signupdata(String firstname, String lastname, final String email, String con_id, String d_id) {
-
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         SignupInterface service = retrofit.create(SignupInterface.class);
-
-
         Call<MobileModel> call = service.sendData(firstname, lastname, email, con_id, d_id);
-
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
-
                 try {
-
                     MobileModel result = new MobileModel();
                     String successstatus = response.body().getCheckstatus().get(0).getStatus();
-
                     Log.d("successstatus", successstatus);
-
-
                     if (successstatus.equals("1")) {
                         mDialog.dismiss();
                         final AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
@@ -1071,45 +991,32 @@ public class SignUp extends AppCompatActivity {
                         //-------------Adding dialog box to the view of alert dialog
                         alertdialog.setView(confirmDialog);
                         alertdialog.setCancelable(false);
-
                         //----------------Creating an alert dialog
                         alertDialogreturn = alertdialog.create();
                         // alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
                         //----------------Displaying the alert dialog
                         alertDialogreturn.show();
 
-
                         btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 alertDialogreturn.dismiss();
                                 Intent loginintent = new Intent(SignUp.this, LoginActivity.class);
-                                loginintent.putExtra("message", message);
                                 startActivity(loginintent);
                             }
                         });
-
-
                     } else {
-
                         if (!(Validation.isNetworkAvailable(SignUp.this))) {
                             ToastPopUp.show(SignUp.this, getString(R.string.network_validation));
-
                             mDialog.dismiss();
-
                         } else {
                             ToastPopUp.show(SignUp.this, "Signup was unsuccessful");
                             mDialog.dismiss();
                         }
-
-
                     }
-
-
                 } catch (Exception e) {
                     //e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -1118,10 +1025,7 @@ public class SignUp extends AppCompatActivity {
                 ToastPopUp.show(SignUp.this, "Network issue");
 // we use this methiod in this place to for some situation when during progress dialog is running and that time
                 //netowrk goes off then dialog continue running so due to this validation dialog is dismiss.
-
             }
-
-
         });
     }
 
@@ -1129,7 +1033,6 @@ public class SignUp extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(SignUp.this, LoginActivity.class);
-        intent.putExtra("message", message);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -1138,10 +1041,8 @@ public class SignUp extends AppCompatActivity {
     //---------hide keypad on clicking anywhere-----------------------------------------------------
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) { //--add for hide keyboard from screen-----------------------------------
-
         View v = getCurrentFocus();
         boolean ret = super.dispatchTouchEvent(event);
-
         if (v instanceof EditText) {
             View w = getCurrentFocus();
             int scrcoords[] = new int[2];
@@ -1151,10 +1052,8 @@ public class SignUp extends AppCompatActivity {
 
             Log.d("Activity", "Touch event " + event.getRawX() + "," + event.getRawY() + " " + x + "," + y + " rect " + w.getLeft() + "," + w.getTop() + "," + w.getRight() + "," + w.getBottom() + " coords " + scrcoords[0] + "," + scrcoords[1]);
             if (event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom())) {
-
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getWindow().getCurrentFocus().getWindowToken(), 0);
-
             }
         }
         return ret;
@@ -1163,20 +1062,15 @@ public class SignUp extends AppCompatActivity {
     //make spanaable text view
     private void customTextView(TextView view, String firstblacktext, String firsthighlight, String secndBlacktext,
                                 final String scndHighLight, String thirdBlackTest) {
-
-
         SpannableStringBuilder spanTxt = new SpannableStringBuilder(
                 firstblacktext);
         spanTxt.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanTxt.length(), 0);
-
         spanTxt.append(firsthighlight);
         spanTxt.setSpan(new ForegroundColorSpan(Color.WHITE), 6, 26, 0);
-
         spanTxt.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
                 Intent trmscondn = new Intent(SignUp.this, Terms_Conditions.class);
-                trmscondn.putExtra("message", message);
                 startActivity(trmscondn);
             }
         }, spanTxt.length() - firsthighlight.length(), spanTxt.length(), 0);
@@ -1184,7 +1078,6 @@ public class SignUp extends AppCompatActivity {
         spanTxt.setSpan(new ForegroundColorSpan(Color.WHITE), 31, spanTxt.length(), 0);
         spanTxt.append(scndHighLight);
         spanTxt.setSpan(new ForegroundColorSpan(Color.WHITE), 45, spanTxt.length(), 0);
-
         spanTxt.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
@@ -1198,6 +1091,4 @@ public class SignUp extends AppCompatActivity {
         view.setMovementMethod(LinkMovementMethod.getInstance());
         view.setText(spanTxt, TextView.BufferType.SPANNABLE);
     }
-
-
 }

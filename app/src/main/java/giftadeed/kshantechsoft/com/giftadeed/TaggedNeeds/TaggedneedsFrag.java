@@ -46,7 +46,7 @@ import java.util.Locale;
 import giftadeed.kshantechsoft.com.giftadeed.Filter.FilterFrag;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 
 public class TaggedneedsFrag extends Fragment {
@@ -61,7 +61,7 @@ public class TaggedneedsFrag extends Fragment {
     TextView dialogtext;
     private AlertDialog alertDialogForgot;
     Button dialogconfirm, dialogcancel;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUserId;
     SimpleArcDialog mDialog;
     static FragmentManager fragmgr;
@@ -102,11 +102,11 @@ public class TaggedneedsFrag extends Fragment {
         fragmgr = getFragmentManager();
         requestgallPermission();
         tablayout = (TabLayout) rootview.findViewById(R.id.tabLayout);
-        sessionManager = new SessionManager(getActivity());
-        selectedLangugae = sessionManager.getLanguage();
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        selectedLangugae = sharedPrefManager.getLanguage();
         updateLanguage(selectedLangugae);
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUserId = user.get(sessionManager.USER_ID);
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUserId = user.get(sharedPrefManager.USER_ID);
         viewpgr = (ViewPager) rootview.findViewById(R.id.pager);
 
         TaggedneedsActivity.fragname = TaggedneedsFrag.newInstance(0);

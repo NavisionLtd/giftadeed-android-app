@@ -9,7 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -29,11 +29,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.sendbird.android.GroupChannel;
@@ -54,8 +49,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -65,19 +59,19 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class AddGroupMemberFragment extends Fragment  {
     View rootview;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
     SimpleArcDialog mDialog;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUser_ID;
     String receivedGid = "", receivedGName = "", strClubName;
     EditText editsearch;
     Button btnSearch, btnAddSearchedMember;
     TextView searchedRecordResult, searchedUsername, searchedEmail, tvAlreadyAdded;
     LinearLayout layoutSearchedRecord;
-    private GoogleApiClient mGoogleApiClient;
+
     ArrayList<MemberDetails> userList;
     String searchedMemberId;
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
@@ -104,7 +98,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.add_group_member_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.add_member));
         TaggedneedsActivity.fragname = AddGroupMemberFragment.newInstance(0);
         fragmgr = getFragmentManager();
@@ -120,12 +114,12 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         init();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
-        HashMap<String, String> group = sessionManager.getSelectedGroupDetails();
-        receivedGid = group.get(sessionManager.GROUP_ID);
-        receivedGName = group.get(sessionManager.GROUP_NAME);
+
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
+        HashMap<String, String> group = sharedPrefManager.getSelectedGroupDetails();
+        receivedGid = group.get(sharedPrefManager.GROUP_ID);
+        receivedGName = group.get(sharedPrefManager.GROUP_NAME);
         // Sendbird channel. Concat with GRP for Group and CLB for Collaboration
         strClubName = receivedGName + " - GRP" + receivedGid;
         try {
@@ -220,7 +214,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -230,9 +224,8 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         userList.clear();
@@ -321,7 +314,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -331,9 +324,8 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
@@ -392,10 +384,7 @@ public class AddGroupMemberFragment extends Fragment implements GoogleApiClient.
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     public void getChannelsDetails() {
         //always use connect() along with any method of chat #phase 2 requirement 27 feb 2018 Nilesh

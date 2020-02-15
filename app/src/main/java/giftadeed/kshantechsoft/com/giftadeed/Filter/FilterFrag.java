@@ -57,9 +57,8 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.CategoryType;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.Needtype;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -92,7 +91,7 @@ public class FilterFrag extends Fragment {
     TextView txtapplyfilter, txtradius, txtdist;
     Button btnapplyfilters;
     static FragmentManager fragmgr;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String value = "tab1";
 
     public static FilterFrag newInstance() {
@@ -118,9 +117,9 @@ public class FilterFrag extends Fragment {
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        sessionManager = new SessionManager(getContext());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getContext());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         mDialog = new SimpleArcDialog(getContext());
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -128,7 +127,7 @@ public class FilterFrag extends Fragment {
         }
         init();
         getUserGroups(strUser_ID);
-        radius = sessionManager.getradius();
+        radius = sharedPrefManager.getradius();
         edselectcategory.setText(Validation.FILTER_CATEGORY);
 
         edselectcategory.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +155,7 @@ public class FilterFrag extends Fragment {
                 int i = 1;
                 fragmgr = getFragmentManager();
                 // Validation.radius = radius;
-                sessionManager.store_radius((float) radius);
+                sharedPrefManager.store_radius((float) radius);
                 // Log.d("Validation o radius", "validation from validation class" + Validation.radius + "Radius " + radius);
                 strNeed_Name = edselectcategory.getText().toString();
                 Validation.FILTER_CATEGORY = strNeed_Name;
@@ -218,16 +217,16 @@ public class FilterFrag extends Fragment {
 
         // Log.d("validation radius", String.valueOf(Validation.radius));
 
-        txtdist.setText(sessionManager.getradius() + " Metres");
+        txtdist.setText(sharedPrefManager.getradius() + " Metres");
 
-        double rad = sessionManager.getradius();
+        double rad = sharedPrefManager.getradius();
         distance.setProgress((int) rad);
         Log.d("validation radius", String.valueOf(rad));
-        if (sessionManager.getradius() > 1000) {
-            float valueKM = sessionManager.getradius() / 1000;
-            txtdist.setText("" + sessionManager.getradius() + " Metres (" + valueKM + " kms)");
+        if (sharedPrefManager.getradius() > 1000) {
+            float valueKM = sharedPrefManager.getradius() / 1000;
+            txtdist.setText("" + sharedPrefManager.getradius() + " Metres (" + valueKM + " kms)");
         } else {
-            txtdist.setText("" + sessionManager.getradius() + " Metres");
+            txtdist.setText("" + sharedPrefManager.getradius() + " Metres");
         }
         distance.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
@@ -397,12 +396,11 @@ public class FilterFrag extends Fragment {
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();

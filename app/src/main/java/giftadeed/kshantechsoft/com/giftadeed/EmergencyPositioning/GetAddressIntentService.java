@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class GetAddressIntentService extends IntentService {
-
     private static final String IDENTIFIER = "GetAddressIntentService";
     private ResultReceiver addressResultReceiver;
 

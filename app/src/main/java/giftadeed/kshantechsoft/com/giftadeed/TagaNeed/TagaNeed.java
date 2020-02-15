@@ -59,7 +59,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -82,14 +81,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -106,6 +101,7 @@ import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -130,7 +126,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.MobileModel;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -151,7 +147,8 @@ import static android.app.Activity.RESULT_OK;
 // Description : Used to tag a new deed or edit existing deed
 ////////////////////////////////////////////////////////
 
-public class TagaNeed extends Fragment implements Animation.AnimationListener, GoogleApiClient.OnConnectionFailedListener {
+public class TagaNeed extends Fragment implements Animation.AnimationListener {
+    int AUTOCOMPLETE_REQUEST_CODE = 100;
     EditText ed;
     TextView tv;
     File mediaFile;
@@ -187,7 +184,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     String imageToSend;
     ScrollView deeddetails_scrollview;
     String strCategory, strlocation, strFullDescription;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     private static int RESULT_LOAD_IMG = 11;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private Uri fileUri;
@@ -208,7 +205,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     String str_tagid, str_geopoint, str_characterPath, str_fname, str_lname, str_privacy, str_needName, str_totalTaggedCreditPoints,
             str_FromGroup, str_totalFulfilledCreditPoints, str_title, str_date, str_distance, str_needid, str_tab, strcontainer = "0",
             str_validity = "3", userGroupsCallingFrom = "TagDeedScreenload", categoryCallingFrom = "TagDeedScreenload";
-    private GoogleApiClient mGoogleApiClient;
     DisplayMetrics metrics;
     int deviceWidth, deviceHeight;
 
@@ -226,7 +222,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.fragment_taga_need, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_tag_deed));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         fragmgr = getFragmentManager();
@@ -258,11 +254,11 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         deviceWidth = metrics.widthPixels;
         deviceHeight = metrics.heightPixels;
 
-        HashMap<String, String> user = sessionManager.getUserDetails();
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
         LATITUDE = new GPSTracker(myContext).latitude;
         LONGITUDE = new GPSTracker(myContext).longitude;
         str_geopoint = LATITUDE + "," + LONGITUDE;
-        strUser_ID = user.get(sessionManager.USER_ID);
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -367,15 +363,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
             lat = String.valueOf(new GPSTracker(myContext).latitude);
             longi = String.valueOf(new GPSTracker(myContext).longitude);
             getAddress(lat, longi);
-        }
-
-        try {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API)
-                    .build();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
@@ -515,7 +502,15 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         edselectlocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAutocompleteActivity(1);
+                // Set the fields to specify which types of place data to
+                // return after the user has made a selection.
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
+
+                // Start the autocomplete intent.
+                Intent autoCompleteIntent = new Autocomplete.IntentBuilder(
+                        AutocompleteActivityMode.FULLSCREEN, fields)
+                        .build(getActivity());
+                startActivityForResult(autoCompleteIntent, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
 
@@ -686,7 +681,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -695,9 +690,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                         //updateUI(false);
                                     }
                                 });*/
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();
@@ -1674,7 +1668,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1684,9 +1678,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         MobileModel mobilemodel = response.body();
@@ -1771,7 +1764,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1781,9 +1774,8 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         StatusModel statusModel = response.body();
@@ -1839,7 +1831,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
+        /*if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 // retrive the data by using getPlace() method.
                 Place place = PlaceAutocomplete.getPlace(myContext, data);
@@ -1867,15 +1859,41 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 }
                 str_geopoint = latitude_source + "," + longitude_source;
                 Log.d("Geopoints after change", str_geopoint);
-                /*if ((edselectlocation.getText().length() > 0) && (edselectcategory.length() > 0)) {
-                    // background check for already added deeds for selected location
-                    checkDeed();
-                }*/
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(myContext,
                         data);
                 // TODO: Handle the error.
                 Log.e("Tag", status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }*/
+
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i("TagDeed", "Place: " + place.getName() + ", " + place.getAddress() + ", " + place.getId());
+                edselectlocation.setText(place.getName() + ",\n" +
+                        place.getAddress());
+                StringTokenizer st = new StringTokenizer("" + place.getLatLng(), ",");
+                int i = 0;
+                String strLat = "0.0", strLong = "0.0";
+                while (st.hasMoreTokens()) {
+                    String strValue = st.nextToken();
+                    //Log.d(TAG, strValue);
+                    ++i;
+                    if (i == 1) {
+                        latitude_source = strValue.substring(10);
+                        //    Log.d(TAG, "********** Latitude = " + strLat);
+                    } else if (i == 2) {
+                        longitude_source = strValue.substring(0, (strValue.length() - 1));
+                        //Log.d(TAG, "********** Longitude = " + strLong);
+                    }
+                }
+                str_geopoint = latitude_source + "," + longitude_source;
+                Log.d("Geopoints after change", str_geopoint);
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
@@ -2184,7 +2202,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         });
     }
 
-    private void openAutocompleteActivity(int requestcode_MyLoc_MyDest) {
+    /*private void openAutocompleteActivity(int requestcode_MyLoc_MyDest) {
         try {
             // The autocomplete activity requires Google Play Services to be available. The intent
             // builder checks this and throws an exception if it is not the case.
@@ -2196,7 +2214,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     //-----------------------------getting string from bitmap image---------------------------------
     public String getStringImage(Bitmap bmp) {
@@ -2452,11 +2470,6 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener, G
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
     }
 
     @Override

@@ -8,10 +8,7 @@ package giftadeed.kshantechsoft.com.giftadeed.splash;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,7 +21,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -32,26 +28,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 
-import giftadeed.kshantechsoft.com.giftadeed.Animation.FadeInActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.GetingAddress;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 public class SplashActivity extends AppCompatActivity {
     TextView txt_title;
     TextView txt_title2, txt_app_version;
     private boolean isBackPressed = false;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUserId = null, message, address_show;
     String currentVersion = "", newVersion;
     private static int SPLASH_TIME_OUT = 3000;
@@ -147,18 +138,14 @@ public class SplashActivity extends AppCompatActivity {
                 // This method will be executed once the timer is over
                 // Start your app main activity
                 if (!isBackPressed) {
-                    sessionManager = new SessionManager(getApplicationContext());
-                    HashMap<String, String> user = sessionManager.getUserDetails();
-                    strUserId = user.get(sessionManager.USER_ID);
+                    sharedPrefManager = new SharedPrefManager(getApplicationContext());
+                    HashMap<String, String> user = sharedPrefManager.getUserDetails();
+                    strUserId = user.get(sharedPrefManager.USER_ID);
                     if (strUserId == null) {
-                        //messagecharity = "Charity";
                         Intent log = new Intent(getApplicationContext(), LoginActivity.class);
-                        log.putExtra("message", "Charity");
                         startActivity(log);
                     } else {
-                        message = "Charity";
                         Intent in = new Intent(SplashActivity.this, TaggedneedsActivity.class);
-                        in.putExtra("message", message);
                         startActivity(in);
                     }
                 }

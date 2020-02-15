@@ -8,7 +8,7 @@ package giftadeed.kshantechsoft.com.giftadeed.Mytags;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,11 +34,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 
@@ -55,8 +50,7 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
@@ -70,7 +64,7 @@ import retrofit.Retrofit;
 //                                                               //
 //     Shows list of tags done by logged in user                //
 /////////////////////////////////////////////////////////////////
-public class MyTagsList extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class MyTagsList extends Fragment  {
     RecyclerView recyclerView;
     RelativeLayout relativeNoResultFound;
     TextView txtmytags;
@@ -78,12 +72,12 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
     private RecyclerView.LayoutManager layoutManager;
     static FragmentManager fragmgr;
     FragmentActivity myContext;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUSERID;
     SimpleArcDialog mDialog;
     public List<Taggedlist> lstMytags = new ArrayList<>();
     public AdapterMyTags adapterMytags;
-    private GoogleApiClient mGoogleApiClient;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,9 +87,9 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.my_tags_heading));
         TaggedneedsActivity.fragname = MyTagsList.newInstance(0);
         //----------------------------------this code is used for taking user id from session preference
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUSERID = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUSERID = user.get(sharedPrefManager.USER_ID);
         //-----------------------------------recycler view layout------------------
         mDialog = new SimpleArcDialog(getContext());
         recyclerView = (RecyclerView) rootview.findViewById(R.id.recycler_myTags);
@@ -117,15 +111,6 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
-        // mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        try {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-//                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API)
-                    .build();
-        } catch (Exception e) {
-
-        }
         fetch_ListOfMyTags(strUSERID);//used to fetch the data via retrofit
 
 
@@ -192,12 +177,11 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
                                         //updateUI(false);
                                     }
                                 });*/
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         ModelMytaglist result = new ModelMytaglist();
@@ -328,8 +312,5 @@ public class MyTagsList extends Fragment implements GoogleApiClient.OnConnection
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

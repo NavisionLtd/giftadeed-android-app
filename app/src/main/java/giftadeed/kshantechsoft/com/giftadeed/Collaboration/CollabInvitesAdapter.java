@@ -21,10 +21,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.sendbird.android.GroupChannel;
@@ -44,9 +40,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupListInfo;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
@@ -61,8 +55,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
     String strUser_ID;
     String collabCreatorID = "";
     SimpleArcDialog mDialog;
-    SessionManager sessionManager;
-    private GoogleApiClient mGoogleApiClient;
+    SharedPrefManager sharedPrefManager;
     private Fragment fragment;
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
     private String strClubName = "";
@@ -82,8 +75,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        sessionManager = new SessionManager(context);
-        mGoogleApiClient = ((TaggedneedsActivity) context).mGoogleApiClient;
+        sharedPrefManager = new SharedPrefManager(context);
         holder.colabInviteFromName.setText(list.get(position).getColabName());
         holder.colabInviteFromDesc.setText("Details : " + list.get(position).getColabDesc());
         holder.colabInviteFromStartDate.setText("Started on : " + list.get(position).getColabStartDate());
@@ -178,18 +170,10 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(context);
                         Toast.makeText(context, context.getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(context, LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         context.startActivity(loginintent);
                     } else {
                         Log.d("response_status", "" + collabResponseStatus.getStatus());

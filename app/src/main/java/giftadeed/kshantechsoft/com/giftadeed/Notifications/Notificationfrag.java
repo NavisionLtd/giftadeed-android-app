@@ -23,7 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -35,11 +34,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -69,7 +63,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.Needtype;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -82,7 +76,7 @@ import retrofit.Retrofit;
 ////////////////////////////////////////////////////////////////////
 //     Shows list of notification of last seven days            //
 /////////////////////////////////////////////////////////////////
-public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
+public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
     NotificationAdapter notificationAdapter;
@@ -92,7 +86,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
     static FragmentManager fragmgr;
     View rootview;
     ArrayList<Notification> notiArrayList;
-    SessionManager sharedPreferences;
+    SharedPrefManager sharedPreferences;
     LinearLayout layout_data_not_found;
     float notification_radius = 10.0f;
     int days = 7;
@@ -104,7 +98,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
     String strNeedmapping_ID, strFiltertype = "All";
     private AlertDialog alertDialogreturn;
     TextView txtfilterrmaxadius, txtfilterrmaxtime;
-    private GoogleApiClient mGoogleApiClient;
+
     private double LATITUDE, LONGITUDE;
     private String str_geopoint = "";
     DBGAD db_gad;
@@ -138,18 +132,9 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
         mDialog = new SimpleArcDialog(getContext());
         fragmgr = getFragmentManager();
         //------------------------------get data from sharedpreferences------------------
-        sharedPreferences = new SessionManager(getContext());
+        sharedPreferences = new SharedPrefManager(getContext());
         HashMap<String, String> user = sharedPreferences.getUserDetails();
         strUserId = user.get(sharedPreferences.USER_ID);
-        try {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API)
-                    .build();
-        } catch (Exception e) {
-
-        }
-
         LATITUDE = new GPSTracker(getContext()).latitude;
         LONGITUDE = new GPSTracker(getContext()).longitude;
         str_geopoint = LATITUDE + "," + LONGITUDE;
@@ -243,7 +228,6 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
 
                         sharedPreferences.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         AllNotificationModel model = response.body();
@@ -577,7 +561,6 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
 
                         sharedPreferences.set_notification_status("ON");
                         Intent loginintent = new Intent(getContext(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         getContext().startActivity(loginintent);
                     } else {
                         DeeddeletedModel statusModel = response.body();
@@ -643,10 +626,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     @Override
     public void onRefresh() {

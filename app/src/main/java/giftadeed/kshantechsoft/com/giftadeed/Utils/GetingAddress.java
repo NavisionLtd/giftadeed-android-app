@@ -8,7 +8,6 @@ package giftadeed.kshantechsoft.com.giftadeed.Utils;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
@@ -24,8 +23,6 @@ public class GetingAddress {
     public static String strAdd = "";
     Context context;
     List<Address> addresses;
-
-
     public static String countryName;
 
     public GetingAddress(Context context) {
@@ -37,18 +34,14 @@ public class GetingAddress {
         Thread thread = new Thread() {
             @Override
             public void run() {
-
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 try {
-
                     addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
-
                     if (addresses != null && addresses.size() > 0) {
                         Address returnedAddress = addresses.get(0);
                         countryName = addresses.get(0).getCountryName();
                         // Log.d("country", countryName);
                         StringBuilder strReturnedAddress = new StringBuilder("");
-
                         for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
                             strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                         }
@@ -61,7 +54,6 @@ public class GetingAddress {
                     e.printStackTrace();
                     //Log.d("My Current loction address", "Canont get Address!");
                 }
-
             }
         };
         thread.start();
@@ -72,6 +64,4 @@ public class GetingAddress {
         // }
         return strAdd;
     }
-
-
 }

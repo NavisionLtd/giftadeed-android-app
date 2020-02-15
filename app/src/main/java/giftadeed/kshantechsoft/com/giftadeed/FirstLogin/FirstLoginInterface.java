@@ -5,7 +5,6 @@
 
 package giftadeed.kshantechsoft.com.giftadeed.FirstLogin;
 
-import giftadeed.kshantechsoft.com.giftadeed.Login.LinkedInLoginModel;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
 import retrofit.http.Field;

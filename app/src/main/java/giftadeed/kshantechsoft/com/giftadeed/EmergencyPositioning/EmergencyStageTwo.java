@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,12 +39,7 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -76,8 +70,6 @@ import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -91,7 +83,7 @@ import retrofit.Retrofit;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class EmergencyStageTwo extends AppCompatActivity {
     Button btnOpenCamera, btnSendDetails;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -115,8 +107,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
     private StorageReference storageReference;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
-    SessionManager sessionManager;
-    private GoogleApiClient mGoogleApiClient;
+    SharedPrefManager sharedPrefManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,21 +118,18 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
         imageCaptured = (ImageView) findViewById(R.id.captured_photo);
         etCurrentLocation = (EditText) findViewById(R.id.et_current_location);
         tvRefreshLocation = (TextView) findViewById(R.id.tv_refresh_location);
-        sessionManager = new SessionManager(this);
+        sharedPrefManager = new SharedPrefManager(this);
         simpleArcDialog = new SimpleArcDialog(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(EmergencyStageTwo.this)
-                .enableAutoManage(EmergencyStageTwo.this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference(WebServices.DATABASE_SOS_UPLOADS);
         storageReference = FirebaseStorage.getInstance().getReference();
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
-        strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
+        strDeviceid = sharedPrefManager.getDeviceToken();
         callingfrom = getIntent().getStringExtra("callingfrom");
         latitude = getIntent().getStringExtra("latitude");
         longitude = getIntent().getStringExtra("longitude");
@@ -277,7 +265,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                         simpleArcDialog.dismiss();
                         FacebookSdk.sdkInitialize(getApplicationContext());
                         Toast.makeText(EmergencyStageTwo.this, getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -286,9 +274,8 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
                                         //updateUI(false);
                                     }
                                 });*/
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getApplicationContext(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (sosResponseStatus.getSos_id() > 0) {
@@ -434,6 +421,7 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CAMERA) {
             if (resultCode == RESULT_OK) {
                 File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
@@ -585,8 +573,5 @@ public class EmergencyStageTwo extends AppCompatActivity implements GoogleApiCli
         }
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 import static giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed.selectedUserGrpNames;
 import static giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed.selectedUserGroups;
@@ -25,7 +25,7 @@ import static giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed.selectedUs
 public class UserGroupAdapter extends BaseAdapter {
     ArrayList<GroupPOJO> list = new ArrayList<>();
     Context context;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
 
     public UserGroupAdapter(ArrayList<GroupPOJO> subcategories, Context context) {
         this.list = subcategories;
@@ -53,7 +53,7 @@ public class UserGroupAdapter extends BaseAdapter {
         view = inflater.inflate(R.layout.user_org_item, null);
         CheckBox chk = (CheckBox) view.findViewById(R.id.chkbox);
         chk.setText(list.get(i).getGroup_name());
-        sessionManager = new SessionManager(context);
+        sharedPrefManager = new SharedPrefManager(context);
 
         if (selectedUserGroups.contains(list.get(i).getGroup_id())) {
             chk.setChecked(true);

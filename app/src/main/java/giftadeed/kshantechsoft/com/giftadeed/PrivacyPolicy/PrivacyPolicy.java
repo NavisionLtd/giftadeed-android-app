@@ -29,7 +29,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 public class PrivacyPolicy extends Fragment {
     static FragmentManager fragmgr;
     View rootview;
-    WebView txtAgreementDetails;
+    private WebView txtPrivacyPolicy;
 
     public static PrivacyPolicy newInstance(int sectionNumber) {
         PrivacyPolicy fragment = new PrivacyPolicy();
@@ -62,23 +62,23 @@ public class PrivacyPolicy extends Fragment {
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
 
-        txtAgreementDetails = (WebView) rootview.findViewById(R.id.txtprivacypolicy);
+        txtPrivacyPolicy = (WebView) rootview.findViewById(R.id.txtprivacypolicy);
 //        txtAgreementDetails.loadUrl("file:///android_asset/PrivacyPolicy.html");
-        txtAgreementDetails.loadUrl("https://giftadeed.com/pages/privacy_policy_app.html");
+        txtPrivacyPolicy.loadUrl("https://giftadeed.com/pages/privacy_policy_app.html");
 
-        WebSettings settings = txtAgreementDetails.getSettings();
+        WebSettings settings = txtPrivacyPolicy.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);
-        txtAgreementDetails.getSettings().setJavaScriptEnabled(true);
-        txtAgreementDetails.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-        txtAgreementDetails.getSettings().setAppCacheEnabled(true);
-        txtAgreementDetails.setOnLongClickListener(new View.OnLongClickListener() {
+        txtPrivacyPolicy.getSettings().setJavaScriptEnabled(true);
+        txtPrivacyPolicy.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        txtPrivacyPolicy.getSettings().setAppCacheEnabled(true);
+        txtPrivacyPolicy.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 return true;
             }
         });
-        txtAgreementDetails.setLongClickable(false);
+        txtPrivacyPolicy.setLongClickable(false);
         TaggedneedsActivity.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

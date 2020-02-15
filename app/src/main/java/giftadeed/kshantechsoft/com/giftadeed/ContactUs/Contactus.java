@@ -22,18 +22,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -49,9 +43,8 @@ import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Needdetails.StatusModel;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 import retrofit.Call;
 import retrofit.Callback;
@@ -65,15 +58,15 @@ import retrofit.Retrofit;
 //      Contacting to admin                                    //
 /////////////////////////////////////////////////////////////////
 
-public class Contactus extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class Contactus extends Fragment {
     static FragmentManager fragmgr;
     View rootview;
     TextView txtadminemail;
     EditText edContactUsMessage;
     Button btnContactUsMessage;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     SimpleArcDialog mDialog;
-    private GoogleApiClient mGoogleApiClient;
+
 
     public static Contactus newInstance(int sectionNumber) {
         Contactus fragment = new Contactus();
@@ -111,12 +104,6 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
         txtadminemail.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         edContactUsMessage.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
         btnContactUsMessage.setTypeface(new FontDetails(getActivity()).fontStandardForPage);
-
-        //mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API)
-                .build();
         txtadminemail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,9 +167,9 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
     public void contactUs() {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
         String message = edContactUsMessage.getText().toString();
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -209,7 +196,7 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
 
@@ -221,10 +208,9 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
 
@@ -276,10 +262,5 @@ public class Contactus extends Fragment implements GoogleApiClient.OnConnectionF
                 return false;
             }
         });
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
     }
 }

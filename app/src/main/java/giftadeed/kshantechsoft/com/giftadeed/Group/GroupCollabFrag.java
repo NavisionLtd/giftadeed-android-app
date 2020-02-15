@@ -39,7 +39,7 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.groupchannel.GroupChannelListFragment;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 
 import static giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity.userClubCount;
@@ -52,7 +52,7 @@ public class GroupCollabFrag extends Fragment {
     String value = "tab1";
     int tab_no;
     String selected_tab;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUserId;
     SimpleArcDialog mDialog;
     static FragmentManager fragmgr;
@@ -90,10 +90,10 @@ public class GroupCollabFrag extends Fragment {
         mDialog = new SimpleArcDialog(getContext());
         rootview = inflater.inflate(R.layout.fragment_groupscollab, container, false);
         fragmgr = getFragmentManager();
-        sessionManager = new SessionManager(getActivity());
-        selectedLangugae = sessionManager.getLanguage();
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUserId = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        selectedLangugae = sharedPrefManager.getLanguage();
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUserId = user.get(sharedPrefManager.USER_ID);
         viewpgr = (ViewPager) rootview.findViewById(R.id.group_pager);
         tablayout = (TabLayout) rootview.findViewById(R.id.group_tabLayout);
         TaggedneedsActivity.fragname = GroupCollabFrag.newInstance(0);
@@ -196,12 +196,12 @@ public class GroupCollabFrag extends Fragment {
         switch (id) {
             case R.id.action_create_group:
                 CreateGroupFragment createGroupFragment = new CreateGroupFragment();
-                sessionManager.createGroupDetails("create", "", "", "", "");
+                sharedPrefManager.createGroupDetails("create", "", "", "", "");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
                 return true;
             case R.id.action_create_collab:
                 CreateCollabFragment createCollabFragment = new CreateCollabFragment();
-                sessionManager.createColabDetails("create", "", "", "", "", "");
+                sharedPrefManager.createColabDetails("create", "", "", "", "", "");
                 fragmgr.beginTransaction().replace(R.id.content_frame, createCollabFragment).commit();
                 return true;
             case R.id.action_collab_invitations:

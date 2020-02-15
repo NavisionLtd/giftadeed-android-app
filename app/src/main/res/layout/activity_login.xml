@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) Navision Ltd. - All Rights Reserved
   ~ Unauthorized copying of this file, via any medium is strictly prohibited
   -->
@@ -120,8 +119,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColorHint="#fff"
-                    app:passwordToggleEnabled="true"
                     app:hintTextAppearance="@style/TextLabel"
+                    app:passwordToggleEnabled="true"
                     app:passwordToggleTint="@color/white">
 
                     <EditText
@@ -254,6 +253,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
+                    android:layout_marginRight="20dp"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -262,14 +262,6 @@
                         android:layout_height="@dimen/fb_image_dimen"
                         android:src="@drawable/facebook" />
 
-                    <!-- <TextView
-                         android:id="@+id/txtfb_login"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_marginLeft="10dp"
-                         android:text="Login using Facebook"
-                         android:textColor="#fff"
-                         android:textSize="@dimen/finaltextfont" />-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -277,22 +269,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/linkedin_btn"
+                        android:id="@+id/instagram_btn"
                         android:layout_width="@dimen/fb_image_dimen"
                         android:layout_height="@dimen/fb_image_dimen"
-                        android:src="@drawable/linkedin" />
+                        android:src="@drawable/instagram_icon" />
 
-                    <!-- <TextView
-                         android:id="@+id/txtlinkedIn_login"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_marginLeft="10dp"
-                         android:text="Login using LinkedIn  "
-                         android:textColor="#fff"
-                         android:textSize="@dimen/finaltextfont" />-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -300,6 +285,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:layout_marginLeft="20dp"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -307,15 +293,6 @@
                         android:layout_width="@dimen/fb_image_dimen"
                         android:layout_height="@dimen/fb_image_dimen"
                         android:src="@drawable/ic_google" />
-
-                    <!-- <TextView
-                         android:id="@+id/txtgoogle_login"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_marginLeft="10dp"
-                         android:text="Login using Google     "
-                         android:textColor="#fff"
-                         android:textSize="@dimen/finaltextfont" />-->
                 </LinearLayout>
 
             </LinearLayout>

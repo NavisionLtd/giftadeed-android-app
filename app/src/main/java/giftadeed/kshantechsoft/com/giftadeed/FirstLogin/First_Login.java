@@ -24,16 +24,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -63,7 +57,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.StateModel;
 import giftadeed.kshantechsoft.com.giftadeed.Signup.StateSignup;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -78,7 +72,7 @@ import retrofit.Retrofit;
 //                                                               //
 //     Used to complete details required to complete profile    //
 /////////////////////////////////////////////////////////////////
-public class First_Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class First_Login extends AppCompatActivity {
     EditText edfirstlogin_country, edfirstlogin_state, edfirstlogin_city, edfirstlogin_email;
     Button btnsubmit;
     TextView firstloginhead;
@@ -96,8 +90,8 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
     StateAdapter stateadptr;
     CityAdapter cityadptr;
     SimpleArcDialog mDialog;
-    private GoogleApiClient mGoogleApiClient;
-    SessionManager sharedPreferences;
+
+    SharedPrefManager sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,18 +101,12 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(First_Login.this)
-                .enableAutoManage(First_Login.this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
         try {
             Bundle bundle = getIntent().getExtras();
             strUserId = bundle.getString("strMerchant_id");
             strEmail = bundle.getString("EmailId");
             strFname = bundle.getString("FName");
             strLname = bundle.getString("LName");
-            message = bundle.getString("message");
             strCountry_Id = bundle.getString("countryid");
             strPrivacy = bundle.getString("privacy");
         } catch (Exception e) {
@@ -138,7 +126,7 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
         }
 
         mDialog = new SimpleArcDialog(this);
-        sharedPreferences = new SessionManager(First_Login.this);
+        sharedPreferences = new SharedPrefManager(First_Login.this);
         context = First_Login.this;
         edfirstlogin_country.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -795,7 +783,6 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                         sharedPreferences.createUserCredentialSession(User_Id, strFullName, privacy);
                         sharedPreferences.store_radius(Validation.inital_radius);
                         Intent in = new Intent(First_Login.this, TaggedneedsActivity.class);
-                        in.putExtra("message", message);
                         startActivity(in);
                     } else {
                         Toast.makeText(First_Login.this, getResources().getString(R.string.login_unsuccess), Toast.LENGTH_SHORT).show();
@@ -831,16 +818,9 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                                     }
                                 });*/
         Intent in = new Intent(First_Login.this, LoginActivity.class);
-        in.putExtra("message", message);
         startActivity(in);
 
     }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
 
     //--------------------------check email already exist
     public void checkemail(final int chkemail) {
@@ -896,7 +876,6 @@ public class First_Login extends AppCompatActivity implements GoogleApiClient.On
                                 Bundle bundle = new Bundle();
                                 bundle.putString("EmailId", stremailaddress);
                                 bundle.putString("strMerchant_id",user);
-                                bundle.putString("message", message);
                                 bundle.putString("FName",strFirstMerchantName);
                                 bundle.putString("LName",strLastName);
                                 bundle.putString("countryid",contryid);

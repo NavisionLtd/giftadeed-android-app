@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -35,11 +34,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -53,7 +47,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Needdetails.SingleDeedMap;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -68,7 +62,7 @@ import retrofit.Retrofit;
 //  Delete resource option is only available for resource creator.
 /////////////////////////////////////////////////////////////////////////
 
-public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class ResourceDetailsFrag extends Fragment  {
     FragmentActivity myContext;
     LinearLayout resLocation, qtyLayout, subTypeLayout;
     View rootview;
@@ -77,9 +71,9 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     String str_ResCreatorId, strUser_ID, str_resid, callingFrom, str_geopoint, str_groupId, str_groupName, str_resName, str_address,
             str_resDesc, resAllGrpSelected, resAudienceGrpIds, resAudienceGrpNames;
     static FragmentManager fragmgr;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     SimpleArcDialog mDialog;
-    private GoogleApiClient mGoogleApiClient;
+
     StringBuffer sb, rescatId, rescat, ressubcatId, ressubcat;
     private String resCustomCatId = "", resCustomCat = "";
 
@@ -91,7 +85,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.resource_details_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.toggle.setDrawerIndicatorEnabled(false);
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -108,9 +102,9 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         fragmgr = getFragmentManager();
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.res_details));
         init();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         str_resid = this.getArguments().getString("str_resid");
         callingFrom = this.getArguments().getString("callingFrom");
         if (!(Validation.isNetworkAvailable(getActivity()))) {
@@ -160,7 +154,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
@@ -186,7 +180,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -196,9 +190,8 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         mDialog.dismiss();
@@ -296,7 +289,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -306,9 +299,8 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (groupResponseStatus.getStatus() == 1) {
@@ -389,7 +381,7 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
                     createResourceFragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
-                    sessionManager.createResourceDetails("editRes", str_resid, str_resName);
+                    sharedPrefManager.createResourceDetails("editRes", str_resid, str_resName);
                     fragmentTransaction.replace(R.id.content_frame, createResourceFragment);
                     fragmentTransaction.commit();
                 }
@@ -485,8 +477,5 @@ public class ResourceDetailsFrag extends Fragment implements GoogleApiClient.OnC
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

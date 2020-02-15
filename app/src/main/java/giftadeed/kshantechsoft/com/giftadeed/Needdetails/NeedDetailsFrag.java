@@ -14,7 +14,7 @@ import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,8 +49,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Notifications.Notificationfrag;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -72,11 +71,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -99,7 +93,7 @@ import java.util.concurrent.TimeUnit;
 //  Shows details of deed and also can comment,endorse,report,edit deed//
 ////////////////////////////////////////////////////////////////////////
 
-public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener, Animation.AnimationListener {
+public class NeedDetailsFrag extends Fragment implements Animation.AnimationListener {
     FragmentActivity myContext;
     View rootview;
     ListView listviewcomments;
@@ -123,11 +117,11 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
             strLastEndorseTime;
     static FragmentManager fragmgr;
     LinearLayout layout_editdeed, layout_endorsedeed, layout_viewdeed, detailspage_containerlayout, comments_layout;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     List<Comment> commentslist;
     CommentAdapter commentadapter;
     SimpleArcDialog mDialog;
-    private GoogleApiClient mGoogleApiClient;
+
     Button img_view_send_comment;
     Animation animFadein;
     ImageView imageView;
@@ -159,13 +153,11 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         init();
         img.setImageResource(R.drawable.imagedefault);
         img.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-
         //detailsofgieft.loadDataWithBaseURL(null, getString(R.string.faq), "text/html", "utf-8", "");
         //-------------getting data
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        str_userID = user.get(sessionManager.USER_ID);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        str_userID = user.get(sharedPrefManager.USER_ID);
         str_tagid = this.getArguments().getString("str_tagid");
         tab = this.getArguments().getString("tab");
         getDeed_Details();
@@ -388,19 +380,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         // dist = 100;
@@ -449,7 +432,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                             Location tagLocation2 = new Location("tag Location");
                             tagLocation2.setLatitude(Double.parseDouble(words[0]));
                             tagLocation2.setLongitude(Double.parseDouble(words[1]));
-                            double radi = sessionManager.getradius();
+                            double radi = sharedPrefManager.getradius();
                             DecimalFormat df2 = new DecimalFormat("#.##");
                             double dist1 = myLocation.distanceTo(tagLocation2) / 1000;
                             str_distance = String.valueOf(dist1);
@@ -630,22 +613,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-
-
-                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-
-                        sessionManager.set_notification_status("ON");
-
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
 
@@ -685,11 +656,11 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
     public void commentDeed() {
         // mDialog.show();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
-        String name = user.get(sessionManager.USER_NAME);
-        final String privacy = user.get(sessionManager.PRIVACY);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
+        String name = user.get(sharedPrefManager.USER_NAME);
+        final String privacy = user.get(sharedPrefManager.PRIVACY);
         final String fname = name.split(" ")[0];
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -715,19 +686,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         StatusModel statusModel = response.body();
@@ -767,10 +729,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
     public void reportDeed() {
         mDialog.show();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
-        String name = user.get(sessionManager.USER_NAME);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
+        String name = user.get(sharedPrefManager.USER_NAME);
         final String fname = name.split(" ")[0];
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -795,19 +757,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         StatusModel statusModel = response.body();
@@ -846,10 +799,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
     public void reportUser() {
         mDialog.show();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
-        String name = user.get(sessionManager.USER_NAME);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
+        String name = user.get(sharedPrefManager.USER_NAME);
         final String fname = name.split(" ")[0];
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -875,7 +828,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
 
@@ -887,10 +840,9 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
 
@@ -932,10 +884,10 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
 
     public void isDeedDeleted(final String fromwhere) {
         mDialog.show();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
-        String name = user.get(sessionManager.USER_NAME);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
+        String name = user.get(sharedPrefManager.USER_NAME);
         final String fname = name.split(" ")[0];
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -961,7 +913,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -971,10 +923,9 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         DeeddeletedModel statusModel = response.body();
@@ -1271,10 +1222,7 @@ public class NeedDetailsFrag extends Fragment implements GoogleApiClient.OnConne
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     //----------------------------------------gif showing after endorse
     private void gifDialog() {

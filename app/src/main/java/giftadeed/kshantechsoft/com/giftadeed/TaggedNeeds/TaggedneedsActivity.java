@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,12 +35,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,10 +77,9 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PushUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.GetingAddress;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Utility;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -100,7 +93,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
+public class TaggedneedsActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, DrawerLayout.DrawerListener {
     String selectedLangugae;
     DatabaseAccess databaseAccess;
@@ -117,15 +110,14 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
     TextView profiletxtview, txtProfileName;
     Toolbar toolbar;
     public static ActionBarDrawerToggle toggle;
-    SessionManager sharedPreferences;
-    String message, strUserId, strUserName;
+    SharedPrefManager sharedPreferences;
+    String strUserId, strUserName;
     public String adress_show;
     Context myContext;
     public static Fragment fragname;
     TextView dialogtext;
     private AlertDialog alertDialogForgot;
     Button dialogconfirm, dialogcancel;
-    public GoogleApiClient mGoogleApiClient;
     SimpleArcDialog mDialog;
     private List<Profile> profileList;
     private DatabaseReference mFirebaseDatabase;
@@ -141,7 +133,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         init();
         databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
         databaseAccess.open();
-        sharedPreferences = new SessionManager(getApplicationContext());
+        sharedPreferences = new SharedPrefManager(getApplicationContext());
         selectedLangugae = sharedPreferences.getLanguage();
         setSupportActionBar(toolbar);
         GPSTracker gps = new GPSTracker(TaggedneedsActivity.this);
@@ -171,17 +163,10 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
             gps.showSettingsAlert();
         }
         drawer.setDrawerListener(this);
-        Bundle bundle = getIntent().getExtras();
-        message = bundle.getString("message");
         fragmgr = getSupportFragmentManager();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(TaggedneedsActivity.this)
-                .enableAutoManage(TaggedneedsActivity.this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -358,15 +343,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                 @Override
                 public void onClick(View v) {
                     LoginManager.getInstance().logOut();
-                    if (mGoogleApiClient.isConnected()) {
-                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-                    }
                     sharedPreferences.createUserCredentialSession(null, null, null);
                     DisconnectSendbirdCall();
                     sharedPreferences.set_notification_status("ON");
@@ -377,7 +353,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                     databaseAccess.deleteAllCategory();
                     Log.d("LocalDbCategoriesAfter", "" + databaseAccess.getAllCategories().size());
                     Intent loginintent = new Intent(TaggedneedsActivity.this, LoginActivity.class);
-                    loginintent.putExtra("message", "Charity");
                     startActivity(loginintent);
                     TaggedneedsActivity.this.finish();
                 }
@@ -553,11 +528,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
         return super.dispatchTouchEvent(ev);
     }*/
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
-
     public void getNotificationCount() {
         // mDialog.setCancelable(false);
         // item = new ArrayList<>();
@@ -655,7 +625,6 @@ public class TaggedneedsActivity extends AppCompatActivity implements GoogleApiC
                                 });*/
                         sharedPreferences.set_notification_status("ON");
                         Intent loginintent = new Intent(getApplicationContext(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();

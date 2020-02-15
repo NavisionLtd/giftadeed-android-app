@@ -51,9 +51,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -111,7 +108,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.StateSignup;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Utility;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -129,7 +126,7 @@ import static android.app.Activity.RESULT_OK;
 //                                                               //
 //     Shows user profile details                               //
 /////////////////////////////////////////////////////////////////
-public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class MyProfilefrag extends Fragment  {
     private StorageReference storageReference;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
@@ -156,7 +153,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     Button btnbtnSave;
     RadioButton rbtnMale, rbtnFemale, rbtnpublic, rbtnanonymous;
     ImageView imgEditProfile, imgShare;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     MyProfilefrag fragmentobj;
     CountryAdapter ctryadptr;
     StateAdapter stateadptr;
@@ -171,7 +168,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
     private ArrayList<SignupPOJO> cities = new ArrayList<>();
     SignUp country = new SignUp();
     SimpleArcDialog mDialog;
-    private GoogleApiClient mGoogleApiClient;
+
 
     public static MyProfilefrag newInstance(int sectionNumber) {
         MyProfilefrag fragment = new MyProfilefrag();
@@ -191,7 +188,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         //-------------------------------hide keyboard----------------------------------------------
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         mDialog = new SimpleArcDialog(getContext());
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         init();
 //----------------------------------------Camera and filter invisible-------------------------------
         TaggedneedsActivity.imgappbarcamera.setVisibility(View.GONE);
@@ -201,20 +198,11 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         TaggedneedsActivity.fragname = MyProfilefrag.newInstance(0);
         edEmail.setEnabled(false);
-        //mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        try {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API)
-                    .build();
-        } catch (Exception e) {
-
-        }
         //----------------------------------getting user id and name from shared preferences--------
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUserId = user.get(sessionManager.USER_ID);
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUserId = user.get(sharedPrefManager.USER_ID);
         Log.d("loggedin_userid", "" + strUserId);
-        strProfilrName = user.get(sessionManager.USER_NAME);
+        strProfilrName = user.get(sharedPrefManager.USER_NAME);
         txtName.setText(strProfilrName);
         if (!(Validation.isNetworkAvailable(getContext()))) {
             Toast.makeText(getContext(), getResources().getString(R.string.network_validation), Toast.LENGTH_SHORT).show();
@@ -244,7 +232,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         }
                         if (path.length() > 0) {
                             Glide.with(getContext()).load(path).into(profilePic);
-                            sessionManager.store_profile_image_path(path);
+                            sharedPrefManager.store_profile_image_path(path);
                         } else {
                             Glide.with(getContext()).load(R.drawable.ic_default_profile_pic).into(profilePic);
                         }
@@ -952,7 +940,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -962,9 +950,8 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         if (fdata.getProfiledata().get(0).getFname() != "") {
@@ -1671,7 +1658,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -1680,9 +1667,8 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                                         //updateUI(false);
                                     }
                                 });*/
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         String successstatus = response.body().getCheckstatus().get(0).getStatus();
@@ -1690,20 +1676,20 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                             strmobile = "";
                             String strFullName = fname + " " + lname;
                             ToastPopUp.displayToast(getActivity(), getResources().getString(R.string.profile_updated));
-                            sessionManager.createUserCredentialSession(strUserId, strFullName, privacy);
+                            sharedPrefManager.createUserCredentialSession(strUserId, strFullName, privacy);
 
                             // update user full name in SendBird
                             DisconnectSendbirdCall();
-                            String image_path = sessionManager.getProfileImagePath();
+                            String image_path = sharedPrefManager.getProfileImagePath();
                             if (image_path != null) {
                                 loginWithSendbirdchat(strUserId, strFullName, image_path);
                             } else {
                                 loginWithSendbirdchat(strUserId, strFullName, "");
                             }
 
-                            HashMap<String, String> user = sessionManager.getUserDetails();
-                            strUserId = user.get(sessionManager.USER_ID);
-                            strProfilrName = user.get(sessionManager.USER_NAME);
+                            HashMap<String, String> user = sharedPrefManager.getUserDetails();
+                            strUserId = user.get(sharedPrefManager.USER_ID);
+                            strProfilrName = user.get(sharedPrefManager.USER_NAME);
                             txtName.setText(strProfilrName);
                             //firebase call for image store with sos id
                             if (bitmap != null) {
@@ -1724,9 +1710,8 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
                             }
 
                             if (!(strPassword.equals(strnewPassword))) {
-                                sessionManager.createUserCredentialSession(null, null, null);
+                                sharedPrefManager.createUserCredentialSession(null, null, null);
                                 Intent loginintent = new Intent(getContext(), LoginActivity.class);
-                                loginintent.putExtra("message", "Charity");
                                 startActivity(loginintent);
                             } else {
                                 //edPhone.requestFocus();
@@ -2141,10 +2126,7 @@ public class MyProfilefrag extends Fragment implements GoogleApiClient.OnConnect
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     public void loginWithSendbirdchat(String strUserId, String strUserName, String strPhotoPath) {
         if (strUserId != null && strUserName != null) {

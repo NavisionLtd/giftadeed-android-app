@@ -29,11 +29,11 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
  * Created by I-Sys on 30-Aug-17.
  */
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> implements GoogleApiClient.OnConnectionFailedListener {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder>  {
     List<Notification> item;
     Context context;
     static FragmentManager fragmgr;
-    private GoogleApiClient mGoogleApiClient;
+
 
     public NotificationAdapter(List<Notification> item, Context context) {
         this.item = item;
@@ -48,7 +48,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        mGoogleApiClient = ((TaggedneedsActivity) context).mGoogleApiClient;
+
         fragmgr = ((TaggedneedsActivity) context).getSupportFragmentManager();
         if (item.get(position).getSeen().equals("0")) {
             holder.title.setTypeface(Typeface.DEFAULT_BOLD);
@@ -71,10 +71,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return item.size();
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, date;

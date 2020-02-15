@@ -13,7 +13,6 @@ import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -38,8 +37,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.leo.simplearcloader.SimpleArcDialog;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
@@ -55,9 +52,9 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
-public class SettingsFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class SettingsFragment extends Fragment  {
     View rootview;
     FragmentActivity myContext;
     static FragmentManager fragmgr;
@@ -71,8 +68,8 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
     ImageView heart;
     LinearLayout radiusLayout, groupListLayout, catListLayout;
     String strUser_ID;
-    SessionManager sessionManager;
-    private GoogleApiClient mGoogleApiClient;
+    SharedPrefManager sharedPrefManager;
+
     GroupListSettingsAdapter groupListAdapter;
     CatListSettingsAdapter catListSettingsAdapter;
     ArrayList<GroupPOJO> groupArrayList;
@@ -107,8 +104,8 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.settings_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
-        storedLanguage = sessionManager.getLanguage();
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        storedLanguage = sharedPrefManager.getLanguage();
         updateLanguage(storedLanguage);
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.settings));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
@@ -140,21 +137,19 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
         }
         databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-
-        Notification_status_map = sessionManager.get_notification_status();
-        Notification_status = Notification_status_map.get(sessionManager.KEY_NOTIFICATION);
-        radius = sessionManager.getradius();
-        double rad = sessionManager.getradius();
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
+        Notification_status_map = sharedPrefManager.get_notification_status();
+        Notification_status = Notification_status_map.get(sharedPrefManager.KEY_NOTIFICATION);
+        radius = sharedPrefManager.getradius();
+        double rad = sharedPrefManager.getradius();
         distanceSeekBar.setProgress((int) rad);
         Log.d("validation radius", String.valueOf(rad));
-        if (sessionManager.getradius() > 1000) {
-            float valueKM = sessionManager.getradius() / 1000;
-            txtdist.setText("" + sessionManager.getradius() + " Metres (" + valueKM + " kms)");
+        if (sharedPrefManager.getradius() > 1000) {
+            float valueKM = sharedPrefManager.getradius() / 1000;
+            txtdist.setText("" + sharedPrefManager.getradius() + " Metres (" + valueKM + " kms)");
         } else {
-            txtdist.setText("" + sessionManager.getradius() + " Metres");
+            txtdist.setText("" + sharedPrefManager.getradius() + " Metres");
         }
 
         heart.setOnClickListener(new View.OnClickListener() {
@@ -284,29 +279,29 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
             @Override
             public void onClick(View v) {
                 if (switchReceiveNoti.isChecked()) {
-                    sessionManager.set_notification_status("ON");
-                    sessionManager.store_radius((float) radius);
+                    sharedPrefManager.set_notification_status("ON");
+                    sharedPrefManager.store_radius((float) radius);
                 } else {
-                    sessionManager.set_notification_status("OFF");
+                    sharedPrefManager.set_notification_status("OFF");
                 }
 
                 if (storedLanguage.equals("zh")) {
-                    sessionManager.store_language("zh");
+                    sharedPrefManager.store_language("zh");
                     updateLanguage("zh");
                 } else if (storedLanguage.equals("en")) {
-                    sessionManager.store_language("en");
+                    sharedPrefManager.store_language("en");
                     updateLanguage("en");
                 } else if (storedLanguage.equals("fr")) {
-                    sessionManager.store_language("fr");
+                    sharedPrefManager.store_language("fr");
                     updateLanguage("fr");
                 } else if (storedLanguage.equals("hi")) {
-                    sessionManager.store_language("hi");
+                    sharedPrefManager.store_language("hi");
                     updateLanguage("hi");
                 } else if (storedLanguage.equals("pt")) {
-                    sessionManager.store_language("pt");
+                    sharedPrefManager.store_language("pt");
                     updateLanguage("pt");
                 } else if (storedLanguage.equals("es")) {
-                    sessionManager.store_language("es");
+                    sharedPrefManager.store_language("es");
                     updateLanguage("es");
                 }
 
@@ -387,8 +382,5 @@ public class SettingsFragment extends Fragment implements GoogleApiClient.OnConn
         }
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

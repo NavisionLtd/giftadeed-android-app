@@ -9,7 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -32,11 +32,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.sendbird.android.GroupChannel;
 import com.sendbird.android.GroupChannelListQuery;
@@ -56,9 +51,8 @@ import giftadeed.kshantechsoft.com.giftadeed.SendBirdChat.utils.PreferenceUtils;
 import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.TagaNeed;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -71,7 +65,7 @@ import retrofit.Retrofit;
 import static giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity.userClubCount;
 
 public class GroupsListFragment extends Fragment
-        implements SwipeRefreshLayout.OnRefreshListener, GoogleApiClient.OnConnectionFailedListener {
+        implements SwipeRefreshLayout.OnRefreshListener {
     View rootview;
     FragmentActivity myContext;
     SimpleArcDialog mDialog;
@@ -81,8 +75,8 @@ public class GroupsListFragment extends Fragment
     Button btnCreateGroup;
     SwipeRefreshLayout swipeRefreshLayout;
     String strUser_ID;
-    SessionManager sessionManager;
-    private GoogleApiClient mGoogleApiClient;
+    SharedPrefManager sharedPrefManager;
+
     GroupListAdapter groupListAdapter;
     DatabaseAccess databaseAccess;
     private List<GroupListInfo> lstGetChannelsList = new ArrayList<>();
@@ -118,7 +112,7 @@ public class GroupsListFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootview = inflater.inflate(R.layout.fragment_groups_layout, container, false);
-        sessionManager = new SessionManager(getActivity());
+        sharedPrefManager = new SharedPrefManager(getActivity());
         TaggedneedsActivity.updateTitle(getResources().getString(R.string.drawer_groups));
         TaggedneedsActivity.fragname = TagaNeed.newInstance(0);
         mDialog = new SimpleArcDialog(getContext());
@@ -135,9 +129,9 @@ public class GroupsListFragment extends Fragment
         init();
         databaseAccess = DatabaseAccess.getInstance(getContext());
         databaseAccess.open();
-        mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         swipeRefreshLayout.setOnRefreshListener(this);
         /**
          * Showing Swipe Refresh animation on activity create
@@ -165,7 +159,7 @@ public class GroupsListFragment extends Fragment
                 FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
                 CreateGroupFragment createGroupFragment = new CreateGroupFragment();
-                sessionManager.createGroupDetails("create", "", "", "", "");
+                sharedPrefManager.createGroupDetails("create", "", "", "", "");
                 newfrag.beginTransaction().replace(R.id.content_frame, createGroupFragment).commit();
             }
         });
@@ -177,7 +171,7 @@ public class GroupsListFragment extends Fragment
                 FragmentManager newfrag;
                 newfrag = getActivity().getSupportFragmentManager();
                 Log.d("infogrp", "" + groupArrayList.get(position).getGroup_id() + groupArrayList.get(position).getGroup_name());
-                sessionManager.createGroupDetails("", groupArrayList.get(position).getGroup_id(), groupArrayList.get(position).getGroup_name(), groupArrayList.get(position).getGroup_desc(), groupArrayList.get(position).getGroup_image());
+                sharedPrefManager.createGroupDetails("", groupArrayList.get(position).getGroup_id(), groupArrayList.get(position).getGroup_name(), groupArrayList.get(position).getGroup_desc(), groupArrayList.get(position).getGroup_image());
                 GroupDetailsFragment fragment = new GroupDetailsFragment();
                 newfrag.beginTransaction().replace(R.id.content_frame, fragment).commit();
             }
@@ -239,7 +233,7 @@ public class GroupsListFragment extends Fragment
                         swipeRefreshLayout.setRefreshing(false);
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
                         /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                                 new ResultCallback<Status>() {
@@ -249,9 +243,8 @@ public class GroupsListFragment extends Fragment
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         List<GroupPOJO> groupPOJOS = response.body();
@@ -346,10 +339,7 @@ public class GroupsListFragment extends Fragment
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     public void getChannelsDetails() {
         channelList = new ArrayList<String>();

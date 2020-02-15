@@ -7,9 +7,7 @@ package giftadeed.kshantechsoft.com.giftadeed.Login;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,14 +18,12 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,36 +42,22 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
-import com.linkedin.platform.APIHelper;
-import com.linkedin.platform.LISessionManager;
-import com.linkedin.platform.errors.LIApiError;
-import com.linkedin.platform.errors.LIAuthError;
-import com.linkedin.platform.listeners.ApiListener;
-import com.linkedin.platform.listeners.ApiResponse;
-import com.linkedin.platform.listeners.AuthListener;
-import com.linkedin.platform.utils.Scope;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.json.JSONArray;
@@ -83,8 +65,6 @@ import org.json.JSONObject;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -100,7 +80,6 @@ import giftadeed.kshantechsoft.com.giftadeed.Signup.SignUp;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
@@ -124,29 +103,22 @@ import static giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails.context;
 //                                                               //
 //     Used to Log into app                                     //
 /////////////////////////////////////////////////////////////////
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity {
     private TextView txtagreet_C, txtagreePolicy;
-    ImageView fbbtn, linkedinbtn, googlebtn;
+    ImageView fbbtn, instagrambtn, googlebtn;
     TextView notregistered, signup, forgot, loginheading, txtloginTermsandcondn, txtagree1, txtTermsAnd, txtSelectLanguage;
-    private CheckBox chkbx;
     Button btnLogin, dialogconfirm, dialogcancel;
     TextInputLayout txtInpLoiginid, txtInpPasswrd;
     EditText email, password, edforgotpassEmail;
-    TextView dialogtext, txtlinkedIn_login, fb_login, txtsaperator;
-    String message;
-    String strEmail, strPassword, lnkdFname, lnkdLname, lnkdEmail = "";
-    //private AlertDialog alertDialogForgot;
-    SessionManager sharedPreferences;
-    //ProgressDialog progressDialog;
+    TextView txtsaperator;
+    String strEmail, strPassword;
+    SharedPrefManager sharedPreferences;
     SimpleArcDialog mDialog;
-    // public static float inital_radius = 10.0f;
     CallbackManager callbackManager;
-    String id;//, name, lname, email, gender, location;
+    String id;
     AccessToken accessToken;
     public static final int RequestPermissionCode = 1;
-    private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 007;
-    public static final String PACKAGE = "giftadeed.kshantechsoft.com.giftadeed";
     private AlertDialog alertDialogForgot, alertDialogreturn;
     Button btnSos;
     LinearLayout layoutSelectLanguage;
@@ -160,8 +132,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Bundle bundle = getIntent().getExtras();
-        message = bundle.getString("message");
         init();
         databaseAccess = DatabaseAccess.getInstance(this);
         databaseAccess.open();
@@ -172,41 +142,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         } else {
             requestPermission();
         }
-//---------------google sign in
+        //---------------google sign in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        //mGoogleApiClient.getConnectionResult(this)
-        if (mGoogleApiClient.isConnected()) {
-            /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-        }
+        callbackManager = CallbackManager.Factory.create();
 
         mDialog = new SimpleArcDialog(this);
-        sharedPreferences = new SessionManager(LoginActivity.this);
+        sharedPreferences = new SharedPrefManager(LoginActivity.this);
         storedLanguage = sharedPreferences.getLanguage();
         updateLanguage(storedLanguage);
         databaseAccess.deleteAllGroups();
         Log.d("LocalDbGroupSize", "" + databaseAccess.getAllGroups().size());
-
-        //---------facebook sign in
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
-        AppEventsLogger.activateApp(this);
-        LoginManager.getInstance().logOut();
 
         btnSos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -423,7 +373,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
                 Intent intentsignup = new Intent(LoginActivity.this, SignUp.class);
-                intentsignup.putExtra("message", message);
                 startActivity(intentsignup);
             }
         });
@@ -436,13 +385,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
 
         fbbtn.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-//                if (!(chkbx.isChecked())) {
-//                    ToastPopUp.displayToast(SendBirdLoginActivity.this, "Please accept the Terms and Conditions.");
-//                } else {
-                callbackManager = CallbackManager.Factory.create();
+//                callbackManager = CallbackManager.Factory.create();
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email", "user_hometown"));
                 LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
@@ -450,7 +395,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         id = loginResult.getAccessToken().getUserId();
                         accessToken = loginResult.getAccessToken();
                         GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.e("SendBirdLogin Response", response.toString());
@@ -464,7 +408,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                                 try {
                                     JSONArray arr = object.getJSONArray("location");
-
                                     for (int n = 0; n < arr.length(); n++) {
                                         JSONObject obj = arr.getJSONObject(n);
                                         final String town = obj.getString("name");
@@ -495,33 +438,41 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         Log.d("Cannot login", String.valueOf(error));
                     }
                 });
-//                }
             }
         });
-        //-------------------------------Linkedin Login
-        linkedinbtn.setOnClickListener(new View.OnClickListener() {
+        //-------------------------------Instagram Login
+        instagrambtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!(chkbx.isChecked())) {
-//                    ToastPopUp.displayToast(SendBirdLoginActivity.this, "Please accept the Terms and Conditions.");
-//                } else {
-                handleLogin();
-//                }
+
             }
         });
+
         googlebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!(chkbx.isChecked())) {
-//                    ToastPopUp.displayToast(SendBirdLoginActivity.this, "Please accept the Terms and Conditions.");
-//                } else {
                 signIn();
-//                }
             }
         });
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("firebase_token", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        Log.d("firebase_token", "" + token);
+                        sharedPreferences.saveDeviceToken(token);
+                    }
+                });
     }
 
-    //----------------------initlizing UI veriables-------------------------------------------------
+    //----------------------initializing UI variables-------------------------------------------------
     private void init() {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         layoutSelectLanguage = (LinearLayout) findViewById(R.id.layout_select_language_login);
@@ -538,13 +489,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         txtInpLoiginid = (TextInputLayout) findViewById(R.id.inputlayoutemail);
         txtInpPasswrd = (TextInputLayout) findViewById(R.id.inputlayoutpassword);
         txtloginTermsandcondn = findViewById(R.id.txtloginTermsandcondn);
-        chkbx = findViewById(R.id.chkloginagree);
         txtagree1 = findViewById(R.id.txtagreeagree_1);
         txtTermsAnd = findViewById(R.id.txtagreeT_C_and);
         txtSelectLanguage = findViewById(R.id.select_language_text);
         txtsaperator = (TextView) findViewById(R.id.txtsaperator);
         fbbtn = (ImageView) findViewById(R.id.fb_btn);
-        linkedinbtn = (ImageView) findViewById(R.id.linkedin_btn);
+        instagrambtn = (ImageView) findViewById(R.id.instagram_btn);
         googlebtn = (ImageView) findViewById(R.id.google_btn);
 //---------------------------------------setting font style-------------------------
         btnLogin.setTypeface(new FontDetails(LoginActivity.this).fontStandardForPage);
@@ -685,9 +635,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             @Override
                             public void onClick(View v) {
                                 alertDialogreturn.dismiss();
-                                /*Intent loginintent = new Intent(SendBirdLoginActivity.this, SendBirdLoginActivity.class);
-                                loginintent.putExtra("message", message);
-                                startActivity(loginintent);*/
                             }
                         });
                     } else if (successstatus.equals("3")) {
@@ -724,7 +671,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     //---------------------sending details of login to server and validating------------------------
     public void login() {
-        String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
+        String strDeviceid = sharedPreferences.getDeviceToken();
         mDialog.setConfiguration(new ArcConfiguration(this));
         mDialog.show();
         mDialog.setCancelable(false);
@@ -741,7 +688,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         LoginInterface service = retrofit.create(LoginInterface.class);
         Log.d("login_inputs", stremailaddress + "," + strPassword + "," + strDeviceid);
-        Call<MobileModel> call = service.sendData(stremailaddress, strPassword, strDeviceid);
+        Call<MobileModel> call = service.sendData(stremailaddress, strPassword, strDeviceid, "0");
         call.enqueue(new Callback<MobileModel>() {
             @Override
             public void onResponse(Response<MobileModel> response, Retrofit retrofit) {
@@ -767,7 +714,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Bundle bundle = new Bundle();
                             bundle.putString("EmailId", stremailaddress);
                             bundle.putString("strMerchant_id", strMerchant_id);
-                            bundle.putString("message", message);
                             bundle.putString("FName", strFname);
                             bundle.putString("LName", strLname);
                             bundle.putString("countryid", country_id);
@@ -780,7 +726,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             sharedPreferences.createUserCredentialSession(strMerchant_id, strFullName, privacy);
                             sharedPreferences.store_radius(Validation.inital_radius);
                             Intent i = new Intent(getBaseContext(), TaggedneedsActivity.class);
-                            i.putExtra("message", message);
                             startActivity(i);
                             //-----------------------set up notification status to ON-----------------------
                             sharedPreferences.set_notification_status("ON");
@@ -828,9 +773,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             @Override
                             public void onClick(View v) {
                                 alertDialogreturn.dismiss();
-                               /* Intent loginintent = new Intent(SendBirdLoginActivity.this, SendBirdLoginActivity.class);
-                                loginintent.putExtra("message", message);
-                                startActivity(loginintent);*/
                             }
                         });
                         // Toast.makeText(Login.this, "Wrong Password", Toast.LENGTH_LONG).show();
@@ -902,56 +844,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
-    private void handleLogin() {
-        LISessionManager.getInstance(getApplicationContext()).init(LoginActivity.this, buildScope(), new AuthListener() {
-            @Override
-            public void onAuthSuccess() {
-                // Authentication was successful.  You can now do
-                // other calls with the SDK.
-                fetchinfo();
-            }
-
-            @Override
-            public void onAuthError(LIAuthError error) {
-                // Handle authentication errors
-                Log.d(getResources().getString(R.string.error), error.toString());
-            }
-        }, true);
-    }
-
-    private void fetchinfo() {
-        String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,picture-urls::(original))";
-        APIHelper apiHelper = APIHelper.getInstance(LoginActivity.this);
-        apiHelper.getRequest(LoginActivity.this, url, new ApiListener() {
-            @Override
-            public void onApiSuccess(ApiResponse apiResponse) {
-                // Success!
-                try {
-                    JSONObject jsonObject = apiResponse.getResponseDataAsJson();
-                    lnkdFname = jsonObject.getString("firstName");
-                    lnkdLname = jsonObject.getString("lastName");
-                    lnkdEmail = jsonObject.getString("emailAddress");
-                    // imgurl = jsonObject.getString("pictureUrls");
-
-                   /* Intent in=new Intent(SendBirdLoginActivity.this,Detailspage.class);
-                    startActivity(in);*/
-                    Log.d("FName", lnkdFname);
-                    Log.d("LName", lnkdLname);
-                    Log.d("Email", lnkdEmail);
-                    linkedInLigin(lnkdFname, lnkdLname, lnkdEmail, "li");
-                    //Log.d("Photopath",imgurl);
-                } catch (Exception e) {
-                    Log.d("error", e.toString());
-                }
-            }
-
-            @Override
-            public void onApiError(LIApiError liApiError) {
-                // Error making GET request!
-            }
-        });
-    }
-
     //-------------------requests all permissions-------------------------------------------------------
     private void requestPermission() {
         ActivityCompat.requestPermissions(LoginActivity.this, new String[]
@@ -981,19 +873,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Add this line to your existing onActivityResult() method
-        LISessionManager.getInstance(getApplicationContext()).onActivityResult(this, requestCode, resultCode, data);
-        try {
-            callbackManager.onActivityResult(requestCode, resultCode, data);
-        } catch (Exception e) {
-
-        }
-
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-//            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-//            int statusCode = result.getStatus().getStatusCode();
-//            Log.d("statusCode", String.valueOf(statusCode));
-
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -1001,19 +884,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    //------------------------linkedinlogin api-----------------------------------------------------
-    public void linkedInLigin(final String first_Name, final String last_Name, final String LinkedIn_Email, String Login_Type) {
-        String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
+    //------------------------google login api-----------------------------------------------------
+    public void googleLogin(final String first_Name, final String last_Name, final String google_Email, String Login_Type) {
+        String strDeviceid = sharedPreferences.getDeviceToken();
        /* progressDialog = new ProgressDialog(SendBirdLoginActivity.this);
         progressDialog.show();*/
         if (first_Name == null) {
             Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                    new ResultCallback<Status>() {
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                         @Override
-                        public void onResult(Status status) {
-                            // Toast.makeText(SendBirdLoginActivity.this,"")
-                            //updateUI(false);
+                        public void onComplete(@NonNull Task<Void> task) {
                             signIn();
                         }
                     });
@@ -1029,11 +910,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     .baseUrl(WebServices.MANI_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            LinkedInLoginInterface service = retrofit.create(LinkedInLoginInterface.class);
-            Call<LinkedInLoginModel> call = service.sendData(first_Name, last_Name, LinkedIn_Email, strDeviceid, Login_Type);
-            call.enqueue(new Callback<LinkedInLoginModel>() {
+            GoogleLoginInterface service = retrofit.create(GoogleLoginInterface.class);
+            Call<GoogleLoginModel> call = service.sendData(first_Name, last_Name, google_Email, strDeviceid, Login_Type);
+            call.enqueue(new Callback<GoogleLoginModel>() {
                 @Override
-                public void onResponse(Response<LinkedInLoginModel> response, Retrofit retrofit) {
+                public void onResponse(Response<GoogleLoginModel> response, Retrofit retrofit) {
                     try {
                         String successstatus = response.body().getCheckstatus().getStatus();
                         String count = response.body().getCheckstatus().getCount();
@@ -1048,10 +929,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             if (count.equals("0")) {
                                 Intent in = new Intent(LoginActivity.this, First_Login.class);
                                 Bundle bundle = new Bundle();
-//Add your data to bundle
-                                bundle.putString("EmailId", LinkedIn_Email);
+                                //Add your data to bundle
+                                bundle.putString("EmailId", google_Email);
                                 bundle.putString("strMerchant_id", strMerchant_id);
-                                bundle.putString("message", message);
                                 bundle.putString("FName", first_Name);
                                 bundle.putString("LName", last_Name);
                                 bundle.putString("countryid", "");
@@ -1064,7 +944,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 sharedPreferences.store_radius(Validation.inital_radius);
 
                                 Intent i = new Intent(getBaseContext(), TaggedneedsActivity.class);
-                                i.putExtra("message", message);
                                 startActivity(i);
                                 //----------------------set up status to ON-----------------------
                                 sharedPreferences.set_notification_status("ON");
@@ -1091,7 +970,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void facebookLogin(final String first_Name, final String last_Name, final String fbEmail, String fb_Id) {
-        String strDeviceid = SharedPrefManager.getInstance(this).getDeviceToken();
+        String strDeviceid = sharedPreferences.getDeviceToken();
        /* progressDialog = new ProgressDialog(SendBirdLoginActivity.this);
         progressDialog.show();*/
         mDialog.setConfiguration(new ArcConfiguration(this));
@@ -1107,11 +986,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
         FacebookLoginInterface service = retrofit.create(FacebookLoginInterface.class);
 
-        Call<LinkedInLoginModel> call = service.sendData(first_Name, last_Name, fbEmail, strDeviceid, fb_Id);
+        Call<GoogleLoginModel> call = service.sendData(first_Name, last_Name, fbEmail, strDeviceid, fb_Id);
 
-        call.enqueue(new Callback<LinkedInLoginModel>() {
+        call.enqueue(new Callback<GoogleLoginModel>() {
             @Override
-            public void onResponse(Response<LinkedInLoginModel> response, Retrofit retrofit) {
+            public void onResponse(Response<GoogleLoginModel> response, Retrofit retrofit) {
                 try {
                     String successstatus = response.body().getCheckstatus().getStatus();
                     String count = response.body().getCheckstatus().getCount();
@@ -1131,7 +1010,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //Add your data to bundle
                             bundle.putString("EmailId", fbEmail);
                             bundle.putString("strMerchant_id", strMerchant_id);
-                            bundle.putString("message", message);
                             bundle.putString("FName", first_Name);
                             bundle.putString("LName", last_Name);
                             bundle.putString("countryid", "");
@@ -1144,7 +1022,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             sharedPreferences.store_radius(Validation.inital_radius);
 
                             Intent i = new Intent(getBaseContext(), TaggedneedsActivity.class);
-                            i.putExtra("message", message);
                             startActivity(i);
                             //----------------------set up status to ON-----------------------
                             sharedPreferences.set_notification_status("ON");
@@ -1166,11 +1043,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 mDialog.dismiss();
             }
         });
-    }
-
-    // Build the list of member permissions our LinkedIn session requires
-    private static Scope buildScope() {
-        return Scope.build(Scope.R_BASICPROFILE, Scope.W_SHARE, Scope.R_EMAILADDRESS);
     }
 
     //-----------------------Back button press------------------------------------------------------
@@ -1214,39 +1086,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onStart() {
         super.onStart();
-//        mGoogleApiClient.clearDefaultAccountAndReconnect();
-//        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            Log.d("opr", opr.toString());
-            Log.d("cached", "Got cached sign-in");
-            GoogleSignInResult result = opr.get();
-//            handleSignInResult(result);
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            // showProgressDialog();
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    // hideProgressDialog();
-//                    handleSignInResult(googleSignInResult);
-                }
-            });
-        }
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -1266,29 +1110,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     if (first_name.equals("null")) {
                         mDialog.dismiss();
                         Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
+                        mGoogleSignInClient.signOut()
+                                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                                     @Override
-                                    public void onResult(Status status) {
-                                        // Toast.makeText(SendBirdLoginActivity.this,"")
-                                        //updateUI(false);
+                                    public void onComplete(@NonNull Task<Void> task) {
                                         signIn();
                                     }
                                 });
                         // mDialog.dismiss();
                         // Toast.makeText(SendBirdLoginActivity.this, "Retry login", Toast.LENGTH_SHORT).show();
                     } else {
-                        //  linkedInLigin(first_name, last_name, email, "gp");
-                        linkedInLigin(first_name, last_name, personEmail, "gp");
+                        googleLogin(first_name, last_name, personEmail, "gp");
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                            new ResultCallback<Status>() {
+                    mGoogleSignInClient.signOut()
+                            .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                                 @Override
-                                public void onResult(Status status) {
-                                    // Toast.makeText(SendBirdLoginActivity.this,"")
-                                    //updateUI(false);
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    // ...
                                     signIn();
                                 }
                             });
@@ -1302,101 +1142,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("Google_details", "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
-
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d("Google_details", "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            Log.e("Google_details", "display name: " + acct.getDisplayName());
-            String personName = acct.getDisplayName();
-            String first_name = "";
-            first_name = acct.getGivenName();
-            String last_name = "";
-            last_name = acct.getFamilyName();
-//            String personPhotoUrl = acct.getPhotoUrl().toString();
-            String email = acct.getEmail();
-            try {
-                Log.e("Google_details", "Name: " + first_name + " last name:" + last_name + ", email: " + email);
-                if (first_name.equals("null")) {
-                    mDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
-                    Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                            new ResultCallback<Status>() {
-                                @Override
-                                public void onResult(Status status) {
-                                    // Toast.makeText(SendBirdLoginActivity.this,"")
-                                    //updateUI(false);
-                                    signIn();
-                                }
-                            });
-                    // mDialog.dismiss();
-                    // Toast.makeText(SendBirdLoginActivity.this, "Retry login", Toast.LENGTH_SHORT).show();
-                } else {
-                    //  linkedInLigin(first_name, last_name, email, "gp");
-                    linkedInLigin(first_name, last_name, email, "gp");
-                }
-            } catch (Exception e) {
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.select_account), Toast.LENGTH_SHORT).show();
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                // Toast.makeText(SendBirdLoginActivity.this,"")
-                                //updateUI(false);
-                                signIn();
-                            }
-                        });
-                StringWriter writer = new StringWriter();
-                e.printStackTrace(new PrintWriter(writer));
-                Bugreport bg = new Bugreport();
-                bg.sendbug(writer.toString());
-            }
-            /*txtName.setText(personName);
-            txtEmail.setText(email);
-            Glide.with(getApplicationContext()).load(personPhotoUrl)
-                    .thumbnail(0.5f)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imgProfilePic);*/
-
-            // updateUI(true);
-        } else {
-            // Signed out, show unauthenticated UI.
-
-
-            // updateUI(false);
-            //signIn();
-        }
-    }
-
-    public void generateHashkey() {
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    PACKAGE,
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                // D3:C1:3D:B4:58:06:77:13:1D:38:6C:9E:79:E8:03:0D:36:F8:23:FC
-                byte[] sha1 = {
-                        (byte) 0xD3, (byte) 0xC1, 0x3D, (byte) 0xB4, 0x58, 0x06, 0x77, 0x13, 0x1D, 0x38, 0x6C, (byte) 0x9E, 0x79, (byte) 0xE8, 0x03, 0x0D, 0x36, (byte) 0xF8, 0x23, (byte) 0xFC
-                        //(byte) 0xD3, (byte)0xDA, (byte)0xA0, 0x5B, 0x4F, 0x35, 0x71, 0x02, 0x4E, 0x27, 0x22, (byte)0xB9, (byte)0xAc, (byte)0xB2, 0x77, 0x2F, (byte)0x9D, (byte)0xA9, (byte)0x9B, (byte)0xD9
-                };
-                Log.e("keyhash", Base64.encodeToString(sha1, Base64.NO_WRAP));
-                // Toast.makeText(SendBirdLoginActivity.this, Base64.encodeToString(md.digest(), Base64.NO_WRAP), Toast.LENGTH_LONG).show();
-               /* ((TextView) findViewById(R.id.hashKey))
-                        .setText(Base64.encodeToString(md.digest(),
-                                Base64.NO_WRAP));*/
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.d("Name not found", e.getMessage(), e);
-
-        } catch (NoSuchAlgorithmException e) {
-            Log.d(getResources().getString(R.string.error), e.getMessage(), e);
         }
     }
 
@@ -1414,7 +1159,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View widget) {
                 Intent trmscondn = new Intent(LoginActivity.this, Terms_Conditions.class);
-                trmscondn.putExtra("message", message);
                 startActivity(trmscondn);
             }
         }, spanTxt.length() - firsthighlight.length(), spanTxt.length(), 0);

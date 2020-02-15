@@ -43,7 +43,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
@@ -65,11 +64,6 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -103,7 +97,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TagaNeed.GPSTracker;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsFrag;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -122,7 +116,7 @@ import static android.app.Activity.RESULT_OK;
 //                                                               //
 //     Used to fulfill a need                                   //
 /////////////////////////////////////////////////////////////////
-public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnectionFailedListener, Animation.AnimationListener {
+public class GiftANeedFrag extends Fragment implements Animation.AnimationListener {
     FragmentActivity myContext;
     View rootview;
     public static final int RequestPermissionCode = 1;
@@ -146,12 +140,11 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     private Bitmap capturedBitmap, rotatedBitmap;
     String imageToSend, strImagenamereturned;
     SimpleArcDialog simpleArcDialog;
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     public static final int STORAGE_PERMISSION_CODE = 23;
     public String strimagePath;
     Uri filee;
     int REQUEST_CAMERA = 0;
-    private GoogleApiClient mGoogleApiClient;
     String str_address, str_tagid, str_geopoint, str_taggedPhotoPath, str_description, str_characterPath, str_fname,
             str_lname, str_privacy, str_userID, str_needName, str_totalTaggedCreditPoints, str_totalFulfilledCreditPoints,
             str_title, str_date, str_distance, strAboutgift, strNoOfPeople, strUser_ID, strCreditpoints, strTotalpoints, tab;
@@ -178,16 +171,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         TaggedneedsActivity.imgShare.setVisibility(View.GONE);
         TaggedneedsActivity.editprofile.setVisibility(View.GONE);
         TaggedneedsActivity.saveprofile.setVisibility(View.GONE);
-        sessionManager = new SessionManager(getActivity());
-        // mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        try {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API)
-                    .build();
-        } catch (Exception e) {
-
-        }
+        sharedPrefManager = new SharedPrefManager(getActivity());
         //-------------------getting data from previous fragment and stoing in string-------------------
         str_address = this.getArguments().getString("str_address");
         str_tagid = this.getArguments().getString("str_tagid");
@@ -210,8 +194,8 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         //--------------Locking nevigation drawer---------------------------------------------------
         TaggedneedsActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         //-----------getting user id from shared preferences----------------------------------------
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUser_ID = user.get(sessionManager.USER_ID);
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUser_ID = user.get(sharedPrefManager.USER_ID);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         simpleArcDialog = new SimpleArcDialog(getContext());
@@ -793,18 +777,15 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                         Location tagLocation2 = new Location("tag Location");
                         tagLocation2.setLatitude(Double.parseDouble(words[0]));
                         tagLocation2.setLongitude(Double.parseDouble(words[1]));
-
 //--------------------------distance in km----------------------------------------------------------
                         float dist1 = myLocation.distanceTo(tagLocation2) / 1000;
 //---------------------------distance in feet-------------------------------------------------------
                         float ft_distance = dist1 * 3280.8f;
-
                         if (ft_distance < requiredDistFulfill) {
                             isDeedDeleted();
                         } else {
                             //Toast.makeText(myContext, "You are not in the 10 feet area of needy persons", Toast.LENGTH_SHORT).show();
                             //fragmgr.beginTransaction().replace(R.id.content_frame, GiftANeedFrag.newInstance()).commit();
-
                             final AlertDialog.Builder alertdialog = new AlertDialog.Builder(getContext());
                             LayoutInflater li = LayoutInflater.from(getContext());
                             View confirmDialog = li.inflate(R.layout.signup_dialog, null);
@@ -817,31 +798,19 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                             //-------------Adding dialog box to the view of alert dialog
                             alertdialog.setView(confirmDialog);
                             alertdialog.setCancelable(false);
-
-                            //----------------Creating an alert dialog
                             alertDialogreturn = alertdialog.create();
-
                             alertDialogForgot.getWindow().getAttributes().windowAnimations = R.style.PauseDialogAnimation;
                             alertDialogForgot.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            //----------------Displaying the alert dialog
                             alertDialogreturn.show();
-
 
                             btnOk.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     alertDialogreturn.dismiss();
-                               /* Intent loginintent = new Intent(SignUp.this, SendBirdLoginActivity.class);
-                                loginintent.putExtra("message", message);
-                                startActivity(loginintent);*/
                                 }
                             });
-
                         }
                     }
-
-                    //checkimage();
-
                     alertDialogForgot.dismiss();
                 }
             }
@@ -886,18 +855,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
                     if (isblock == 1) {
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        /*Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });*/
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         MobileModel model = response.body();
@@ -1189,10 +1150,10 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        String user_id = user.get(sessionManager.USER_ID);
-        String name = user.get(sessionManager.USER_NAME);
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        String user_id = user.get(sharedPrefManager.USER_ID);
+        String name = user.get(sharedPrefManager.USER_NAME);
         final String fname = name.split(" ")[0];
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(1, TimeUnit.HOURS);
@@ -1241,10 +1202,7 @@ public class GiftANeedFrag extends Fragment implements GoogleApiClient.OnConnect
     }
 
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 
     //----------------------------------------gif showing after tag
     private void gifDialog(final String strImagepath) {

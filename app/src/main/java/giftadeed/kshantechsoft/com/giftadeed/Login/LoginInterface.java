@@ -21,5 +21,6 @@ public interface LoginInterface {
 
     @FormUrlEncoded
     @POST(path)
-    Call<MobileModel> sendData(@Field("Email") String email, @Field("Password") String password, @Field("Device_ID") String did);
+    Call<MobileModel> sendData(@Field("Email") String email, @Field("Password") String password,
+                               @Field("Device_ID") String did, @Field("Device_Type") String dtype); // Device_Type : 0 for Android
 }

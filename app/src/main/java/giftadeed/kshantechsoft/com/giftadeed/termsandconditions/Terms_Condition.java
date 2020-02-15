@@ -68,8 +68,8 @@ public class Terms_Condition extends Fragment {
 
 
         txtAgreementDetails= (WebView)rootview. findViewById(R.id.txttermsandcondn);
-        txtAgreementDetails.loadUrl("file:///android_asset/Terms_and_condition.html");
-
+//        txtAgreementDetails.loadUrl("file:///android_asset/Terms_and_condition.html");
+        txtAgreementDetails.loadUrl("https://giftadeed.com/pages//Terms_and_condition.html");
         WebSettings settings = txtAgreementDetails.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setTextZoom(100);

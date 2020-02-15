@@ -8,12 +8,11 @@ package giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
@@ -31,11 +30,6 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 
@@ -47,8 +41,7 @@ import giftadeed.kshantechsoft.com.giftadeed.GridMenu.MenuGrid;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -63,7 +56,7 @@ import retrofit.Retrofit;
 //                                                               //
 //     Shows list of top 10 taggers in your city                //
 /////////////////////////////////////////////////////////////////
-public class TaggerList extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class TaggerList extends Fragment  {
     private Toolbar toolbar;
     private Context context;
     RecyclerView recyclerView;
@@ -73,10 +66,10 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
     FragmentActivity myContext;
     Adapter_TopTenTagger adaptertoptentaggers;
     List<RESULT> lsttoptentagger = new ArrayList<RESULT>();
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUSERID;
     SimpleArcDialog mDialog;
-    private GoogleApiClient mGoogleApiClient;
+
     RelativeLayout relativeNoREcordsFound;
 
     @Override
@@ -98,18 +91,9 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
         TaggedneedsActivity.back.setVisibility(View.VISIBLE);
         TaggedneedsActivity.imgHamburger.setVisibility(View.GONE);
         fragmgr = getFragmentManager();
-        sessionManager = new SessionManager(getActivity());
-        HashMap<String, String> user = sessionManager.getUserDetails();
-        strUSERID = user.get(sessionManager.USER_ID);
-        //mGoogleApiClient = ((TaggedneedsActivity) getActivity()).mGoogleApiClient;
-        try {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API)
-                    .build();
-        }catch (Exception e){
-
-        }
+        sharedPrefManager = new SharedPrefManager(getActivity());
+        HashMap<String, String> user = sharedPrefManager.getUserDetails();
+        strUSERID = user.get(sharedPrefManager.USER_ID);
         //-----------------------------------recycler view layout------------------
         recyclerView = (RecyclerView) rootview.findViewById(R.id.recycler_tagger_List_Info);
         relativeNoREcordsFound = (RelativeLayout) rootview.findViewById(R.id.toptentaggernoResultFound);
@@ -194,7 +178,7 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(getActivity());
                         Toast.makeText(getContext(), getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
 
 
@@ -206,10 +190,9 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
                                     }
                                 });*/
 
-                        sessionManager.set_notification_status("ON");
+                        sharedPrefManager.set_notification_status("ON");
 
                         Intent loginintent = new Intent(getActivity(), LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
 
@@ -270,8 +253,5 @@ public class TaggerList extends Fragment implements GoogleApiClient.OnConnection
         });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
-    }
+
 }

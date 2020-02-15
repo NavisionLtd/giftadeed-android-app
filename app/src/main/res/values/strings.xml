@@ -4,8 +4,8 @@
   -->
 
 <resources>
-    <string name="app_name">GiftADeed</string>
-    <!--<string name="app_name">GAD P2 Test 17 September</string>-->
+<!--    <string name="app_name">GiftADeed</string>-->
+    <string name="app_name">GAD Test 13 Feb</string>
 
     <!-- Shortcut strings -->
     <string name="compose_shortcut_short_label1">SOS</string>
@@ -13,6 +13,9 @@
     <string name="compose_shortcut_short_label2">Tag deed</string>
     <string name="compose_shortcut_long_label2">Tag deed</string>
     <string name="compose_disabled_message1">Not available</string>
+
+    <!--Firebase log-->
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <!--Login page-->
     <string name="login_terms">Terms and Conditions</string>
@@ -421,7 +424,7 @@
     <string name="already_deeds_msg">Following deeds are already tagged for selected location:</string>
 
     //--------------------key-------------------
-    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBnX-7HAlteCgU0MEwyHwsOoWKViB-ufxg</string>
+    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
 
     <!-- SendBird -->
     <string name="no_channel">No channel found</string>

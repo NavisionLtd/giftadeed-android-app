@@ -5,10 +5,9 @@
 
 package giftadeed.kshantechsoft.com.giftadeed.EmergencyPositioning;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -22,25 +21,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.leo.simplearcloader.ArcConfiguration;
 import com.leo.simplearcloader.SimpleArcDialog;
 import com.squareup.okhttp.OkHttpClient;
@@ -48,15 +43,14 @@ import com.squareup.okhttp.OkHttpClient;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.R;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.DBGAD;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.GpsUtils;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.ToastPopUp;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
@@ -76,22 +70,23 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
     SimpleArcDialog mDialog;
-    private Location mylocation;
-    private GoogleApiClient googleApiClient;
+    GoogleApiClient googleApiClient;
     LinearLayout layoutCall, layoutSMS, layoutShareLocation;
     TextView tvClose, noContactFoundMSG, sosOption1, sosOption2, sosOption3;
     Button btnSetContact;
-    String Latitude = "", Longitude = "", message1, message2, country_sos_number = "911";
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
-    private final static int REQUEST_ID_MULTIPLE_PERMISSIONS = 0x2;
+    String strLatitude = "", strLongitude = "", message1, message2, country_sos_number = "911";
     public static final int RequestPermissionCode = 1;
     DatabaseAccess databaseAccess;
     int contactsCount;
     ArrayList<Contact> contactArrayList;
     String msgNumber1 = "", msgNumber2 = "";
     ImageView callSign, smsSign, locationSign, correctSign1, correctSign2, correctSign3;
-    SessionManager sessionManager;
-    LottieAnimationView lottieAnimationView;
+    SharedPrefManager sharedPrefManager;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+    private boolean isContinue = false;
+    private boolean isGPS = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,10 +109,45 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         correctSign2 = (ImageView) findViewById(R.id.correct_sign_2);
         correctSign3 = (ImageView) findViewById(R.id.correct_sign_3);
         setUpGClient();
-        sessionManager = new SessionManager(SOSOptionActivity.this);
-        mDialog = new SimpleArcDialog(this);
 
-        if (sessionManager.getSosOption1Clicked().equals("yes")) {  // check if CALL option performed already
+        sharedPrefManager = new SharedPrefManager(SOSOptionActivity.this);
+        mDialog = new SimpleArcDialog(this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10 * 1000); // 10 seconds
+        locationRequest.setFastestInterval(5 * 1000); // 5 seconds
+
+        new GpsUtils(this).turnGPSOn(new GpsUtils.onGpsListener() {
+            @Override
+            public void gpsStatus(boolean isGPSEnable) {
+                // turn on GPS
+                isGPS = isGPSEnable;
+            }
+        });
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    if (location != null) {
+                        strLatitude = String.valueOf(location.getLatitude());
+                        strLongitude = String.valueOf(location.getLongitude());
+                        if (!isContinue) {
+                            Log.d("SOSOptions", strLatitude + "," + strLongitude);
+                        }
+                        if (!isContinue && fusedLocationProviderClient != null) {
+                            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+                        }
+                    }
+                }
+            }
+        };
+
+        if (sharedPrefManager.getSosOption1Clicked().equals("yes")) {  // check if CALL option performed already
             callSign.setVisibility(View.GONE);
             correctSign1.setVisibility(View.VISIBLE);
             sosOption1.setTextColor(getResources().getColor(R.color.colorPurple));
@@ -126,7 +156,7 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
             correctSign1.setVisibility(View.GONE);
             sosOption1.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
-        if (sessionManager.getSosOption2Clicked().equals("yes")) {  // check if SMS option performed already
+        if (sharedPrefManager.getSosOption2Clicked().equals("yes")) {  // check if SMS option performed already
             smsSign.setVisibility(View.GONE);
             correctSign2.setVisibility(View.VISIBLE);
             sosOption2.setTextColor(getResources().getColor(R.color.colorPurple));
@@ -135,7 +165,7 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
             correctSign2.setVisibility(View.GONE);
             sosOption2.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
-        if (sessionManager.getSosOption3Clicked().equals("yes")) {  // check if SHARE LOCATION option performed already
+        if (sharedPrefManager.getSosOption3Clicked().equals("yes")) {  // check if SHARE LOCATION option performed already
             locationSign.setVisibility(View.GONE);
             correctSign3.setVisibility(View.VISIBLE);
             sosOption3.setTextColor(getResources().getColor(R.color.colorPurple));
@@ -171,20 +201,32 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
             public void onClick(View view) {
                 if (!(Validation.isNetworkAvailable(SOSOptionActivity.this))) {
                     ToastPopUp.show(SOSOptionActivity.this, getString(R.string.network_validation));
-                    country_sos_number = sessionManager.getCountrySOSCode();
+                    country_sos_number = sharedPrefManager.getCountrySOSCode();
                     String dial = "tel:" + country_sos_number;
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.parse(dial));
                     callSign.setVisibility(View.GONE);
                     correctSign1.setVisibility(View.VISIBLE);
                     sosOption1.setTextColor(getResources().getColor(R.color.colorPurple));
-                    sessionManager.store_sos_option1_clicked("yes");
+                    sharedPrefManager.store_sos_option1_clicked("yes");
                     startActivity(intent);
                 } else {
-                    if (Latitude.length() > 0 && Longitude.length() > 0) {
-                        //------- latitude and longitude available
-                        //----------------getting country emergency number based on latitude,longitude from server-----------------------
-                        getCountryEmergencyCode();
+                    if (!isGPS) {
+                        new GpsUtils(SOSOptionActivity.this).turnGPSOn(new GpsUtils.onGpsListener() {
+                            @Override
+                            public void gpsStatus(boolean isGPSEnable) {
+                                // turn on GPS
+                                isGPS = isGPSEnable;
+                            }
+                        });
+                        isContinue = false;
+                        getLocation();
+                    } else {
+                        if (strLatitude.length() > 0 && strLongitude.length() > 0) {
+                            //------- latitude and longitude available
+                            //----------------getting country emergency number based on latitude,longitude from server-----------------------
+                            getCountryEmergencyCode();
+                        }
                     }
                 }
             }
@@ -193,26 +235,38 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         layoutSMS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (contactsCount > 0) {
-                    if (Latitude.length() > 0 && Longitude.length() > 0) {
-                        String numbers = "";
-                        if (!TextUtils.isEmpty(msgNumber1) && !TextUtils.isEmpty(msgNumber2)) {
-                            numbers = msgNumber1 + ";" + msgNumber2;
-                        } else if (!TextUtils.isEmpty(msgNumber1) && TextUtils.isEmpty(msgNumber2)) {
-                            numbers = msgNumber1;
-                        } else if (TextUtils.isEmpty(msgNumber1) && !TextUtils.isEmpty(msgNumber2)) {
-                            numbers = msgNumber2;
+                if (!isGPS) {
+                    new GpsUtils(SOSOptionActivity.this).turnGPSOn(new GpsUtils.onGpsListener() {
+                        @Override
+                        public void gpsStatus(boolean isGPSEnable) {
+                            // turn on GPS
+                            isGPS = isGPSEnable;
                         }
+                    });
+                    isContinue = false;
+                    getLocation();
+                } else {
+                    if (contactsCount > 0) {
+                        if (strLatitude.length() > 0 && strLongitude.length() > 0) {
+                            String numbers = "";
+                            if (!TextUtils.isEmpty(msgNumber1) && !TextUtils.isEmpty(msgNumber2)) {
+                                numbers = msgNumber1 + ";" + msgNumber2;
+                            } else if (!TextUtils.isEmpty(msgNumber1) && TextUtils.isEmpty(msgNumber2)) {
+                                numbers = msgNumber1;
+                            } else if (TextUtils.isEmpty(msgNumber1) && !TextUtils.isEmpty(msgNumber2)) {
+                                numbers = msgNumber2;
+                            }
 
-                        if (numbers.length() > 0) {
-                            Uri uri = Uri.parse("smsto:" + numbers);
-                            Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-                            it.putExtra("sms_body", message1 + message2);
-                            smsSign.setVisibility(View.GONE);
-                            correctSign2.setVisibility(View.VISIBLE);
-                            sosOption2.setTextColor(getResources().getColor(R.color.colorPurple));
-                            sessionManager.store_sos_option2_clicked("yes");
-                            startActivity(it);
+                            if (numbers.length() > 0) {
+                                Uri uri = Uri.parse("smsto:" + numbers);
+                                Intent it = new Intent(Intent.ACTION_SENDTO, uri);
+                                it.putExtra("sms_body", message1 + message2);
+                                smsSign.setVisibility(View.GONE);
+                                correctSign2.setVisibility(View.VISIBLE);
+                                sosOption2.setTextColor(getResources().getColor(R.color.colorPurple));
+                                sharedPrefManager.store_sos_option2_clicked("yes");
+                                startActivity(it);
+                            }
                         }
                     }
                 }
@@ -222,16 +276,28 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         layoutShareLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Latitude.length() > 0 && Longitude.length() > 0) {
-                    Intent intent = new Intent(SOSOptionActivity.this, EmergencyStageTwo.class);
-                    intent.putExtra("latitude", Latitude);
-                    intent.putExtra("longitude", Longitude);
-                    intent.putExtra("callingfrom", "app");
-                    locationSign.setVisibility(View.GONE);
-                    correctSign3.setVisibility(View.VISIBLE);
-                    sosOption3.setTextColor(getResources().getColor(R.color.colorPurple));
-                    sessionManager.store_sos_option3_clicked("yes");
-                    startActivity(intent);
+                if (!isGPS) {
+                    new GpsUtils(SOSOptionActivity.this).turnGPSOn(new GpsUtils.onGpsListener() {
+                        @Override
+                        public void gpsStatus(boolean isGPSEnable) {
+                            // turn on GPS
+                            isGPS = isGPSEnable;
+                        }
+                    });
+                    isContinue = false;
+                    getLocation();
+                } else {
+                    if (strLatitude.length() > 0 && strLongitude.length() > 0) {
+                        Intent intent = new Intent(SOSOptionActivity.this, EmergencyStageTwo.class);
+                        intent.putExtra("latitude", strLatitude);
+                        intent.putExtra("longitude", strLongitude);
+                        intent.putExtra("callingfrom", "app");
+                        locationSign.setVisibility(View.GONE);
+                        correctSign3.setVisibility(View.VISIBLE);
+                        sosOption3.setTextColor(getResources().getColor(R.color.colorPurple));
+                        sharedPrefManager.store_sos_option3_clicked("yes");
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -260,6 +326,55 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         });
     }
 
+    private void getLocation() {
+        if (checkPermission()) {
+            // All Permissions Granted
+            if (isContinue) {
+                fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            } else {
+                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(SOSOptionActivity.this, location -> {
+                    if (location != null) {
+                        strLatitude = String.valueOf(location.getLatitude());
+                        strLongitude = String.valueOf(location.getLongitude());
+                        Log.d("SOSOptions", strLatitude + "," + strLongitude);
+                    } else {
+                        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                    }
+                });
+            }
+        } else {
+            requestPermission();
+            Toast.makeText(SOSOptionActivity.this, "Please allow app permissions", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1000) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                if (isContinue) {
+                    fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                } else {
+                    fusedLocationProviderClient.getLastLocation().addOnSuccessListener(SOSOptionActivity.this, location -> {
+                        if (location != null) {
+                            strLatitude = String.valueOf(location.getLatitude());
+                            strLongitude = String.valueOf(location.getLongitude());
+                            Log.d("SOSOptions", strLatitude + "," + strLongitude);
+                        } else {
+                            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                        }
+                    });
+                }
+            } else {
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     //---------------------getting country emergency number based on latitude,longitude from server-----------------------
     public void getCountryEmergencyCode() {
         mDialog.setConfiguration(new ArcConfiguration(SOSOptionActivity.this));
@@ -272,8 +387,8 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SOSNumberInfoInterface service = retrofit.create(SOSNumberInfoInterface.class);
-        Call<SOSNumberInfoPOJO> call = service.sendData(Latitude + "," + Longitude);
-        Log.d("sosinfo_input_params", Latitude + "," + Longitude);
+        Call<SOSNumberInfoPOJO> call = service.sendData(strLatitude + "," + strLongitude);
+        Log.d("sosinfo_input_params", strLatitude + "," + strLongitude);
         call.enqueue(new Callback<SOSNumberInfoPOJO>() {
             @Override
             public void onResponse(Response<SOSNumberInfoPOJO> response, Retrofit retrofit) {
@@ -291,32 +406,25 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
                         mDialog.dismiss();
                         FacebookSdk.sdkInitialize(SOSOptionActivity.this);
                         Toast.makeText(SOSOptionActivity.this, getResources().getString(R.string.block_toast), Toast.LENGTH_SHORT).show();
-                        sessionManager.createUserCredentialSession(null, null, null);
+                        sharedPrefManager.createUserCredentialSession(null, null, null);
                         LoginManager.getInstance().logOut();
-                        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(Status status) {
-                                        //updateUI(false);
-                                    }
-                                });
-                        sessionManager.set_notification_status("ON");
+                        // TODO: 01-Feb-20  Google signout code
+                        sharedPrefManager.set_notification_status("ON");
                         Intent loginintent = new Intent(SOSOptionActivity.this, LoginActivity.class);
-                        loginintent.putExtra("message", "Charity");
                         startActivity(loginintent);
                     } else {
                         String status = sosNumberInfoPOJO.getStatus();
                         if (status.equals("1")) {
                             country_sos_number = sosNumberInfoPOJO.getContactNo();
                             Log.d("country_sos_number", "" + country_sos_number);
-                            sessionManager.store_country_sos_code(country_sos_number);
+                            sharedPrefManager.store_country_sos_code(country_sos_number);
                             String dial = "tel:" + country_sos_number;
                             Intent intent = new Intent(Intent.ACTION_DIAL);
                             intent.setData(Uri.parse(dial));
                             callSign.setVisibility(View.GONE);
                             correctSign1.setVisibility(View.VISIBLE);
                             sosOption1.setTextColor(getResources().getColor(R.color.colorPurple));
-                            sessionManager.store_sos_option1_clicked("yes");
+                            sharedPrefManager.store_sos_option1_clicked("yes");
                             startActivity(intent);
                         } else {
                             ToastPopUp.show(SOSOptionActivity.this, "" + sosNumberInfoPOJO.getErrorMsg());
@@ -343,7 +451,6 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
 
     private synchronized void setUpGClient() {
         googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, 0, this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -353,133 +460,37 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
 
     @Override
     public void onLocationChanged(Location location) {
-        mylocation = location;
-        if (mylocation != null) {
-            Latitude = String.valueOf(mylocation.getLatitude());
-            Longitude = String.valueOf(mylocation.getLongitude());
+        if (location != null) {
+            strLatitude = String.valueOf(location.getLatitude());
+            strLongitude = String.valueOf(location.getLongitude());
             message1 = "Your friend is in emergency situation \n";
-            message2 = "http://maps.google.com/maps?saddr=" + Latitude + "," + Longitude;
+            message2 = "http://maps.google.com/maps?saddr=" + strLatitude + "," + strLongitude;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CHECK_SETTINGS:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        getMyLocation();
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        getMyLocation();
-                        break;
-                }
-                break;
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SharedPrefManager.GPS_REQUEST) {
+                isGPS = true; // flag maintain before get location
+            }
         }
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        checkPermissions();
-    }
-
-    private void checkPermissions() {
-        int permissionLocation = ContextCompat.checkSelfPermission(SOSOptionActivity.this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-        if (permissionLocation != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
-            if (!listPermissionsNeeded.isEmpty()) {
-                ActivityCompat.requestPermissions(this,
-                        listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
-            }
-        } else {
-            getMyLocation();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        int permissionLocation = ContextCompat.checkSelfPermission(SOSOptionActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-            getMyLocation();
-        }
+        getLocation();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        //Do whatever you need
-        //You can display a message here
+
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //You can display a message here
-    }
-
-    private void getMyLocation() {
-        if (googleApiClient != null) {
-            if (googleApiClient.isConnected()) {
-                int permissionLocation = ContextCompat.checkSelfPermission(SOSOptionActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION);
-                if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-                    mylocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                    LocationRequest locationRequest = new LocationRequest();
-                    locationRequest.setInterval(3000);
-                    locationRequest.setFastestInterval(3000);
-                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                    LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                            .addLocationRequest(locationRequest);
-                    builder.setAlwaysShow(true);
-                    LocationServices.FusedLocationApi
-                            .requestLocationUpdates(googleApiClient, locationRequest, this);
-                    PendingResult<LocationSettingsResult> result =
-                            LocationServices.SettingsApi
-                                    .checkLocationSettings(googleApiClient, builder.build());
-                    result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-
-                        @Override
-                        public void onResult(LocationSettingsResult result) {
-                            final Status status = result.getStatus();
-                            switch (status.getStatusCode()) {
-                                case LocationSettingsStatusCodes.SUCCESS:
-                                    // All location settings are satisfied.
-                                    // You can initialize location requests here.
-                                    int permissionLocation = ContextCompat
-                                            .checkSelfPermission(SOSOptionActivity.this,
-                                                    Manifest.permission.ACCESS_FINE_LOCATION);
-                                    if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-                                        mylocation = LocationServices.FusedLocationApi
-                                                .getLastLocation(googleApiClient);
-                                    }
-                                    break;
-                                case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                    // Location settings are not satisfied.
-                                    // But could be fixed by showing the user a dialog.
-                                    try {
-                                        // Show the dialog by calling startResolutionForResult(),
-                                        // and check the result in onActivityResult().
-                                        // Ask to turn on GPS automatically
-                                        status.startResolutionForResult(SOSOptionActivity.this,
-                                                REQUEST_CHECK_SETTINGS);
-                                    } catch (IntentSender.SendIntentException e) {
-                                        // Ignore the error.
-                                    }
-                                    break;
-                                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                    // Location settings are not satisfied.
-                                    // However, we have no way
-                                    // to fix the
-                                    // settings so we won't show the dialog.
-                                    // finish();
-                                    break;
-                            }
-                        }
-                    });
-                }
-            }
-        }
     }
 
     //-------------------requests all permissions-------------------------------------------------------
@@ -501,13 +512,11 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int FourthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
         int FifthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), READ_CONTACTS);
-//        int SixthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), SEND_SMS);
 
         return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 ThirdPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 FourthPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 FifthPermissionResult == PackageManager.PERMISSION_GRANTED;
-//                SixthPermissionResult == PackageManager.PERMISSION_GRANTED;
     }
 }

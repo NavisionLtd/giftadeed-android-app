@@ -41,7 +41,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Group.GroupPOJO;
 import giftadeed.kshantechsoft.com.giftadeed.Login.LoginActivity;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.DatabaseAccess;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 
 /**
  * Created by Belal on 03/11/16.
@@ -49,7 +49,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Utils.SessionManager;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MyFirebaseMsgService";
-    SessionManager sessionManager;
+    SharedPrefManager sharedPrefManager;
     String strUserId = null;
     String notificationTitle, notificationMessage, latlong, user_one, id = "", notificationType = "", groupids = "", catids = "";
     private GoogleApiClient mGoogleApiClient;
@@ -118,14 +118,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
             selectedGrpCheckedCount = databaseAccess.getSelectedGrpCheckedCount(groupids);
             selectedCatCheckedCount = databaseAccess.getSelectedCatCheckedCount(catids);
             Log.d("db_res_notification", "savedGroupList : " + savedGroupList.size() + ", checkedGroups : " + checkedGroups + ", selectedGrpCheckedCount : " + selectedGrpCheckedCount + ", selectedCatCheckedCount : " + selectedCatCheckedCount);
-            sessionManager = new SessionManager(getApplicationContext());
-            HashMap<String, String> user = sessionManager.getUserDetails();
-            strUserId = user.get(sessionManager.USER_ID);
+            sharedPrefManager = new SharedPrefManager(getApplicationContext());
+            HashMap<String, String> user = sharedPrefManager.getUserDetails();
+            strUserId = user.get(sharedPrefManager.USER_ID);
             String Notification_status = "";
             HashMap<String, String> Notification_status_map;
-            sessionManager = new SessionManager(getApplicationContext());
-            Notification_status_map = sessionManager.get_notification_status();
-            Notification_status = Notification_status_map.get(sessionManager.KEY_NOTIFICATION);
+            sharedPrefManager = new SharedPrefManager(getApplicationContext());
+            Notification_status_map = sharedPrefManager.get_notification_status();
+            Notification_status = Notification_status_map.get(sharedPrefManager.KEY_NOTIFICATION);
 
             //------------------------------------------------------
             if (Notification_status != "") {
@@ -144,7 +144,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                         } else {
                             intent = new Intent(getApplicationContext(), TaggedneedsActivity.class);
                             //pass value
-                            //intent.putExtra("message", "Charity");
                             intent.putExtra("tag_id", "1001");
                         }
                     }
@@ -172,7 +171,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                         } else {
                             intent = new Intent(getApplicationContext(), TaggedneedsActivity.class);
                             //pass value
-                            //intent.putExtra("message", "Charity");
                             intent.putExtra("tag_id", "1001");
                         }
                     }
@@ -261,9 +259,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                             tagLocation2.setLatitude(Double.parseDouble(words[0]));
                             tagLocation2.setLongitude(Double.parseDouble(words[1]));
 
-//---------------taking current location-----------------------
+                            //---------------taking current location-----------------------
                             DecimalFormat df2 = new DecimalFormat("#.##");
-                            double radi = sessionManager.getradius();
+                            double radi = sharedPrefManager.getradius();
                             if (radi == 0.0f) {
                                 radi = 10.0f;
                             }
@@ -275,9 +273,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
                                 //------------------------recive notification
                                 String Notification_status = "";
                                 HashMap<String, String> Notification_status_map;
-                                sessionManager = new SessionManager(getApplicationContext());
-                                Notification_status_map = sessionManager.get_notification_status();
-                                Notification_status = Notification_status_map.get(sessionManager.KEY_NOTIFICATION);
+                                sharedPrefManager = new SharedPrefManager(getApplicationContext());
+                                Notification_status_map = sharedPrefManager.get_notification_status();
+                                Notification_status = Notification_status_map.get(sharedPrefManager.KEY_NOTIFICATION);
 
                                 if (strUserId == null) {
                                     if (notificationType.equals("1")) {
@@ -350,8 +348,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService impleme
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i(TAG, "Connection Suspended");
-        mGoogleApiClient.connect();
+
     }
 
     @Override
