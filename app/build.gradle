@@ -6,8 +6,8 @@ android {
         applicationId "giftadeed.kshantechsoft.com.giftadeed"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 49
-        versionName "5.1"
+        versionCode 50
+        versionName "5.2"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

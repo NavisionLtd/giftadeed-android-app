@@ -11,6 +11,9 @@ package giftadeed.kshantechsoft.com.giftadeed.Utils;
 
 public class WebServices {
 
+//    public static final String MANI_URL = "http://kshandemo.co.in/";
+//    public static final String SUB_URL = "gad3p2/api/";
+
     /* Urls for development */
     public static final String MANI_URL = "https://devtest.giftadeed.com/";
     public static final String SUB_URL = "api/";

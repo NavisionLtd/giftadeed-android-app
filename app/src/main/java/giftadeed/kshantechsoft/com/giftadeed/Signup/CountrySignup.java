@@ -20,5 +20,4 @@ String path= WebServices.country;
     @FormUrlEncoded
     @POST(path)
     Call<CountryModel> sendData(@Field("country") String country);
-
 }

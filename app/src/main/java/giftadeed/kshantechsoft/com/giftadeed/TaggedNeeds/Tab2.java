@@ -269,7 +269,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                                             ArrayList<String> audienceGroupList = new ArrayList<String>(Arrays.asList(split_audience_groupids)); // arraylist server audience groupids
 
                                             if (model.getTaggedlist().get(j).getFromGroupID() != null) {  // check for "from groupid"... if null means tagger is individual user
-                                                if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
+//                                                if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
                                                     if (audience_all_groups.equals("N")) { // check for tagger selected all groups audience
                                                         if (audienceGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {
                                                             RowData rowData = new RowData();
@@ -325,7 +325,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                                                         rowData.setUser_group_ids(model.getTaggedlist().get(j).getUserGrpIds());
                                                         item_list.add(rowData);
                                                     }
-                                                }
+//                                                }
                                             } else {
                                                 RowData rowData = new RowData();
                                                 rowData.setTitle(result.getTaggedlist().get(j).getNeedName());

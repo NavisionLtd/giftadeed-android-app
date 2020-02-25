@@ -725,7 +725,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                 String[] split_audience_groupids = audience_selected_groups.split(","); // server audience groupids
                                                 ArrayList<String> audienceGroupList = new ArrayList<String>(Arrays.asList(split_audience_groupids)); // arraylist server audience groupids
                                                 if (model.getTaggedlist().get(j).getFromGroupID() != null) {  // check for "from groupid"... if null means tagger is individual user
-                                                    if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
+//                                                    if (filterGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {  // check for filter settings having tagger's group id
                                                         if (audience_all_groups.equals("N")) { // check for tagger selected all groups audience
                                                             if (audienceGroupList.contains(model.getTaggedlist().get(j).getFromGroupID())) {
                                                                 lat_long.add(model.getTaggedlist().get(j).getGeopoint());
@@ -869,7 +869,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                                         });
                                                             }
                                                         }
-                                                    }
+//                                                    }
                                                 } else {
                                                     lat_long.add(model.getTaggedlist().get(j).getGeopoint());
                                                     icon_path.add(model.getTaggedlist().get(j).getIconPath());
