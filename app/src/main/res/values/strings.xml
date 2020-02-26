@@ -379,9 +379,6 @@
     <string name="all_individuals">All individual users</string>
     <string name="tell_people_remaining">Tell people what is remaining</string>
 
-    //--------------------key-------------------
-    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
-
     <!-- SendBird -->
     <string name="no_channel">No channel found</string>
     <string name="action_group_messages">Group Messages</string>

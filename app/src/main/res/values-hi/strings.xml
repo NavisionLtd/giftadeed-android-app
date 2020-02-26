@@ -374,9 +374,6 @@
     <string name="your_groups">आपके समूह</string>
     <string name="tell_people_remaining">लोगों को बताओ कि क्या शेष है</string>
 
-    //--------------------key-------------------
-    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
-
     <!-- SendBird -->
     <string name="no_channel">कोई चैनल नहीं मिला</string>
     <string name="action_group_messages">समूह संदेश</string>

@@ -66,7 +66,7 @@ public class GiftAdeed extends Application {
 
         //Initialize places api
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), getString(R.string.google_key));
+            Places.initialize(getApplicationContext(), WebServices.GOOGLE_KEY);
         }
     }
 

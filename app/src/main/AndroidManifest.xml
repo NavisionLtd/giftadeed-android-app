@@ -87,7 +87,6 @@
         <activity
             android:name=".TaggedNeeds.TaggedneedsActivity"
             android:configChanges="orientation"
-            android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
@@ -196,12 +195,10 @@
             android:label="@string/participant_list" />
         <activity
             android:name=".SendBirdChat.openchannel.OpenChannelActivity"
-            android:label=""
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SendBirdChat.groupchannel.GroupChannelActivity"
-            android:label=""
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".SendBirdChat.utils.Activity_Audio" />

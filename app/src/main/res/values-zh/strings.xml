@@ -370,9 +370,6 @@
     <string name="your_groups">你的團體</string>
     <string name="tell_people_remaining">告訴別人剩下的是什麼</string>
 
-    //--------------------key-------------------
-    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
-
     <!-- SendBird -->
     <string name="all_app_version">Sample UI v%1$s / SDK v%2$s</string>
     <string name="select_channel_type">選擇頻道類型</string>

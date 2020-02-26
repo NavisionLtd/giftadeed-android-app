@@ -381,9 +381,6 @@
     <string name="all_individuals">Tous les utilisateurs individuels</string>
     <string name="tell_people_remaining">Dites aux gens ce qui reste</string>
 
-    //--------------------key-------------------
-    <string name="google_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0</string>
-
     <!-- SendBird -->
     <string name="no_channel">Aucune chaîne trouvée</string>
     <string name="action_group_messages">Messages de groupe</string>
