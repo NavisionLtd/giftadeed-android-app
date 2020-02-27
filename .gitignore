@@ -9,6 +9,7 @@
 /app/src/release
 /app/release
 /app/src/main/java/giftadeed/kshantechsoft/com/giftadeed/Utils/WebServices.java
+/build.gradle
 /captures
 .externalNativeBuild
 
