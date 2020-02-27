@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 public class FadeInActivity extends AppCompatActivity implements Animation.AnimationListener {
     private TextView txt2, txtcreditpoints, txttotalpoints, txtneedname;
@@ -101,16 +102,13 @@ public class FadeInActivity extends AppCompatActivity implements Animation.Anima
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String android_shortlink = "http://tiny.cc/kwb33y";
-                String ios_shortlink = "http://tiny.cc/h4533y";
-                String website = "https://www.giftadeed.com/";
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, "Hey! My latest points are " + total_points + " in the GiftADeed App.\n" +
                         "You can earn your points by downloading the app from\n\n" +
-                        "Android : " + android_shortlink + "\n" +
-                        "iOS : " + ios_shortlink + "\n\n" +
-                        "Also, check the website at " + website);
+                        "Android : " + WebServices.android_shortlink + "\n" +
+                        "iOS : " + WebServices.ios_shortlink + "\n\n" +
+                        "Also, check the website at " + WebServices.website_url);
                 startActivity(Intent.createChooser(share, "Share your points on:"));
             }
         });

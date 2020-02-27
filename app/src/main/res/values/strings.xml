@@ -4,8 +4,7 @@
   -->
 
 <resources>
-<!--    <string name="app_name">GiftADeed</string>-->
-    <string name="app_name">GAD Test 19 Feb</string>
+    <string name="app_name">GiftADeed</string>
 
     <!-- Shortcut strings -->
     <string name="compose_shortcut_short_label1">SOS</string>

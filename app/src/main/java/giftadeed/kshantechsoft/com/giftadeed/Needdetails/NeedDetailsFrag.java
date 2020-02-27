@@ -215,18 +215,15 @@ public class NeedDetailsFrag extends Fragment implements Animation.AnimationList
         TaggedneedsActivity.imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String android_shortlink = "http://tiny.cc/kwb33y";
-                String ios_shortlink = "http://tiny.cc/h4533y";
-                String website = "https://www.giftadeed.com/";
                 String location = "http://maps.google.com/maps?saddr=" + str_geopoint;
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, "Hey! Someone needs your help to fulfil a deed. \n" +
                         str_needName + " is needed here " + location + "\n\n" +
                         "For more details download GiftADeed App: \n" +
-                        "Android : " + android_shortlink + "\n" +
-                        "iOS : " + ios_shortlink + "\n\n" +
-                        "Also, check the website at " + website);
+                        "Android : " + WebServices.android_shortlink + "\n" +
+                        "iOS : " + WebServices.ios_shortlink + "\n\n" +
+                        "Also, check the website at " + WebServices.website_url);
                 startActivity(Intent.createChooser(share, "Share deed details on:"));
             }
         });

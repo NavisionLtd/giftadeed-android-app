@@ -39,6 +39,10 @@ public class WebServices {
     public static final String GOOGLE_KEY = "AIzaSyBmiu7Ia3kJiOcNnPs_XF3HOt4RgUaO_c0"; */
     /* End of Urls for production */
 
+    public static final String PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN";
+    public static final String android_shortlink = "http://tiny.cc/kwb33y";
+    public static final String ios_shortlink = "http://tiny.cc/h4533y";
+    public static final String website_url = "https://www.giftadeed.com/";
     public static final String CUSTOM_CATEGORY_IMAGE_URL = MANI_URL + SUB_URL + "image/group_category/";
     public static final String country = SUB_URL + "country_list.php";
     public static final String state = SUB_URL + "state_list.php";

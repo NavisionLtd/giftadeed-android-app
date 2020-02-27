@@ -37,13 +37,14 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.GetingAddress;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
 
 public class SplashActivity extends AppCompatActivity {
     TextView txt_title;
     TextView txt_title2, txt_app_version;
     private boolean isBackPressed = false;
     SharedPrefManager sharedPrefManager;
-    String strUserId = null, message, address_show;
+    String strUserId = null, address_show;
     String currentVersion = "", newVersion;
     private static int SPLASH_TIME_OUT = 3000;
 
@@ -159,7 +160,7 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=giftadeed.kshantechsoft.com.giftadeed&hl=en_IN")
+                Document document = Jsoup.connect(WebServices.PLAY_STORE_URL)
                         .timeout(30000)
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                         .referrer("http://www.google.com")
