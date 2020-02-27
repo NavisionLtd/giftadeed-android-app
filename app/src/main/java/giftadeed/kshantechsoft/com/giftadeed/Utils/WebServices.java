@@ -10,7 +10,6 @@ package giftadeed.kshantechsoft.com.giftadeed.Utils;
  */
 
 public class WebServices {
-    //Change for trial
 
     // TODO : Change URLs for Website, APIs, Firebase, SendBird, Google key
     public static final String MAIN_API_URL = "YOUR_API_MAIN_URL"; // For example: http://www.example.com/
