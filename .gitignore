@@ -1,16 +1,16 @@
 *.iml
 .gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
+local.properties
+.idea/workspace.xml
+.idea/libraries
 .DS_Store
-/build
-/app/src/debug
-/app/src/release
-/app/release
-/app/src/main/java/giftadeed/kshantechsoft/com/giftadeed/Utils/WebServices.java
-/build.gradle
-/captures
+build
+app/src/debug
+app/src/release
+app/release
+app/src/main/java/giftadeed/kshantechsoft/com/giftadeed/Utils/WebServices.java
+build.gradle
+captures
 .externalNativeBuild
 
 ### Android ###
