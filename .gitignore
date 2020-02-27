@@ -5,7 +5,7 @@ build
 app/src/debug
 app/src/release
 app/release
-app/src/main/java/giftadeed/kshantechsoft/com/giftadeed/Utils/
+app/src/main/java/giftadeed/kshantechsoft/com/giftadeed/Utils/WebServices.java
 .externalNativeBuild
 local.properties
 
