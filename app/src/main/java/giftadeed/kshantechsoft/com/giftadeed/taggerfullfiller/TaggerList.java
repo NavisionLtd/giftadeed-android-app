@@ -157,7 +157,7 @@ public class TaggerList extends Fragment  {
         mDialog.show();
         mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TaggeddNeedIntface service = retrofit.create(TaggeddNeedIntface.class);

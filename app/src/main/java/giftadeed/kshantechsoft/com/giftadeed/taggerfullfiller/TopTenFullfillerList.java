@@ -148,7 +148,7 @@ public class TopTenFullfillerList extends Fragment {
         mDialog.show();
         mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TopTenFullfiller service = retrofit.create(TopTenFullfiller.class);

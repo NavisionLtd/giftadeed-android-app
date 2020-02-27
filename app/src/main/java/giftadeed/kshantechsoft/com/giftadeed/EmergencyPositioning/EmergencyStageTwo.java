@@ -243,7 +243,7 @@ public class EmergencyStageTwo extends AppCompatActivity {
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CreateSOSInterface service = retrofit.create(CreateSOSInterface.class);
         Call<SOSResponseStatus> call = service.sendData(userid, devid, geopoints, address, sostypes, devtype);
@@ -361,7 +361,7 @@ public class EmergencyStageTwo extends AppCompatActivity {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EmergencyTypesInterface service = retrofit.create(EmergencyTypesInterface.class);
         Call<List<EmergencyTypes>> call = service.sendData("category");

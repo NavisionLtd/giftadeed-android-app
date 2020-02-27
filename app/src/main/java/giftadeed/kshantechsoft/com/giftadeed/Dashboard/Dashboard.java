@@ -115,7 +115,7 @@ public class Dashboard extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         DashboardInterface servvice = retrofit.create(DashboardInterface.class);

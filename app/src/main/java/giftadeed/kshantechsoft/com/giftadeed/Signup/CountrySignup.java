@@ -16,7 +16,8 @@ import retrofit.http.POST;
  */
 
 public interface CountrySignup {
-String path= WebServices.country;
+    String path = WebServices.country;
+
     @FormUrlEncoded
     @POST(path)
     Call<CountryModel> sendData(@Field("country") String country);

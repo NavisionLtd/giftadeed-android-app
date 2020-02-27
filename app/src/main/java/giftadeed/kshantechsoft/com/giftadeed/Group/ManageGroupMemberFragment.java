@@ -340,7 +340,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         RemoveMemberInterface service = retrofit.create(RemoveMemberInterface.class);
         Call<GroupResponseStatus> call = service.sendData(userid, memberid, groupid);
@@ -434,7 +434,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         AssignAdminInterface service = retrofit.create(AssignAdminInterface.class);
         Call<GroupResponseStatus> call = service.sendData(userid, memberid, groupid);
@@ -501,7 +501,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DismissAdminInterface service = retrofit.create(DismissAdminInterface.class);
         Call<GroupResponseStatus> call = service.sendData(userid, memberid, groupid);
@@ -570,7 +570,7 @@ public class ManageGroupMemberFragment extends Fragment implements SwipeRefreshL
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         MemberListInterface service = retrofit.create(MemberListInterface.class);
         Call<Memberlist> call = service.sendData(user_id, group_id, role);

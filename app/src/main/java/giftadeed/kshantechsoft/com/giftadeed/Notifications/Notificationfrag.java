@@ -194,7 +194,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         AllNotificationInterface service = retrofit.create(AllNotificationInterface.class);
         Log.d("response_notilist", "" + strUserId + "," + str_geopoint);
@@ -364,7 +364,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CategoryInterface service = retrofit.create(CategoryInterface.class);
         Call<CategoryType> call = service.sendData("");
@@ -529,7 +529,7 @@ public class Notificationfrag extends Fragment implements SwipeRefreshLayout.OnR
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeeddeletedInterface service = retrofit.create(DeeddeletedInterface.class);
         Call<DeeddeletedModel> call = service.fetchData(tagid);

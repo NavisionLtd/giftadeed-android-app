@@ -10,7 +10,6 @@ import android.graphics.Color;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +30,9 @@ import giftadeed.kshantechsoft.com.giftadeed.Bug.Bugreport;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
-import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
-import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.AdapterToptenFullfiller;
-import giftadeed.kshantechsoft.com.giftadeed.taggerfullfiller.RESULTFFILLER;
 
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.MANI_URL;
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.SUB_URL;
+import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.MAIN_API_URL;
+import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.API_SUB_URL;
 
 /**
  * Created by Nilesh on 5/16/2017.
@@ -80,7 +76,7 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
         mainHolder.mytagsviews.setText(model.getViews().toString());
         mainHolder.mytagsendorse.setText(model.getEndorse().toString());
         mainHolder.txtMytagsAddress.setText(model.getAddress().trim());
-        Picasso.with(context).load(MANI_URL + SUB_URL + model.getCharacterPath()).resize(50, 50).into(mainHolder.imgchar);
+        Picasso.with(context).load(MAIN_API_URL + API_SUB_URL + model.getCharacterPath()).resize(50, 50).into(mainHolder.imgchar);
         mainHolder.txtMytagsDate.setTypeface(FontDetails.fontStandardForPage);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -98,13 +94,13 @@ public class AdapterMyTags extends RecyclerView.Adapter<AdapterMyTags.RecyclerVi
         sdf = new SimpleDateFormat("dd-MMM-yyyy");
         System.out.println(sdf.format(date));
         holder.txtMytagsDate.setText(sdf.format(date));
-        String strImagepath = MANI_URL + SUB_URL + model.getTaggedPhotoPath();
+        String strImagepath = MAIN_API_URL + API_SUB_URL + model.getTaggedPhotoPath();
         // mainHolder.txtMytagsDate.setText(model.getTaggedDatetime());
         if (strImagepath.length() > 57) {
 
             try {
 
-                Picasso.with(context).load(MANI_URL + SUB_URL + model.getTaggedPhotoPath()).placeholder(R.drawable.pictu).into(mainHolder.imgMytags);
+                Picasso.with(context).load(MAIN_API_URL + API_SUB_URL + model.getTaggedPhotoPath()).placeholder(R.drawable.pictu).into(mainHolder.imgMytags);
             } catch (Exception e) {
                 // Picasso.with(context).load(R.drawable.pictu).resize(100, 100).into(mainHolder.imgMytags);
                 StringWriter writer = new StringWriter();

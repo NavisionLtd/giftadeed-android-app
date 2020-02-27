@@ -189,7 +189,7 @@ public class CollabDetailsFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CollabInfoInterface service = retrofit.create(CollabInfoInterface.class);
         Call<CollabPOJO> call = service.sendData(colab_id);
@@ -381,7 +381,7 @@ public class CollabDetailsFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeleteCollabInterface service = retrofit.create(DeleteCollabInterface.class);
         Call<CollabResponseStatus> call = service.sendData(collabid);
@@ -461,7 +461,7 @@ public class CollabDetailsFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         RemoveCollabMemberInterface service = retrofit.create(RemoveCollabMemberInterface.class);
         Call<CollabResponseStatus> call = service.sendData(collabid, user_id);

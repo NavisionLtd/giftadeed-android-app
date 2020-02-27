@@ -228,7 +228,7 @@ public class CreateCollabFragment extends Fragment {
         mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CreateCollabInterface service = retrofit.create(CreateCollabInterface.class);
         Call<CollabResponseStatus> call = service.sendData(user_id, groupid, collabname, collabdesc);
@@ -311,7 +311,7 @@ public class CreateCollabFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         OwnedGroupsInterface service = retrofit.create(OwnedGroupsInterface.class);
         Call<List<GroupPOJO>> call = service.sendData(userid);
@@ -437,7 +437,7 @@ public class CreateCollabFragment extends Fragment {
         mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditCollabInterface service = retrofit.create(EditCollabInterface.class);
         Call<CollabResponseStatus> call = service.sendData(collabid, groupid, collabname, collabdesc);

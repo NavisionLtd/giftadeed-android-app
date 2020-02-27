@@ -22,8 +22,8 @@ import java.util.List;
 import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.MANI_URL;
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.SUB_URL;
+import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.MAIN_API_URL;
+import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.API_SUB_URL;
 
 /**
  * Created by Nilesh on 5/13/2017.
@@ -70,16 +70,16 @@ public class AdapterToptenFullfiller extends RecyclerView.Adapter<AdapterToptenF
         mainHolder.txtTopTenfullfillerpoints.setText(result.getTotalFullfillerPoints());
         mainHolder.txttoptenfullfillneeds.setText("Fulfilled Score");
         mainHolder.count_number.setText(String.valueOf(position+1));
-        if (MANI_URL+SUB_URL+result.getUrlFullfillerRank() != "") {
+        if (MAIN_API_URL + API_SUB_URL +result.getUrlFullfillerRank() != "") {
             try {
-                System.out.print("image url" + MANI_URL+SUB_URL+result.getUrlFullfillerRank());
-                Log.d("image url", MANI_URL+SUB_URL+result.getUrlFullfillerRank());
-                Picasso.with(context).load(MANI_URL+SUB_URL+result.getUrlFullfillerRank()).resize(60, 60).into(mainHolder.imgtopFullfiller);
+                System.out.print("image url" + MAIN_API_URL + API_SUB_URL +result.getUrlFullfillerRank());
+                Log.d("image url", MAIN_API_URL + API_SUB_URL +result.getUrlFullfillerRank());
+                Picasso.with(context).load(MAIN_API_URL + API_SUB_URL +result.getUrlFullfillerRank()).resize(60, 60).into(mainHolder.imgtopFullfiller);
             } catch (Exception es) {
-                Picasso.with(context).load(MANI_URL+SUB_URL+result.getUrlFullfillerRank()).resize(60, 60).into(mainHolder.imgtopFullfiller);
+                Picasso.with(context).load(MAIN_API_URL + API_SUB_URL +result.getUrlFullfillerRank()).resize(60, 60).into(mainHolder.imgtopFullfiller);
             }
         } else {
-            Picasso.with(context).load(MANI_URL+SUB_URL+result.getUrlFullfillerRank()).resize(60, 60).into(mainHolder.imgtopFullfiller);
+            Picasso.with(context).load(MAIN_API_URL + API_SUB_URL +result.getUrlFullfillerRank()).resize(60, 60).into(mainHolder.imgtopFullfiller);
         }
     }
 

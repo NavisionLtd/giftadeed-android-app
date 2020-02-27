@@ -835,7 +835,7 @@ public class GiftANeedFrag extends Fragment implements Animation.AnimationListen
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)    //.client(client)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)    //.client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GiftaNeedInterface service = retrofit.create(GiftaNeedInterface.class);
         Call<MobileModel> call = service.sendData(strUser_id, strTag_ID, strfulfilphotopath, strDescr, ispartial, need, no_of_people);
@@ -901,7 +901,7 @@ public class GiftANeedFrag extends Fragment implements Animation.AnimationListen
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         FulfillDistanceInterface service = retrofit.create(FulfillDistanceInterface.class);
         Call<FulfilDistance> call = service.sendData("10");
@@ -1159,7 +1159,7 @@ public class GiftANeedFrag extends Fragment implements Animation.AnimationListen
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeeddeletedInterface service = retrofit.create(DeeddeletedInterface.class);
         Call<DeeddeletedModel> call = service.fetchData(str_tagid);

@@ -384,7 +384,7 @@ public class SOSOptionActivity extends AppCompatActivity implements GoogleApiCli
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SOSNumberInfoInterface service = retrofit.create(SOSNumberInfoInterface.class);
         Call<SOSNumberInfoPOJO> call = service.sendData(strLatitude + "," + strLongitude);

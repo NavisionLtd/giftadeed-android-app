@@ -177,7 +177,7 @@ public class First_Login extends AppCompatActivity {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CountrySignup service = retrofit.create(CountrySignup.class);
         countries.clear();
@@ -352,7 +352,7 @@ public class First_Login extends AppCompatActivity {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CountrySignup service = retrofit.create(CountrySignup.class);
 
@@ -430,7 +430,7 @@ public class First_Login extends AppCompatActivity {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         StateSignup service = retrofit.create(StateSignup.class);
 
@@ -578,7 +578,7 @@ public class First_Login extends AppCompatActivity {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CitySignup service = retrofit.create(CitySignup.class);
 
@@ -767,7 +767,7 @@ public class First_Login extends AppCompatActivity {
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         FirstLoginInterface service = retrofit.create(FirstLoginInterface.class);
@@ -830,7 +830,7 @@ public class First_Login extends AppCompatActivity {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

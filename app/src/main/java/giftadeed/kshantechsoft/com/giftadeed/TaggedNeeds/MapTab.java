@@ -434,7 +434,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         OwnedGroupsInterface service = retrofit.create(OwnedGroupsInterface.class);
         Call<List<GroupPOJO>> call = service.sendData(userid);
@@ -580,7 +580,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         taglistInterface service = retrofit.create(taglistInterface.class);
 
@@ -687,14 +687,14 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                     final String markerTitle, icon_path_str_new;
                                                     if (permanent.equals("Y")) {
                                                         markerTitle = "Permanent";
-                                                        icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
+                                                        icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + permanent_marker_path;
                                                     } else {
                                                         if (catType.equals("C")) {
                                                             markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
                                                             icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
                                                         } else {
                                                             markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                            icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
+                                                            icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + model.getTaggedlist().get(j).getIconPath();
                                                         }
                                                     }
 
@@ -767,14 +767,14 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                                     final String markerTitle, icon_path_str_new;
                                                                     if (permanent.equals("Y")) {
                                                                         markerTitle = "Permanent";
-                                                                        icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
+                                                                        icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + permanent_marker_path;
                                                                     } else {
                                                                         if (catType.equals("C")) {
                                                                             markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
                                                                             icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
                                                                         } else {
                                                                             markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                                            icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
+                                                                            icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + model.getTaggedlist().get(j).getIconPath();
                                                                         }
                                                                     }
 
@@ -838,14 +838,14 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                                 final String markerTitle, icon_path_str_new;
                                                                 if (permanent.equals("Y")) {
                                                                     markerTitle = "Permanent";
-                                                                    icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
+                                                                    icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + permanent_marker_path;
                                                                 } else {
                                                                     if (catType.equals("C")) {
                                                                         markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
                                                                         icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
                                                                     } else {
                                                                         markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                                        icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
+                                                                        icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + model.getTaggedlist().get(j).getIconPath();
                                                                     }
                                                                 }
 
@@ -910,14 +910,14 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                                         final String markerTitle, icon_path_str_new;
                                                         if (permanent.equals("Y")) {
                                                             markerTitle = "Permanent";
-                                                            icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + permanent_marker_path;
+                                                            icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + permanent_marker_path;
                                                         } else {
                                                             if (catType.equals("C")) {
                                                                 markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
                                                                 icon_path_str_new = WebServices.CUSTOM_CATEGORY_IMAGE_URL + model.getTaggedlist().get(j).getIconPath();
                                                             } else {
                                                                 markerTitle = model.getTaggedlist().get(j).getTaggedTitle();
-                                                                icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + model.getTaggedlist().get(j).getIconPath();
+                                                                icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + model.getTaggedlist().get(j).getIconPath();
                                                             }
                                                         }
 
@@ -973,7 +973,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SOSlistInterface service = retrofit.create(SOSlistInterface.class);
 
@@ -1039,7 +1039,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                             String[] words_new = str_lati_logi.split(",");
                                             if (words_new.length > 1) {
                                                 final String marker_id = model.getSoslist().get(j).getId();
-                                                String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
+                                                String icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + response.body().getMarker_path();
                                                 Log.d("sosiconpath", icon_path_str_new);
                                                 Double maplat = Double.parseDouble(words_new[0]);
                                                 Double maplong = Double.parseDouble(words_new[1]);
@@ -1087,7 +1087,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ResourcelistInterface service = retrofit.create(ResourcelistInterface.class);
 
@@ -1154,7 +1154,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                             String[] words_new = str_lati_logi.split(",");
                                             if (words_new.length > 1) {
                                                 final String marker_id = model.getReslist().get(j).getId();
-                                                String icon_path_str_new = WebServices.MANI_URL + WebServices.SUB_URL + response.body().getMarker_path();
+                                                String icon_path_str_new = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + response.body().getMarker_path();
                                                 Log.d("resiconpath", icon_path_str_new);
                                                 Double maplat = Double.parseDouble(words_new[0]);
                                                 Double maplong = Double.parseDouble(words_new[1]);
@@ -1212,7 +1212,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         PermanentTaggedDeedsInterface service = retrofit.create(PermanentTaggedDeedsInterface.class);
         Log.d("input_params", strUserId + "," + geopoints);
@@ -1384,7 +1384,7 @@ public class MapTab extends Fragment implements OnMapReadyCallback, GoogleApiCli
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         RemoveLocationInterface service = retrofit.create(RemoveLocationInterface.class);
         Call<GroupResponseStatus> call = service.sendData(strUserId, tagid);

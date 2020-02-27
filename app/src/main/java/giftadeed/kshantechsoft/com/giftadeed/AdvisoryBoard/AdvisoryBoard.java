@@ -101,7 +101,7 @@ public class AdvisoryBoard extends Fragment {
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         AdvisoryDataInterface service = retrofit.create(AdvisoryDataInterface.class);

@@ -194,7 +194,7 @@ public class GroupDetailsFragment extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GrouptagsInterface service = retrofit.create(GrouptagsInterface.class);
         Call<List<Taggedlist>> call = service.fetchData(strUser_ID, receivedGid);
@@ -448,7 +448,7 @@ public class GroupDetailsFragment extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GroupInfoInterface service = retrofit.create(GroupInfoInterface.class);
         Call<List<GroupInfoPOJO>> call = service.sendData(user_id, group_id);
@@ -534,7 +534,7 @@ public class GroupDetailsFragment extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeleteGroupInterface service = retrofit.create(DeleteGroupInterface.class);
         Call<GroupResponseStatus> call = service.sendData(groupid, user_id);
@@ -604,7 +604,7 @@ public class GroupDetailsFragment extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ExitGroupInterface service = retrofit.create(ExitGroupInterface.class);
         Call<GroupResponseStatus> call = service.sendData(groupid, user_id);

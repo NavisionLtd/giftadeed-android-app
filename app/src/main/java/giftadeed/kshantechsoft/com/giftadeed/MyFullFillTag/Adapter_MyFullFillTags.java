@@ -26,8 +26,8 @@ import giftadeed.kshantechsoft.com.giftadeed.R;
 import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.list_Model.Taggedlist;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.FontDetails;
 
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.MANI_URL;
-import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.SUB_URL;
+import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.MAIN_API_URL;
+import static giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices.API_SUB_URL;
 
 /**
  * Created by Nilesh on 5/22/2017.
@@ -63,7 +63,7 @@ public class Adapter_MyFullFillTags extends RecyclerView.Adapter<Adapter_MyFullF
         mainHolder.txtmyFulllfilltagsAddress.setText(model.getAddress().trim());
         mainHolder.txtmyfulfilviews.setText(model.getViews());
         mainHolder.txtmyfulfilendorse.setText(model.getEndorse());
-        Picasso.with(context).load(MANI_URL + SUB_URL + model.getCharacterPath()).resize(50, 50).into(mainHolder.imgmyfullfilltagschar);
+        Picasso.with(context).load(MAIN_API_URL + API_SUB_URL + model.getCharacterPath()).resize(50, 50).into(mainHolder.imgmyfullfilltagschar);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
@@ -79,11 +79,11 @@ public class Adapter_MyFullFillTags extends RecyclerView.Adapter<Adapter_MyFullF
         //mainHolder.txtmyFullfilltagpoints.setText(model.getFullFilledPoints());
 
 
-        String strImagepath = MANI_URL + SUB_URL + model.getFullFilledPhotoPath();
+        String strImagepath = MAIN_API_URL + API_SUB_URL + model.getFullFilledPhotoPath();
         // mainHolder.txtMytagsDate.setText(model.getTaggedDatetime());
         if (strImagepath.length() > 57) {
             try {
-                Picasso.with(context).load(MANI_URL + SUB_URL + model.getFullFilledPhotoPath()).placeholder(R.drawable.pictu).into(mainHolder.imgMyFullfilltags);
+                Picasso.with(context).load(MAIN_API_URL + API_SUB_URL + model.getFullFilledPhotoPath()).placeholder(R.drawable.pictu).into(mainHolder.imgMyFullfilltags);
             } catch (Exception es) {
                 // Picasso.with(context).load(R.drawable.pictu).resize(100, 100).into(mainHolder.imgMyFullfilltags);
                 mainHolder.imgMyFullfilltags.setImageResource(R.drawable.pictu);

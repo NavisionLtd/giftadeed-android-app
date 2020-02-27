@@ -216,7 +216,7 @@ public class ResourceListFragment extends Fragment
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         UserResourcesInterface service = retrofit.create(UserResourcesInterface.class);
         Call<List<ResourcePOJO>> call = service.fetchData(user_id);

@@ -194,7 +194,7 @@ public class AddGroupMemberFragment extends Fragment  {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SearchMemberInterface service = retrofit.create(SearchMemberInterface.class);
         Call<List<MemberDetails>> call = service.sendData(user_id, email, groupid);
@@ -294,7 +294,7 @@ public class AddGroupMemberFragment extends Fragment  {
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         AddMemberInterface service = retrofit.create(AddMemberInterface.class);
         Call<GroupResponseStatus> call = service.sendData(user_id, memberid, groupid);

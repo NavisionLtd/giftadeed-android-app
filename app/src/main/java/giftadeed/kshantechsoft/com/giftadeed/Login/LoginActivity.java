@@ -588,7 +588,7 @@ public class LoginActivity extends AppCompatActivity {
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ForgetPasswordInterface service = retrofit.create(ForgetPasswordInterface.class);
@@ -682,7 +682,7 @@ public class LoginActivity extends AppCompatActivity {
         final String stremailaddress = email.getText().toString().trim();
         String strPassword = password.getText().toString();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -811,7 +811,7 @@ public class LoginActivity extends AppCompatActivity {
         final String stremailaddress = email.getText().toString().trim();
         String strPassword = password.getText().toString();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -907,7 +907,7 @@ public class LoginActivity extends AppCompatActivity {
             client.setReadTimeout(1, TimeUnit.HOURS);
             client.setWriteTimeout(1, TimeUnit.HOURS);
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(WebServices.MANI_URL)
+                    .baseUrl(WebServices.MAIN_API_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             GoogleLoginInterface service = retrofit.create(GoogleLoginInterface.class);
@@ -981,7 +981,7 @@ public class LoginActivity extends AppCompatActivity {
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         FacebookLoginInterface service = retrofit.create(FacebookLoginInterface.class);

@@ -187,7 +187,7 @@ public class CollabPendingInvitesFragment extends Fragment
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ColabRequestListInterface service = retrofit.create(ColabRequestListInterface.class);
         Call<CollabPOJO> call = service.sendData(strUser_ID);

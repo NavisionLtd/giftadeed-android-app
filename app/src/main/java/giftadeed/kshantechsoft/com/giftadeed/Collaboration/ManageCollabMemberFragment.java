@@ -278,7 +278,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         RemoveCollabMemberInterface service = retrofit.create(RemoveCollabMemberInterface.class);
         Call<CollabResponseStatus> call = service.sendData(receivedCid, memberid);
@@ -374,7 +374,7 @@ public class ManageCollabMemberFragment extends Fragment implements SwipeRefresh
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CollabMemberListInterface service = retrofit.create(CollabMemberListInterface.class);
         Call<CollabPOJO> call = service.sendData(collabid);

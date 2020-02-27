@@ -440,7 +440,7 @@ public class CreateResourceFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         OwnedGroupsInterface service = retrofit.create(OwnedGroupsInterface.class);
         Call<List<GroupPOJO>> call = service.sendData(userid);
@@ -610,7 +610,7 @@ public class CreateResourceFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CategoryInterface service = retrofit.create(CategoryInterface.class);
         Call<CategoryType> call = service.sendData(groupid);
@@ -810,7 +810,7 @@ public class CreateResourceFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         MultiSubCategoryInterface service = retrofit.create(MultiSubCategoryInterface.class);
         Call<List<MultiSubCategories>> call = service.sendData(strUser_ID, formattedTypeIds);
@@ -988,7 +988,7 @@ public class CreateResourceFragment extends Fragment {
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         SuggestSubType service = retrofit.create(SuggestSubType.class);
@@ -1097,7 +1097,7 @@ public class CreateResourceFragment extends Fragment {
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GetAddressInterface service = retrofit.create(GetAddressInterface.class);
         Call<GetAddressResponse> call = service.sendData(latitude, longitude);
@@ -1141,7 +1141,7 @@ public class CreateResourceFragment extends Fragment {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GroupsInterface service = retrofit.create(GroupsInterface.class);
         Call<List<GroupPOJO>> call = service.sendData(user_id);
@@ -1335,7 +1335,7 @@ public class CreateResourceFragment extends Fragment {
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CreateResourceInterface service = retrofit.create(CreateResourceInterface.class);
         Log.d("create_res_input", userid + "," + groupid + "," + resname + "," + desc + "," + subtype + "," + geopoint + "," + address + "," + groupids + "," + allgrps + ":" + formattedTypeIds + ":" + formattedCustomTypeIds);
@@ -1409,7 +1409,7 @@ public class CreateResourceFragment extends Fragment {
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         UpdateResourceInterface service = retrofit.create(UpdateResourceInterface.class);
         Log.d("update_res_input", resid + "," + userid + "," + groupid + "," + resname + "," + desc + "," + subtype + "," + geopoint + "," + groupids + "," + allgrps + "," + formattedTypeIds + "," + formattedCustomTypeIds + "," + address);

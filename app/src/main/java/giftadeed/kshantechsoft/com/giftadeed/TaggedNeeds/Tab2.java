@@ -174,7 +174,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         taglistInterface service = retrofit.create(taglistInterface.class);
         Call<Modeltaglist> call = service.fetchData(user_id);
@@ -397,7 +397,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GroupsInterface service = retrofit.create(GroupsInterface.class);
         Call<List<GroupPOJO>> call = service.sendData(user_id);
@@ -485,7 +485,7 @@ public class Tab2 extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CategoryInterface service = retrofit.create(CategoryInterface.class);
         Call<CategoryType> call = service.sendData("");

@@ -357,7 +357,7 @@ public class NeedDetailsFrag extends Fragment implements Animation.AnimationList
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeedDetailsInterface service = retrofit.create(DeedDetailsInterface.class);
         Call<DeedDetailsModel> call = service.fetchData(str_userID, str_tagid);
@@ -589,7 +589,7 @@ public class NeedDetailsFrag extends Fragment implements Animation.AnimationList
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         EndorsedeedInterface servvice = retrofit.create(EndorsedeedInterface.class);
@@ -663,7 +663,7 @@ public class NeedDetailsFrag extends Fragment implements Animation.AnimationList
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CommentInterface service = retrofit.create(CommentInterface.class);
         Call<StatusModel> call = service.fetchData(user_id, str_tagid, edComment.getText().toString());
@@ -735,7 +735,7 @@ public class NeedDetailsFrag extends Fragment implements Animation.AnimationList
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ReportDeedInterface service = retrofit.create(ReportDeedInterface.class);
         Call<StatusModel> call = service.fetchData(user_id, str_tagid);
@@ -805,7 +805,7 @@ public class NeedDetailsFrag extends Fragment implements Animation.AnimationList
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ReportUserInterface service = retrofit.create(ReportUserInterface.class);
         Call<StatusModel> call = service.fetchData(user_id, str_tagid, strdeedowner_id);
@@ -890,7 +890,7 @@ public class NeedDetailsFrag extends Fragment implements Animation.AnimationList
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         DeeddeletedInterface service = retrofit.create(DeeddeletedInterface.class);
         Call<DeeddeletedModel> call = service.fetchData(str_tagid);

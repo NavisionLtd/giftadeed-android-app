@@ -235,7 +235,7 @@ public class SOSDetailsFrag extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SOSDetailsInterface service = retrofit.create(SOSDetailsInterface.class);
         Call<List<EmergencyInfoPOJO>> call = service.fetchData(str_sosid);
@@ -288,7 +288,7 @@ public class SOSDetailsFrag extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SOSDeleteInterface service = retrofit.create(SOSDeleteInterface.class);
         Call<GroupResponseStatus> call = service.fetchData(strUser_ID, str_sosid);

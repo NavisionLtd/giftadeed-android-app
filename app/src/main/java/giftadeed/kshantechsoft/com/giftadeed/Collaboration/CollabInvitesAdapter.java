@@ -149,7 +149,7 @@ public class CollabInvitesAdapter extends RecyclerView.Adapter<CollabInvitesAdap
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ChangeInviteInterface service = retrofit.create(ChangeInviteInterface.class);
         Call<CollabResponseStatus> call = service.sendData(user_id, collabid, invite_status);

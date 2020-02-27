@@ -541,7 +541,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         NotificationCountInterface service = retrofit.create(NotificationCountInterface.class);
         Call<NotificationCountModel> call = service.fetchData(strUserId, lat_long);
@@ -594,7 +594,7 @@ public class TaggedneedsActivity extends AppCompatActivity implements
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         OwnedGroupsInterface service = retrofit.create(OwnedGroupsInterface.class);
         Call<List<GroupPOJO>> call = service.sendData(userid);

@@ -258,7 +258,7 @@ public class CreateGroupFragment extends Fragment  {
         mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CreateGroupInterface service = retrofit.create(CreateGroupInterface.class);
         Call<GroupResponseStatus> call = service.sendData(groupimage, groupname, user_id, groupdesc);
@@ -303,7 +303,7 @@ public class CreateGroupFragment extends Fragment  {
                             sharedPrefManager.store_GroupName(groupname);
                             grpImageUrl = groupResponseStatus.getGrpImagePath();
                             if (grpImageUrl.length() > 0) {
-                                grpImageUrl = WebServices.MANI_URL + WebServices.SUB_URL + grpImageUrl;
+                                grpImageUrl = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + grpImageUrl;
                             }
                             //group chat
                             mIsDistinct = PreferenceUtils.getGroupChannelDistinct(myContext);
@@ -346,7 +346,7 @@ public class CreateGroupFragment extends Fragment  {
         mDialog.setConfiguration(configuration);
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditGroupInterface service = retrofit.create(EditGroupInterface.class);
         Call<GroupResponseStatus> call = service.sendData(groupimage, groupname, user_id, groupdesc, groupid);
@@ -387,7 +387,7 @@ public class CreateGroupFragment extends Fragment  {
                             Toast.makeText(getContext(), getResources().getString(R.string.group_edited), Toast.LENGTH_SHORT).show();
                             grpImageUrl = groupResponseStatus.getGrpImagePath();
                             if (grpImageUrl.length() > 0) {
-                                grpImageUrl = WebServices.MANI_URL + WebServices.SUB_URL + grpImageUrl;
+                                grpImageUrl = WebServices.MAIN_API_URL + WebServices.API_SUB_URL + grpImageUrl;
                             }
                             // update sendbird also
                             String channelName = "";

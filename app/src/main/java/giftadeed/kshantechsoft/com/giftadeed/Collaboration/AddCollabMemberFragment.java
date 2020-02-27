@@ -208,7 +208,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         InviteCreatorsInterface service = retrofit.create(InviteCreatorsInterface.class);
         Call<CollabResponseStatus> call = service.sendData(receivedCid, formattedCreators);
@@ -272,7 +272,7 @@ public class AddCollabMemberFragment extends Fragment implements SwipeRefreshLay
         mDialog.setConfiguration(new ArcConfiguration(getContext()));
         mDialog.show();
         mDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CreatorsListInterface service = retrofit.create(CreatorsListInterface.class);
         Call<CollabPOJO> call = service.sendData(strUser_ID, receivedCid);

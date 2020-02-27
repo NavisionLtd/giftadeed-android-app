@@ -150,7 +150,7 @@ public class MyFullFillTags extends Fragment  {
         mDialog.show();
         mDialog.setCancelable(false);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         InterfaceMyFFillTag service = retrofit.create(InterfaceMyFFillTag.class);

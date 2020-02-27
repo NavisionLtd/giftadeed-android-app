@@ -661,7 +661,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GroupsInterface service = retrofit.create(GroupsInterface.class);
         Call<List<GroupPOJO>> call = service.sendData(user_id);
@@ -903,7 +903,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         CategoryInterface service = retrofit.create(CategoryInterface.class);
         Call<CategoryType> call = service.sendData(selectedgroupid);
@@ -1198,7 +1198,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener {
 //        simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
 //        simpleArcDialog.show();
 //        simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         SubCategoryInterface service = retrofit.create(SubCategoryInterface.class);
         Log.d("type_id", "" + strNeedmapping_ID);
@@ -1428,7 +1428,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener {
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         SuggestSubType service = retrofit.create(SuggestSubType.class);
@@ -1644,7 +1644,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener {
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)  //.client(client)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)  //.client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         TagAneedInterface service = retrofit.create(TagAneedInterface.class);
         Log.d("tag_input", user_id + ":" + NeedMapping_ID + ":" + geopoints + ":" + Imagename + ":" + title + ":" + description + ":" + locat + ":" + container + ":" + validity + ":" + paddress + ":" + subTypePref + ":" + checkedOtherOrg + ":" + checkedIndi + ":" + userOrgs + ":" + from_grp_id);
@@ -1744,7 +1744,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener {
         simpleArcDialog.setConfiguration(configuration);
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         EditdeedInterface service = retrofit.create(EditdeedInterface.class);
         Log.d("edit_deed_params", "" + user_id + "," + deedId + "," + NeedMapping_ID + "," + geopoints + "," + Imagename + "," + title + "," + description + "," + locat + "," + container + "," + validity + "," + str_subtypes + "," + str_permanent);
@@ -2032,7 +2032,7 @@ public class TagaNeed extends Fragment implements Animation.AnimationListener {
         simpleArcDialog.setConfiguration(new ArcConfiguration(getContext()));
         simpleArcDialog.show();
         simpleArcDialog.setCancelable(false);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         GetAddressInterface service = retrofit.create(GetAddressInterface.class);
         Call<GetAddressResponse> call = service.sendData(latitude, longitude);

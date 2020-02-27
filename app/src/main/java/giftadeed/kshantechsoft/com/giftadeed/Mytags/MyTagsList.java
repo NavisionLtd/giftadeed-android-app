@@ -146,7 +146,7 @@ public class MyTagsList extends Fragment  {
         mDialog.setCancelable(false);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WebServices.MANI_URL)
+                .baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         MyTagsInterface service = retrofit.create(MyTagsInterface.class);

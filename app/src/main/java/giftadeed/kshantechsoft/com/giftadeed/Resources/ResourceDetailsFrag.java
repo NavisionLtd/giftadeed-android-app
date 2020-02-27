@@ -159,7 +159,7 @@ public class ResourceDetailsFrag extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ResourceDetailsInterface service = retrofit.create(ResourceDetailsInterface.class);
         Call<ResourcePOJO> call = service.fetchData(strUser_ID, str_resid);
@@ -270,7 +270,7 @@ public class ResourceDetailsFrag extends Fragment  {
         client.setConnectTimeout(1, TimeUnit.HOURS);
         client.setReadTimeout(1, TimeUnit.HOURS);
         client.setWriteTimeout(1, TimeUnit.HOURS);
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MANI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServices.MAIN_API_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         ResourceDeleteInterface service = retrofit.create(ResourceDeleteInterface.class);
         Call<GroupResponseStatus> call = service.fetchData(strUser_ID, str_resid);
