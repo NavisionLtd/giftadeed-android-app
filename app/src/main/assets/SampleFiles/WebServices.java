@@ -25,6 +25,8 @@ public class WebServices {
     public static final String android_shortlink = "YOUR_PLAYSTORE_APP_SHORT_URL";
     public static final String ios_shortlink = "YOUR_APPSTORE_APP_SHORT_URL";
     public static final String website_url = "YOUR_WEBSITE_URL";
+	public static final String EMAIL ="YOUR_EMAIL_ID"; // For Bug report on email
+    public static final String PASSWORD ="YOUR_EMAIL_PASSWORD"; // For Bug report on email
 
 
     public static final String CUSTOM_CATEGORY_IMAGE_URL = MAIN_API_URL + API_SUB_URL + "image/group_category/";

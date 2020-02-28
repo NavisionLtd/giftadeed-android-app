@@ -15,6 +15,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import giftadeed.kshantechsoft.com.giftadeed.Utils.WebServices;
+
 //Class is extending AsyncTask because this class is going to perform a networking operation
 class SendMail extends AsyncTask<Void, Void, Void> {
     //Information to send email
@@ -59,7 +61,7 @@ class SendMail extends AsyncTask<Void, Void, Void> {
                 new javax.mail.Authenticator() {
                     //Authenticating the password
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Config.EMAIL, Config.PASSWORD);
+                        return new PasswordAuthentication(WebServices.EMAIL, WebServices.PASSWORD);
                     }
                 });
        /* Session session = Session.getInstance(props, new javax.mail.Authenticator() {
@@ -73,7 +75,7 @@ class SendMail extends AsyncTask<Void, Void, Void> {
             MimeMessage mm = new MimeMessage(session);
 
             //Setting sender address
-            mm.setFrom(new InternetAddress(Config.EMAIL));
+            mm.setFrom(new InternetAddress(WebServices.EMAIL));
             //Adding receiver
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             //  mm.addRecipient(Message.RecipientType.BCC,new InternetAddress("darshan@kshantechsoft.com"));
