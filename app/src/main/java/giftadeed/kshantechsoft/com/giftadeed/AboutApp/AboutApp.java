@@ -26,6 +26,7 @@ import giftadeed.kshantechsoft.com.giftadeed.TaggedNeeds.TaggedneedsActivity;
 //        Description about app                                //
 /////////////////////////////////////////////////////////////////
 public class AboutApp extends Fragment {
+	private String abc;
     View rootview;
     static FragmentManager fragmgr;
     WebView txtAgreementDetails;
