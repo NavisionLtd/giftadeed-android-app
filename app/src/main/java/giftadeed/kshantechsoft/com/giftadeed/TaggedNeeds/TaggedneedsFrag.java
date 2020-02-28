@@ -50,6 +50,7 @@ import giftadeed.kshantechsoft.com.giftadeed.Utils.SharedPrefManager;
 import giftadeed.kshantechsoft.com.giftadeed.Utils.Validation;
 
 public class TaggedneedsFrag extends Fragment {
+    private String abc;
     private TabLayout tablayout;
     private ViewPager viewpgr;
     View rootview;
